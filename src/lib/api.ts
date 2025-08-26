@@ -1,7 +1,8 @@
-const API = process.env.NEXT_PUBLIC_THOR_API
+const MIDGARD = process.env.NEXT_PUBLIC_MIDGARD_API
+const THORNODE = process.env.NEXT_PUBLIC_THOR_API
 
 export const getPools = async () => {
-  const res = await fetch(`${API}/thorchain/pools`)
+  const res = await fetch(`${MIDGARD}/v2/pools`)
 
   if (!res.ok) {
     throw new Error('Failed to fetch transactions')
@@ -9,16 +10,15 @@ export const getPools = async () => {
 
   return (await res.json()).map((item: any) => {
     const [chain, asset] = item.asset.split('.')
-    const [symbol, contract] = asset.split('-')
-    const decimals = item.decimals
+    const [symbol] = asset.split('-')
 
     return {
-      type: contract ? 'LAYER_1' : 'NATIVE',
+      type: chain === 'THOR' ? 'NATIVE' : 'LAYER_1',
       asset: item.asset,
       chain,
       metadata: {
         symbol,
-        decimals
+        decimals: item.nativeDecimal
       }
     }
   })
@@ -26,7 +26,7 @@ export const getPools = async () => {
 
 export const getQuote = async (params: Record<string, any>) => {
   const qs = new URLSearchParams(Object.entries(params).filter(i => i[1]))
-  const res = await fetch(`${API}/thorchain/quote/swap?${qs.toString()}`)
+  const res = await fetch(`${THORNODE}/thorchain/quote/swap?${qs.toString()}`)
 
   if (!res.ok) {
     throw new Error('Failed to fetch transactions')
