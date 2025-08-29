@@ -2,6 +2,7 @@ import { fromBech32 } from "@cosmjs/encoding";
 import { Psbt } from "bitcoinjs-lib";
 import { Buffer } from "buffer";
 import { getAddress, TransactionRequest } from "ethers";
+import { TronWeb } from "tronweb";
 import { Payment as XrpPayment } from "xrpl";
 import { InboundAddress } from "../accounts";
 import { Asset } from "../asset";
@@ -10,9 +11,9 @@ import { Network } from "../network";
 import { EncodeObject } from "../signers/cosmos/proto-signing";
 import { MsgSend } from "../signers/cosmos/types/cosmos/bank/v1beta1/tx";
 import { MsgDeposit as MsgDepositBase } from "../signers/cosmos/types/thorchain/types/msg_deposit";
-import { evmRouter } from "../signers/evm/router";
+import { evmRouter } from "../signers/evm";
 import { PsbtFactory, Utxo } from "../signers/utxo";
-import { ERC20Allowance, Msg } from "./msg";
+import { ERC20Allowance, Msg, TronTx } from "./msg";
 
 const EVM_NATIVE = "0x0000000000000000000000000000000000000000";
 
@@ -241,6 +242,28 @@ export class MsgDeposit implements Msg {
       Fee: ((inboundAddress?.gasRate || 0n) / 100n).toString(),
       Memos: MemoData ? [{ Memo: { MemoData } }] : [],
     };
+  }
+  async toTronTx(
+    tronWeb: TronWeb,
+    account: { network: Network; address: string },
+    inboundAddress?: InboundAddress
+  ): Promise<TronTx> {
+    if (!inboundAddress)
+      throw new Error(`Inbound Address required for ${account.network}`);
+
+    if (this.asset.chain !== account.network) {
+      throw new IncorrectNetworkError(account.network, this.asset.chain);
+    }
+
+    const tx = await tronWeb.transactionBuilder.sendTrx(
+      inboundAddress?.address,
+      Number(this.amount),
+      account.address
+    );
+
+    return tronWeb.transactionBuilder.alterTransaction(tx, {
+      data: this.toMemo(),
+    });
   }
 }
 

@@ -1,5 +1,6 @@
 import { Psbt } from "bitcoinjs-lib";
 import { TransactionRequest } from "ethers";
+import { TronWeb, Trx } from "tronweb";
 import { Payment as XrpPayment } from "xrpl";
 import { InboundAddress } from "../accounts";
 import { Network } from "../network";
@@ -22,6 +23,8 @@ export interface UtxoTx {
   memo: string;
 }
 
+export type TronTx = Exclude<Parameters<Trx["sign"]>[0], string>;
+
 /**
  * A generic representation of a message type
  * This can either be encoded as a L1 with a memo, base layer with a MsgDeposit, or app layer with MsgExecuteContract
@@ -33,6 +36,7 @@ export interface Msg {
    * For MsgExecuteContract and app-layer interactions, this will construct a native MsgExecuteContract with the correct memo and funds
    * If this is called for any network except `Network.Thorchain`, the function should error
    * @param account
+   * @param inboundAddress
    */
   toEncodeObject(
     account: {
@@ -45,6 +49,7 @@ export interface Msg {
   /**
    * Called from EVM signers
    * @param account
+   * @param inboundAddress
    */
   toTransactionRequest(
     account: {
@@ -53,12 +58,12 @@ export interface Msg {
     },
     inboundAddress?: InboundAddress
   ): Promise<{ tx: TransactionRequest; erc20?: ERC20Allowance }>;
-  // /**
-  //  * Called from Layer 1 signers.
-  //  * @param network
-  //  */
-  // toL1(network: Network): { memo: string; amount: bigint };
-  // toMemo(): string;
+
+  /**
+   * Called from UTXO signers.
+   * @param account
+   * @param inboundAddress
+   */
   toPsbt(
     account: {
       network: Network;
@@ -86,6 +91,20 @@ export interface Msg {
     },
     inboundAddress?: InboundAddress
   ): Promise<XrpPayment>;
+
+  /**
+   * Called from TRON signers
+   * @param account
+   * @param inboundAddress
+   */
+  toTronTx(
+    tronWeb: TronWeb,
+    account: {
+      network: Network;
+      address: string;
+    },
+    inboundAddress?: InboundAddress
+  ): Promise<TronTx>;
 
   toDeposit?(): { amount: bigint; symbol: string };
 }

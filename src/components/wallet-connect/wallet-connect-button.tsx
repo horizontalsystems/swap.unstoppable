@@ -92,5 +92,10 @@ export const WALLETS: WalletProps<Provider>[] = [
     key: 'vultisig',
     label: 'Vultisig',
     provider: 'Vultisig'
+  },
+  {
+    key: 'tronlink',
+    label: 'TronLink',
+    provider: 'Tronlink'
   }
 ]

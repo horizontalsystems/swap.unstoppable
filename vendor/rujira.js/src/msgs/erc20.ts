@@ -4,7 +4,7 @@ import { Payment as XrpPayment } from "xrpl";
 import { InsufficientAllowanceError } from "../errors";
 import { Network } from "../network";
 import { EncodeObject } from "../signers/cosmos/proto-signing";
-import { Msg } from "./msg";
+import { Msg, TronTx } from "./msg";
 
 export class MsgErc20IncreaseAllowance implements Msg {
   constructor(private error: InsufficientAllowanceError) {}
@@ -44,6 +44,11 @@ export class MsgErc20IncreaseAllowance implements Msg {
     throw new Error("toPsbt not implemented for MsgErc20IncreaseAllowance.");
   }
   toXrpPayment(): Promise<XrpPayment> {
+    throw new Error(
+      "toXrpPayment not implemented for MsgErc20IncreaseAllowance."
+    );
+  }
+  toTronTx(): Promise<TronTx> {
     throw new Error(
       "toXrpPayment not implemented for MsgErc20IncreaseAllowance."
     );

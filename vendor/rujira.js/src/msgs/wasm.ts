@@ -8,7 +8,7 @@ import {
   MsgInstantiateContract,
   MsgStoreCode,
 } from "../signers/cosmos/types/cosmwasm/wasm/v1/tx";
-import { Msg } from "./msg";
+import { Msg, TronTx } from "./msg";
 
 export class MsgStore implements Msg {
   constructor(private wasmByteCode: Uint8Array) {}
@@ -44,6 +44,9 @@ export class MsgStore implements Msg {
     };
   }
   toXrpPayment(): Promise<XrpPayment> {
+    throw new Error("toXrpPayment not implemented for MsgStore.");
+  }
+  toTronTx(): Promise<TronTx> {
     throw new Error("toXrpPayment not implemented for MsgStore.");
   }
 }
@@ -96,6 +99,9 @@ export class MsgInstantiate<T> implements Msg {
     };
   }
   toXrpPayment(): Promise<XrpPayment> {
+    throw new Error("toXrpPayment not implemented for MsgInstantiate.");
+  }
+  toTronTx(): Promise<TronTx> {
     throw new Error("toXrpPayment not implemented for MsgInstantiate.");
   }
 }

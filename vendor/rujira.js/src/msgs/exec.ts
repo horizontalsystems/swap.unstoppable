@@ -13,7 +13,7 @@ import {
   MsgMigrateContract,
 } from "../signers/cosmos/types/cosmwasm/wasm/v1/tx";
 import { MsgDeposit } from "./deposit";
-import { Msg } from "./msg";
+import { Msg, TronTx } from "./msg";
 
 const defaultEncoder = <T>(x: T) => Buffer.from(JSON.stringify(x));
 
@@ -132,6 +132,9 @@ export class MsgExecute<T> implements Msg {
   toXrpPayment(): Promise<XrpPayment> {
     throw new Error("toXrpPayment not implemented for MsgExecute.");
   }
+  toTronTx(): Promise<TronTx> {
+    throw new Error("toXrpPayment not implemented for MsgExecute.");
+  }
   toMemo(): string {
     throw new Error("toMemo not supported");
   }
@@ -180,6 +183,9 @@ export class MsgMigrate<T> implements Msg {
     };
   }
   toXrpPayment(): Promise<XrpPayment> {
+    throw new Error("toXrpPayment not implemented for MsgMigrate.");
+  }
+  toTronTx(): Promise<TronTx> {
     throw new Error("toXrpPayment not implemented for MsgMigrate.");
   }
   toMemo(): string {

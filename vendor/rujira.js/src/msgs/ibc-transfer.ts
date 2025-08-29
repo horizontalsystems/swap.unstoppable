@@ -4,7 +4,7 @@ import { Payment as XrpPayment } from "xrpl";
 import { Network } from "../network";
 import { EncodeObject } from "../signers/cosmos/proto-signing";
 import { MsgTransfer } from "../signers/cosmos/types/ibc/applications/transfer/v1/tx";
-import { Msg } from "./msg";
+import { Msg, TronTx } from "./msg";
 
 export class MsgIbcTransfer implements Msg {
   constructor(
@@ -48,6 +48,9 @@ export class MsgIbcTransfer implements Msg {
     throw new Error(`TransactionRequest not supported`);
   }
   toXrpPayment(): Promise<XrpPayment> {
+    throw new Error("toXrpPayment not implemented for MsgIbcTransfer.");
+  }
+  toTronTx(): Promise<TronTx> {
     throw new Error("toXrpPayment not implemented for MsgIbcTransfer.");
   }
   toMemo(): string {

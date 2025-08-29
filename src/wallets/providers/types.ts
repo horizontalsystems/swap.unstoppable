@@ -9,6 +9,7 @@ import { CtrlContext } from './ctrl'
 import { KeplrContext } from './keplr'
 import { OkxContext } from './okx'
 import { VulticonnectContext } from './vulticonnect'
+import { TronlinkContext } from './tronlink'
 
 export type Provider = keyof Providers
 export type Account = BaseAccount<Provider>
@@ -27,4 +28,5 @@ export type Providers = {
   Rabby: JsonRpcSigner
   Brave: JsonRpcSigner
   Coinbase: JsonRpcSigner
+  Tronlink: TronlinkContext
 }

@@ -1,6 +1,7 @@
 import { Psbt } from "bitcoinjs-lib";
 import { Buffer } from "buffer";
 import { getAddress, Interface, TransactionRequest } from "ethers";
+import { TronWeb } from "tronweb";
 import { Payment as XrpPayment } from "xrpl";
 import { InboundAddress } from "../accounts";
 import { Asset } from "../asset";
@@ -9,7 +10,7 @@ import { Network } from "../network";
 import { EncodeObject } from "../signers/cosmos/proto-signing";
 import { MsgSend as CosmosMsgSend } from "../signers/cosmos/types/cosmos/bank/v1beta1/tx";
 import { PsbtFactory, Utxo } from "../signers/utxo";
-import { ERC20Allowance, Msg } from "./msg";
+import { ERC20Allowance, Msg, TronTx } from "./msg";
 
 const EVM_NATIVE = "0x0000000000000000000000000000000000000000";
 
@@ -132,6 +133,19 @@ export class MsgSend implements Msg {
       Fee: ((inboundAddress?.gasRate || 0n) / 100n).toString(),
       Memos: MemoData ? [{ Memo: { MemoData } }] : [],
     };
+  }
+
+  async toTronTx(
+    tronWeb: TronWeb,
+    account: { network: Network; address: string }
+  ): Promise<TronTx> {
+    this.checkNetwork(account.network);
+
+    return tronWeb.transactionBuilder.sendTrx(
+      this.recipient,
+      Number(this.amount),
+      account.address
+    );
   }
 
   toMemo(): string {

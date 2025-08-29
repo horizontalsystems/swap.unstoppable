@@ -11,6 +11,7 @@ import { default as rabby } from './rabby'
 import { default as station } from './station'
 import { default as trust } from './trust'
 import { default as vulticonnect } from './vulticonnect'
+import { default as tronlink } from './tronlink'
 
 const isClient = () => typeof window !== 'undefined'
 const walletProvidersCache = new Map<Provider, WalletProvider<any>>()
@@ -43,6 +44,8 @@ const getProviderInstance = <P extends Provider>(provider: P): WalletProvider<P>
       return brave() as unknown as WalletProvider<P>
     case 'Coinbase':
       return coinbase() as unknown as WalletProvider<P>
+    case 'Tronlink':
+      return tronlink() as unknown as WalletProvider<P>
     default:
       throw new Error(`Unsupported provider: ${provider}`)
   }
