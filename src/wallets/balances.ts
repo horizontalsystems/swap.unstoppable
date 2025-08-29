@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ethers } from 'ethers'
-import { Network } from 'rujira.js'
+import { gasToken, Network } from 'rujira.js'
 
 interface BalanceProviderProps {
   network: Network
@@ -112,10 +112,10 @@ class BalanceProvider {
   async getBalances(address: string, assets: string[]): Promise<Record<string, string>> {
     const balances: Record<string, string> = {}
     for (const item of assets) {
-      const [, asset] = item.split('.')
+      const [chain, asset] = item.split('.')
       const [, contract] = asset.split('-')
 
-      if (asset.toUpperCase() === this.network) {
+      if (chain === this.network && asset.toUpperCase() === gasToken(this.network).symbol) {
         balances[item] = await this.getNativeBalance(address)
       } else {
         balances[item] = await this.getTokenBalance(address, contract)
