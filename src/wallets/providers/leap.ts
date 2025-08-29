@@ -15,14 +15,16 @@ declare global {
 export type LeapContext = JsonRpcSigner | CosmosContext
 
 export class LeapAdapter implements WalletProvider<LeapContext> {
+  onChange?: ((cb: () => void) => void) | undefined
   private c: CosmosAdapter
+
   constructor(
     private e: Eip6963Adapter,
     k: () => Keplr | undefined
   ) {
     this.c = new CosmosAdapter(k)
   }
-  onChange?: ((cb: () => void) => void) | undefined
+
   isAvailable(): boolean {
     return this.c.isAvailable()
   }

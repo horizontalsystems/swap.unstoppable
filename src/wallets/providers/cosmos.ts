@@ -1,5 +1,5 @@
 import { AccountData, ChainInfo, Keplr } from '@keplr-wallet/types'
-import { Account, InboundAddress, Msg, Network, signers, Simulation, TxResult, Decimal } from 'rujira.js'
+import { Account, Decimal, InboundAddress, Msg, Network, signers, Simulation, TxResult } from 'rujira.js'
 import { CosmosClient } from 'rujira.js/src/signers/cosmos'
 import { AminoTypes, OfflineAminoSigner } from 'rujira.js/src/signers/cosmos/amino'
 import { OfflineDirectSigner } from 'rujira.js/src/signers/cosmos/proto-signing'
@@ -17,8 +17,10 @@ export interface CosmosContext {
 }
 
 export class CosmosAdapter implements WalletProvider<CosmosContext> {
-  constructor(private k: () => Keplr | undefined) {}
   onChange?: ((cb: () => void) => void) | undefined
+
+  constructor(private k: () => Keplr | undefined) {}
+
   isAvailable(): boolean {
     const k = this.k()
     if (!k) return false

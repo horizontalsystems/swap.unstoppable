@@ -22,11 +22,14 @@ declare global {
 export type CtrlContext = JsonRpcSigner | CosmosContext | UtxoQueryClient
 
 class CtrlAdapter implements WalletProvider<CtrlContext> {
+  onChange?: ((cb: () => void) => void) | undefined
+
   constructor(
     private e: Eip1193Adapter,
     private c: CosmosAdapter,
     private b?: XfiWindow
   ) {}
+
   async getAccounts(): Promise<
     {
       context: CtrlContext
@@ -44,6 +47,7 @@ class CtrlAdapter implements WalletProvider<CtrlContext> {
     ])
     return x.flat()
   }
+
   async simulate(
     context: CtrlContext,
     account: Account<keyof Providers>,
@@ -61,6 +65,7 @@ class CtrlAdapter implements WalletProvider<CtrlContext> {
       gas: 0n
     }
   }
+
   async signAndBroadcast(
     context: CtrlContext,
     account: Account<keyof Providers>,
@@ -109,7 +114,7 @@ class CtrlAdapter implements WalletProvider<CtrlContext> {
       )
     })
   }
-  onChange?: ((cb: () => void) => void) | undefined
+
   isAvailable() {
     return this.e.isAvailable()
   }

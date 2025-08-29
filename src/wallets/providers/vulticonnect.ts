@@ -12,10 +12,7 @@ export type Callback = (
 ) => void
 
 export type VultisigProvider = {
-  request(
-    request: { method: string; params?: Array<any> | Record<string, any> },
-    callback?: Callback
-  ): Promise<any>
+  request(request: { method: string; params?: Array<any> | Record<string, any> }, callback?: Callback): Promise<any>
 }
 
 declare global {

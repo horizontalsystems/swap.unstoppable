@@ -24,11 +24,14 @@ declare global {
 export type OkxContext = JsonRpcSigner | CosmosContext | UtxoContext
 
 class OkxAdapter implements WalletProvider<OkxContext> {
+  onChange?: ((cb: () => void) => void) | undefined
+
   constructor(
     private e: Eip6963Adapter,
     private c: CosmosAdapter,
     private b?: BitcoinProvider
   ) {}
+
   getAccounts(): Promise<
     {
       context: OkxContext
@@ -50,6 +53,7 @@ class OkxAdapter implements WalletProvider<OkxContext> {
 
     return Promise.all([this.e.getAccounts(), this.c.getAccounts(), accs]).then(x => x.flat())
   }
+
   async simulate(
     context: OkxContext,
     account: Account<keyof Providers>,
@@ -69,6 +73,7 @@ class OkxAdapter implements WalletProvider<OkxContext> {
       gas: 0n
     }
   }
+
   async signAndBroadcast(
     context: OkxContext,
     account: Account<keyof Providers>,
@@ -87,7 +92,7 @@ class OkxAdapter implements WalletProvider<OkxContext> {
     const signed = Psbt.fromHex(res)
     return context.broadcast(account.address, signed.extractTransaction(), msg.toDeposit?.())
   }
-  onChange?: ((cb: () => void) => void) | undefined
+
   isAvailable() {
     return this.e.isAvailable()
   }

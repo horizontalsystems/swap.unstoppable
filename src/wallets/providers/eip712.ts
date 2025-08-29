@@ -15,6 +15,9 @@ interface Provider extends Eip1193Provider {
 export type Eip712Context = CosmosContext
 
 export class Eip712Adapter implements WalletProvider<Eip712Context> {
+  onChange?: ((cb: () => void) => void) | undefined
+  disconnect?: (() => void) | undefined
+
   constructor(
     private e: () => Provider | undefined,
     private chainInfo: ChainInfo
@@ -34,6 +37,7 @@ export class Eip712Adapter implements WalletProvider<Eip712Context> {
       })
     )
   }
+
   async simulate(
     context: Eip712Context,
     account: Account<keyof Providers>,
@@ -61,6 +65,7 @@ export class Eip712Adapter implements WalletProvider<Eip712Context> {
       gas: BigInt(sim)
     }
   }
+
   async signAndBroadcast(
     context: Eip712Context,
     account: Account<keyof Providers>,
@@ -80,9 +85,8 @@ export class Eip712Adapter implements WalletProvider<Eip712Context> {
       deposited: msg.toDeposit ? msg.toDeposit() : undefined
     }
   }
-  onChange?: ((cb: () => void) => void) | undefined
+
   isAvailable() {
     return true
   }
-  disconnect?: (() => void) | undefined
 }
