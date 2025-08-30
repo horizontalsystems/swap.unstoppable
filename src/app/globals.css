@@ -10,6 +10,20 @@
   --color-storm-purple: var(--storm-purple);
   --color-rune-gray: var(--rune-gray);
 
+  --color-tyler: var(--tyler);
+  --color-lawrence: var(--lawrence);
+  --color-claude: var(--claude);
+  --color-bran: var(--bran);
+  --color-andy: var(--andy);
+  --color-leah: var(--leah);
+  --color-jacob: var(--jacob);
+  --color-sunset: var(--sunset);
+
+  --color-gray: var(--gray);
+  --color-green: var(--green);
+  --color-blue: var(--blue);
+  --color-bright: var(--bright);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -49,6 +63,22 @@
 
 @layer base {
   :root {
+    --black: #000000;
+    --dark: #151515;
+    --carbon: #232323;
+    --smoke: #4B4B4B;
+    --gray: #808085;
+    --steel: #B3B3B3;
+    --light: #DFDFDF;
+    --bright: #EDEDED;
+    --white: #FFFFFF;
+    --blue: #2848FF;
+    --sunset: #FF2C00;
+    --yellow: #FFB700;
+    --green: #0AC18E;
+    --gray-50: #808085;
+    --orange: #FF9500;
+
     --deep-black: #0D0D0D;
     --runes-blue: #00E8FF;
     --liquidity-green: #00FFA3;
@@ -57,6 +87,14 @@
   }
 
   :root {
+    --tyler: var(--bright);
+    --lawrence: var(--white);
+    --claude: var(--bright);
+    --bran: var(--light);
+    --andy: var(--steel);
+    --leah: var(--dark);
+    --jacob: var(--orange);
+
     --radius: 0.625rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -92,6 +130,14 @@
   }
 
   .dark {
+    --tyler: var(--black);
+    --lawrence: var(--dark);
+    --claude: var(--carbon);
+    --bran: var(--carbon);
+    --andy: var(--smoke);
+    --leah: var(--bright);
+    --jacob: var(--yellow);
+
     --background: black;
     --foreground: oklch(0.985 0 0);
     --card: oklch(0.205 0 0);
