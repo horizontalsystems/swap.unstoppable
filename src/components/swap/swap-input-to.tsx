@@ -1,9 +1,11 @@
+import Decimal from 'decimal.js'
 import { useState } from 'react'
 import { ChevronDown, Wallet } from 'lucide-react'
 import { SwapSelectCoin } from '@/components/swap/swap-select-coin'
 import { useSwapContext } from '@/context/swap-provider'
 import { DecimalInput } from '@/components/decimal-input'
 import { Network, networkLabel } from 'rujira.js'
+import { DecimalFiat } from '@/components/decimal-fiat'
 import { useAccounts } from '@/context/accounts-provider'
 import { UseQuote } from '@/hook/use-quote'
 
@@ -17,6 +19,10 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
   const { accounts } = useAccounts()
 
   const amount = toAsset ? BigInt(quote?.expected_amount_out || 0) : 0n
+  const valueTo = new Decimal(amount)
+    .div(10 ** 8)
+    .mul(toAsset?.price || 1)
+    .toString()
 
   return (
     <div className="px-6 py-8">
@@ -24,14 +30,16 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
         <div className="flex-1">
           <div className="text-2xl font-medium text-white">
             <DecimalInput
-              className="w-full bg-transparent text-2xl font-medium text-leah outline-none"
+              className="text-leah w-full bg-transparent text-2xl font-medium outline-none"
               amount={amount}
               onAmountChange={console.log}
               autoComplete="off"
               disabled
             />
           </div>
-          <div className="text-gray mt-1 text-sm">$00.00</div>
+          <div className="text-gray mt-1 text-sm">
+            <DecimalFiat amount={valueTo} />
+          </div>
         </div>
         <div className="flex items-center gap-3" onClick={() => setOpen(true)}>
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-300">

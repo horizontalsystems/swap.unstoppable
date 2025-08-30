@@ -2,7 +2,7 @@
 
 import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useContext, useState } from 'react'
 import { useAccounts } from '@/context/accounts-provider'
-import { usePools } from '@/hook/use-pools'
+import { usePoolsRates } from '@/hook/use-pools-rates'
 import { Asset } from '@/components/swap/asset'
 import { Account } from '@/wallets'
 import { Network } from 'rujira.js'
@@ -12,11 +12,11 @@ interface SwapContext {
   setSlippageLimit: Dispatch<SetStateAction<bigint>>
   /** Selected from Asset */
   fromAsset?: Asset & {
-    price?: { current?: string | null | undefined }
+    price?: string | null | undefined
   }
   /** Selected to Asset */
   toAsset?: Asset & {
-    price?: { current?: string | null | undefined }
+    price?: string | null | undefined
   }
   /** The amount of asset that needs to be deposited to inboundAddress, 8dp */
   fromAmount: bigint
@@ -79,7 +79,7 @@ export const SwapProvider: FC<PropsWithChildren> = ({ children }) => {
       to: b?.asset || to
     })
 
-  const { pools } = usePools()
+  const { pools } = usePoolsRates()
   const fromAsset = findAsset(pools, selected, from)
   const toAsset = findAsset(pools, destination, to)
 
@@ -103,4 +103,4 @@ export const SwapProvider: FC<PropsWithChildren> = ({ children }) => {
   )
 }
 
-export const useSwapContext = () => useContext(Context)
+export const useSwapContext = (): SwapContext => useContext(Context)

@@ -1,12 +1,9 @@
 import axios from 'axios'
+import { poolsInfoMap } from '@/hook/use-pools-rates'
 
-const midgard = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_MIDGARD_API
-})
-
-const thornode = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_THOR_API
-})
+const midgard = axios.create({ baseURL: 'https://midgard.ninerealms.com' })
+const thornode = axios.create({ baseURL: 'https://thornode.ninerealms.com' })
+const coingecko = axios.create({ baseURL: 'https://api.coingecko.com/api/v3' })
 
 export const getPools = async () => {
   return midgard
@@ -23,11 +20,22 @@ export const getPools = async () => {
           chain,
           metadata: {
             symbol,
-            decimals: item.nativeDecimal
+            decimals: poolsInfoMap[item.asset]?.decimals || parseInt(item.nativeDecimal)
           }
         }
       })
     )
+}
+
+export const getPoolsRates = async (assets: string[]) => {
+  const ids = assets
+    .map(asset => poolsInfoMap[asset]?.geckoId)
+    .filter(Boolean)
+    .join(',')
+
+  if (!ids) return {}
+
+  return coingecko.get(`/simple/price?ids=${ids}&vs_currencies=usd`).then(res => res.data)
 }
 
 export const getQuote = async (params: Record<string, any>) => {
