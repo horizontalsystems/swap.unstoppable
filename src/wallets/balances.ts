@@ -23,6 +23,7 @@ const networkUrls: Record<Network, string> = {
   [Network.Thorchain]: 'https://thornode.ninerealms.com',
   [Network.Noble]: 'https://lcd-noble.blockapsis.com',
   [Network.Xrp]: 'https://data.ripple.com/v2/accounts',
+  [Network.Tron]: 'https://api.trongrid.io',
   [Network.Terra]: 'https://lcd-terra.classic.money',
   [Network.Terra2]: 'https://lcd-terra2.classic.money'
 }
