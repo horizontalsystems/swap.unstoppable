@@ -19,27 +19,27 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
   const amount = toAsset ? BigInt(quote?.expected_amount_out || 0) : 0n
 
   return (
-    <div className="rounded-xl bg-gray-800 p-4">
+    <div className="px-6 py-8">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="text-2xl font-medium text-white">
             <DecimalInput
-              className="w-full bg-transparent text-2xl font-medium text-white outline-none"
+              className="w-full bg-transparent text-2xl font-medium text-leah outline-none"
               amount={amount}
               onAmountChange={console.log}
               autoComplete="off"
               disabled
             />
           </div>
-          <div className="mt-1 text-sm text-gray-400">$00.00</div>
+          <div className="text-gray mt-1 text-sm">$00.00</div>
         </div>
         <div className="flex items-center gap-3" onClick={() => setOpen(true)}>
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-300">
             <Wallet className="h-6 w-6 text-black" />
           </div>
           <div className="flex flex-col items-start">
-            <span className="text-lg font-semibold text-white">{toAsset?.metadata.symbol}</span>
-            <span className="text-sm text-neutral-400">{toAsset?.chain ? networkLabel(toAsset.chain) : ''}</span>
+            <span className="text-leah text-lg font-semibold">{toAsset?.metadata.symbol}</span>
+            <span className="text-gray text-sm">{toAsset?.chain ? networkLabel(toAsset.chain) : ''}</span>
           </div>
           <ChevronDown className="h-4 w-4 text-white" />
         </div>

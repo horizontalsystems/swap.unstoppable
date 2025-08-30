@@ -3,20 +3,21 @@
 import { useMemo } from 'react'
 import { Msg, MsgSwap, Simulation } from 'rujira.js'
 import { ArrowDown, LoaderCircle, SlidersHorizontal } from 'lucide-react'
-import { SwapAddress } from '@/components/swap/swap-address'
 import { SwapButton } from '@/components/swap/swap-button'
-import { useAccounts } from '@/context/accounts-provider'
+import { SwapAddressFrom } from '@/components/swap/swap-address-from'
+import { SwapAddressTo } from '@/components/swap/swap-address-to'
 import { Separator } from '@/components/ui/separator'
 import { SwapInputFrom } from '@/components/swap/swap-input-from'
 import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapDetails } from '@/components/swap/swap-details'
+import { useAccounts } from '@/context/accounts-provider'
 import { useSwapContext } from '@/context/swap-provider'
 import { useQuote } from '@/hook/use-quote'
 import { wallets } from '@/wallets'
 
 export const Swap = () => {
-  const { selected, select, context } = useAccounts()
-  const { fromAsset, fromAmount, destination, setDestination, setSwap, toAsset, slippageLimit } = useSwapContext()
+  const { selected, context } = useAccounts()
+  const { fromAsset, fromAmount, destination, setSwap, toAsset, slippageLimit } = useSwapContext()
 
   const params = useMemo(
     () => ({
@@ -71,7 +72,7 @@ export const Swap = () => {
 
         <div className="bg-deep-black border-blade rounded-3xl border-1">
           <div className="border-b-1 p-4">
-            <SwapAddress asset={fromAsset} account={selected} onSelect={select} />
+            <SwapAddressFrom asset={fromAsset} />
           </div>
 
           <SwapInputFrom />
@@ -87,7 +88,7 @@ export const Swap = () => {
           <SwapInputTo quote={quote} />
 
           <div className="border-t-1 p-4">
-            <SwapAddress asset={toAsset} account={destination} onSelect={setDestination} />
+            <SwapAddressTo asset={toAsset} />
           </div>
         </div>
         {error && (

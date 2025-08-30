@@ -63,13 +63,13 @@ export const SwapButton = ({ msg, signer }: SwapButtonProps) => {
   const disabled = !simulation || !msg || !!simulationError
 
   return (
-    <div>
+    <div className="mt-6">
       {simulationError?.message && (
         <div className="mt-3 px-3 text-red-500">{translateError(simulationError.message)}</div>
       )}
 
       <Button
-        className="mt-6 w-full rounded-2xl bg-gray-200 py-4 font-medium text-black transition-colors hover:bg-white"
+        className="w-full rounded-2xl bg-gray-200 py-4 font-medium text-black transition-colors hover:bg-white"
         onClick={onSign}
         disabled={disabled}
         size="lg"

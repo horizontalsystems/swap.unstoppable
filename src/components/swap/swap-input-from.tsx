@@ -1,11 +1,12 @@
 import Decimal from 'decimal.js'
 import { useState } from 'react'
+import { networkLabel } from 'rujira.js'
 import { ChevronDown, Wallet } from 'lucide-react'
 import { DecimalInput, parseFixed } from '@/components/decimal-input'
 import { SwapSelectCoin } from '@/components/swap/swap-select-coin'
+import { Button } from '@/components/ui/button'
 import { useSwapContext } from '@/context/swap-provider'
 import { useBalances } from '@/context/balances-provider'
-import { networkLabel } from 'rujira.js'
 
 export const SwapInputFrom = () => {
   const [open, setOpen] = useState(false)
@@ -21,48 +22,48 @@ export const SwapInputFrom = () => {
   }
 
   return (
-    <div className="rounded-xl bg-gray-800 p-4">
-      <div className="mb-2 flex items-start justify-between">
+    <div className="px-6 py-8">
+      <div className="flex items-start justify-between">
         <div className="flex-1">
           <DecimalInput
-            className="w-full bg-transparent text-2xl font-medium text-white outline-none"
+            className="w-full bg-transparent text-2xl font-medium text-leah outline-none"
             amount={fromAmount}
             onAmountChange={e => setFromAmount(e)}
             autoComplete="off"
           />
-          <div className="mt-1 text-sm text-gray-400">$0.00</div>
+          <div className="mt-1 text-sm text-gray">$0.00</div>
         </div>
         <div className="flex items-center gap-3" onClick={() => setOpen(true)}>
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400">
             <Wallet className="h-6 w-6 text-black" />
           </div>
           <div className="flex flex-col items-start">
-            <span className="text-lg font-semibold text-white">{fromAsset?.metadata.symbol}</span>
-            <span className="text-sm text-neutral-400">{fromAsset?.chain ? networkLabel(fromAsset.chain) : ''}</span>
+            <span className="text-lg font-semibold text-leah">{fromAsset?.metadata.symbol}</span>
+            <span className="text-sm text-gray">{fromAsset?.chain ? networkLabel(fromAsset.chain) : ''}</span>
           </div>
           <ChevronDown className="h-4 w-4 text-white" />
         </div>
       </div>
 
       <div className="mt-4 flex gap-2">
-        <button
-          className="rounded bg-gray-700 px-3 py-1 text-sm text-gray-300 transition-colors hover:bg-gray-600"
+        <Button
+          className="text-leah bg-blade hover:bg-zinc-800 rounded-full px-3 py-1 text-sm"
           onClick={() => handleSetPercent(0)}
         >
           Clear
-        </button>
-        <button
-          className="rounded bg-gray-600 px-3 py-1 text-sm text-white transition-colors hover:bg-gray-500"
+        </Button>
+        <Button
+          className="text-leah bg-blade hover:bg-zinc-800 rounded-full px-3 py-1 text-sm"
           onClick={() => handleSetPercent(0.5)}
         >
           50%
-        </button>
-        <button
-          className="rounded bg-gray-700 px-3 py-1 text-sm text-gray-300 transition-colors hover:bg-gray-600"
+        </Button>
+        <Button
+          className="text-leah bg-blade hover:bg-zinc-800 rounded-full px-3 py-1 text-sm"
           onClick={() => handleSetPercent(1)}
         >
           100%
-        </button>
+        </Button>
       </div>
 
       <SwapSelectCoin
