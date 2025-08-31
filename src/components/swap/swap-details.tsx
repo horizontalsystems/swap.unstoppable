@@ -1,11 +1,13 @@
+import Decimal from 'decimal.js'
 import { ReactNode, useState } from 'react'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { ArrowRightLeft, ChevronDown, ChevronUp, Clock, Info } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Separator } from '@/components/ui/separator'
+import { DecimalText } from '@/components/decimal-text'
+import { DecimalFiat } from '@/components/decimal-fiat'
 import { UseQuote } from '@/hook/use-quote'
 import { useSwapContext } from '@/context/swap-provider'
-import { DecimalText } from '@/components/decimal-text'
 
 interface SwapDetailsProps {
   quote?: UseQuote
@@ -24,6 +26,8 @@ export function SwapDetails({ quote }: SwapDetailsProps) {
     Number(quote?.fees.liquidity || 0) + Number(quote?.fees.outbound || 0) + Number(quote?.fees.affiliate || 0)
   )
 
+  const feeInUsd = new Decimal(toAsset?.price || 0).mul(totalFee / 10n ** 8n).toString()
+
   return (
     <div className="p-5 pb-0">
       <div className="flex justify-between">
@@ -39,9 +43,9 @@ export function SwapDetails({ quote }: SwapDetailsProps) {
 
         <div className="flex items-center gap-2 text-sm">
           <span className="text-gray">Fee</span>
-          <span className="font-sm text-leah">
-            <DecimalText amount={totalFee} round={6} symbol={toAsset?.metadata.symbol} />
-          </span>
+          <div className="text-leah">
+            <DecimalFiat className="text-sm" amount={feeInUsd} symbol="$" />
+          </div>
           {showMore ? (
             <ChevronUp className="text-gray h-4 w-4" onClick={() => setShowMore(false)} />
           ) : (
@@ -56,12 +60,22 @@ export function SwapDetails({ quote }: SwapDetailsProps) {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
+              <span className="text-gray text-sm">Total Fee</span>
+            </div>
+            <DecimalText className="text-leah text-xs" amount={totalFee} round={6} symbol={toAsset?.metadata.symbol} />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
               <span className="text-gray text-sm">Liquidity Fee</span>
               <InfoTooltip>Fee for liquidity providers on the route.</InfoTooltip>
             </div>
-            <div className="text-leah text-sm">
-              <DecimalText amount={BigInt(quote?.fees.liquidity || 0)} round={2} />
-            </div>
+            <DecimalText
+              className="text-leah text-xs"
+              amount={BigInt(quote?.fees.liquidity || 0)}
+              round={2}
+              symbol={toAsset?.metadata.symbol}
+            />
           </div>
 
           <div className="flex items-center justify-between">
@@ -69,9 +83,12 @@ export function SwapDetails({ quote }: SwapDetailsProps) {
               <span className="text-gray text-sm">Outbound Fee</span>
               <InfoTooltip>Outbound Fee</InfoTooltip>
             </div>
-            <div className="text-leah text-sm">
-              <DecimalText amount={BigInt(quote?.fees.outbound || 0)} round={2} />
-            </div>
+            <DecimalText
+              className="text-leah text-xs"
+              amount={BigInt(quote?.fees.outbound || 0)}
+              round={2}
+              symbol={toAsset?.metadata.symbol}
+            />
           </div>
 
           <div className="flex items-center justify-between">
@@ -79,9 +96,12 @@ export function SwapDetails({ quote }: SwapDetailsProps) {
               <span className="text-gray text-sm">Affiliate Fee</span>
               <InfoTooltip>Percentage returned to the referrer.</InfoTooltip>
             </div>
-            <div className="text-leah text-sm">
-              <DecimalText amount={BigInt(quote?.fees.affiliate || 0)} round={2} />
-            </div>
+            <DecimalText
+              className="text-leah text-xs"
+              amount={BigInt(quote?.fees.affiliate || 0)}
+              round={2}
+              symbol={toAsset?.metadata.symbol}
+            />
           </div>
 
           <div className="flex items-center justify-between">

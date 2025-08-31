@@ -4,11 +4,13 @@ interface DecimalFiatProps {
   amount: string
   decimals?: number
   symbol?: string
+  className?: string
 }
 
-export const DecimalFiat = ({ amount, decimals = 2, symbol = '$' }: DecimalFiatProps) => {
+export const DecimalFiat = ({ className, amount, decimals = 2, symbol = '$' }: DecimalFiatProps) => {
   return (
     <NumericFormat
+      className={className}
       value={amount}
       displayType="text"
       thousandSeparator=","

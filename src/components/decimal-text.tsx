@@ -4,9 +4,10 @@ interface DecimalPropsProps {
   round?: number
   symbol?: string
   subscript?: boolean
+  className?: string
 }
 
-export const DecimalText = ({ amount, decimals = 8, round = 6, symbol, subscript }: DecimalPropsProps) => {
+export const DecimalText = ({ className, amount, decimals = 8, round = 6, symbol, subscript }: DecimalPropsProps) => {
   const dec = amount % BigInt(10 ** decimals)
   const int = BigInt(Math.round(Number(amount - dec) / 10 ** decimals))
   const padded = dec.toString().padStart(decimals, '0')
@@ -15,7 +16,7 @@ export const DecimalText = ({ amount, decimals = 8, round = 6, symbol, subscript
   const trimmed = truncated.substring(0, round)
 
   return (
-    <span>
+    <span className={className}>
       <span>
         {(int || '0').toLocaleString()}
         {round > 0 && whatDecimalSeparator()}
