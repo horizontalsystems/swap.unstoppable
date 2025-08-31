@@ -39,7 +39,13 @@ export function SwapSelectCoin({ isOpen, onClose, selected, onSelectAsset, isInp
   }
 
   const networks = Array.from(chains.keys())
-  const chainAssets = chains.get(selectedChain) || []
+  const chainAssets = (chains.get(selectedChain) || []).filter(asset => {
+    if (!searchQuery) return true
+
+    const query = searchQuery.toLowerCase()
+    return asset.metadata.symbol.toLowerCase().includes(query)
+  })
+
   const handleChainSelect = (chain: Network) => {
     setSelectedChain(chain)
   }
