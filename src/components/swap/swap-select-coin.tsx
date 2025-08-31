@@ -51,15 +51,15 @@ export function SwapSelectCoin({ isOpen, onClose, selected, onSelectAsset, isInp
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-deep-black w-full max-w-3xl min-w-2xl gap-0 p-0">
-        <DialogHeader className="p-6 pb-4">
+      <DialogContent className="bg-deep-black w-full max-w-3xl gap-0 p-0 md:h-auto md:max-h-[90vh] md:min-w-2xl">
+        <DialogHeader className="hidden p-6 pb-4 md:block">
           <DialogTitle className="text-2xl font-medium text-white">Select Coin</DialogTitle>
         </DialogHeader>
 
-        <div className="flex min-h-0 flex-1">
-          <div className="w-1/2 border-r p-6 pt-0">
-            <h3 className="mb-4 text-sm font-medium text-gray">Chains</h3>
-            <div className="h-full max-h-[400px] space-y-1 overflow-y-auto">
+        <div className="flex flex-col md:flex-row">
+          <div className="flex-1 border-b p-6 sm:pt-4 md:border-r md:border-b-0 md:pt-0">
+            <h3 className="text-gray mb-4 text-sm font-medium">Chains</h3>
+            <div className="h-full max-h-[30vh] space-y-1 overflow-y-auto md:max-h-[60vh]">
               {networks.map((network, index) => (
                 <button
                   key={index}
@@ -79,20 +79,20 @@ export function SwapSelectCoin({ isOpen, onClose, selected, onSelectAsset, isInp
             </div>
           </div>
 
-          <div className="w-1/2 p-6 pt-0">
-            <h3 className="mb-4 text-sm font-medium text-gray">Assets</h3>
+          <div className="flex-1 p-6 sm:pt-4 md:pt-0">
+            <h3 className="text-gray mb-4 text-sm font-medium">Assets</h3>
 
             <div className="relative mb-4">
-              <Search className="absolute top-1/2 left-3 -translate-y-1/2 transform text-gray" size={18} />
+              <Search className="text-gray absolute top-1/2 left-3 -translate-y-1/2 transform" size={18} />
               <Input
                 placeholder="Search"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="border-gray-700 bg-gray-800 pl-10 text-white placeholder-gray-400"
+                className="bg-blade text-gray pl-10 placeholder-gray-400"
               />
             </div>
 
-            <div className="h-full max-h-[400px] space-y-1 overflow-y-auto">
+            <div className="h-full max-h-[30vh] space-y-1 overflow-y-auto md:max-h-[60vh]">
               {chainAssets.map((item, index) => (
                 <button
                   key={index}
@@ -109,10 +109,8 @@ export function SwapSelectCoin({ isOpen, onClose, selected, onSelectAsset, isInp
                   {item.asset === selected?.asset && (
                     <div
                       className={cn('rounded-full border px-2 py-1 text-xs font-medium', {
-                        'border-green-500': isInput,
-                        'text-green-400': isInput,
-                        'border-yellow-500': !isInput,
-                        'text-yellow-400': !isInput
+                        'border-green-500 text-green-400': isInput,
+                        'border-yellow-500 text-yellow-400': !isInput
                       })}
                     >
                       {isInput ? 'INPUT' : 'OUTPUT'}

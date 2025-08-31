@@ -56,17 +56,15 @@ export const WalletConnectDialog = <T,>({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-deep-black mx-4 w-full max-w-3xl min-w-2xl overflow-hidden p-0">
-        <DialogHeader className="p-6 pb-0">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-semibold text-white">Connect Wallet</DialogTitle>
-          </div>
+      <DialogContent className="bg-deep-black mx-0 w-full max-w-3xl p-0 md:mx-4 md:h-auto md:max-h-[90vh] md:min-w-2xl">
+        <DialogHeader className="bg-deep-black sticky top-0 z-10 p-6 pb-0">
+          <DialogTitle className="text-2xl font-semibold text-white">Connect Wallet</DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-2 gap-8 px-6 pb-6">
-          <div className="border-r-1 pe-3">
+        <div className="grid flex-1 grid-cols-1 gap-4 overflow-hidden px-6 pb-6 md:grid-cols-2">
+          <div className="border-b pe-3 pb-6 md:border-r md:border-b-0 md:pb-0">
             <div className="text-gray mb-3 text-base font-semibold">Wallets</div>
-            <div className="h-full max-h-[400px] overflow-y-auto">
+            <div className="h-full max-h-[40vh] overflow-y-auto md:max-h-[70vh]">
               <div className="space-y-1">
                 {wallets.map(wallet => {
                   const isChosen = chosen.get(wallet.provider)
@@ -118,7 +116,7 @@ export const WalletConnectDialog = <T,>({
               </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className="mt-6 flex justify-end md:mt-0">
               <Button
                 className="border-0 bg-gradient-to-r from-green-400 to-blue-500 text-white hover:from-green-500 hover:to-blue-600"
                 disabled={chosenSize < 1 || connecting}
