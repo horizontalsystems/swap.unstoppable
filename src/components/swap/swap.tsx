@@ -23,9 +23,9 @@ export const Swap = () => {
 
   const params = useMemo(
     () => ({
-      amount: fromAmount.toString(),
-      fromAsset: fromAsset?.asset || '',
-      toAsset: toAsset?.asset || '',
+      amount: fromAmount > 0n ? fromAmount.toString() : undefined,
+      fromAsset: fromAsset?.asset,
+      toAsset: toAsset?.asset,
       affiliate: [],
       affiliateBps: [],
       destination: destination?.address,

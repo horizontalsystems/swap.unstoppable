@@ -4,8 +4,8 @@ import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Thorchain.swap',
-  description: 'Thorchain.swap'
+  title: 'THORChain Swap',
+  description: 'THORChain Swap'
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

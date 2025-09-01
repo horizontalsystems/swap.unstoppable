@@ -3,9 +3,9 @@ import { getQuote } from '@/lib/api'
 import { AxiosError } from 'axios'
 
 interface UseQuoteParams {
-  amount: string
-  fromAsset: string
-  toAsset: string
+  amount?: string
+  fromAsset?: string
+  toAsset?: string
   affiliate: never[]
   affiliateBps: never[]
   destination: string | undefined
@@ -59,7 +59,8 @@ export const useQuote = (params: UseQuoteParams): { quote?: UseQuote; isLoading:
         streaming_interval: params.streamingInterval,
         streaming_quantity: params.streamingQuantity,
         liquidity_tolerance_bps: params.liquidityToleranceBps
-      })
+      }),
+    enabled: !!(params.amount && params.fromAsset && params.toAsset)
   })
 
   let errorMessage = null
