@@ -70,11 +70,8 @@ export const useSwapStore = create<SwapState>()(
 )
 
 // Selectors
-export const useSwapSlippage = () =>
-  useSwapStore(state => ({
-    slippageLimit: state.slippageLimit,
-    setSlippageLimit: state.setSlippageLimit
-  }))
+export const useSlippageLimit = () => useSwapStore(state => state.slippageLimit)
+export const useSetSlippageLimit = () => useSwapStore(state => state.setSlippageLimit)
 
 export const useSwap = () => {
   const [destination, setDestination] = useState<Account | undefined>()

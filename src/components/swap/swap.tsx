@@ -2,11 +2,12 @@
 
 import { useMemo } from 'react'
 import { Msg, MsgSwap, Simulation } from 'rujira.js'
-import { ArrowDown, LoaderCircle, SlidersHorizontal } from 'lucide-react'
+import { ArrowDown, LoaderCircle } from 'lucide-react'
 import { SwapButton } from '@/components/swap/swap-button'
 import { SwapAddressFrom } from '@/components/swap/swap-address-from'
 import { SwapAddressTo } from '@/components/swap/swap-address-to'
 import { Separator } from '@/components/ui/separator'
+import { SwapSlippage } from '@/components/swap/swap-slippage'
 import { SwapInputFrom } from '@/components/swap/swap-input-from'
 import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapDetails } from '@/components/swap/swap-details'
@@ -79,9 +80,7 @@ export const Swap = () => {
             <h1 className="text-2xl font-medium text-white">Swap</h1>
             {isLoading && <LoaderCircle className="animate-spin" />}
           </div>
-          <button className="bg-bran rounded-full px-2 py-2">
-            <SlidersHorizontal className="h-4 w-4" />
-          </button>
+          <SwapSlippage />
         </div>
 
         <div className="bg-deep-black border-blade rounded-3xl border-1">
