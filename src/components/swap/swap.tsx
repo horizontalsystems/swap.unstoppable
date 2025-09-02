@@ -73,7 +73,7 @@ export const Swap = () => {
   }, [fromAmount, fromAsset, quote?.memo])
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
+    <div className="flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
