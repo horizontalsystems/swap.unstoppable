@@ -96,13 +96,8 @@ export const Swap = () => {
             <SwapAddressTo asset={toAsset} />
           </div>
         </div>
-        {error && (
-          <div className="mt-2 px-6">
-            <div className="overflow-hidden text-red-500">{error}</div>
-          </div>
-        )}
 
-        <SwapDetails quote={quote} />
+        <SwapDetails quote={quote} isLoading={isLoading} error={error} />
         <SwapButton msg={msg} signer={{ simulate, signAndBroadcast }} />
       </div>
     </div>

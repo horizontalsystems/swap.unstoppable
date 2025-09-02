@@ -1,8 +1,9 @@
 import Decimal from 'decimal.js'
 import { ReactNode, useState } from 'react'
 import { formatDuration, intervalToDuration } from 'date-fns'
-import { ArrowRightLeft, ChevronDown, ChevronUp, Clock, Info } from 'lucide-react'
+import { ArrowRightLeft, ChevronDown, ChevronUp, Clock, Info, OctagonAlert } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { translateError } from 'rujira.js'
 import { Separator } from '@/components/ui/separator'
 import { DecimalText } from '@/components/decimal-text'
 import { DecimalFiat } from '@/components/decimal-fiat'
@@ -11,11 +12,22 @@ import { useSwap } from '@/hook/use-swap'
 
 interface SwapDetailsProps {
   quote?: UseQuote
+  isLoading: boolean
+  error?: string
 }
 
-export function SwapDetails({ quote }: SwapDetailsProps) {
+export function SwapDetails({ quote, error }: SwapDetailsProps) {
   const [showMore, setShowMore] = useState(false)
   const { fromAmount, fromAsset, toAsset } = useSwap()
+
+  if (error) {
+    return (
+      <div className="mt-2 flex items-center gap-2 px-5 text-red-500">
+        <OctagonAlert size={16} min={16} className="flex-shrink-0" />
+        <span className="overflow-hidden text-red-500">{translateError(error || 'Unknown Error')}</span>
+      </div>
+    )
+  }
 
   if (!quote) {
     return null
