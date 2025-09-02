@@ -17,8 +17,9 @@ export const SwapInputFrom = () => {
   const { fromAsset, setSwap, fromAmount, setFromAmount } = useSwap()
   const { balances } = useBalances()
 
+  const balance = new Decimal(balances[fromAsset?.asset || ''] || 0)
+
   const handleSetPercent = (percent: number) => {
-    const balance = new Decimal(balances[fromAsset?.asset || ''] || 0)
     if (balance.isZero()) return
     const value = percent > 0 ? balance.mul(percent).toString() : ''
     const intValue = parseFixed(value, 8)
@@ -60,18 +61,21 @@ export const SwapInputFrom = () => {
         <Button
           className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
           onClick={() => handleSetPercent(0)}
+          disabled={balance.isZero()}
         >
           Clear
         </Button>
         <Button
           className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
           onClick={() => handleSetPercent(0.5)}
+          disabled={balance.isZero()}
         >
           50%
         </Button>
         <Button
           className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
           onClick={() => handleSetPercent(1)}
+          disabled={balance.isZero()}
         >
           100%
         </Button>
