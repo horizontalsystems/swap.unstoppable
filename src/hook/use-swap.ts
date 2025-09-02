@@ -9,12 +9,14 @@ import { AssetRate, usePoolsRates } from '@/hook/use-pools-rates'
 
 interface SwapState {
   slippageLimit: string
+  destination?: Account
   fromAmount: string
   feeWarning: string
   from?: string
   to?: string
 
   setSlippageLimit: (limit: bigint) => void
+  setDestination: (destination?: Account) => void
   setFromAmount: (amount: bigint) => void
   setSwap: (fromAsset?: Asset, toAsset?: Asset) => void
   swapAssets: () => void
@@ -43,6 +45,7 @@ export const useSwapStore = create<SwapState>()(
       ...initialState,
 
       setSlippageLimit: slippageLimit => set({ slippageLimit: slippageLimit.toString() }),
+      setDestination: destination => set({ destination }),
       setFromAmount: fromAmount => set({ fromAmount: fromAmount.toString() }),
 
       setSwap: (fromAsset, toAsset) => {
@@ -72,6 +75,9 @@ export const useSwapStore = create<SwapState>()(
 // Selectors
 export const useSlippageLimit = () => useSwapStore(state => state.slippageLimit)
 export const useSetSlippageLimit = () => useSwapStore(state => state.setSlippageLimit)
+
+export const useDestination = () => useSwapStore(state => state.destination)
+export const useSetDestination = () => useSwapStore(state => state.setDestination)
 
 export const useSwap = () => {
   const [destination, setDestination] = useState<Account | undefined>()
