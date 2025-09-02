@@ -1,22 +1,10 @@
 'use client'
 
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { Network } from 'rujira.js'
 import { Account, AccountProvider, Provider, wallets } from '@/wallets'
-
-const {
-  getAccounts,
-  addProvider,
-  clearProviders,
-  clearSelected,
-  loadProviders,
-  loadSelected,
-  removeProvider,
-  saveSelected,
-  onChange,
-  isAvaialable
-} = wallets
+import { Network } from 'rujira.js'
+import { toast } from 'sonner'
+import * as storage from '@/wallets/storage'
 
 const ERROR = () => {
   throw new Error('AccountProvider Context not defined')
@@ -42,22 +30,12 @@ const Context = createContext<AccountContext>({
   isAvaialable: ERROR
 })
 
-// Currently we only support 1-1 relationship between providers and connected account(s)
-// If for example a user has multiple accounts connected on a Metamask wallet, the context
-// will provide just the one that is currently selected
-// This is relatively easily extended to allow a user to connect to a provider multiple
-// times, registering each account/address and allowing the UI to visually represent
-// (or auto-fix) a mis-match between UI-selected account and provider-selected account
-const storedSelected = loadSelected()
-// These are the providers that have been previously connected, and so we should attempt to re-connect
-// on a page refresh, where possible without triggering annoying modal prompts from the wallets
-// If a connection is refused, it should be removed from the list of stored providers
-const connectedProviders: Provider[] = loadProviders()
+const storedSelected = storage.loadSelected()
+const connectedProviders: Provider[] = storage.loadProviders()
 
 export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
   const [provider, setProvider] = useState<Provider | undefined>(storedSelected?.provider)
   const [network, setNetwork] = useState<Network | undefined>(storedSelected?.network)
-
   const [address, setAddress] = useState<string | undefined>(storedSelected?.address)
 
   const [accounts, setAccounts] = useState<WalletContext[]>()
@@ -65,9 +43,9 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     Promise.allSettled(
       connectedProviders.map(x =>
-        getAccounts(x).catch(err => {
+        wallets.getAccounts(x).catch(err => {
           // Don't keep trying
-          removeProvider(x)
+          storage.removeProvider(x)
           throw err
         })
       )
@@ -85,8 +63,8 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (!selected) return
-    return onChange(selected?.account.provider, () => {
-      getAccounts(selected?.account.provider).then(x => {
+    wallets.onChange(selected?.account.provider, () => {
+      wallets.getAccounts(selected?.account.provider).then(x => {
         if (!x.length) return
         setAccounts((prev = []) => [...prev.filter(x => x.account.provider !== provider), ...x])
       })
@@ -95,12 +73,12 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const connect = async (provider: Provider) => {
     try {
-      const x = await getAccounts(provider)
+      const x = await wallets.getAccounts(provider)
       if (!x.length) throw new Error(`No accounts found on ${provider}`)
       const toSelect = x.find(x => x.account.network === Network.Thorchain) || x[0]
-      addProvider(provider)
+      storage.addProvider(provider)
       if (toSelect) {
-        saveSelected(provider, toSelect.account.network)
+        storage.saveSelected(provider, toSelect.account.network)
         setNetwork(toSelect.account.network)
       }
       setProvider(provider)
@@ -118,7 +96,7 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
     } | null
   ) => {
     if (!account) {
-      clearSelected()
+      storage.clearSelected()
       setProvider(undefined)
       setNetwork(undefined)
       setAddress(undefined)
@@ -132,13 +110,13 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
 
     switch (account.provider) {
       case 'Metamask':
-        saveSelected(account.provider, account.network, account.address)
+        storage.saveSelected(account.provider, account.network, account.address)
         setProvider(account.provider)
         setNetwork(account.network)
         setAddress(account.address)
         break
       default:
-        saveSelected(account.provider, account.network)
+        storage.saveSelected(account.provider, account.network)
         setProvider(account.provider)
         setNetwork(account.network)
         setAddress(undefined)
@@ -147,12 +125,12 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const disconnect = (p: Provider) => {
     wallets.disconnect(p)
-    removeProvider(p)
+    storage.removeProvider(p)
     setAccounts((prev = []) => {
       const filtered = prev.filter(x => x.account.provider !== p)
       const selected = filtered[0]
       if (selected) {
-        saveSelected(selected.account.provider, selected.account.network, selected.account.address)
+        storage.saveSelected(selected.account.provider, selected.account.network, selected.account.address)
       }
       return filtered
     })
@@ -160,8 +138,8 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const disconnectAll = () => {
     accounts?.map(a => wallets.disconnect(a.account.provider))
-    clearProviders()
-    clearSelected()
+    storage.clearProviders()
+    storage.clearSelected()
     setAccounts([])
   }
 
@@ -176,7 +154,7 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
         connect,
         disconnect,
         disconnectAll,
-        isAvaialable
+        isAvaialable: wallets.isAvaialable
       }}
     >
       {children}

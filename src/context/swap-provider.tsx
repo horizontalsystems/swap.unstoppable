@@ -10,17 +10,13 @@ import { Network } from 'rujira.js'
 interface SwapContext {
   slippageLimit: bigint
   setSlippageLimit: Dispatch<SetStateAction<bigint>>
-  /** Selected from Asset */
   fromAsset?: Asset & {
     price?: string | null | undefined
   }
-  /** Selected to Asset */
   toAsset?: Asset & {
     price?: string | null | undefined
   }
-  /** The amount of asset that needs to be deposited to inboundAddress, 8dp */
   fromAmount: bigint
-
   setFromAmount: Dispatch<SetStateAction<bigint>>
   setSwap: (from?: Asset, to?: Asset) => void
   feeWarning: bigint
@@ -42,26 +38,16 @@ const Context = createContext<SwapContext>({
   setDestination: ERROR
 })
 
-const findAsset = (pools?: Asset[], account?: Account | undefined, id?: string): Asset | undefined => {
+const findAsset = (pools?: Asset[], id?: string): Asset | undefined => {
   if (!id || !pools) {
     return undefined
   }
 
-  const asset = pools.find(v => v.asset === id)
-  if (!asset) {
-    return undefined
-  }
-
-  // Return secured variant if account network doesn't match
-  if (account && asset.chain !== account.network) {
-    // return pool.asset.variants.secured as Asset
-  }
-
-  return asset
+  return pools.find(v => v.asset === id)
 }
 
 export const SwapProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { selected, accounts } = useAccounts()
+  const { accounts } = useAccounts()
   const [slippageLimit, setSlippageLimit] = useState(100n)
   const [fromAmount, setFromAmount] = useState(100000000n)
   const [destination, setDestination] = useState<Account | undefined>(
@@ -80,8 +66,8 @@ export const SwapProvider: FC<PropsWithChildren> = ({ children }) => {
     })
 
   const { pools } = usePoolsRates()
-  const fromAsset = findAsset(pools, selected, from)
-  const toAsset = findAsset(pools, destination, to)
+  const fromAsset = findAsset(pools, from)
+  const toAsset = findAsset(pools, to)
 
   return (
     <Context.Provider
