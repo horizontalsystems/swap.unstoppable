@@ -45,7 +45,7 @@ export const WalletConnectDialog = <T,>({
 
     withTimeout(Promise.all(chosenList.map(([provider]) => connect(provider))), 20_000)
       .then(() => {
-        console.log('connected')
+        onOpenChange(false)
       })
       .catch(err => {
         console.log(err.message)
