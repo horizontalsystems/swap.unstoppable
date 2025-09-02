@@ -2,6 +2,7 @@
 
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from 'react'
 import { Account, AccountProvider, Provider, wallets } from '@/wallets'
+import { useSwapContext } from '@/context/swap-provider'
 import { Network } from 'rujira.js'
 import { toast } from 'sonner'
 import * as storage from '@/wallets/storage'
@@ -34,6 +35,7 @@ const storedSelected = storage.loadSelected()
 const connectedProviders: Provider[] = storage.loadProviders()
 
 export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { fromAsset } = useSwapContext()
   const [provider, setProvider] = useState<Provider | undefined>(storedSelected?.provider)
   const [network, setNetwork] = useState<Network | undefined>(storedSelected?.network)
   const [address, setAddress] = useState<string | undefined>(storedSelected?.address)
@@ -73,16 +75,16 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const connect = async (provider: Provider) => {
     try {
-      const x = await wallets.getAccounts(provider)
-      if (!x.length) throw new Error(`No accounts found on ${provider}`)
-      const toSelect = x.find(x => x.account.network === Network.Thorchain) || x[0]
+      const acc = await wallets.getAccounts(provider)
+      if (!acc.length) throw new Error(`No accounts found on ${provider}`)
+      const toSelect = acc.find(x => x.account.network === fromAsset?.chain)
       storage.addProvider(provider)
       if (toSelect) {
         storage.saveSelected(provider, toSelect.account.network)
         setNetwork(toSelect.account.network)
       }
       setProvider(provider)
-      setAccounts((prev = []) => [...prev.filter(x => x.account.provider !== provider), ...x])
+      setAccounts((prev = []) => [...prev.filter(x => x.account.provider !== provider), ...acc])
     } catch (error: any) {
       toast.error(error.message)
     }

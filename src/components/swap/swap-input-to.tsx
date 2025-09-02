@@ -4,7 +4,7 @@ import { ChevronDown, Wallet } from 'lucide-react'
 import { SwapSelectCoin } from '@/components/swap/swap-select-coin'
 import { useSwapContext } from '@/context/swap-provider'
 import { DecimalInput } from '@/components/decimal-input'
-import { Network, networkLabel } from 'rujira.js'
+import { networkLabel } from 'rujira.js'
 import { DecimalFiat } from '@/components/decimal-fiat'
 import { useAccounts } from '@/context/accounts-provider'
 import { UseQuote } from '@/hook/use-quote'
@@ -59,12 +59,12 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
         selected={toAsset}
         isInput={false}
         onClose={() => setOpen(false)}
-        onSelectAsset={v => {
-          if (destination?.network !== Network.Thorchain && destination?.network !== v.chain) {
-            setDestination(accounts?.find(x => x.network === Network.Thorchain))
+        onSelectAsset={asset => {
+          if (destination?.network !== asset.chain) {
+            setDestination(accounts?.find(x => x.network === asset.chain))
           }
 
-          setSwap(undefined, v)
+          setSwap(undefined, asset)
         }}
       />
     </div>

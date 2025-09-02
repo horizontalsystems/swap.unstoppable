@@ -8,9 +8,11 @@ import { SwapSelectCoin } from '@/components/swap/swap-select-coin'
 import { Button } from '@/components/ui/button'
 import { useSwapContext } from '@/context/swap-provider'
 import { useBalances } from '@/context/balances-provider'
+import { useAccounts } from '@/context/accounts-provider'
 
 export const SwapInputFrom = () => {
   const [open, setOpen] = useState(false)
+  const { accounts, select } = useAccounts()
   const { fromAsset, setSwap, fromAmount, setFromAmount } = useSwapContext()
   const { balances } = useBalances()
 
@@ -80,8 +82,10 @@ export const SwapInputFrom = () => {
         selected={fromAsset}
         isInput={true}
         onClose={() => setOpen(false)}
-        onSelectAsset={v => {
-          setSwap(v)
+        onSelectAsset={asset => {
+          setSwap(asset)
+          const toSelect = accounts?.find(a => a.network === asset?.chain)
+          select(toSelect || null)
         }}
       />
     </div>

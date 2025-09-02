@@ -1,11 +1,9 @@
 'use client'
 
 import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useContext, useState } from 'react'
-import { useAccounts } from '@/context/accounts-provider'
 import { usePoolsRates } from '@/hook/use-pools-rates'
 import { Asset } from '@/components/swap/asset'
 import { Account } from '@/wallets'
-import { Network } from 'rujira.js'
 
 interface SwapContext {
   slippageLimit: bigint
@@ -47,12 +45,9 @@ const findAsset = (pools?: Asset[], id?: string): Asset | undefined => {
 }
 
 export const SwapProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { accounts } = useAccounts()
   const [slippageLimit, setSlippageLimit] = useState(100n)
   const [fromAmount, setFromAmount] = useState(100000000n)
-  const [destination, setDestination] = useState<Account | undefined>(
-    accounts?.find(a => a.network === Network.Thorchain)
-  )
+  const [destination, setDestination] = useState<Account | undefined>()
 
   const [{ from, to }, setParams] = useState<{ from?: string; to?: string }>({
     from: 'BTC.BTC',

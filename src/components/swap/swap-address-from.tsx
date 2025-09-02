@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAccounts } from '@/context/accounts-provider'
 import { cn, truncate } from '@/lib/utils'
-import { Network } from 'rujira.js'
 import { Asset } from '@/components/swap/asset'
 
 interface SwapAddressFromProps {
@@ -18,7 +17,7 @@ interface SwapAddressFromProps {
 
 export const SwapAddressFrom = ({ asset }: SwapAddressFromProps) => {
   const { accounts, selected, select } = useAccounts()
-  const options = accounts?.filter(a => a.network === asset?.chain || a.network === Network.Thorchain)
+  const options = accounts?.filter(a => a.network === asset?.chain)
 
   return (
     <div className="flex items-center justify-between">

@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAccounts } from '@/context/accounts-provider'
 import { cn, truncate } from '@/lib/utils'
-import { Network } from 'rujira.js'
 import { Asset } from '@/components/swap/asset'
 import { useSwapContext } from '@/context/swap-provider'
 import { Input } from '@/components/ui/input'
@@ -22,7 +21,7 @@ interface SwapSelectToProps {
 export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
   const { accounts } = useAccounts()
   const { destination, setDestination } = useSwapContext()
-  const options = accounts?.filter(a => a.network === asset?.chain || a.network === Network.Thorchain)
+  const options = accounts?.filter(a => a.network === asset?.chain)
 
   return (
     <div className="flex items-center justify-between">
