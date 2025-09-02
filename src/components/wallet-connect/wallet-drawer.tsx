@@ -32,7 +32,7 @@ export const WalletDrawer = ({ open, onOpenChange, provider }: WalletDrawerProps
         <DrawerHeader className="p-0">
           <div className="flex items-center justify-between border-b border-gray-800 p-4">
             <div className="flex items-center space-x-3">
-              <Image width="32" height="32" src={`/wallets/${provider}.png`} alt={provider} />
+              <Image width="32" height="32" src={`/wallets/${provider.toLowerCase()}.svg`} alt={provider} />
               <div>
                 <DrawerTitle className="text-lg font-semibold">{provider}</DrawerTitle>
                 <p className="text-sm text-gray-400">account 1</p>

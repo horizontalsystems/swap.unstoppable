@@ -61,7 +61,7 @@ export const WalletConnectButton = () => {
             className="rounded-lg border-1 border-emerald-500 px-0"
             onClick={() => setDrawer({ open: true, provider })}
           >
-            <Image width="32" height="32" src={`/wallets/${provider}.png`} alt={provider} />
+            <Image width="32" height="32" src={`/wallets/${provider.toLowerCase()}.svg`} alt={provider} />
           </Button>
         ))}
       </div>
