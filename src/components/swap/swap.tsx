@@ -11,14 +11,14 @@ import { SwapInputFrom } from '@/components/swap/swap-input-from'
 import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapDetails } from '@/components/swap/swap-details'
 import { useAccounts } from '@/context/accounts-provider'
-import { useSwapContext } from '@/context/swap-provider'
 import { useTransactions } from '@/hook/use-transactions'
 import { useQuote } from '@/hook/use-quote'
 import { wallets } from '@/wallets'
+import { useSwap } from '@/hook/use-swap'
 
 export const Swap = () => {
   const { selected, context } = useAccounts()
-  const { fromAsset, fromAmount, destination, setSwap, toAsset, slippageLimit } = useSwapContext()
+  const { fromAsset, fromAmount, destination, setSwap, toAsset, slippageLimit } = useSwap()
   const { setTransaction } = useTransactions()
 
   const params = useMemo(

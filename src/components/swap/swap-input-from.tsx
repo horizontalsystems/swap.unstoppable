@@ -6,14 +6,14 @@ import { DecimalInput, parseFixed } from '@/components/decimal-input'
 import { DecimalFiat } from '@/components/decimal-fiat'
 import { SwapSelectCoin } from '@/components/swap/swap-select-coin'
 import { Button } from '@/components/ui/button'
-import { useSwapContext } from '@/context/swap-provider'
 import { useBalances } from '@/context/balances-provider'
 import { useAccounts } from '@/context/accounts-provider'
+import { useSwap } from '@/hook/use-swap'
 
 export const SwapInputFrom = () => {
   const [open, setOpen] = useState(false)
   const { accounts, select } = useAccounts()
-  const { fromAsset, setSwap, fromAmount, setFromAmount } = useSwapContext()
+  const { fromAsset, setSwap, fromAmount, setFromAmount } = useSwap()
   const { balances } = useBalances()
 
   const handleSetPercent = (percent: number) => {

@@ -2,7 +2,7 @@
 
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from 'react'
 import { Account, AccountProvider, Provider, wallets } from '@/wallets'
-import { useSwapContext } from '@/context/swap-provider'
+import { useSwap } from '@/hook/use-swap'
 import { Network } from 'rujira.js'
 import { toast } from 'sonner'
 import * as storage from '@/wallets/storage'
@@ -35,7 +35,7 @@ const storedSelected = storage.loadSelected()
 const connectedProviders: Provider[] = storage.loadProviders()
 
 export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { fromAsset } = useSwapContext()
+  const { fromAsset } = useSwap()
   const [provider, setProvider] = useState<Provider | undefined>(storedSelected?.provider)
   const [network, setNetwork] = useState<Network | undefined>(storedSelected?.network)
   const [address, setAddress] = useState<string | undefined>(storedSelected?.address)

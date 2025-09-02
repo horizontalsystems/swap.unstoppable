@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { DecimalText } from '@/components/decimal-text'
 import { DecimalFiat } from '@/components/decimal-fiat'
 import { UseQuote } from '@/hook/use-quote'
-import { useSwapContext } from '@/context/swap-provider'
+import { useSwap } from '@/hook/use-swap'
 
 interface SwapDetailsProps {
   quote?: UseQuote
@@ -15,7 +15,7 @@ interface SwapDetailsProps {
 
 export function SwapDetails({ quote }: SwapDetailsProps) {
   const [showMore, setShowMore] = useState(false)
-  const { fromAmount, fromAsset, toAsset } = useSwapContext()
+  const { fromAmount, fromAsset, toAsset } = useSwap()
 
   if (!quote) {
     return null

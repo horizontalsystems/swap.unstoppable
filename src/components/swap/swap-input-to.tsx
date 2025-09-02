@@ -2,12 +2,12 @@ import Decimal from 'decimal.js'
 import { useState } from 'react'
 import { ChevronDown, Wallet } from 'lucide-react'
 import { SwapSelectCoin } from '@/components/swap/swap-select-coin'
-import { useSwapContext } from '@/context/swap-provider'
 import { DecimalInput } from '@/components/decimal-input'
 import { networkLabel } from 'rujira.js'
 import { DecimalFiat } from '@/components/decimal-fiat'
 import { useAccounts } from '@/context/accounts-provider'
 import { UseQuote } from '@/hook/use-quote'
+import { useSwap } from '@/hook/use-swap'
 
 interface SwapInputProps {
   quote?: UseQuote
@@ -15,7 +15,7 @@ interface SwapInputProps {
 
 export const SwapInputTo = ({ quote }: SwapInputProps) => {
   const [open, setOpen] = useState(false)
-  const { toAsset, setSwap, setDestination, destination } = useSwapContext()
+  const { toAsset, setSwap, setDestination, destination } = useSwap()
   const { accounts } = useAccounts()
 
   const amount = toAsset ? BigInt(quote?.expected_amount_out || 0) : 0n

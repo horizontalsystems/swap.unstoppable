@@ -3,8 +3,12 @@ import { usePools } from '@/hook/use-pools'
 import { useQuery } from '@tanstack/react-query'
 import { getPoolsRates } from '@/lib/api'
 
+export interface AssetRate extends Asset {
+  price?: string | null | undefined
+}
+
 interface PoolsRates {
-  pools: Asset[] | undefined
+  pools: AssetRate[] | undefined
   isLoading: boolean
   rates: Record<string, string | null>
 }
@@ -19,7 +23,7 @@ export const usePoolsRates = (): PoolsRates => {
   })
 
   const ratesMap: Record<string, string | null> = {}
-  const poolsRates = pools?.map(p => {
+  const poolsRates: AssetRate[] | undefined = pools?.map(p => {
     const geckoId = poolsInfoMap[p.asset]?.geckoId
     const price = geckoId ? rates?.[geckoId]?.usd || null : null
 

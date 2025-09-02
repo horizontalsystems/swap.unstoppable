@@ -10,9 +10,9 @@ import {
 import { useAccounts } from '@/context/accounts-provider'
 import { cn, truncate } from '@/lib/utils'
 import { Asset } from '@/components/swap/asset'
-import { useSwapContext } from '@/context/swap-provider'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { useSwap } from '@/hook/use-swap'
 
 interface SwapSelectToProps {
   asset?: Asset
@@ -20,7 +20,7 @@ interface SwapSelectToProps {
 
 export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
   const { accounts } = useAccounts()
-  const { destination, setDestination } = useSwapContext()
+  const { destination, setDestination } = useSwap()
   const options = accounts?.filter(a => a.network === asset?.chain)
 
   return (
