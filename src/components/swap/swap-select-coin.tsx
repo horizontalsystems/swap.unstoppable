@@ -75,7 +75,7 @@ export function SwapSelectCoin({ isOpen, onClose, selected, onSelectAsset, isInp
                   }`}
                 >
                   <div className="flex h-8 w-8 items-center rounded-lg">
-                    <Image src={`/networks/${network}.png`} alt="" width="32" height="32" />
+                    <Image src={`/networks/${network}.svg`} alt="" width="32" height="32" />
                   </div>
                   <div className="flex h-8 w-full items-center text-sm font-bold text-white">
                     {networkLabel(network)}
@@ -106,7 +106,9 @@ export function SwapSelectCoin({ isOpen, onClose, selected, onSelectAsset, isInp
                   className="flex w-full items-center justify-between border border-transparent p-3 transition-all hover:bg-neutral-900"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 rounded-full bg-orange-500"></div>
+                    <div className="flex h-8 w-8 rounded-full">
+                      <Image src={`/coins/${item.metadata.symbol}.svg`} alt="" width="32" height="32" />
+                    </div>
                     <div className="text-left">
                       <div className="text-leah font-semibold">{item.metadata.symbol}</div>
                       <div className="text-gray text-sm">{networkLabel(item.chain)}</div>

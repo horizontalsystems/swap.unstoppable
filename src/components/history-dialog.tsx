@@ -11,6 +11,7 @@ import Decimal from 'decimal.js'
 import { usePoolsRates } from '@/hook/use-pools-rates'
 import { DecimalFiat } from '@/components/decimal-fiat'
 import { CopyButton } from '@/components/button-copy'
+import Image from 'next/image'
 
 interface HistoryDialogProps {
   open: boolean
@@ -64,8 +65,8 @@ export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
                   onClick={() => setExpandTx(isExpanded ? null : tx.hash)}
                 >
                   <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-500">
-                      <span className="text-sm font-bold"></span>
+                    <div className="flex h-8 w-8 rounded-full">
+                      <Image src={`/coins/${tx.fromAsset?.metadata.symbol}.svg`} alt="" width="32" height="32" />
                     </div>
                     <div>
                       <p className="text-sm font-medium">
@@ -89,8 +90,8 @@ export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
                       </p>
                       <p className="text-xs text-gray-400">{tx.toAsset?.metadata?.symbol}</p>
                     </div>
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500">
-                      <span className="text-sm font-bold"></span>
+                    <div className="flex h-8 w-8 rounded-full">
+                      <Image src={`/coins/${tx.toAsset?.metadata.symbol}.svg`} alt="" width="32" height="32" />
                     </div>
                   </div>
                 </div>

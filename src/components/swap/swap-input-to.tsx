@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { useState } from 'react'
-import { ChevronDown, Wallet } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { SwapSelectCoin } from '@/components/swap/swap-select-coin'
 import { DecimalInput } from '@/components/decimal-input'
 import { networkLabel } from 'rujira.js'
@@ -8,6 +8,7 @@ import { DecimalFiat } from '@/components/decimal-fiat'
 import { useAccounts } from '@/context/accounts-provider'
 import { UseQuote } from '@/hook/use-quote'
 import { useSwap } from '@/hook/use-swap'
+import Image from 'next/image'
 
 interface SwapInputProps {
   quote?: UseQuote
@@ -42,8 +43,8 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
           </div>
         </div>
         <div className="flex items-center gap-3" onClick={() => setOpen(true)}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-300">
-            <Wallet className="h-6 w-6 text-black" />
+          <div className="flex rounded-full">
+            <Image src={`/coins/${toAsset?.metadata.symbol}.svg`} alt="" width="40" height="40" />
           </div>
           <div className="flex flex-col items-start">
             <span className="text-leah text-lg font-semibold">{toAsset?.metadata.symbol}</span>

@@ -90,7 +90,7 @@ export const WalletConnectDialog = <T,>({
                         })
                       }}
                     >
-                      <Image src={`/wallets/${wallet.provider}.png`} alt="" width="32" height="32" />
+                      <Image src={`/wallets/${wallet.key}.svg`} alt="" width="32" height="32" />
                       <div className="flex-1">
                         <div className="font-medium text-white">{wallet.label}</div>
                         <div className="text-sm text-gray-400">
@@ -110,7 +110,7 @@ export const WalletConnectDialog = <T,>({
               <div className="grid grid-cols-4 gap-3">
                 {networks.map(network => (
                   <div key={network} className="flex h-12 w-12 items-center justify-center rounded-xl">
-                    <Image src={`/networks/${network}.png`} alt={network} width="32" height="32" />
+                    <Image src={`/networks/${network}.svg`} alt={network} width="32" height="32" />
                   </div>
                 ))}
               </div>

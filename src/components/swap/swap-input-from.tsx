@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 import { useState } from 'react'
 import { networkLabel } from 'rujira.js'
-import { ChevronDown, Wallet } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { DecimalInput, parseFixed } from '@/components/decimal-input'
 import { DecimalFiat } from '@/components/decimal-fiat'
 import { SwapSelectCoin } from '@/components/swap/swap-select-coin'
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { useBalances } from '@/context/balances-provider'
 import { useAccounts } from '@/context/accounts-provider'
 import { useSwap } from '@/hook/use-swap'
+import Image from 'next/image'
 
 export const SwapInputFrom = () => {
   const [open, setOpen] = useState(false)
@@ -44,8 +45,8 @@ export const SwapInputFrom = () => {
           </div>
         </div>
         <div className="flex items-center gap-3" onClick={() => setOpen(true)}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400">
-            <Wallet className="h-6 w-6 text-black" />
+          <div className="flex rounded-full">
+            <Image src={`/coins/${fromAsset?.metadata.symbol}.svg`} alt="" width="40" height="40" />
           </div>
           <div className="flex flex-col items-start">
             <span className="text-leah text-lg font-semibold">{fromAsset?.metadata.symbol}</span>
