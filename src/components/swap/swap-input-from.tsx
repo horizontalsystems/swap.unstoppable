@@ -1,12 +1,12 @@
 import Decimal from 'decimal.js'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { networkLabel } from 'rujira.js'
-import { ChevronDown } from 'lucide-react'
-import { DecimalInput, parseFixed } from '@/components/decimal-input'
+import { ChevronDown, Loader } from 'lucide-react'
+import { DecimalInput } from '@/components/decimal-input'
+import { balanceKey, useBalance, useSyncBalance, useSyncing } from '@/hook/use-balance'
 import { DecimalFiat } from '@/components/decimal-fiat'
 import { SwapSelectCoin } from '@/components/swap/swap-select-coin'
 import { Button } from '@/components/ui/button'
-import { useBalances } from '@/context/balances-provider'
 import { useAccounts } from '@/context/accounts-provider'
 import { DecimalText } from '@/components/decimal-text'
 import { useSwap } from '@/hook/use-swap'
@@ -17,15 +17,21 @@ export const SwapInputFrom = () => {
   const [open, setOpen] = useState(false)
   const { accounts, selected, select } = useAccounts()
   const { fromAsset, setSwap, fromAmount, setFromAmount } = useSwap()
-  const { balances } = useBalances()
 
-  const balance = Number(balances[`${fromAsset?.chain}:${selected?.address}:${fromAsset?.asset}`] || 0n) / 1e8
+  const key = balanceKey(fromAsset?.chain, selected?.address, fromAsset?.asset)
+  const syncBalance = useSyncBalance()
+  const balanceSyncing = useSyncing(key)
+  const balance = useBalance(key)
 
-  const handleSetPercent = (percent: number) => {
-    if (balance == 0) return
-    const value = percent > 0 ? (balance * percent).toString() : ''
-    const intValue = parseFixed(value, 8)
-    setFromAmount(intValue)
+  useEffect(() => {
+    if (fromAsset?.chain && selected?.address && fromAsset?.asset) {
+      syncBalance(fromAsset?.chain, selected?.address, fromAsset?.asset, true)
+    }
+  }, [fromAsset?.asset, fromAsset?.chain, key, selected?.address, syncBalance])
+
+  const handleSetPercent = (percent: bigint) => {
+    if (!balance) return
+    setFromAmount((balance * percent) / 100n)
   }
 
   const valueFrom = new Decimal(fromAmount || 0)
@@ -65,28 +71,30 @@ export const SwapInputFrom = () => {
         <div className="flex gap-2">
           <Button
             className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
-            onClick={() => handleSetPercent(0)}
-            disabled={balance == 0}
+            onClick={() => handleSetPercent(0n)}
+            disabled={!balance}
           >
             Clear
           </Button>
           <Button
             className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
-            onClick={() => handleSetPercent(0.5)}
-            disabled={balance == 0}
+            onClick={() => handleSetPercent(50n)}
+            disabled={!balance}
           >
             50%
           </Button>
           <Button
             className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
-            onClick={() => handleSetPercent(1)}
-            disabled={balance == 0}
+            onClick={() => handleSetPercent(100n)}
+            disabled={!balance}
           >
             100%
           </Button>
         </div>
-        <div className="text-gray text-xs">
-          Balance: <DecimalText amount={parseFixed(balance.toString(), 8)} />
+        <div className="text-gray flex gap-1 text-xs">
+          {balanceSyncing && <Loader className="animate-spin" size="18" />}
+          <span>Balance:</span>
+          <DecimalText amount={balance || 0n} />
         </div>
       </div>
 
