@@ -1,49 +1,57 @@
 'use client'
 
-import { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react'
+import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from 'react'
 import { Network } from 'rujira.js'
 import { BalanceFetcher } from '@/wallets/balances'
 import { usePools } from '@/hook/use-pools'
 import { useAccounts } from '@/context/accounts-provider'
+import { sleep } from '@/lib/utils'
 
 interface BalancesContext {
-  balances: Record<string, string>
-  refresh: (network: Network, address: string, assets: string[]) => void
+  balances: Record<string, bigint | undefined>
 }
 
 const Context = createContext<BalancesContext>({
-  balances: {},
-  refresh: () => null
+  balances: {}
 })
 
 export const BalancesProvider: FC<PropsWithChildren> = ({ children }) => {
   const { pools } = usePools()
   const { wallets } = useAccounts()
-  const [balances, setBalances] = useState<Record<string, string>>({})
-  const [synced, setSynced] = useState<Record<string, boolean>>({})
+  const [balances, setBalances] = useState<Record<string, bigint | undefined>>({})
 
-  const refresh = useCallback(
-    (network: Network, address: string, assets: string[]) => {
-      if (synced[`${network}:${address}`]) return
+  const syncBalance = (network: Network, address: string, asset: string) => {
+    const key = `${network}:${address}:${asset}`
 
-      BalanceFetcher.fetch({ network, address, assets }).then(result => {
-        setBalances(prev => ({ ...prev, ...result }))
-        setSynced(prev => ({ ...prev, [`${network}:${address}`]: true }))
-      })
-    },
-    [synced]
-  )
+    if (balances[key]) {
+      return
+    }
+
+    BalanceFetcher.fetch({ network, address, asset }).then(result => {
+      setBalances(prev => ({ ...prev, [key]: result }))
+    })
+  }
 
   useEffect(() => {
     if (!pools?.length || !wallets?.length) return
 
-    wallets.forEach(wallet => {
-      const assets = pools.filter(p => p.chain === wallet.account.network).map(i => i.asset)
-      refresh(wallet.account.network, wallet.account.address, assets)
-    })
-  }, [pools, wallets, refresh])
+    const sync = async () => {
+      for (let i = 0; i < wallets.length; i++) {
+        const wallet = wallets[i]
+        const assets = pools.filter(p => p.chain === wallet.account.network).map(p => p.asset)
 
-  return <Context.Provider value={{ balances, refresh }}>{children}</Context.Provider>
+        for (let i = 0; i < assets.length; i++) {
+          syncBalance(wallet.account.network, wallet.account.address, assets[i])
+
+          await sleep(1000)
+        }
+      }
+    }
+
+    sync().then()
+  }, [pools?.length, wallets?.length])
+
+  return <Context.Provider value={{ balances }}>{children}</Context.Provider>
 }
 
 export const useBalances = (): BalancesContext => useContext(Context)

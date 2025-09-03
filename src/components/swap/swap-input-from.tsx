@@ -15,15 +15,15 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export const SwapInputFrom = () => {
   const [open, setOpen] = useState(false)
-  const { accounts, select } = useAccounts()
+  const { accounts, selected, select } = useAccounts()
   const { fromAsset, setSwap, fromAmount, setFromAmount } = useSwap()
   const { balances } = useBalances()
 
-  const balance = new Decimal(balances[fromAsset?.asset || ''] || 0)
+  const balance = Number(balances[`${fromAsset?.chain}:${selected?.address}:${fromAsset?.asset}`] || 0n) / 1e8
 
   const handleSetPercent = (percent: number) => {
-    if (balance.isZero()) return
-    const value = percent > 0 ? balance.mul(percent).toString() : ''
+    if (balance == 0) return
+    const value = percent > 0 ? (balance * percent).toString() : ''
     const intValue = parseFixed(value, 8)
     setFromAmount(intValue)
   }
@@ -66,21 +66,21 @@ export const SwapInputFrom = () => {
           <Button
             className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
             onClick={() => handleSetPercent(0)}
-            disabled={balance.isZero()}
+            disabled={balance == 0}
           >
             Clear
           </Button>
           <Button
             className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
             onClick={() => handleSetPercent(0.5)}
-            disabled={balance.isZero()}
+            disabled={balance == 0}
           >
             50%
           </Button>
           <Button
             className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
             onClick={() => handleSetPercent(1)}
-            disabled={balance.isZero()}
+            disabled={balance == 0}
           >
             100%
           </Button>
