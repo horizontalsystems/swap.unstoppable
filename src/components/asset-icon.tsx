@@ -18,7 +18,7 @@ export function AssetIcon({ url }: { url: string | null }) {
         alt=""
         width={40}
         height={40}
-        onLoadingComplete={() => setLoading(false)}
+        onLoad={() => setLoading(false)}
       />
     </div>
   )

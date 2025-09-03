@@ -36,7 +36,7 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
             <DecimalInput
               className="text-leah w-full bg-transparent text-2xl font-medium outline-none"
               amount={amount}
-              onAmountChange={console.log}
+              onAmountChange={() => null}
               autoComplete="off"
               disabled
             />
