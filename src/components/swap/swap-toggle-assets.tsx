@@ -5,13 +5,21 @@ import { useSwap } from '@/hooks/use-swap'
 
 export const SwapToggleAssets = () => {
   const { accounts, select } = useAccounts()
-  const { swapAssets, toAsset } = useSwap()
+  const { swapAssets, toAsset, fromAsset, destination, setDestination } = useSwap()
 
   const onSwapAssets = () => {
     swapAssets()
-    const prevFromAsset = toAsset
-    const toSelect = accounts?.find(x => x.network === prevFromAsset?.chain)
-    select(toSelect || null)
+    const fromAssetNew = toAsset
+    const toAssetNew = fromAsset
+    const fromAssetAccount = accounts?.find(x => x.network === fromAssetNew?.chain)
+    select(fromAssetAccount || null)
+
+    if (destination?.network === toAssetNew?.chain) {
+      return
+    }
+
+    const toAssetAccount = accounts?.find(x => x.network === toAssetNew?.chain)
+    setDestination(toAssetAccount)
   }
 
   return (

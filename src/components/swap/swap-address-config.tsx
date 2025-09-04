@@ -27,7 +27,6 @@ export const SwapAddressConfig = ({ isOpen, setOpen }: SwapAddressProps) => {
 
   const onSave = async () => {
     if (!toAsset) {
-      console.log({ toAsset })
       return
     }
 
