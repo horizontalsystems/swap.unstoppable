@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { poolsInfoMap } from '@/hook/use-pools-rates'
+import { poolsInfoMap } from '@/hooks/use-pools-rates'
 
 const midgard = axios.create({ baseURL: 'https://midgard.ninerealms.com' })
 const thornode = axios.create({ baseURL: 'https://thornode.ninerealms.com' })
