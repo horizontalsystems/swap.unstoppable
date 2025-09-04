@@ -6,11 +6,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Separator } from '@/components/ui/separator'
 import { DecimalText } from '@/components/decimal-text'
 import { DecimalFiat } from '@/components/decimal-fiat'
-import { UseQuote } from '@/hooks/use-quote'
+import { Quote } from '@/hooks/use-quote'
 import { useSwap } from '@/hooks/use-swap'
 
 interface SwapDetailsProps {
-  quote?: UseQuote
+  quote?: Quote
 }
 
 export function SwapDetails({ quote }: SwapDetailsProps) {
@@ -26,7 +26,10 @@ export function SwapDetails({ quote }: SwapDetailsProps) {
     Number(quote?.fees.liquidity || 0) + Number(quote?.fees.outbound || 0) + Number(quote?.fees.affiliate || 0)
   )
 
-  const feeInUsd = new Decimal(toAsset?.price || 0).mul(totalFee).div(10n ** 8n).toString()
+  const feeInUsd = new Decimal(toAsset?.price || 0)
+    .mul(totalFee)
+    .div(10n ** 8n)
+    .toString()
 
   return (
     <div className="p-5 pb-0">
