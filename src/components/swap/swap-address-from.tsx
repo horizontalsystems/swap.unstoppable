@@ -8,8 +8,8 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { useAccounts } from '@/context/accounts-provider'
-import { cn, truncate } from '@/lib/utils'
 import { Asset } from '@/components/swap/asset'
+import { cn, truncate } from '@/lib/utils'
 
 interface SwapAddressFromProps {
   asset?: Asset
@@ -37,22 +37,24 @@ export const SwapAddressFrom = ({ asset }: SwapAddressFromProps) => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="bg-lawrence rounded-2xl p-0">
-          <div className="border-b p-4">
+          <div className="border-b p-3 py-2">
             <div className="flex items-center gap-3">
               <Wallet className="text-gray h-6 w-6" />
               <DropdownMenuLabel className="text-gray p-0 text-sm">Source Wallet</DropdownMenuLabel>
             </div>
           </div>
 
-          <div className="divide-y divide-neutral-900">
+          <div className="divide-y divide-neutral-800">
             {options?.map((account, index) => (
               <DropdownMenuItem
                 key={index}
-                className="group flex cursor-pointer items-center gap-4 rounded-none px-2 py-2 ps-5 focus:bg-neutral-900/60"
+                className="flex cursor-pointer items-center justify-between gap-3 rounded-none px-3 py-2 focus:bg-neutral-800"
                 onSelect={() => select(account)}
               >
-                <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
-                <span className="text-gray text-sm">{account.provider}</span>
+                <div className="flex items-center gap-3">
+                  <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
+                  <span className="text-gray text-sm">{account.provider}</span>
+                </div>
                 <span className={cn('ms-5 text-sm', { 'text-runes-blue': account === selected })}>
                   {truncate(account.address)}
                 </span>

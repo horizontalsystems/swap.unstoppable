@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { ChevronDown, Wallet } from 'lucide-react'
+import { ChevronDown, Pencil, Wallet } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,8 +8,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Asset } from '@/components/swap/asset'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { useAccounts } from '@/context/accounts-provider'
 import { useDestination, useSetDestination } from '@/hooks/use-swap'
 import { cn, truncate } from '@/lib/utils'
@@ -42,34 +40,37 @@ export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="bg-lawrence rounded-2xl p-0">
-          <div className="border-b p-4">
+          <div className="border-b p-3">
             <div className="flex items-center gap-3">
               <Wallet className="text-gray h-6 w-6" />
               <DropdownMenuLabel className="text-gray p-0 text-sm">Destination Wallet</DropdownMenuLabel>
             </div>
           </div>
 
-          <div className="divide-y divide-neutral-900">
+          <div className="divide-y divide-neutral-800">
             {options?.map((account, index) => (
               <DropdownMenuItem
                 key={index}
-                className="group flex cursor-pointer items-center gap-4 rounded-none px-2 py-2 ps-5 focus:bg-neutral-900/60"
+                className="flex cursor-pointer items-center justify-between gap-3 rounded-none px-3 py-2 focus:bg-neutral-800"
                 onSelect={() => setDestination(account)}
               >
-                <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
-                <span className="text-gray text-sm">{account.provider}</span>
-                <span className={cn('ms-5 text-sm', { 'text-runes-blue': account === destination })}>
+                <div className="flex items-center gap-3">
+                  <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
+                  <span className="text-gray text-sm">{account.provider}</span>
+                </div>
+                <span className={cn('ms-5 text-sm', { 'text-runes-blue': account.address === destination?.address })}>
                   {truncate(account.address)}
                 </span>
               </DropdownMenuItem>
             ))}
 
-            <div className="flex items-center justify-between gap-4 px-5 py-2">
-              <Input className="text-sm" placeholder="Custom Address" disabled />
-              <Button className="text-leah bg-blade px-3 py-1 text-sm hover:bg-zinc-800" disabled>
-                Confirm
-              </Button>
-            </div>
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center gap-3 rounded-none px-3 py-2 focus:bg-neutral-800"
+              disabled
+            >
+              <Pencil size={24} className="text-green ms-1 flex-shrink-0" />
+              <span className="text-green ps-1 text-sm">Custom Address</span>
+            </DropdownMenuItem>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
