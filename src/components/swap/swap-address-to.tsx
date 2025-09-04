@@ -31,7 +31,7 @@ export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
-        {(destination && destination.provider) ? (
+        {destination && destination.provider ? (
           <Image src={`/wallets/${destination.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
         ) : (
           <Wallet className="text-gray h-6 w-6" />

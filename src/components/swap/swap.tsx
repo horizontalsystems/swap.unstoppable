@@ -20,7 +20,7 @@ import { toast } from 'sonner'
 
 export const Swap = () => {
   const { selected, context } = useAccounts()
-  const { fromAsset, fromAmount, destination, toAsset, slippageLimit } = useSwap()
+  const { fromAsset, fromAmount, destination, toAsset } = useSwap()
   const { isLoading: isQuoting, quote, error: quoteError } = useQuote()
   const { isLoading: isSimulating, simulationData, error: simulationError } = useSimulation()
   const { setTransaction } = useTransactions()
@@ -43,8 +43,6 @@ export const Swap = () => {
     const func = wallets.signAndBroadcast(context, selected, simulationData.inboundAddress)
     const broadcast = func(simulationData.simulation, simulationData.msg)
       .then(res => {
-        console.log('res', res)
-
         setTransaction({
           hash: res.txHash,
           timestamp: new Date(),
