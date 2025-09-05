@@ -14,7 +14,7 @@ export interface Transaction {
   }
   fromAmount?: string
   toAmount?: string
-  status?: 'pending' | 'succeeded' | 'failed' | 'refunded'
+  status?: 'pending' | 'completed' | 'failed' | 'refunded'
   details?: any
 }
 
@@ -65,7 +65,7 @@ export const useTransactions = create<TransactionStore>()(
 
               let status = 'pending'
               if (stages?.swap_finalised?.completed) {
-                status = 'succeeded'
+                status = 'completed'
               }
 
               return {
