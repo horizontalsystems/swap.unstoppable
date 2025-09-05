@@ -61,10 +61,10 @@ export const useTransactions = create<TransactionStore>()(
                 return d
               }
 
-              const stages = data.stages
+              const stages = data?.stages
 
               let status = 'pending'
-              if (stages.swap_finalised.completed) {
+              if (stages?.swap_finalised?.completed) {
                 status = 'succeeded'
               }
 

@@ -34,21 +34,21 @@ export const WalletConnectButton = () => {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <Tooltip open={showPendingAlert}>
+        <Tooltip open={showPendingAlert && !!pendingTx}>
           <TooltipTrigger asChild>
             <Button className="rounded-xl" variant="outline" onClick={onClickHistory}>
               <Clock3 /> History
             </Button>
           </TooltipTrigger>
-          <TooltipContent className="bg-blade rounded-xl p-3 text-white" arrowClassName="bg-blade fill-blade">
+          <TooltipContent
+            className="bg-blade cursor-pointer rounded-xl p-3 text-white"
+            arrowClassName="bg-blade fill-blade"
+            onClick={onClickHistory}
+          >
             <div className="flex items-center gap-2">
-              {pendingTx ? (
-                <div>
-                  {pendingTx?.fromAsset?.metadata?.symbol} to {pendingTx?.toAsset?.metadata?.symbol}
-                </div>
-              ) : (
-                'Pending transactions'
-              )}
+              <div>
+                {pendingTx?.fromAsset?.metadata?.symbol} to {pendingTx?.toAsset?.metadata?.symbol}
+              </div>
               <LoaderCircle size={16} className="animate-spin" />
             </div>
           </TooltipContent>
@@ -147,7 +147,7 @@ const WALLETS: WalletProps<Provider>[] = [
       Network.Dogecoin,
       Network.Ethereum,
       Network.Litecoin,
-      Network.Osmo,
+      Network.Osmo
     ]
   },
   {
