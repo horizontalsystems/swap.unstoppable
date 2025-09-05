@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { ChevronDown, Pencil, Wallet } from 'lucide-react'
 import {
   DropdownMenu,
@@ -10,11 +11,10 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Asset } from '@/components/swap/asset'
-import { useAccounts } from '@/context/accounts-provider'
-import { useDestination, useSetDestination } from '@/hooks/use-swap'
 import { SwapAddressConfig } from '@/components/swap/swap-address-config'
+import { useDestination, useSetDestination, useSwap } from '@/hooks/use-swap'
+import { useAccounts } from '@/context/accounts-provider'
 import { cn, truncate } from '@/lib/utils'
-import { useState } from 'react'
 
 interface SwapSelectToProps {
   asset?: Asset
@@ -22,11 +22,21 @@ interface SwapSelectToProps {
 
 export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
   const { accounts } = useAccounts()
+  const { toAsset } = useSwap()
   const [isOpen, setIsOpen] = useState(false)
 
   const destination = useDestination()
   const setDestination = useSetDestination()
   const options = accounts?.filter(a => a.network === asset?.chain)
+
+  useEffect(() => {
+    if (toAsset && !destination) {
+      const toAssetAccount = accounts?.find(x => x.network === toAsset?.chain)
+      if (toAssetAccount) {
+        setDestination(toAssetAccount)
+      }
+    }
+  }, [accounts, destination, setDestination, toAsset])
 
   return (
     <div className="flex items-center justify-between">

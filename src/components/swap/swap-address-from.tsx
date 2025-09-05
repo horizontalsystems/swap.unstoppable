@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useEffect } from 'react'
 import { ChevronDown, Wallet } from 'lucide-react'
 import {
   DropdownMenu,
@@ -10,6 +11,7 @@ import {
 import { useAccounts } from '@/context/accounts-provider'
 import { Asset } from '@/components/swap/asset'
 import { cn, truncate } from '@/lib/utils'
+import { useSwap } from '@/hooks/use-swap'
 
 interface SwapAddressFromProps {
   asset?: Asset
@@ -17,7 +19,17 @@ interface SwapAddressFromProps {
 
 export const SwapAddressFrom = ({ asset }: SwapAddressFromProps) => {
   const { accounts, selected, select } = useAccounts()
+  const { fromAsset } = useSwap()
   const options = accounts?.filter(a => a.network === asset?.chain)
+
+  useEffect(() => {
+    if (fromAsset && !selected) {
+      const fromAssetAccount = accounts?.find(x => x.network === fromAsset?.chain)
+      if (fromAssetAccount) {
+        select(fromAssetAccount)
+      }
+    }
+  }, [accounts, fromAsset, select, selected])
 
   return (
     <div className="flex items-center justify-between">
