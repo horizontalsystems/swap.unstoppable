@@ -8,6 +8,7 @@ import { WalletConnectDialog, WalletProps } from '@/components/wallet-connect/wa
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { HistoryDialog } from '@/components/history-dialog'
+import { Network } from 'rujira.js'
 import { Provider } from '@/wallets'
 import { useAccounts } from '@/context/accounts-provider'
 import { useTransactions } from '@/hooks/use-transactions'
@@ -92,7 +93,17 @@ const WALLETS: WalletProps<Provider>[] = [
     key: 'ctrl',
     label: 'Ctrl',
     provider: 'Ctrl',
-    link: 'https://ctrl.xyz'
+    link: 'https://ctrl.xyz',
+    supportedChains: [
+      Network.Avalanche,
+      Network.Base,
+      Network.BitcoinCash,
+      Network.Bitcoin,
+      Network.Bsc,
+      Network.Dogecoin,
+      Network.Ethereum,
+      Network.Litecoin
+    ]
   },
   // {
   //   key: 'keplr',
@@ -108,7 +119,8 @@ const WALLETS: WalletProps<Provider>[] = [
     key: 'metamask',
     label: 'Metamask',
     provider: 'Metamask',
-    link: 'https://metamask.io'
+    link: 'https://metamask.io',
+    supportedChains: [Network.Avalanche, Network.Base, Network.Bsc, Network.Ethereum, Network.Thorchain]
   },
   // {
   //   key: 'okx',
@@ -125,12 +137,24 @@ const WALLETS: WalletProps<Provider>[] = [
     key: 'vultisig',
     label: 'Vultisig',
     provider: 'Vultisig',
-    link: 'https://vultisig.com'
+    link: 'https://vultisig.com',
+    supportedChains: [
+      Network.Avalanche,
+      Network.Base,
+      Network.BitcoinCash,
+      Network.Bitcoin,
+      Network.Bsc,
+      Network.Dogecoin,
+      Network.Ethereum,
+      Network.Litecoin,
+      Network.Osmo,
+    ]
   },
   {
     key: 'tronlink',
     label: 'TronLink',
     provider: 'Tronlink',
-    link: 'https://www.tronlink.org'
+    link: 'https://www.tronlink.org',
+    supportedChains: [Network.Tron, Network.Bsc, Network.Ethereum]
   }
 ]

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { useState } from 'react'
+import { LoaderCircle } from 'lucide-react'
 import { AccountProvider, Network, networkLabel } from 'rujira.js'
 import { Credenza, CredenzaContent, CredenzaFooter, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -7,12 +8,14 @@ import { Button } from '@/components/ui/button'
 import { Provider } from '@/wallets'
 import { usePools } from '@/hooks/use-pools'
 import { cn } from '@/lib/utils'
+import { toast } from 'sonner'
 
 export interface WalletProps<T> {
   key: string
   label: string
   provider: T
   link: string
+  supportedChains: Network[]
 }
 
 interface WalletConnectDialogProps<T> {
@@ -31,20 +34,42 @@ export const WalletConnectDialog = <T,>({
   connectedProviders
 }: WalletConnectDialogProps<T>) => {
   const { connect, isAvaialable } = provider
-  const [chosen, setChosen] = useState<Map<T, boolean>>(new Map())
   const [connecting, setConnecting] = useState(false)
-  const { pools } = usePools()
+  const [selectedWallets, setSelectedWallets] = useState<T[]>([])
+  const [hoveredChain, setHoveredChain] = useState<Network | null>(null)
 
+  const { pools } = usePools()
   const networks: Network[] = [...new Set((pools || []).map(p => p.chain))]
-  const chosenSize = Array.from(chosen.values()).filter(i => i).length
+
+  const toggleSelection = (walletKey: T) => {
+    setSelectedWallets(prev =>
+      prev.includes(walletKey) ? prev.filter(key => key !== walletKey) : [...prev, walletKey]
+    )
+  }
+
+  const getSelectedWalletsChains = () => {
+    if (selectedWallets.length === 0) return []
+    return wallets.filter(wallet => selectedWallets.includes(wallet.provider)).flatMap(wallet => wallet.supportedChains)
+  }
+
+  const isChainHighlighted = (chain: Network) => {
+    if (hoveredChain === chain) return true
+    if (selectedWallets.length > 0) {
+      return getSelectedWalletsChains().includes(chain)
+    }
+    return false
+  }
+
+  const isWalletHighlightedForChain = (provider: T) => {
+    if (!hoveredChain) return false
+    const wallet = wallets.find(w => w.provider === provider)
+    return wallet?.supportedChains.includes(hoveredChain) || false
+  }
 
   const handleConnect = async () => {
-    const chosenList = Array.from(chosen.entries()).filter(([, value]) => value)
-    if (!chosenList.length) return
-
     setConnecting(true)
 
-    withTimeout(Promise.all(chosenList.map(([provider]) => connect(provider))), 20_000)
+    withTimeout(Promise.all(selectedWallets.map(provider => connect(provider))), 20_000)
       .then(() => {
         onOpenChange(false)
       })
@@ -52,7 +77,7 @@ export const WalletConnectDialog = <T,>({
         console.log(err.message)
       })
       .finally(() => {
-        setChosen(new Map())
+        setSelectedWallets([])
         setConnecting(false)
       })
   }
@@ -70,39 +95,30 @@ export const WalletConnectDialog = <T,>({
             <ScrollArea className="h-full max-h-[40vh] md:max-h-[60vh]">
               <div className="space-y-1">
                 {wallets.map(wallet => {
-                  const isChosen = chosen.get(wallet.provider)
-                  const isConnected = connectedProviders.find(i => i === wallet.provider)
+                  const isConnected = connectedProviders.find(w => w === wallet.provider)
                   const isInstalled = isAvaialable(wallet.provider)
+
+                  const isSelected = selectedWallets.includes(wallet.provider)
+                  const isHighlighted = isWalletHighlightedForChain(wallet.provider)
 
                   return (
                     <div
                       key={wallet.key}
                       className={cn('flex items-center space-x-3 rounded-lg border-1 border-transparent p-3', {
-                        'border-runes-blue': isChosen,
+                        'border-runes-blue': isSelected,
+                        'opacity-25': !isHighlighted && !!hoveredChain,
                         'bg-emerald-500/10': isConnected,
-                        'cursor-pointer': isInstalled
+                        'cursor-pointer': isInstalled && !isConnected
                       })}
                       onClick={() => {
                         if (isConnected || !isInstalled) return
-                        setChosen(prevChosen => {
-                          const newChosen = new Map(prevChosen)
-                          newChosen.set(wallet.provider, !isChosen)
-                          return newChosen
-                        })
+                        toggleSelection(wallet.provider)
                       }}
                     >
                       <Image src={`/wallets/${wallet.key}.svg`} alt="" width="32" height="32" />
                       <div className="flex-1">
                         <div className="font-medium text-white">{wallet.label}</div>
-                        <div className="text-xs">
-                          {isInstalled ? (
-                            <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
-                          ) : (
-                            <a href={wallet.link} className="text-jacob" rel="noopener noreferrer" target="_blank">
-                              Install
-                            </a>
-                          )}
-                        </div>
+                        <div className="text-xs"></div>
                       </div>
                     </div>
                   )
@@ -113,12 +129,29 @@ export const WalletConnectDialog = <T,>({
           <div className="col-span-3 hidden md:block">
             <h3 className="text-gray mb-3 text-base font-semibold">Supported Networks</h3>
             <div className="grid grid-cols-2 gap-2">
-              {networks.map(network => (
-                <div key={network} className="flex items-center gap-3 p-2">
-                  <Image src={`/networks/${network.toLowerCase()}.svg`} alt={network} width="24" height="24" />
-                  <div className="text-sm">{networkLabel(network)}</div>
-                </div>
-              ))}
+              {networks.map(chain => {
+                const isHighlighted = isChainHighlighted(chain)
+
+                return (
+                  <div
+                    key={chain}
+                    className={cn('flex cursor-pointer items-center gap-3 border-1 border-transparent p-2', {
+                      'opacity-25': selectedWallets.length && !isHighlighted
+                    })}
+                    onMouseEnter={() => setHoveredChain(chain)}
+                    onMouseLeave={() => setHoveredChain(null)}
+                    onClick={() => {
+                      const walletsForChain = wallets.filter(wallet => wallet.supportedChains.includes(chain))
+                      if (walletsForChain.length) {
+                        setSelectedWallets(walletsForChain.map(w => w.provider))
+                      }
+                    }}
+                  >
+                    <Image src={`/networks/${chain.toLowerCase()}.svg`} alt={chain} width="24" height="24" />
+                    <div className="text-sm">{networkLabel(chain)}</div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -126,10 +159,11 @@ export const WalletConnectDialog = <T,>({
           <div className="flex justify-end">
             <Button
               className="border-0 bg-gradient-to-r from-green-400 to-blue-500 text-white hover:from-green-500 hover:to-blue-600"
-              disabled={chosenSize < 1 || connecting}
+              disabled={selectedWallets.length < 1 || connecting}
               onClick={() => handleConnect()}
             >
-              Connect {chosenSize || ''} Wallet
+              {connecting && <LoaderCircle size={16} className="animate-spin" />}
+              {connecting ? 'Connecting' : 'Connect'} {selectedWallets.length || ''} Wallet
             </Button>
           </div>
         </CredenzaFooter>
@@ -140,7 +174,10 @@ export const WalletConnectDialog = <T,>({
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return new Promise((resolve, reject) => {
-    const id = setTimeout(() => reject(new Error('Connection timeout')), ms)
+    const id = setTimeout(() => {
+      toast.error('Connection timed out. Please try logging in to your wallet again')
+      reject(new Error('Connection timeout'))
+    }, ms)
     promise
       .then(res => {
         clearTimeout(id)
