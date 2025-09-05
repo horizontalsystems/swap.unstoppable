@@ -118,7 +118,15 @@ export const WalletConnectDialog = <T,>({
                       <Image src={`/wallets/${wallet.key}.svg`} alt="" width="32" height="32" />
                       <div className="flex-1">
                         <div className="font-medium text-white">{wallet.label}</div>
-                        <div className="text-xs"></div>
+                        <div className="text-xs">
+                          {isInstalled ? (
+                            <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
+                          ) : (
+                            <a href={wallet.link} className="text-jacob" rel="noopener noreferrer" target="_blank">
+                              Install
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )
