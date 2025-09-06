@@ -79,7 +79,7 @@ export const SwapSelectAsset = ({ isOpen, setOpen, selected, onSelectAsset }: Sw
           return asset.metadata.symbol.toLowerCase().includes(searchQuery.toLowerCase())
         })
 
-    const symbolPriorityOrder = ['BTC.BTC', 'ETH.ETH', 'BSC.BNB', 'AVAX.AVAX']
+    const symbolPriorityOrder = ['BTC.BTC', 'ETH.ETH', 'BSC.BNB', 'THOR.RUNE', 'AVAX.AVAX']
 
     return filteredAssets.sort((a, b) => {
       const symbolA = a.asset.toUpperCase()
