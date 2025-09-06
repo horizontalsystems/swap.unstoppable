@@ -20,11 +20,11 @@ interface WalletProps<T> {
 }
 
 interface WalletConnectDialogProps {
-  open: boolean
+  isOpen: boolean
   onOpenChange: (open: boolean) => void
 }
 
-export const WalletConnectDialog = ({ open, onOpenChange }: WalletConnectDialogProps) => {
+export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialogProps) => {
   const { connect, isAvaialable, accounts } = useAccounts()
   const [connecting, setConnecting] = useState(false)
   const [selectedWallets, setSelectedWallets] = useState<Provider[]>([])
@@ -76,7 +76,7 @@ export const WalletConnectDialog = ({ open, onOpenChange }: WalletConnectDialogP
   }
 
   return (
-    <Credenza open={open} onOpenChange={onOpenChange}>
+    <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="bg-lawrence min-h-1/2 w-full p-6 md:min-w-2xl md:p-12">
         <CredenzaHeader className="flex items-start">
           <CredenzaTitle className="text-base font-semibold text-white md:text-2xl">Connect Wallet</CredenzaTitle>

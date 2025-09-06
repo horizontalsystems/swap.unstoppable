@@ -1,10 +1,11 @@
 'use client'
 
 import Image from 'next/image'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Clock3, LoaderCircle, LogOut, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { WalletConnectDialog } from '@/components/wallet-connect/wallet-connect-dialog'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { HistoryDialog } from '@/components/history-dialog'
 import { useAccounts } from '@/context/accounts-provider'
@@ -12,9 +13,7 @@ import { useTransactions } from '@/hooks/use-transactions'
 import { useDialog } from '@/components/global-dialog'
 
 export const WalletConnectButton = () => {
-  const [showHistory, setShowHistory] = useState(false)
   const { openDialog } = useDialog()
-
   const { showPendingAlert, setPendingAlert, transactions } = useTransactions()
 
   const accProvider = useAccounts()
@@ -25,7 +24,7 @@ export const WalletConnectButton = () => {
   )
 
   const onClickHistory = () => {
-    setShowHistory(true)
+    openDialog(HistoryDialog, {})
     if (showPendingAlert) setPendingAlert(false)
   }
 
@@ -51,7 +50,7 @@ export const WalletConnectButton = () => {
             </div>
           </TooltipContent>
         </Tooltip>
-        <Button className="rounded-xl" variant="outline" onClick={() => openDialog('connect-wallet')}>
+        <Button className="rounded-xl" variant="outline" onClick={() => openDialog(WalletConnectDialog, {})}>
           <Plus />
         </Button>
         {connectedProviders.map((provider, i) => (
@@ -72,8 +71,6 @@ export const WalletConnectButton = () => {
           </DropdownMenu>
         ))}
       </div>
-
-      <HistoryDialog open={showHistory} onOpenChange={setShowHistory} />
     </div>
   )
 }

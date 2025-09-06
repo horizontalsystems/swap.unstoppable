@@ -1,24 +1,24 @@
 'use client'
 
+import Image from 'next/image'
+import Decimal from 'decimal.js'
 import { format } from 'date-fns'
+import { useEffect, useState } from 'react'
 import { ArrowRight, Globe, LoaderCircle, X } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { useTransactions } from '@/hooks/use-transactions'
 import { DecimalText } from '@/components/decimal-text'
-import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import Decimal from 'decimal.js'
-import { usePoolsRates } from '@/hooks/use-pools-rates'
 import { DecimalFiat } from '@/components/decimal-fiat'
 import { CopyButton } from '@/components/button-copy'
-import Image from 'next/image'
+import { usePoolsRates } from '@/hooks/use-pools-rates'
+import { useTransactions } from '@/hooks/use-transactions'
 
 interface HistoryDialogProps {
-  open: boolean
+  isOpen: boolean
   onOpenChange: (open: boolean) => void
 }
 
-export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
+export const HistoryDialog = ({ isOpen, onOpenChange }: HistoryDialogProps) => {
   const { rates } = usePoolsRates()
   const { transactions, syncPending } = useTransactions()
   const [expandTx, setExpandTx] = useState<string | null>(null)
@@ -29,7 +29,7 @@ export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
   }, [syncPending])
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md rounded-2xl bg-lawrence p-6 text-white" showCloseButton={false}>
         <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle className="text-lg font-semibold">History</DialogTitle>

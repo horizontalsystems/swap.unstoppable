@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { networkLabel } from 'rujira.js'
 import { ChevronDown, Loader } from 'lucide-react'
 import { DecimalInput } from '@/components/decimal-input'
@@ -12,9 +12,10 @@ import { DecimalText } from '@/components/decimal-text'
 import { useSwap } from '@/hooks/use-swap'
 import { AssetIcon } from '@/components/asset-icon'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useDialog } from '@/components/global-dialog'
 
 export const SwapInputFrom = () => {
-  const [open, setOpen] = useState(false)
+  const { openDialog } = useDialog()
   const { accounts, selected, select } = useAccounts()
   const { fromAsset, setSwap, fromAmount, setFromAmount } = useSwap()
 
@@ -39,6 +40,17 @@ export const SwapInputFrom = () => {
     .mul(fromAsset?.price || 1)
     .toString()
 
+  const onClick = () => {
+    openDialog(SwapSelectAsset, {
+      selected: fromAsset,
+      onSelectAsset: asset => {
+        setSwap(asset)
+        const toSelect = accounts?.find(a => a.network === asset?.chain)
+        select(toSelect || null)
+      }
+    })
+  }
+
   return (
     <div className="px-6 py-8">
       <div className="flex items-start justify-between">
@@ -53,7 +65,7 @@ export const SwapInputFrom = () => {
             <DecimalFiat amount={valueFrom} />
           </div>
         </div>
-        <div className="flex cursor-pointer items-center gap-3" onClick={() => setOpen(true)}>
+        <div className="flex cursor-pointer items-center gap-3" onClick={onClick}>
           <AssetIcon url={fromAsset ? `/coins/${fromAsset.metadata.symbol.toLowerCase()}.svg` : null} />
           <div className="flex flex-col items-start">
             <span className="text-leah text-lg font-semibold">
@@ -97,17 +109,6 @@ export const SwapInputFrom = () => {
           <DecimalText amount={balance || 0n} />
         </div>
       </div>
-
-      <SwapSelectAsset
-        isOpen={open}
-        setOpen={setOpen}
-        selected={fromAsset}
-        onSelectAsset={asset => {
-          setSwap(asset)
-          const toSelect = accounts?.find(a => a.network === asset?.chain)
-          select(toSelect || null)
-        }}
-      />
     </div>
   )
 }

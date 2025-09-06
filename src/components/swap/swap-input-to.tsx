@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
 import { DecimalInput } from '@/components/decimal-input'
@@ -10,13 +9,14 @@ import { DecimalFiat } from '@/components/decimal-fiat'
 import { useAccounts } from '@/context/accounts-provider'
 import { Quote } from '@/hooks/use-quote'
 import { useDestination, useSetDestination, useSwap } from '@/hooks/use-swap'
+import { useDialog } from '@/components/global-dialog'
 
 interface SwapInputProps {
   quote?: Quote
 }
 
 export const SwapInputTo = ({ quote }: SwapInputProps) => {
-  const [open, setOpen] = useState(false)
+  const { openDialog } = useDialog()
   const { toAsset, setSwap } = useSwap()
   const { accounts } = useAccounts()
   const destination = useDestination()
@@ -27,6 +27,18 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
     .div(10 ** 8)
     .mul(toAsset?.price || 1)
     .toString()
+
+  const onClick = () =>
+    openDialog(SwapSelectAsset, {
+      selected: toAsset,
+      onSelectAsset: asset => {
+        if (destination?.network !== asset.chain) {
+          setDestination(accounts?.find(x => x.network === asset.chain))
+        }
+
+        setSwap(undefined, asset)
+      }
+    })
 
   return (
     <div className="px-6 py-8">
@@ -45,7 +57,7 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
             <DecimalFiat amount={valueTo} />
           </div>
         </div>
-        <div className="flex cursor-pointer items-center gap-3" onClick={() => setOpen(true)}>
+        <div className="flex cursor-pointer items-center gap-3" onClick={onClick}>
           <AssetIcon url={toAsset ? `/coins/${toAsset.metadata.symbol.toLowerCase()}.svg` : null} />
           <div className="flex flex-col items-start">
             <span className="text-leah text-lg font-semibold">
@@ -58,19 +70,6 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
           <ChevronDown className="h-4 w-4 text-white" />
         </div>
       </div>
-
-      <SwapSelectAsset
-        isOpen={open}
-        setOpen={setOpen}
-        selected={toAsset}
-        onSelectAsset={asset => {
-          if (destination?.network !== asset.chain) {
-            setDestination(accounts?.find(x => x.network === asset.chain))
-          }
-
-          setSwap(undefined, asset)
-        }}
-      />
     </div>
   )
 }

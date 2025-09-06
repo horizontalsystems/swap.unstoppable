@@ -1,46 +1,42 @@
 'use client'
 
 import { create } from 'zustand'
-import { WalletConnectDialog } from '@/components/wallet-connect/wallet-connect-dialog'
+import { ComponentType } from 'react'
 
-const dialogs = {
-  'connect-wallet': WalletConnectDialog
+interface DialogProps {
+  isOpen: boolean
+  onOpenChange: (isOpen: boolean) => void
 }
 
-type DialogName = keyof typeof dialogs
+interface DialogPayload<P = object> {
+  Component: ComponentType<P & DialogProps>
+  props: P
+}
 
 interface DialogStore {
   isOpen: boolean
-  dialogName: DialogName | null
-  dialogProps?: any
-  openDialog: (name: DialogName, props?: any) => void
+  payload: DialogPayload<any> | null
+  openDialog: <P>(Component: ComponentType<P & DialogProps>, props: Omit<P, 'isOpen' | 'onOpenChange'>) => void
   closeDialog: () => void
 }
 
 export const useDialog = create<DialogStore>(set => ({
   isOpen: false,
-  dialogName: null,
-  dialogProps: {},
-  openDialog: (name, props = {}) => {
-    set({ isOpen: true, dialogName: name, dialogProps: props })
+  payload: null,
+  openDialog: (Component, props) => {
+    set({ isOpen: true, payload: { Component, props } })
   },
   closeDialog: () => {
-    set({ isOpen: false, dialogName: null, dialogProps: {} })
+    set({ isOpen: false, payload: null })
   }
 }))
 
 export const GlobalDialog = () => {
-  const { isOpen, dialogName, dialogProps, closeDialog } = useDialog()
-
-  if (!isOpen || !dialogName) {
+  const { isOpen, payload, closeDialog } = useDialog()
+  if (!isOpen || !payload) {
     return null
   }
 
-  const DialogComponent = dialogs[dialogName]
-
-  if (!DialogComponent) {
-    return null
-  }
-
-  return <DialogComponent open={isOpen} onOpenChange={closeDialog} {...dialogProps} />
+  const { Component, props } = payload
+  return <Component isOpen={isOpen} onOpenChange={closeDialog} {...props} />
 }

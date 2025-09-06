@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils'
 
 interface SwapSelectAssetProps {
   isOpen: boolean
-  setOpen: (isOpen: boolean) => void
+  onOpenChange: (isOpen: boolean) => void
   selected?: Asset
   onSelectAsset: (asset: Asset) => void
 }
@@ -23,7 +23,7 @@ enum Filter {
 
 type FilterNetwork = Network | Filter
 
-export const SwapSelectAsset = ({ isOpen, setOpen, selected, onSelectAsset }: SwapSelectAssetProps) => {
+export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset }: SwapSelectAssetProps) => {
   const isMobile = useIsMobile()
   const [selectedChain, setSelectedChain] = useState<FilterNetwork>(Filter.All)
   const [searchQuery, setSearchQuery] = useState('')
@@ -105,11 +105,11 @@ export const SwapSelectAsset = ({ isOpen, setOpen, selected, onSelectAsset }: Sw
 
   const handleAssetSelect = (asset: Asset) => {
     onSelectAsset(asset)
-    setOpen(false)
+    onOpenChange(false)
   }
 
   return (
-    <Credenza open={isOpen} onOpenChange={setOpen}>
+    <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="bg-lawrence min-h-1/2 w-full px-4 pb-0 md:min-w-2xl">
         <CredenzaHeader>
           <CredenzaTitle className="hidden text-2xl font-medium text-white md:block">Select coin</CredenzaTitle>

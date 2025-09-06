@@ -4,6 +4,7 @@ import { useSwap } from '@/hooks/use-swap'
 import { useAccounts } from '@/context/accounts-provider'
 import { useQuote } from '@/hooks/use-quote'
 import { useSimulation } from '@/hooks/use-simulation'
+import { WalletConnectDialog } from '@/components/wallet-connect/wallet-connect-dialog'
 import { useDialog } from '@/components/global-dialog'
 import { cn } from '@/lib/utils'
 import { wallets } from '@/wallets'
@@ -36,14 +37,14 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
         text: `Connect ${networkLabel(fromAsset.chain)} Wallet`,
         spinner: false,
         accent: false,
-        onClick: () => openDialog('connect-wallet')
+        onClick: () => openDialog(WalletConnectDialog, {})
       }
     if (!destination)
       return {
         text: `Connect or Set ${networkLabel(toAsset.chain)} Wallet`,
         spinner: false,
         accent: false,
-        onClick: () => openDialog('connect-wallet')
+        onClick: () => openDialog(WalletConnectDialog, {})
       }
     if (simulationError instanceof InsufficientAllowanceError) {
       return {
