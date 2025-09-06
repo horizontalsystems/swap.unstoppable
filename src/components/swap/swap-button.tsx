@@ -65,7 +65,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
             })
 
           toast.promise(promise, {
-            loading: 'Increasing Allowance',
+            loading: 'Approval Transaction',
             success: 'Success',
             error: (err: any) => err.message || 'Error Submitting Transaction'
           })
