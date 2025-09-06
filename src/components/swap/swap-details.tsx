@@ -94,18 +94,6 @@ export function SwapDetails({ quote }: SwapDetailsProps) {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <span className="text-gray text-sm">Affiliate Fee</span>
-              <InfoTooltip>Percentage returned to the referrer.</InfoTooltip>
-            </div>
-            <DecimalText
-              className="text-leah text-xs"
-              amount={BigInt(quote?.fees.affiliate || 0)}
-              symbol={toAsset?.metadata.symbol}
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
               <span className="text-gray text-sm">Est. Time</span>
             </div>
             <div className="flex items-center gap-2 text-sm font-medium text-zinc-200">
