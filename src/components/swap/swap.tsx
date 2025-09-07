@@ -8,7 +8,7 @@ import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
 import { SwapWarning } from '@/components/swap/swap-warning'
 import { SwapDetails } from '@/components/swap/swap-details'
-import { useAccounts } from '@/context/accounts-provider'
+import { getSelectedContext, useAccounts } from '@/context/accounts-provider'
 import { useTransactions } from '@/hooks/use-transactions'
 import { useSwap } from '@/hooks/use-swap'
 import { useQuote } from '@/hooks/use-quote'
@@ -18,7 +18,7 @@ import { toast } from 'sonner'
 import { SwapButton } from '@/components/swap/swap-button'
 
 export const Swap = () => {
-  const { selected, context } = useAccounts()
+  const { selected } = useAccounts()
   const { fromAsset, fromAmount, toAsset } = useSwap()
   const { quote, error: quoteError } = useQuote()
   const { simulationData, error: simulationError } = useSimulation()
@@ -29,7 +29,7 @@ export const Swap = () => {
       return
     }
 
-    const func = wallets.signAndBroadcast(context, selected, simulationData.inboundAddress)
+    const func = wallets.signAndBroadcast(getSelectedContext(), selected, simulationData.inboundAddress)
     const broadcast = func(simulationData.simulation, simulationData.msg)
       .then(res => {
         setTransaction({

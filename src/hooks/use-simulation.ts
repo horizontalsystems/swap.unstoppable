@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useSwap } from '@/hooks/use-swap'
 import { InboundAddress, MsgSwap, Simulation } from 'rujira.js'
 import { useQuote } from '@/hooks/use-quote'
-import { useAccounts } from '@/context/accounts-provider'
+import { getSelectedContext, useAccounts } from '@/context/accounts-provider'
 import { wallets } from '@/wallets'
 
 type SimulationData = {
@@ -18,7 +18,7 @@ type UseSimulation = {
 }
 
 export const useSimulation = (): UseSimulation => {
-  const { selected, context } = useAccounts()
+  const { selected } = useAccounts()
   const { fromAsset, fromAmount } = useSwap()
   const { quote } = useQuote()
 
@@ -42,7 +42,7 @@ export const useSimulation = (): UseSimulation => {
 
       const msg = new MsgSwap(fromAsset, fromAmount, quote.memo)
 
-      const simulateFunc = wallets.simulate(context, selected, inboundAddress)
+      const simulateFunc = wallets.simulate(getSelectedContext(), selected, inboundAddress)
       const simulation = await simulateFunc(msg)
 
       return { simulation: simulation, inboundAddress, msg }

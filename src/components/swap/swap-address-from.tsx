@@ -67,7 +67,11 @@ export const SwapAddressFrom = ({ asset }: SwapAddressFromProps) => {
                   <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
                   <span className="text-gray text-sm">{account.provider}</span>
                 </div>
-                <span className={cn('ms-5 text-sm', { 'text-runes-blue': account === selected })}>
+                <span
+                  className={cn('ms-5 text-sm', {
+                    'text-runes-blue': account.provider === selected?.provider && account.address === selected?.address
+                  })}
+                >
                   {truncate(account.address)}
                 </span>
               </DropdownMenuItem>

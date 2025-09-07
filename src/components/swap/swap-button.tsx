@@ -1,7 +1,7 @@
 import { LoaderCircle } from 'lucide-react'
 import { InsufficientAllowanceError, MsgErc20IncreaseAllowance, networkLabel } from 'rujira.js'
 import { useSwap } from '@/hooks/use-swap'
-import { useAccounts } from '@/context/accounts-provider'
+import { getSelectedContext, useAccounts } from '@/context/accounts-provider'
 import { useQuote } from '@/hooks/use-quote'
 import { useSimulation } from '@/hooks/use-simulation'
 import { WalletConnectDialog } from '@/components/wallet-connect/wallet-connect-dialog'
@@ -22,7 +22,7 @@ interface ButtonState {
 }
 
 export const SwapButton = ({ onSwap }: SwapButtonProps) => {
-  const { selected, context } = useAccounts()
+  const { selected } = useAccounts()
   const { fromAsset, fromAmount, destination, toAsset } = useSwap()
   const { isLoading: isQuoting, refetch: refetchQuote } = useQuote()
   const { isLoading: isSimulating, simulationData, error: simulationError } = useSimulation()
@@ -53,10 +53,10 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
         accent: false,
         onClick: async () => {
           const msg = new MsgErc20IncreaseAllowance(simulationError)
-          const simulateFunc = wallets.simulate(context, selected)
+          const simulateFunc = wallets.simulate(getSelectedContext(), selected)
           const promise = simulateFunc(msg)
             .then(simulation => {
-              const broadcast = wallets.signAndBroadcast(context, selected)
+              const broadcast = wallets.signAndBroadcast(getSelectedContext(), selected)
               return broadcast(simulation, msg)
             })
             .then(res => {
