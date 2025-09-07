@@ -18,11 +18,9 @@ interface WalletContext {
 
 interface AccountContext extends AccountProvider {
   context?: any
-  wallets: WalletContext[]
 }
 
 const Context = createContext<AccountContext>({
-  wallets: [],
   accounts: undefined,
   select: ERROR,
   connect: ERROR,
@@ -152,7 +150,6 @@ export const AccountsProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Context.Provider
       value={{
-        wallets: accounts || [],
         accounts: accounts?.map(a => a.account),
         selected: selected?.account,
         context: selected?.context,
