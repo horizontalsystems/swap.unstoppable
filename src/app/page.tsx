@@ -1,4 +1,4 @@
-import { Header } from '@/components/header'
+import { Header } from '@/components/header/header'
 import { Swap } from '@/components/swap/swap'
 import { GlobalDialog } from '@/components/global-dialog'
 import { getQueryClient } from '@/components/react-query/react-query-client'

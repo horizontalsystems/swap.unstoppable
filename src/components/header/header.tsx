@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowRightLeft } from 'lucide-react'
-import { WalletConnectButton } from '@/components/wallet-connect/wallet-connect-button'
+import { WalletConnectButton } from '@/components/header/wallet-connect-button'
 
 export function Header() {
   return (
