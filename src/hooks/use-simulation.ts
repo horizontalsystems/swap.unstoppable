@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useSwap } from '@/hooks/use-swap'
 import { InboundAddress, MsgSwap, Simulation } from 'rujira.js'
 import { useQuote } from '@/hooks/use-quote'
-import { getSelectedContext, useAccounts } from '@/context/accounts-provider'
+import { getSelectedContext, useAccounts } from '@/hooks/use-accounts'
 import { wallets } from '@/wallets'
 
 type SimulationData = {

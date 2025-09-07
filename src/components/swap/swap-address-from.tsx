@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { useAccounts } from '@/context/accounts-provider'
+import { useAccounts } from '@/hooks/use-accounts'
 import { Asset } from '@/components/swap/asset'
 import { cn, truncate } from '@/lib/utils'
 import { useSwap } from '@/hooks/use-swap'

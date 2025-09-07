@@ -13,7 +13,7 @@ import {
 import { Asset } from '@/components/swap/asset'
 import { SwapAddressConfig } from '@/components/swap/swap-address-config'
 import { useDestination, useSetDestination, useSwap } from '@/hooks/use-swap'
-import { useAccounts } from '@/context/accounts-provider'
+import { useAccounts } from '@/hooks/use-accounts'
 import { cn, truncate } from '@/lib/utils'
 
 interface SwapSelectToProps {

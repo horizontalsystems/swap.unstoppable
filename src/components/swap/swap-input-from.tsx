@@ -7,7 +7,7 @@ import { balanceKey, useBalance, useSyncBalance, useSyncing } from '@/hooks/use-
 import { DecimalFiat } from '@/components/decimal-fiat'
 import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
 import { Button } from '@/components/ui/button'
-import { useAccounts } from '@/context/accounts-provider'
+import { useAccounts } from '@/hooks/use-accounts'
 import { DecimalText } from '@/components/decimal-text'
 import { useSwap } from '@/hooks/use-swap'
 import { AssetIcon } from '@/components/asset-icon'

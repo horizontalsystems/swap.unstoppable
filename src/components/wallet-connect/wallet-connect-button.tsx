@@ -8,7 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { WalletConnectDialog } from '@/components/wallet-connect/wallet-connect-dialog'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { HistoryDialog } from '@/components/history-dialog'
-import { useAccounts } from '@/context/accounts-provider'
+import { useAccounts } from '@/hooks/use-accounts'
 import { useTransactions } from '@/hooks/use-transactions'
 import { useDialog } from '@/components/global-dialog'
 

@@ -1,7 +1,7 @@
 import { LoaderCircle } from 'lucide-react'
 import { InsufficientAllowanceError, MsgErc20IncreaseAllowance, networkLabel } from 'rujira.js'
 import { useSwap } from '@/hooks/use-swap'
-import { getSelectedContext, useAccounts } from '@/context/accounts-provider'
+import { getSelectedContext, useAccounts } from '@/hooks/use-accounts'
 import { useQuote } from '@/hooks/use-quote'
 import { useSimulation } from '@/hooks/use-simulation'
 import { WalletConnectDialog } from '@/components/wallet-connect/wallet-connect-dialog'

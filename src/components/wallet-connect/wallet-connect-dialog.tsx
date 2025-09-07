@@ -8,7 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { Provider } from '@/wallets'
 import { usePools } from '@/hooks/use-pools'
-import { useAccounts } from '@/context/accounts-provider'
+import { useAccounts } from '@/hooks/use-accounts'
 import { cn } from '@/lib/utils'
 
 interface WalletProps<T> {
