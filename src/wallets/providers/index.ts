@@ -1,7 +1,6 @@
 import { Account as BaseAccount, InboundAddress, Msg, Simulation, TxResult } from 'rujira.js'
 import { Provider, Providers, WalletProvider } from './types'
 
-import brave from './brave'
 import ctrl from './ctrl'
 import keplr from './keplr'
 import metamask from './metamask'
@@ -15,7 +14,6 @@ const providers: Record<Provider, () => WalletProvider<any>> = {
   Ctrl: ctrl,
   Metamask: metamask,
   Okx: okx,
-  Brave: brave,
   Tronlink: tronlink
 }
 

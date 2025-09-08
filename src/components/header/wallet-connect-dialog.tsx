@@ -283,12 +283,5 @@ const WALLETS: WalletProps<Provider>[] = [
     provider: 'Tronlink',
     link: 'https://www.tronlink.org',
     supportedChains: [Network.Tron, Network.Bsc, Network.Ethereum]
-  },
-  {
-    key: 'brave',
-    label: 'Brave',
-    provider: 'Brave',
-    link: 'https://brave.com/wallet',
-    supportedChains: [Network.Avalanche, Network.Base, Network.Ethereum]
   }
 ]

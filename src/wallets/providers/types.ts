@@ -22,6 +22,5 @@ export type Providers = {
   Ctrl: CtrlContext
   Metamask: JsonRpcSigner
   Okx: OkxContext
-  Brave: JsonRpcSigner
   Tronlink: TronlinkContext
 }
