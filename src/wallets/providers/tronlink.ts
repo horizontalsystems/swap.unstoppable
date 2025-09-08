@@ -82,7 +82,7 @@ class Tronlink implements WalletProvider<TronlinkContext> {
   }
   onChange?: ((cb: () => void) => void) | undefined
   isAvailable() {
-    return true
+    return !!this.tron()
   }
 }
 

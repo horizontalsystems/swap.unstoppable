@@ -18,7 +18,7 @@ export class KeplrAdapter implements WalletProvider<KeplrContext> {
   private c: CosmosAdapter
   constructor(
     private e: Eip6963Adapter,
-    k: () => Keplr | undefined
+    private k: () => Keplr | undefined
   ) {
     this.c = new CosmosAdapter(k)
   }
@@ -28,7 +28,7 @@ export class KeplrAdapter implements WalletProvider<KeplrContext> {
   }
 
   isAvailable(): boolean {
-    return this.c.isAvailable()
+    return !!this.k()
   }
 
   public async getAccounts(): Promise<
