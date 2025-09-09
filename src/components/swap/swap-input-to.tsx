@@ -10,6 +10,7 @@ import { useAccounts } from '@/hooks/use-accounts'
 import { Quote } from '@/hooks/use-quote'
 import { useDestination, useSetDestination, useSwap } from '@/hooks/use-swap'
 import { useDialog } from '@/components/global-dialog'
+import { useRate } from '@/hooks/use-rates'
 
 interface SwapInputProps {
   quote?: Quote
@@ -18,6 +19,7 @@ interface SwapInputProps {
 export const SwapInputTo = ({ quote }: SwapInputProps) => {
   const { openDialog } = useDialog()
   const { toAsset, setSwap } = useSwap()
+  const { rate: toAssetRate } = useRate(toAsset?.asset)
   const { accounts } = useAccounts()
   const destination = useDestination()
   const setDestination = useSetDestination()
@@ -25,7 +27,7 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
   const amount = toAsset ? BigInt(quote?.expected_amount_out || 0) : 0n
   const valueTo = new Decimal(amount)
     .div(10 ** 8)
-    .mul(toAsset?.price || 1)
+    .mul(toAssetRate || 1)
     .toString()
 
   const onClick = () =>

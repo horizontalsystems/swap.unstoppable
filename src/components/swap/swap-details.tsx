@@ -8,6 +8,7 @@ import { DecimalText } from '@/components/decimal/decimal-text'
 import { DecimalFiat } from '@/components/decimal/decimal-fiat'
 import { Quote } from '@/hooks/use-quote'
 import { useSwap } from '@/hooks/use-swap'
+import { useRate } from '@/hooks/use-rates'
 
 interface SwapDetailsProps {
   quote?: Quote
@@ -16,6 +17,7 @@ interface SwapDetailsProps {
 export function SwapDetails({ quote }: SwapDetailsProps) {
   const [showMore, setShowMore] = useState(false)
   const { fromAmount, fromAsset, toAsset } = useSwap()
+  const { rate: toAssetRate } = useRate(toAsset?.asset)
 
   if (!quote) {
     return null
@@ -26,7 +28,7 @@ export function SwapDetails({ quote }: SwapDetailsProps) {
     Number(quote?.fees.liquidity || 0) + Number(quote?.fees.outbound || 0) + Number(quote?.fees.affiliate || 0)
   )
 
-  const price = new Decimal(toAsset?.price || 0)
+  const price = new Decimal(toAssetRate || 0)
   const feeInUsd = price
     .mul(totalFee)
     .div(10n ** 8n)
