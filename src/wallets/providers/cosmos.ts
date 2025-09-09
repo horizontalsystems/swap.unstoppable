@@ -8,7 +8,7 @@ import { HttpBatchClient } from 'rujira.js/src/signers/cosmos/rpc/rpcclients'
 import { MsgSend } from 'rujira.js/src/signers/cosmos/types/cosmos/bank/v1beta1/tx'
 import { MsgDeposit } from 'rujira.js/src/signers/cosmos/types/thorchain/types/msg_deposit'
 import * as config from '../config'
-import { Providers, WalletProvider } from './types'
+import { Providers, WalletProvider } from '../types'
 
 export interface CosmosContext {
   chain: ChainInfo

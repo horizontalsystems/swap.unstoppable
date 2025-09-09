@@ -3,7 +3,7 @@ import { useSwap } from '@/hooks/use-swap'
 import { InboundAddress, MsgSwap, Simulation } from 'rujira.js'
 import { useQuote } from '@/hooks/use-quote'
 import { getSelectedContext, useAccounts } from '@/hooks/use-accounts'
-import { wallets } from '@/wallets'
+import { simulate } from '@/wallets'
 
 type SimulationData = {
   simulation: Simulation
@@ -42,7 +42,7 @@ export const useSimulation = (): UseSimulation => {
 
       const msg = new MsgSwap(fromAsset, fromAmount, quote.memo)
 
-      const simulateFunc = wallets.simulate(getSelectedContext(), selected, inboundAddress)
+      const simulateFunc = simulate(getSelectedContext(), selected, inboundAddress)
       const simulation = await simulateFunc(msg)
 
       return { simulation: simulation, inboundAddress, msg }

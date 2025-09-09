@@ -1,6 +1,6 @@
 import { TronWeb } from 'tronweb'
 import { Account, InboundAddress, Msg, Network, Simulation, TxResult } from 'rujira.js'
-import { Providers, WalletProvider } from './types'
+import { Providers, WalletProvider } from '../types'
 
 interface TronLink {
   request: (v: { method: string }) => Promise<any>

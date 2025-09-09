@@ -5,8 +5,8 @@ import { Eip712Signer } from 'rujira.js/src/signers/cosmos/proto-signing'
 import { Comet38Client } from 'rujira.js/src/signers/cosmos/rpc/comet38'
 import { MsgSend } from 'rujira.js/src/signers/cosmos/types/cosmos/bank/v1beta1/tx'
 import { MsgDeposit } from 'rujira.js/src/signers/cosmos/types/thorchain/types/msg_deposit'
-import { CosmosContext, createCosmosContext } from './cosmos'
-import { Providers, WalletProvider } from './types'
+import { CosmosContext, createCosmosContext } from '../cosmos'
+import { Providers, WalletProvider } from '../../types'
 
 interface Provider extends Eip1193Provider {
   on?: (event: string, cb: () => void) => any

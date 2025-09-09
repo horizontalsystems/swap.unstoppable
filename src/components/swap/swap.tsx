@@ -14,7 +14,7 @@ import { useTransactions } from '@/hooks/use-transactions'
 import { useSimulation } from '@/hooks/use-simulation'
 import { useQuote } from '@/hooks/use-quote'
 import { useSwap } from '@/hooks/use-swap'
-import { wallets } from '@/wallets'
+import { signAndBroadcast } from '@/wallets'
 import { toast } from 'sonner'
 
 export const Swap = () => {
@@ -29,7 +29,7 @@ export const Swap = () => {
       return
     }
 
-    const func = wallets.signAndBroadcast(getSelectedContext(), selected, simulationData.inboundAddress)
+    const func = signAndBroadcast(getSelectedContext(), selected, simulationData.inboundAddress)
     const broadcast = func(simulationData.simulation, simulationData.msg)
       .then(res => {
         setTransaction({

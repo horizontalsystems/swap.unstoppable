@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { Account, AccountProvider, Provider, wallets } from '@/wallets'
+import { Account, AccountProvider, disconnect, getAccounts, isAvaialable, onChange, Provider } from '@/wallets'
 import { useSwapStore } from '@/hooks/use-swap'
 import { toast } from 'sonner'
 
@@ -44,7 +44,7 @@ export const useAccountsStore = create<AccountsState>()(
 
       connect: async provider => {
         try {
-          const accs = await wallets.getAccounts(provider)
+          const accs = await getAccounts(provider)
           if (!accs.length) throw new Error(`No accounts found on ${provider}`)
           const { fromAsset } = useSwapStore.getState()
 
@@ -66,7 +66,7 @@ export const useAccountsStore = create<AccountsState>()(
       },
 
       disconnect: provider => {
-        wallets.disconnect(provider)
+        disconnect(provider)
         const { fromAsset } = useSwapStore.getState()
 
         set(state => {
@@ -89,7 +89,7 @@ export const useAccountsStore = create<AccountsState>()(
       },
 
       disconnectAll: () => {
-        get().wallets.forEach(a => wallets.disconnect(a.account.provider))
+        get().wallets.forEach(a => disconnect(a.account.provider))
         set({
           wallets: [],
           accounts: [],
@@ -108,7 +108,7 @@ export const useAccountsStore = create<AccountsState>()(
         return found?.context
       },
 
-      isAvaialable: provider => wallets.isAvaialable(provider)
+      isAvaialable: provider => isAvaialable(provider)
     }),
     {
       name: `thorswap-accounts-${process.env.NEXT_PUBLIC_MODE}`,
@@ -125,7 +125,7 @@ export const useAccountsStore = create<AccountsState>()(
 
         Promise.allSettled(
           state.providers.map(p => {
-            return wallets.getAccounts(p)
+            return getAccounts(p)
           })
         ).then(x => {
           const wallets = x.reduce((a: WalletContext[], v) => (v.status === 'fulfilled' ? [...v.value, ...a] : a), [])
@@ -148,8 +148,8 @@ useAccountsStore.subscribe((currState, prevState) => {
 
   if (!currProvider || (currProvider === prevProvider && prevState.wallets.length)) return
 
-  wallets.onChange(currProvider, async () => {
-    wallets.getAccounts(currProvider).then(accs => {
+  onChange(currProvider, async () => {
+    getAccounts(currProvider).then(accs => {
       const { fromAsset } = useSwapStore.getState()
 
       useAccountsStore.setState(state => {

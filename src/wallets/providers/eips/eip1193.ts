@@ -11,9 +11,9 @@ import {
   Simulation,
   TxResult
 } from 'rujira.js'
-import * as thor from '../config/thor'
+import * as thor from '../../config/thor'
 import { Eip712Adapter, Eip712Context } from './eip712'
-import { Providers, WalletProvider } from './types'
+import { Providers, WalletProvider } from '../../types'
 
 const networks = [Network.Ethereum, Network.Avalanche, Network.Base, Network.Bsc]
 

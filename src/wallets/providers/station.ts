@@ -1,5 +1,5 @@
 import { Keplr } from '@keplr-wallet/types'
-import { Eip6963Adapter } from './eip6963'
+import { Eip6963Adapter } from './eips/eip6963'
 import { KeplrAdapter } from './keplr'
 
 declare global {

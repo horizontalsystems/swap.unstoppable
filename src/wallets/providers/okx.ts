@@ -3,8 +3,8 @@ import { Psbt } from 'bitcoinjs-lib'
 import { Eip1193Provider, JsonRpcSigner } from 'ethers'
 import { Account, InboundAddress, Msg, Network, Simulation, TxResult } from 'rujira.js'
 import { CosmosAdapter, CosmosContext } from './cosmos'
-import { Eip6963Adapter } from './eip6963'
-import { Providers, WalletProvider } from './types'
+import { Eip6963Adapter } from './eips/eip6963'
+import { Providers, WalletProvider } from '../types'
 import { UtxoContext } from './utxo'
 
 interface BitcoinProvider {

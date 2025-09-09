@@ -2,8 +2,8 @@ import { Keplr, Window as KeplrWindow } from '@keplr-wallet/types'
 import { Eip1193Provider, JsonRpcSigner } from 'ethers'
 import { Account, gasToken, InboundAddress, Msg, Network, Simulation, TxResult } from 'rujira.js'
 import { CosmosAdapter, CosmosContext } from './cosmos'
-import { Eip6963Adapter } from './eip6963'
-import { Providers, WalletProvider } from './types'
+import { Eip6963Adapter } from './eips/eip6963'
+import { Providers, WalletProvider } from '../types'
 import { utxoNetworkTochain, UtxoQueryClient } from './utxo'
 
 export type Callback = (

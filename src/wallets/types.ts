@@ -5,11 +5,11 @@ import {
   WalletProvider as BaseWalletProvider
 } from 'rujira.js'
 
-import { CtrlContext } from './ctrl'
-import { KeplrContext } from './keplr'
-import { OkxContext } from './okx'
-import { VulticonnectContext } from './vulticonnect'
-import { TronlinkContext } from './tronlink'
+import { CtrlContext } from './providers/ctrl'
+import { KeplrContext } from './providers/keplr'
+import { OkxContext } from './providers/okx'
+import { VulticonnectContext } from './providers/vulticonnect'
+import { TronlinkContext } from './providers/tronlink'
 
 export type Provider = keyof Providers
 export type Account = BaseAccount<Provider>

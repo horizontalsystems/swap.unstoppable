@@ -2,8 +2,8 @@ import { Keplr, Window as KeplrWindow } from '@keplr-wallet/types'
 import { JsonRpcSigner } from 'ethers'
 import { InboundAddress, Msg, Network, Simulation, TxResult } from 'rujira.js'
 import { CosmosAdapter, CosmosContext } from './cosmos'
-import { Eip6963Adapter } from './eip6963'
-import { Account, WalletProvider } from './types'
+import { Eip6963Adapter } from './eips/eip6963'
+import { Account, WalletProvider } from '../types'
 
 declare global {
   interface Window extends KeplrWindow {

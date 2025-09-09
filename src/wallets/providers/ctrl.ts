@@ -2,9 +2,9 @@ import { Keplr, Window as KeplrWindow } from '@keplr-wallet/types'
 import { Eip1193Provider, JsonRpcSigner } from 'ethers'
 import { Account, gasToken, InboundAddress, Msg, Network, Simulation, TxResult } from 'rujira.js'
 import { CosmosAdapter, CosmosContext } from './cosmos'
-import { Eip1193Adapter } from './eip1193'
-import { Eip6963Adapter } from './eip6963'
-import { Providers, WalletProvider } from './types'
+import { Eip1193Adapter } from './eips/eip1193'
+import { Eip6963Adapter } from './eips/eip6963'
+import { Providers, WalletProvider } from '../types'
 import { BitcoinProvider, UtxoNetworks, utxoNetworkTochain, UtxoQueryClient } from './utxo'
 
 interface XfiWindow extends UtxoNetworks {

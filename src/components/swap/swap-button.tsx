@@ -7,7 +7,7 @@ import { useSimulation } from '@/hooks/use-simulation'
 import { WalletConnectDialog } from '@/components/header/wallet-connect-dialog'
 import { useDialog } from '@/components/global-dialog'
 import { cn } from '@/lib/utils'
-import { wallets } from '@/wallets'
+import { simulate, signAndBroadcast } from '@/wallets'
 import { toast } from 'sonner'
 
 interface SwapButtonProps {
@@ -53,10 +53,10 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
         accent: false,
         onClick: async () => {
           const msg = new MsgErc20IncreaseAllowance(simulationError)
-          const simulateFunc = wallets.simulate(getSelectedContext(), selected)
+          const simulateFunc = simulate(getSelectedContext(), selected)
           const promise = simulateFunc(msg)
             .then(simulation => {
-              const broadcast = wallets.signAndBroadcast(getSelectedContext(), selected)
+              const broadcast = signAndBroadcast(getSelectedContext(), selected)
               return broadcast(simulation, msg)
             })
             .then(res => {
