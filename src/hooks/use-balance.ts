@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useSwap } from '@/hooks/use-swap'
 import { getSelectedContext, useAccounts } from '@/hooks/use-accounts'
 import { BalanceFetcher } from '@/wallets/balances'
-import { MsgSwap } from 'rujira.js'
+import { gasToken, MsgSwap } from 'rujira.js'
 import { simulate } from '@/wallets'
 import { JsonRpcSigner } from 'ethers'
 import { useInboundAddresses } from '@/hooks/use-inbound-addresses'
@@ -40,49 +40,45 @@ export const useBalance = (): UseBalance => {
         asset: fromAsset.asset
       })
 
-      const address = inboundAddresses.find((a: any) => a.chain === fromAsset.chain)
-
-      if (!address) {
-        return null
-      }
-
-      const inboundAddress = {
-        address: address.address,
-        dustThreshold: BigInt(address.dust_threshold || '0'),
-        gasRate: BigInt(address.gas_rate || '0'),
-        router: address.router || undefined
-      }
-
-      const context = getSelectedContext()
-
       let fee = 0n
 
-      if (context instanceof JsonRpcSigner) {
+      const [, assetId] = fromAsset.asset.split('.')
+
+      if (assetId.toUpperCase() === gasToken(fromAsset.chain).symbol && amount > 0n) {
+        const address = inboundAddresses.find((a: any) => a.chain === fromAsset.chain)
+
+        if (!address) {
+          return null
+        }
+
+        const inboundAddress = {
+          address: address.address,
+          dustThreshold: BigInt(address.dust_threshold || '0'),
+          gasRate: BigInt(address.gas_rate || '0'),
+          router: address.router || undefined
+        }
+
+        const context = getSelectedContext()
+
+        let estimateAmount = amount
+
+        if (context instanceof JsonRpcSigner) {
+          estimateAmount = 1n
+        } else if (typeof context === 'object' && 'chain' in context) {
+          // todo
+        }
+
         const msg = new MsgSwap(
           fromAsset,
-          1n,
+          estimateAmount,
           '================================================================================'
         ) // todo
 
         const simulateFunc = simulate(context, selected, inboundAddress)
         const simulation = await simulateFunc(msg)
 
-        console.log({ simulation })
-
-        fee = simulation.amount / BigInt(1e10)
-      } else if (typeof context === 'object' && 'chain' in context) {
-        // todo
-      } else {
-        const msg = new MsgSwap(
-          fromAsset,
-          amount,
-          '================================================================================'
-        ) // todo
-
-        const simulateFunc = simulate(context, selected, inboundAddress)
-        const simulation = await simulateFunc(msg)
-
-        fee = simulation.amount
+        const simulationFee = (simulation.amount * BigInt(1e8)) / BigInt(10 ** simulation.decimals)
+        fee = (simulationFee * 11n) / 10n // surcharge by 10%
       }
 
       const spendable = amount - fee > 0 ? amount - fee : 0n
