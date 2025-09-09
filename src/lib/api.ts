@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { poolsInfoMap } from '@/hooks/use-rates'
 
 const midgard = axios.create({
   baseURL: 'https://midgard.ninerealms.com',
@@ -18,26 +17,7 @@ const thornode = axios.create({
 const coingecko = axios.create({ baseURL: 'https://api.coingecko.com/api/v3' })
 
 export const getPools = async () => {
-  return midgard
-    .get('/v2/pools')
-    .then(res => res.data)
-    .then(data => data.filter((item: any) => item.status === 'available'))
-    .then(data =>
-      data.map((item: any) => {
-        const [chain, asset] = item.asset.split('.')
-        const [symbol] = asset.split('-')
-
-        return {
-          type: chain === 'THOR' ? 'NATIVE' : 'LAYER_1',
-          asset: item.asset,
-          chain,
-          metadata: {
-            symbol,
-            decimals: poolsInfoMap[item.asset]?.decimals || parseInt(item.nativeDecimal)
-          }
-        }
-      })
-    )
+  return midgard.get('/v2/pools').then(res => res.data)
 }
 
 export const getPoolsRates = async (assets: string) => {
