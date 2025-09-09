@@ -124,7 +124,11 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
                         <div className="font-medium text-white">{wallet.label}</div>
                         <div className="text-xs">
                           {isInstalled ? (
-                            <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
+                            isConnected ? (
+                              <span className="text-liquidity-green">Connected</span>
+                            ) : (
+                              <span>Disconnected</span>
+                            )
                           ) : (
                             <a href={wallet.link} className="text-jacob" rel="noopener noreferrer" target="_blank">
                               Install
