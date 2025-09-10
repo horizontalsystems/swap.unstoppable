@@ -8,19 +8,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { Asset } from '@/components/swap/asset'
 import { useAccounts } from '@/hooks/use-accounts'
 import { cn, truncate } from '@/lib/utils'
 import { useSwap } from '@/hooks/use-swap'
 
-interface SwapAddressFromProps {
-  asset?: Asset
-}
-
-export const SwapAddressFrom = ({ asset }: SwapAddressFromProps) => {
+export const SwapAddressFrom = () => {
   const { accounts, selected, select } = useAccounts()
   const { fromAsset } = useSwap()
-  const options = accounts?.filter(a => a.network === asset?.chain)
+
+  const options = accounts?.filter(a => a.network === fromAsset?.chain)
 
   useEffect(() => {
     if (fromAsset && !selected) {
@@ -34,22 +30,24 @@ export const SwapAddressFrom = ({ asset }: SwapAddressFromProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex cursor-pointer items-center justify-between">
-          <div className="flex items-center gap-2">
-            {selected ? (
-              <Image src={`/wallets/${selected.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
-            ) : (
-              <Wallet className="text-gray h-6 w-6" />
-            )}
-            <span className="text-gray text-sm">{selected?.provider || 'Source Wallet'}</span>
-          </div>
-          <div className="text-leah text-sm">
-            <span>{selected?.address ? truncate(selected.address) : ''}</span>
-            <ChevronDown className="ms-2 inline h-4 w-4" />
+        <div className="border-b-1 p-4 cursor-pointer">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {selected ? (
+                <Image src={`/wallets/${selected.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
+              ) : (
+                <Wallet className="text-gray h-6 w-6" />
+              )}
+              <span className="text-gray text-sm">{selected?.provider || 'Source Wallet'}</span>
+            </div>
+            <div className="text-leah text-sm">
+              <span>{selected?.address ? truncate(selected.address) : ''}</span>
+              <ChevronDown className="ms-2 inline h-4 w-4" />
+            </div>
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" side="right" className="bg-lawrence rounded-2xl p-0">
+      <DropdownMenuContent align="end" className="bg-lawrence rounded-2xl p-0">
         <div className="border-b p-3 py-2">
           <div className="flex items-center gap-3">
             <Wallet className="text-gray h-6 w-6" />

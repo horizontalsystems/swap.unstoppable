@@ -70,17 +70,11 @@ export const Swap = () => {
         </div>
 
         <div className="bg-lawrence border-blade rounded-3xl border-1">
-          <div className="border-b-1 p-4">
-            <SwapAddressFrom asset={fromAsset} />
-          </div>
-
+          <SwapAddressFrom />
           <SwapInputFrom />
           <SwapToggleAssets />
           <SwapInputTo quote={quote} />
-
-          <div className="border-t-1 p-4">
-            <SwapAddressTo asset={toAsset} />
-          </div>
+          <SwapAddressTo />
         </div>
 
         <SwapDetails quote={quote} />

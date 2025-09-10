@@ -10,25 +10,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { Asset } from '@/components/swap/asset'
 import { SwapAddressCustom } from '@/components/swap/swap-address-custom'
 import { useDestination, useSetDestination, useSwap } from '@/hooks/use-swap'
 import { useAccounts } from '@/hooks/use-accounts'
 import { useDialog } from '@/components/global-dialog'
 import { cn, truncate } from '@/lib/utils'
 
-interface SwapSelectToProps {
-  asset?: Asset
-}
-
-export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
+export const SwapAddressTo = () => {
   const { openDialog } = useDialog()
   const { accounts } = useAccounts()
   const { toAsset } = useSwap()
-
   const destination = useDestination()
   const setDestination = useSetDestination()
-  const options = accounts?.filter(a => a.network === asset?.chain)
+
+  const options = accounts?.filter(a => a.network === toAsset?.chain)
 
   useEffect(() => {
     if (toAsset && !destination) {
@@ -42,22 +37,24 @@ export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <div className="flex cursor-pointer items-center justify-between">
-          <div className="flex items-center gap-2">
-            {destination && destination.provider ? (
-              <Image src={`/wallets/${destination.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
-            ) : (
-              <Wallet className="text-gray h-6 w-6" />
-            )}
-            <span className="text-gray text-sm">{destination?.provider || 'Destination Wallet'}</span>
-          </div>
-          <div className="text-leah text-sm">
-            <span>{destination?.address ? truncate(destination.address) : ''}</span>
-            <ChevronDown className="ms-2 inline h-4 w-4" />
+        <div className="cursor-pointer border-t-1 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {destination && destination.provider ? (
+                <Image src={`/wallets/${destination.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
+              ) : (
+                <Wallet className="text-gray h-6 w-6" />
+              )}
+              <span className="text-gray text-sm">{destination?.provider || 'Destination Wallet'}</span>
+            </div>
+            <div className="text-leah text-sm">
+              <span>{destination?.address ? truncate(destination.address) : ''}</span>
+              <ChevronDown className="ms-2 inline h-4 w-4" />
+            </div>
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" side="right" className="bg-lawrence rounded-2xl p-0">
+      <DropdownMenuContent align="end" className="bg-lawrence rounded-2xl p-0">
         <div className="border-b p-3">
           <div className="flex items-center gap-3">
             <Wallet className="text-gray h-6 w-6" />
