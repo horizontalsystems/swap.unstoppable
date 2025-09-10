@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { ChevronDown, Pencil, Wallet } from 'lucide-react'
 import {
   DropdownMenu,
@@ -11,9 +11,10 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Asset } from '@/components/swap/asset'
-import { SwapAddressConfig } from '@/components/swap/swap-address-config'
+import { SwapAddressCustom } from '@/components/swap/swap-address-custom'
 import { useDestination, useSetDestination, useSwap } from '@/hooks/use-swap'
 import { useAccounts } from '@/hooks/use-accounts'
+import { useDialog } from '@/components/global-dialog'
 import { cn, truncate } from '@/lib/utils'
 
 interface SwapSelectToProps {
@@ -21,9 +22,9 @@ interface SwapSelectToProps {
 }
 
 export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
+  const { openDialog } = useDialog()
   const { accounts } = useAccounts()
   const { toAsset } = useSwap()
-  const [isOpen, setIsOpen] = useState(false)
 
   const destination = useDestination()
   const setDestination = useSetDestination()
@@ -84,7 +85,7 @@ export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
               className="flex cursor-pointer items-center gap-3 rounded-none px-3 py-2 focus:bg-neutral-800"
               onClick={e => {
                 e.preventDefault()
-                setIsOpen(true)
+                openDialog(SwapAddressCustom, {})
               }}
             >
               <Pencil size={24} className="text-green ms-1 flex-shrink-0" />
@@ -93,8 +94,6 @@ export const SwapAddressTo = ({ asset }: SwapSelectToProps) => {
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <SwapAddressConfig isOpen={isOpen} setOpen={setIsOpen} />
     </div>
   )
 }

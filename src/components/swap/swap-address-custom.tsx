@@ -17,10 +17,10 @@ import { OctagonAlertIcon } from 'lucide-react'
 
 interface SwapAddressProps {
   isOpen: boolean
-  setOpen: (isOpen: boolean) => void
+  onOpenChange: (isOpen: boolean) => void
 }
 
-export const SwapAddressConfig = ({ isOpen, setOpen }: SwapAddressProps) => {
+export const SwapAddressCustom = ({ isOpen, onOpenChange }: SwapAddressProps) => {
   const { toAsset } = useSwap()
   const [address, setAddress] = useState<string>('')
   const setDestination = useSetDestination()
@@ -31,13 +31,13 @@ export const SwapAddressConfig = ({ isOpen, setOpen }: SwapAddressProps) => {
     }
 
     setDestination({ address, network: toAsset.chain })
-    setOpen(false)
+    onOpenChange(false)
   }
 
   const isValid = address.length && toAsset ? validateAddress(toAsset?.chain, address) : true
 
   return (
-    <Dialog open={isOpen} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="bg-lawrence sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Destination Address</DialogTitle>
