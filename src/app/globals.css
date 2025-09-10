@@ -4,26 +4,19 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-deep-black: var(--deep-black);
-  --color-runes-blue: var(--runes-blue);
-  --color-liquidity-green: var(--liquidity-green);
-  --color-storm-purple: var(--storm-purple);
-  --color-rune-gray: var(--rune-gray);
+  --color-gray: var(--gray);
 
   --color-tyler: var(--tyler);
   --color-lawrence: var(--lawrence);
-  --color-claude: var(--claude);
-  --color-blade: var(--claude);
-  --color-bran: var(--bran);
+  --color-blade: var(--blade);
+  --color-abraham: var(--abraham);
   --color-andy: var(--andy);
   --color-leah: var(--leah);
   --color-jacob: var(--jacob);
-  --color-sunset: var(--sunset);
-
-  --color-gray: var(--gray);
-  --color-green: var(--green);
-  --color-blue: var(--blue);
-  --color-bright: var(--bright);
+  --color-lucian: var(--lucian);
+  --color-liquidity-green: var(--liquidity-green);
+  --color-runes-blue: var(--runes-blue);
+  --color-storm-purple: var(--storm-purple);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -67,34 +60,41 @@
     --black: #000000;
     --dark: #151515;
     --carbon: #232323;
-    --smoke: #4B4B4B;
+    --smoke: #4b4b4b;
     --gray: #808085;
-    --steel: #B3B3B3;
-    --light: #DFDFDF;
-    --bright: #EDEDED;
-    --white: #FFFFFF;
-    --blue: #2848FF;
-    --sunset: #FF2C00;
-    --yellow: #FFB700;
-    --green: #0AC18E;
-    --gray-50: #808085;
-    --orange: #FF9500;
+    --steel: #b3b3b3;
+    --light: #dfdfdf;
+    --bright: #ededed;
+    --white: #ffffff;
 
-    --deep-black: #0D0D0D;
-    --runes-blue: #00E8FF;
-    --liquidity-green: #00FFA3;
-    --storm-purple: #5B2BE5;
-    --rune-gray: #2C2C2C;
+    --yellow-d: #ffb700;
+    --yellow-l: #ff9d00;
+    --red-d: #ff1539;
+    --red-l: #ff1500;
+
+    --lg-d: #00ffa3;
+    --lg-l: #00a76b;
+    --rb-d: #00e8ff;
+    --rb-l: #0195a4;
+    --sp-d: #00e8ff;
+    --sp-l: #0195a4;
+    --tg-d: #00ffa3;
+    --tg-l: #00a76b;
   }
 
   :root {
     --tyler: var(--bright);
     --lawrence: var(--white);
-    --claude: var(--bright);
-    --bran: var(--light);
+    --blade: var(--light);
+    --abraham: var(--bright);
     --andy: var(--steel);
     --leah: var(--dark);
-    --jacob: var(--orange);
+    --jacob: var(--yellow-l);
+    --lucian: var(--red-l);
+
+    --liquidity-green: var(--lg-l);
+    --runes-blue: var(--rb-l);
+    --storm-purple: var(--sp-l);
 
     --radius: 0.625rem;
     --background: oklch(1 0 0);
@@ -133,11 +133,16 @@
   .dark {
     --tyler: var(--black);
     --lawrence: var(--dark);
-    --claude: var(--carbon);
-    --bran: var(--carbon);
+    --blade: var(--carbon);
+    --abraham: var(--carbon);
     --andy: var(--smoke);
     --leah: var(--bright);
-    --jacob: var(--yellow);
+    --jacob: var(--yellow-d);
+    --lucian: var(--red-d);
+
+    --liquidity-green: var(--lg-d);
+    --runes-blue: var(--rb-d);
+    --storm-purple: var(--sp-d);
 
     --background: black;
     --foreground: oklch(0.985 0 0);
