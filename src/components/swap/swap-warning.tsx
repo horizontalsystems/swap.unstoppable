@@ -9,8 +9,8 @@ export const SwapWarning = ({ error }: { error: Error | null }) => {
 
   if (error) {
     return (
-      <Alert className="mt-4 rounded-2xl border-0 px-4" variant="destructive">
-        <OctagonAlert size={16} min={16} className="flex-shrink-0" />
+      <Alert className="bg-lawrence mt-4 rounded-2xl border-0 px-4" variant="destructive">
+        <OctagonAlert size={16} min={16} />
         <AlertDescription>{translateError(error?.message || 'Unknown Error')}</AlertDescription>
       </Alert>
     )
