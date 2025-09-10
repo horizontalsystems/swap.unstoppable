@@ -37,9 +37,8 @@ export const DecimalInput: FC<
     decimals?: number
   }
 > = ({ amount, decimals = 8, onAmountChange, disabled, ...rest }) => {
-  const formatted = format(amount, decimals)
-  const trimmed = formatted.replace(trim, '')
-  const [previousValue, setPreviousValue] = useState(trimmed)
+  const value = amount === 0n ? '' : format(amount, decimals).replace(trim, '')
+  const [previousValue, setPreviousValue] = useState(value)
   const [previousAmount, setPreviousAmount] = useState(amount)
   const onValueChange: OnValueChange = values => {
     // `values.value` is always a dot separated decimal
@@ -62,7 +61,7 @@ export const DecimalInput: FC<
         // we want to retain the decimal separator in the input
         // Secondly don't change the input value to `trimmed` if the value hassn't changed
         // eg 100. -> 100.0, which causes a change loop and input to be reset to 100
-        previousValue === `${trimmed}.` || previousAmount === amount ? previousValue : trimmed
+        previousValue === `${value}.` || previousAmount === amount ? previousValue : value
       }
       onValueChange={onValueChange}
       {...rest}

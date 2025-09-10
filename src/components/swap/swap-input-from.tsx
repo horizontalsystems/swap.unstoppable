@@ -75,22 +75,22 @@ export const SwapInputFrom = () => {
         <div className="flex gap-2">
           <Button
             className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
-            onClick={() => handleSetPercent(0n)}
-            disabled={!balance}
+            onClick={() => setFromAmount(0n)}
+            disabled={fromAmount === 0n}
           >
             Clear
           </Button>
           <Button
             className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
             onClick={() => handleSetPercent(50n)}
-            disabled={!balance}
+            disabled={!balance || balance.spendable === 0n}
           >
             50%
           </Button>
           <Button
             className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
             onClick={() => handleSetPercent(100n)}
-            disabled={!balance}
+            disabled={!balance || balance.spendable === 0n}
           >
             100%
           </Button>
