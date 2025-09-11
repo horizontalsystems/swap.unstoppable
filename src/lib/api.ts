@@ -29,7 +29,7 @@ export const getQuote = async (params: Record<string, any>) => {
   return thornode.get(`/thorchain/quote/swap?${qs.toString()}`).then(res => res.data)
 }
 
-export const getTxStatus = async (hash: string) => {
+export const getTransaction = async (hash: string) => {
   const txId = hash.replace('0x', '').toUpperCase()
   return thornode.get(`/thorchain/tx/status/${txId}`).then(res => res.data)
 }

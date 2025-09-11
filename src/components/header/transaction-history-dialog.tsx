@@ -2,15 +2,15 @@
 
 import Image from 'next/image'
 import Decimal from 'decimal.js'
+import { useState } from 'react'
 import { format } from 'date-fns'
-import { useEffect, useState } from 'react'
 import { ArrowRight, Globe, LoaderCircle, X } from 'lucide-react'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { DecimalText } from '@/components/decimal/decimal-text'
 import { Button } from '@/components/ui/button'
 import { DecimalFiat } from '@/components/decimal/decimal-fiat'
 import { CopyButton } from '@/components/button-copy'
-import { useTransactions } from '@/hooks/use-transactions'
+import { useTransactions } from '@/store/transaction-store'
 import { useRates } from '@/hooks/use-rates'
 
 interface HistoryDialogProps {
@@ -18,15 +18,10 @@ interface HistoryDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
-export const HistoryDialog = ({ isOpen, onOpenChange }: HistoryDialogProps) => {
+export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialogProps) => {
   const { rates } = useRates()
-  const { transactions, syncPending } = useTransactions()
   const [expandTx, setExpandTx] = useState<string | null>(null)
-
-  useEffect(() => {
-    const interval = setInterval(syncPending, 5000) // every 5s
-    return () => clearInterval(interval)
-  }, [syncPending])
+  const transactions = useTransactions()
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>

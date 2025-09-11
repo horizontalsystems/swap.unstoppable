@@ -184,3 +184,6 @@ useAccountStore.subscribe((currState, prevState) => {
     })
   })
 })
+
+export const useConnectedProviders = () => useAccountStore(state => state.providers)
+export const useDisconnect = () => useAccountStore(state => state.disconnect)

@@ -10,7 +10,7 @@ import { SwapWarning } from '@/components/swap/swap-warning'
 import { SwapDetails } from '@/components/swap/swap-details'
 import { SwapButton } from '@/components/swap/swap-button'
 import { getSelectedContext, useAccounts } from '@/hooks/use-accounts'
-import { useTransactions } from '@/hooks/use-transactions'
+import { transactionStore } from '@/store/transaction-store'
 import { useSimulation } from '@/hooks/use-simulation'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
@@ -24,7 +24,7 @@ export const Swap = () => {
   const { fromAmount } = useSwap()
   const { quote, error: quoteError } = useQuote()
   const { simulationData, error: simulationError } = useSimulation()
-  const { setTransaction } = useTransactions()
+  const { setTransaction } = transactionStore()
 
   const onSwap = async () => {
     if (!simulationData || !selected) {
