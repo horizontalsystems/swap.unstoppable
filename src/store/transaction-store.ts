@@ -43,7 +43,7 @@ export const transactionStore = create<TransactionStore>()(
         set(state => {
           return {
             transactions: state.transactions.map(item => {
-              if (item.hash === hash) {
+              if (item.hash !== hash) {
                 return item
               }
 
