@@ -86,10 +86,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                   <div className="text-andy mt-6 border-b px-4 pb-3 font-semibold">{formatDate(txDate)}</div>
                 )}
                 <div className={cn('px-4', { 'border-b': i !== transactions.length - 1, 'bg-blade': isExpanded })}>
-                  <div
-                    className="flex cursor-pointer items-center justify-between py-3"
-                    onClick={() => setExpandTx(isExpanded ? null : tx.hash)}
-                  >
+                  <div className="grid grid-cols-3 py-3" onClick={() => setExpandTx(isExpanded ? null : tx.hash)}>
                     <div className="flex items-center gap-2">
                       <div className="flex h-8 w-8 rounded-full">
                         <Image
@@ -99,11 +96,9 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                           height="32"
                         />
                       </div>
-                      <div>
-                        <p className="text-sm font-medium">
-                          <DecimalText className="text-leah text-base" amount={fromAmount} />
-                        </p>
-                        <p className="text-gray text-sm">{tx.fromAsset?.metadata.symbol}</p>
+                      <div className="flex flex-col">
+                        <DecimalText className="text-leah font-base font-medium" amount={fromAmount} />
+                        <span className="text-gray text-sm">{tx.fromAsset?.metadata.symbol}</span>
                       </div>
                     </div>
                     <div className="flex flex-col items-center">
@@ -118,12 +113,10 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                       </span>
                       <span className="text-gray text-xs">{tx.status}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="text-right">
-                        <p className="text-sm font-medium">
-                          <DecimalText className="text-leah text-xs" amount={toAmount} />
-                        </p>
-                        <p className="text-xs text-gray-400">{tx.toAsset?.metadata?.symbol}</p>
+                    <div className="flex items-center justify-end gap-2">
+                      <div className="flex flex-col text-right">
+                        <DecimalText className="text-leah text-base font-medium" amount={toAmount} />
+                        <span className="text-gray text-sm">{tx.toAsset?.metadata?.symbol}</span>
                       </div>
                       <div className="flex h-8 w-8 rounded-full">
                         <Image
@@ -202,7 +195,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         </div>
                       </div>
 
-                      <div className="mb-4 flex items-center justify-end">
+                      <div className="flex items-center justify-end pb-3">
                         <a
                           href={`https://thorchain.net/tx/${tx.hash}`}
                           rel="noopener noreferrer"
@@ -215,6 +208,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                     </div>
                   )}
                 </div>
+                {i === transactions.length - 1 && <div className="mb-6">&nbsp;</div>}
               </Fragment>
             )
           })}

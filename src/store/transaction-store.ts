@@ -76,7 +76,7 @@ export const transactionStore = create<TransactionStore>()(
 )
 
 const sortedTransactions = (state: TransactionStore) =>
-  state.transactions.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+  state.transactions.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
 
 export const useShowPendingAlert = () => transactionStore(state => state.showPendingAlert)
 export const useSetPendingAlert = () => transactionStore(state => state.setPendingAlert)
