@@ -50,6 +50,8 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
           </button>
         </DialogHeader>
 
+        {transactions.length < 1 && <div className="px-6 py-2">No transactions yet</div>}
+
         <ScrollArea className="h-full max-h-[40vh] px-6 md:max-h-[60vh]">
           {transactions.map((tx, i) => {
             const txDate = parseISO(tx.timestamp.toString())
@@ -213,7 +215,6 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
             )
           })}
         </ScrollArea>
-        {transactions.length < 1 && <div className="border-t py-2">No transactions yet</div>}
       </DialogContent>
     </Dialog>
   )
