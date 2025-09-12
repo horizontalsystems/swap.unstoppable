@@ -212,7 +212,7 @@ const WALLETS: WalletProps<Provider>[] = [
     label: 'Metamask',
     provider: 'Metamask',
     link: 'https://metamask.io',
-    supportedChains: [Network.Avalanche, Network.Base, Network.Bsc, Network.Ethereum, Network.Thorchain]
+    supportedChains: [Network.Avalanche, Network.Base, Network.Bsc, Network.Ethereum]
   },
   {
     key: 'vultisig',
@@ -236,7 +236,7 @@ const WALLETS: WalletProps<Provider>[] = [
     label: 'Phantom',
     provider: 'Phantom',
     link: 'https://phantom.app',
-    supportedChains: [Network.Avalanche, Network.Base, Network.Bsc, Network.Ethereum, Network.Thorchain]
+    supportedChains: [Network.Base, Network.Bsc, Network.Ethereum]
   },
   {
     key: 'ctrl',
