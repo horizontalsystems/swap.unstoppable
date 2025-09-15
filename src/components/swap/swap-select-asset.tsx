@@ -54,20 +54,8 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
   }, [pools])
 
   const networks = useMemo(() => {
-    const networkKeys = Array.from(chains.keys())
-    const priorityOrder = [Filter.All, Network.Bitcoin, Network.Ethereum]
-
-    return networkKeys.sort((a, b) => {
-      const aIndex = priorityOrder.indexOf(a)
-      const bIndex = priorityOrder.indexOf(b)
-
-      if (aIndex !== -1 && bIndex !== -1) {
-        return aIndex - bIndex
-      }
-
-      if (aIndex !== -1) return -1
-      if (bIndex !== -1) return 1
-
+    return Array.from(chains.keys()).sort((a, b) => {
+      if (a === Filter.All) return -1
       return a.localeCompare(b)
     })
   }, [chains])
@@ -80,23 +68,8 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
           return asset.metadata.symbol.toLowerCase().includes(searchQuery.toLowerCase())
         })
 
-    const symbolPriorityOrder = ['BTC.BTC', 'ETH.ETH', 'BSC.BNB', 'THOR.RUNE', 'AVAX.AVAX']
-
     return filteredAssets.sort((a, b) => {
-      const symbolA = a.asset.toUpperCase()
-      const symbolB = b.asset.toUpperCase()
-
-      const aIndex = symbolPriorityOrder.indexOf(symbolA)
-      const bIndex = symbolPriorityOrder.indexOf(symbolB)
-
-      if (aIndex !== -1 && bIndex !== -1) {
-        return aIndex - bIndex
-      }
-
-      if (aIndex !== -1) return -1
-      if (bIndex !== -1) return 1
-
-      return symbolA.localeCompare(symbolB)
+      return a.metadata.symbol.toUpperCase().localeCompare(b.metadata.symbol.toUpperCase())
     })
   }, [chains, selectedChain, searchQuery])
 
@@ -111,15 +84,15 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
 
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
-      <CredenzaContent className="bg-lawrence min-h-1/2 w-full px-4 pb-0 md:min-w-2xl">
+      <CredenzaContent className="bg-lawrence min-h-1/2 w-full gap-10 rounded-4xl border-0 p-12 pb-0 md:min-w-3xl">
         <CredenzaHeader>
           <CredenzaTitle className="hidden text-2xl font-medium text-white md:block">Select coin</CredenzaTitle>
           <VisuallyHidden>
             <CredenzaDescription>&nbsp;</CredenzaDescription>
           </VisuallyHidden>
         </CredenzaHeader>
-        <div className={cn('flex flex-col gap-0 md:flex-row md:gap-3', { 'h-full': isMobile })}>
-          <div className="min-w-[250px] shrink-0 border-b md:border-r md:border-b-0">
+        <div className={cn('flex flex-col gap-0 md:flex-row md:gap-8', { 'h-full': isMobile })}>
+          <div className="min-w-[280px] shrink-0 border-b md:border-r md:border-b-0">
             <ScrollArea className={cn({ 'h-full max-h-[30vh] md:max-h-[60vh]': !isMobile, 'w-full': isMobile })}>
               <div className={cn({ 'flex w-max gap-2': isMobile })}>
                 {networks.map((network, index) => (
@@ -127,14 +100,14 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
                     key={index}
                     onClick={() => handleChainSelect(network)}
                     className={cn(
-                      'm-0 flex items-center gap-3 rounded-lg border border-transparent px-3 py-2 hover:bg-neutral-900 md:my-2 md:mr-3',
+                      'hover:bg-blade m-0 flex cursor-pointer items-center gap-3 rounded-lg border border-transparent px-4 py-3 md:mr-10 md:mb-2',
                       {
                         'border-runes-blue': selectedChain === network,
                         'py-0': isMobile
                       }
                     )}
                   >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full">
                       <Image
                         src={network === Filter.All ? '/icons/windows.svg' : `/networks/${network.toLowerCase()}.svg`}
                         alt=""
@@ -153,21 +126,21 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
           </div>
           <div className="flex-1">
             <div className="relative mt-2">
-              <Search className="text-gray absolute top-1/2 left-3 -translate-y-1/2 transform" size={18} />
+              <Search className="text-gray absolute top-1/2 left-4 -translate-y-1/2 transform" size={24} />
               <Input
-                placeholder="Type BTC or ETH for precise searches"
+                placeholder="Search"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="bg-blade text-gray pl-10 placeholder-gray-400"
+                className="bg-blade text-leah placeholder:text-andy rounded-3xl border-0 py-3 pl-12 focus:ring-0 focus-visible:ring-0 md:text-base"
               />
             </div>
 
-            <ScrollArea className="h-full max-h-[35vh] md:max-h-[53vh]">
+            <ScrollArea className="mt-5 h-full max-h-[30vh] md:max-h-[50vh]">
               {chainAssets.map((item, index) => (
                 <div
                   key={index}
                   onClick={() => handleAssetSelect(item)}
-                  className="my-2 flex items-center justify-between gap-3 rounded-lg border border-transparent p-3 transition-all hover:bg-neutral-900"
+                  className="hover:bg-blade flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3"
                 >
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-full">
@@ -184,7 +157,9 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
                     </div>
                   </div>
                   {item.asset === selected?.asset && (
-                    <div className={cn('rounded-full border px-2 py-1 text-xs font-medium')}>Selected</div>
+                    <div className={cn('border-gray text-gray rounded-full border px-1.5 py-0.5 text-xs font-medium')}>
+                      Selected
+                    </div>
                   )}
                 </div>
               ))}

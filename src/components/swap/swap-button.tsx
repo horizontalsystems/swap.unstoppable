@@ -98,10 +98,10 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
     <button
       className={cn(
         'flex items-center justify-center gap-2',
-        'text-lawrence disabled:text-andy h-14 w-full rounded-4xl text-base font-semibold transition-colors disabled:opacity-100',
+        'text-lawrence disabled:text-andy disabled:bg-blade h-14 w-full rounded-4xl text-base font-semibold transition-colors',
         {
           'bg-liquidity-green hover:bg-liquidity-green/90': state.accent,
-          'bg-leah hover:bg-leah/90 disabled:bg-blade': !state.accent
+          'bg-leah hover:bg-leah/90': !state.accent
         }
       )}
       onClick={state.onClick}

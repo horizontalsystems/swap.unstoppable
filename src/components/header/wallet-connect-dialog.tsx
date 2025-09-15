@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/credenza'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Button } from '@/components/ui/button'
 import { Provider } from '@/wallets'
 import { usePools } from '@/hooks/use-pools'
 import { useAccounts } from '@/hooks/use-accounts'
@@ -85,18 +84,18 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
 
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
-      <CredenzaContent className="bg-lawrence min-h-1/2 w-full p-6 md:min-w-2xl md:p-12">
+      <CredenzaContent className="bg-lawrence min-h-1/2 w-full gap-6 rounded-4xl border-0 p-6 md:min-w-3xl md:p-12">
         <CredenzaHeader className="flex items-start">
-          <CredenzaTitle className="text-base font-semibold text-white md:text-2xl">Connect Wallet</CredenzaTitle>
+          <CredenzaTitle className="mb-4 text-base font-semibold text-white md:text-2xl">Connect Wallet</CredenzaTitle>
           <VisuallyHidden>
             <CredenzaDescription>&nbsp;</CredenzaDescription>
           </VisuallyHidden>
         </CredenzaHeader>
 
-        <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-5">
-          <div className="col-span-2 border-0 pe-3 md:border-r">
-            <div className="text-gray mb-3 hidden text-base font-semibold md:block">Wallets</div>
-            <ScrollArea className="h-full max-h-[40vh] md:max-h-[60vh]">
+        <div className="grid flex-1 grid-cols-1 gap-8 md:grid-cols-5">
+          <div className="col-span-2 border-0 md:border-r">
+            <div className="text-gray mb-5 hidden text-base font-semibold md:block">Wallets</div>
+            <ScrollArea className="h-full max-h-[40vh] md:max-h-[50vh]">
               <div className="space-y-1">
                 {WALLETS.map(wallet => {
                   const isConnected = connectedProviders.find(w => w === wallet.provider)
@@ -108,11 +107,10 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
                   return (
                     <div
                       key={wallet.key}
-                      className={cn('flex items-center space-x-3 rounded-lg border-1 border-transparent p-3', {
+                      className={cn('mr-10 flex items-center space-x-3 rounded-lg border-1 border-transparent p-3', {
                         'border-runes-blue': isSelected,
                         'opacity-25': !isHighlighted && !!hoveredChain,
-                        'bg-emerald-500/10': isConnected,
-                        'cursor-pointer': isInstalled && !isConnected
+                        'hover:bg-blade cursor-pointer': isInstalled && !isConnected
                       })}
                       onClick={() => {
                         if (isConnected || !isInstalled) return
@@ -143,7 +141,7 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
             </ScrollArea>
           </div>
           <div className="col-span-3 hidden md:block">
-            <h3 className="text-gray mb-3 text-base font-semibold">Supported Networks</h3>
+            <h3 className="text-gray mb-5 text-base font-semibold">Supported Networks</h3>
             <div className="grid grid-cols-2 gap-2">
               {networks.map(chain => {
                 const isHighlighted = isChainHighlighted(chain)
@@ -151,9 +149,12 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
                 return (
                   <div
                     key={chain}
-                    className={cn('flex cursor-pointer items-center gap-3 border-1 border-transparent p-2', {
-                      'opacity-25': selectedWallets.length && !isHighlighted
-                    })}
+                    className={cn(
+                      'hover:bg-blade flex cursor-pointer items-center gap-3 rounded-lg border-1 border-transparent px-4 py-3',
+                      {
+                        'opacity-25': selectedWallets.length && !isHighlighted
+                      }
+                    )}
                     onMouseEnter={() => setHoveredChain(chain)}
                     onMouseLeave={() => setHoveredChain(null)}
                     onClick={() => {
@@ -173,14 +174,18 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
         </div>
         <CredenzaFooter>
           <div className="flex justify-end">
-            <Button
-              className="border-0 bg-gradient-to-r from-green-400 to-blue-500 text-white hover:from-green-500 hover:to-blue-600"
+            <button
+              className={cn(
+                'flex items-center justify-center gap-2',
+                'text-lawrence disabled:text-andy disabled:bg-blade h-14 rounded-4xl px-10 text-base font-semibold transition-colors',
+                'bg-liquidity-green hover:bg-liquidity-green/90'
+              )}
               disabled={selectedWallets.length < 1 || connecting}
               onClick={() => handleConnect()}
             >
-              {connecting && <LoaderCircle size={16} className="animate-spin" />}
+              {connecting && <LoaderCircle size={20} className="animate-spin" />}
               {connecting ? 'Connecting' : 'Connect'} {selectedWallets.length || ''} Wallet
-            </Button>
+            </button>
           </div>
         </CredenzaFooter>
       </CredenzaContent>
