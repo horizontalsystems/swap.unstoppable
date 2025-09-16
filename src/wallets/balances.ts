@@ -108,6 +108,10 @@ class BalanceProvider {
       const balance = await contract.balanceOf(address.toLowerCase())
       const decimals = await contract.decimals()
       return (BigInt(balance) * BigInt(1e8)) / 10n ** decimals
+    } else if (this.network === Network.Thorchain) {
+      const data = await axios.get(`${this.url}/cosmos/bank/v1beta1/balances/${address}`).then(res => res.data)
+      const balance = data?.balances?.find((i: any) => i.denom.toUpperCase() === assetId)
+      return BigInt(balance?.amount || 0)
     } else {
       return 0n // todo: Handle other blockchains
     }
@@ -116,7 +120,11 @@ class BalanceProvider {
   async getBalance(address: string, asset: string): Promise<bigint> {
     const [chain, assetId] = asset.split('.')
 
-    if (chain === this.network && assetId.toUpperCase() === gasToken(this.network).symbol) {
+    if (
+      chain === this.network &&
+      this.network !== Network.Thorchain &&
+      assetId.toUpperCase() === gasToken(this.network).symbol
+    ) {
       return await this.getNativeBalance(address)
     } else {
       return await this.getTokenBalance(address, assetId)
