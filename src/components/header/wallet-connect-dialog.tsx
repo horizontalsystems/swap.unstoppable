@@ -35,7 +35,6 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
   const { connect, isAvaialable, accounts } = useAccounts()
   const [connecting, setConnecting] = useState(false)
   const [selectedWallets, setSelectedWallets] = useState<Provider[]>([])
-  const [hoveredChain, setHoveredChain] = useState<Network | null>(null)
 
   const { pools } = usePools()
   const networks: Network[] = [...new Set((pools || []).map(p => p.chain))]
@@ -53,17 +52,7 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
   }
 
   const isChainHighlighted = (chain: Network) => {
-    if (hoveredChain === chain) return true
-    if (selectedWallets.length > 0) {
-      return getSelectedWalletsChains().includes(chain)
-    }
-    return false
-  }
-
-  const isWalletHighlightedForChain = (provider: Provider) => {
-    if (!hoveredChain) return false
-    const wallet = WALLETS.find(w => w.provider === provider)
-    return wallet?.supportedChains.includes(hoveredChain) || false
+    return selectedWallets.length > 0 && getSelectedWalletsChains().includes(chain)
   }
 
   const handleConnect = async () => {
@@ -100,16 +89,13 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
                 {WALLETS.map(wallet => {
                   const isConnected = connectedProviders.find(w => w === wallet.provider)
                   const isInstalled = isAvaialable(wallet.provider)
-
                   const isSelected = selectedWallets.includes(wallet.provider)
-                  const isHighlighted = isWalletHighlightedForChain(wallet.provider)
 
                   return (
                     <div
                       key={wallet.key}
                       className={cn('mr-10 flex items-center space-x-3 rounded-lg border-1 border-transparent p-3', {
                         'border-runes-blue': isSelected,
-                        'opacity-25': !isHighlighted && !!hoveredChain,
                         'hover:bg-blade cursor-pointer': isInstalled && !isConnected
                       })}
                       onClick={() => {
@@ -140,8 +126,9 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
               </div>
             </ScrollArea>
           </div>
+
           <div className="col-span-3 hidden md:block">
-            <h3 className="text-gray mb-5 text-base font-semibold">Supported Networks</h3>
+            <h3 className="text-gray mb-5 text-base font-semibold">Chains</h3>
             <div className="grid grid-cols-2 gap-2">
               {networks.map(chain => {
                 const isHighlighted = isChainHighlighted(chain)
@@ -155,10 +142,14 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
                         'opacity-25': selectedWallets.length && !isHighlighted
                       }
                     )}
-                    onMouseEnter={() => setHoveredChain(chain)}
-                    onMouseLeave={() => setHoveredChain(null)}
                     onClick={() => {
-                      const walletsForChain = WALLETS.filter(wallet => wallet.supportedChains.includes(chain))
+                      const walletsForChain = WALLETS.filter(wallet => {
+                        const isConnected = connectedProviders.find(w => w === wallet.provider)
+                        const isInstalled = isAvaialable(wallet.provider)
+
+                        return !isConnected && isInstalled && wallet.supportedChains.includes(chain)
+                      })
+
                       if (walletsForChain.length) {
                         setSelectedWallets(walletsForChain.map(w => w.provider))
                       }

@@ -125,7 +125,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
             </ScrollArea>
           </div>
           <div className="flex-1">
-            <div className="relative mt-2">
+            <div className="relative">
               <Search className="text-gray absolute top-1/2 left-4 -translate-y-1/2 transform" size={24} />
               <Input
                 placeholder="Search"
@@ -135,7 +135,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
               />
             </div>
 
-            <ScrollArea className="mt-5 h-full max-h-[30vh] md:max-h-[50vh]">
+            <ScrollArea className="mt-5 h-full max-h-[30vh] md:max-h-[51vh]">
               {chainAssets.map((item, index) => (
                 <div
                   key={index}
