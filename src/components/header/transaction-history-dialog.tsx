@@ -204,7 +204,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                           target="_blank"
                           className="flex items-center gap-1 text-xs"
                         >
-                          <Globe size={16} /> Thorscan
+                          <Globe size={16} /> THORCHain.net
                         </a>
                       </div>
                     </div>
