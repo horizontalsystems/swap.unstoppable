@@ -167,7 +167,7 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
           <div className="flex justify-end">
             <button
               className={cn(
-                'flex items-center justify-center gap-2',
+                'flex cursor-pointer items-center justify-center gap-2',
                 'text-lawrence disabled:text-andy disabled:bg-blade h-14 rounded-4xl px-10 text-base font-semibold transition-colors',
                 'bg-liquidity-green hover:bg-liquidity-green/90'
               )}
