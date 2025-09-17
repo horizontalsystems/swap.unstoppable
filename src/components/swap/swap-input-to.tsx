@@ -6,9 +6,8 @@ import { AssetIcon } from '@/components/asset-icon'
 import { Skeleton } from '@/components/ui/skeleton'
 import { networkLabel } from 'rujira.js'
 import { DecimalFiat } from '@/components/decimal/decimal-fiat'
-import { useAccounts } from '@/hooks/use-accounts'
 import { Quote } from '@/hooks/use-quote'
-import { useAssetTo, useDestination, useSetAssetTo, useSetDestination } from '@/hooks/use-swap'
+import { useAssetTo, useSetAssetTo } from '@/hooks/use-swap'
 import { useDialog } from '@/components/global-dialog'
 import { useRate } from '@/hooks/use-rates'
 
@@ -21,9 +20,6 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
   const setAssetTo = useSetAssetTo()
   const { openDialog } = useDialog()
   const { rate: toAssetRate } = useRate(assetTo?.asset)
-  const { accounts } = useAccounts()
-  const destination = useDestination()
-  const setDestination = useSetDestination()
 
   const amount = assetTo ? BigInt(quote?.expected_amount_out || 0) : 0n
   const valueTo = new Decimal(amount)
@@ -35,10 +31,6 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
     openDialog(SwapSelectAsset, {
       selected: assetTo,
       onSelectAsset: asset => {
-        if (destination?.network !== asset.chain) {
-          setDestination(accounts?.find(x => x.network === asset.chain))
-        }
-
         setAssetTo(asset)
       }
     })

@@ -12,8 +12,8 @@ export interface WalletContext {
 interface AccountsState extends AccountProvider {
   wallets: WalletContext[]
   providers: Provider[]
-  resolveSource: () => void
   selectedWallet?: WalletContext
+  resolveSource: () => void
 }
 
 export const useAccountStore = create<AccountsState>()(
@@ -27,15 +27,15 @@ export const useAccountStore = create<AccountsState>()(
 
       select: account => {
         if (!account) {
-          return set({ selected: undefined })
+          return set({ selected: undefined, selectedWallet: undefined })
         }
 
         set(state => {
           const found = state.wallets.find(
-            a =>
-              a.account.provider === account.provider &&
-              a.account.network === account.network &&
-              (!account.address || a.account.address === account.address)
+            w =>
+              w.account.provider === account.provider &&
+              w.account.network === account.network &&
+              (!account.address || w.account.address === account.address)
           )
 
           return { selected: found?.account, selectedWallet: found }
@@ -46,12 +46,12 @@ export const useAccountStore = create<AccountsState>()(
         try {
           const accs = await getAccounts(provider)
           if (!accs.length) throw new Error(`No accounts found on ${provider}`)
-          const { assetFrom, resolveDestination } = useSwapStore.getState()
+          const { resolveDestination } = useSwapStore.getState()
 
           set(state => {
             const filtered = state.wallets.filter(x => x.account.provider !== provider)
-            const toSelect = accs.find(x => x.account.network === assetFrom?.chain)
             const wallets = [...filtered, ...accs]
+            const toSelect = resolveSelectedWallet(wallets, state.selectedWallet)
 
             return {
               wallets,
@@ -70,12 +70,12 @@ export const useAccountStore = create<AccountsState>()(
 
       disconnect: provider => {
         disconnect(provider)
-        const { assetFrom, resolveDestination } = useSwapStore.getState()
+        const { resolveDestination } = useSwapStore.getState()
 
         set(state => {
           const wallets = state.wallets.filter(x => x.account.provider !== provider)
           const accounts = wallets.map(a => a.account)
-          const toSelect = wallets.find(x => x.account.network === assetFrom?.chain)
+          const toSelect = resolveSelectedWallet(wallets, state.selectedWallet)
 
           return {
             wallets: wallets,
@@ -103,10 +103,9 @@ export const useAccountStore = create<AccountsState>()(
       },
 
       resolveSource: async () => {
-        const { wallets } = get()
-        const { assetFrom } = useSwapStore.getState()
+        const { wallets, selectedWallet } = get()
 
-        const wallet = wallets?.find(w => w.account.network === assetFrom?.chain)
+        const wallet = resolveSelectedWallet(wallets, selectedWallet)
 
         set({
           selected: wallet?.account,
@@ -168,12 +167,10 @@ useAccountStore.subscribe((currState, prevState) => {
 
   onChange(currProvider, async () => {
     getAccounts(currProvider).then(accs => {
-      const { assetFrom } = useSwapStore.getState()
-
       useAccountStore.setState(state => {
         const filtered = state.wallets.filter(x => x.account.provider !== currProvider)
         const wallets = [...filtered, ...accs]
-        const toSelect = accs.find(x => x.account.network === assetFrom?.chain)
+        const toSelect = resolveSelectedWallet(wallets, state.selectedWallet)
 
         return {
           wallets,
@@ -188,6 +185,19 @@ useAccountStore.subscribe((currState, prevState) => {
     })
   })
 })
+
+function resolveSelectedWallet(wallets: WalletContext[], previous?: WalletContext) {
+  const { assetFrom } = useSwapStore.getState()
+
+  const fromPrevious = wallets?.find(
+    w =>
+      w.account.provider === previous?.account.provider &&
+      w.account.address === previous?.account.address &&
+      w.account.network === assetFrom?.chain
+  )
+
+  return fromPrevious ?? wallets?.find(w => w.account.network === assetFrom?.chain)
+}
 
 export const useConnectedProviders = () => useAccountStore(state => state.providers)
 export const useDisconnect = () => useAccountStore(state => state.disconnect)

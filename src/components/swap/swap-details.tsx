@@ -18,7 +18,7 @@ export function SwapDetails() {
   const [showMore, setShowMore] = useState(false)
   const { amountFrom } = useSwap()
   const { quote } = useQuote()
-  const { simulationData, isLoading: isSimulating, error: simulationError } = useSimulation()
+  const { simulationData, isLoading: isSimulating } = useSimulation()
   const { rates } = useRates()
 
   const _rateTo = assetTo && rates[assetTo.asset]

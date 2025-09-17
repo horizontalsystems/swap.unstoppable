@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect } from 'react'
 import { ChevronDown, Pencil, Wallet } from 'lucide-react'
 import {
   DropdownMenu,
@@ -24,15 +23,6 @@ export const SwapAddressTo = () => {
   const setDestination = useSetDestination()
 
   const options = accounts?.filter(a => a.network === assetTo?.chain)
-
-  useEffect(() => {
-    if (assetTo && !destination) {
-      const toAssetAccount = accounts?.find(x => x.network === assetTo?.chain)
-      if (toAssetAccount) {
-        setDestination(toAssetAccount)
-      }
-    }
-  }, [accounts, destination, setDestination, assetTo])
 
   return (
     <DropdownMenu modal={false}>

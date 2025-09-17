@@ -5,7 +5,6 @@ import { DecimalInput } from '@/components/decimal/decimal-input'
 import { DecimalFiat } from '@/components/decimal/decimal-fiat'
 import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
 import { Button } from '@/components/ui/button'
-import { useAccounts } from '@/hooks/use-accounts'
 import { useAssetFrom, useSetAssetFrom, useSwap } from '@/hooks/use-swap'
 import { AssetIcon } from '@/components/asset-icon'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -18,7 +17,6 @@ export const SwapInputFrom = () => {
   const assetFrom = useAssetFrom()
   const setAssetFrom = useSetAssetFrom()
   const { openDialog } = useDialog()
-  const { accounts, select } = useAccounts()
   const { amountFrom, setAmountFrom } = useSwap()
   const { rate } = useRate(assetFrom?.asset)
   const { balance } = useBalance()
@@ -38,8 +36,6 @@ export const SwapInputFrom = () => {
       selected: assetFrom,
       onSelectAsset: asset => {
         setAssetFrom(asset)
-        const toSelect = accounts?.find(a => a.network === asset?.chain)
-        select(toSelect || null)
       }
     })
   }

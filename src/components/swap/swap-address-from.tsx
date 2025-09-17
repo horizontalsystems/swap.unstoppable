@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { useEffect } from 'react'
 import { ChevronDown, Wallet } from 'lucide-react'
 import {
   DropdownMenu,
@@ -17,15 +16,6 @@ export const SwapAddressFrom = () => {
   const assetFrom = useAssetFrom()
 
   const options = accounts?.filter(a => a.network === assetFrom?.chain)
-
-  useEffect(() => {
-    if (assetFrom && !selected) {
-      const fromAssetAccount = accounts?.find(x => x.network === assetFrom?.chain)
-      if (fromAssetAccount) {
-        select(fromAssetAccount)
-      }
-    }
-  }, [accounts, assetFrom, select, selected])
 
   return (
     <DropdownMenu>
