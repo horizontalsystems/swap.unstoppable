@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAssetFrom, useSwap } from '@/hooks/use-swap'
-import { InboundAddress, MsgSwap, Simulation } from 'rujira.js'
+import { InboundAddress, MsgSwap, Network, Simulation } from 'rujira.js'
 import { useQuote } from '@/hooks/use-quote'
 import { getSelectedContext, useAccounts } from '@/hooks/use-accounts'
 import { simulate } from '@/wallets'
@@ -34,21 +34,27 @@ export const useSimulation = (): UseSimulation => {
         return null
       }
 
-      const inboundAddress = {
-        address: quote.inbound_address,
-        dustThreshold: BigInt(quote.dust_threshold || '0'),
-        gasRate: BigInt(quote.recommended_gas_rate || '0'),
-        router: quote.router || undefined
-      }
-
-      const msg = new MsgSwap(assetFrom, amountFrom, quote.memo)
-
       const context = getSelectedContext()
-
       if (!context) {
         return null
       }
 
+      const inboundAddress =
+        selected.network === Network.Thorchain
+          ? {
+              address: process.env.NEXT_PUBLIC_THORCHAIN_MODULE_ADDRESS || '',
+              dustThreshold: BigInt('0'),
+              gasRate: BigInt('0'),
+              router: undefined
+            }
+          : {
+              address: quote.inbound_address,
+              dustThreshold: BigInt(quote.dust_threshold || '0'),
+              gasRate: BigInt(quote.recommended_gas_rate || '0'),
+              router: quote.router || undefined
+            }
+
+      const msg = new MsgSwap(assetFrom, amountFrom, quote.memo)
       const simulateFunc = simulate(context, selected, inboundAddress)
       const simulation = await simulateFunc(msg)
 
