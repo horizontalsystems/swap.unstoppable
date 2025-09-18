@@ -1,8 +1,9 @@
-import { SlidersHorizontal } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useSetSlippageLimit, useSlippageLimit } from '@/hooks/use-swap'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { ThemeButton } from '@/components/theme-button'
+import { Icon } from '@/components/icons'
 
 export const SwapSlippage = () => {
   const slippageLimit = useSlippageLimit()
@@ -11,9 +12,9 @@ export const SwapSlippage = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="bg-bran rounded-full px-2 py-2">
-          <SlidersHorizontal className="h-4 w-4 cursor-pointer" />
-        </div>
+        <ThemeButton variant="circleSmall">
+          <Icon name="manage" />
+        </ThemeButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <div className="flex gap-2 p-2">

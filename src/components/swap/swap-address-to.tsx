@@ -15,7 +15,7 @@ import { useAccounts } from '@/hooks/use-accounts'
 import { useDialog } from '@/components/global-dialog'
 import { cn, truncate } from '@/lib/utils'
 import { WalletConnectDialog } from '@/components/header/wallet-connect-dialog'
-import { Pencil, Plus } from '@/components/icons'
+import { Icon } from '@/components/icons'
 
 export const SwapAddressTo = () => {
   const { openDialog } = useDialog()
@@ -81,7 +81,7 @@ export const SwapAddressTo = () => {
             onClick={() => openDialog(SwapAddressCustom, {})}
           >
             <div className="flex items-center gap-4">
-              <Pencil className="text-liquidity-green size-6" />
+              <Icon name="pencil" className="text-liquidity-green size-6" />
               <span className="text-liquidity-green text-sm font-medium">Custom Address</span>
             </div>
           </DropdownMenuItem>
@@ -91,7 +91,7 @@ export const SwapAddressTo = () => {
             onClick={() => openDialog(WalletConnectDialog, {})}
           >
             <div className="flex items-center gap-4">
-              <Plus className="text-storm-purple size-6" />
+              <Icon name="plus" className="text-storm-purple size-6" />
               <span className="text-storm-purple text-sm font-medium">Connect Wallet</span>
             </div>
           </DropdownMenuItem>

@@ -2,12 +2,13 @@
 
 import { useLastPendingTx, useSetPendingAlert, useShowPendingAlert } from '@/store/transaction-store'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { Button } from '@/components/ui/button'
-import { Clock3, LoaderCircle } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { TransactionHistoryDialog } from '@/components/header/transaction-history-dialog'
 import { useDialog } from '@/components/global-dialog'
 import { useConnectedProviders } from '@/store/account-store'
 import { useSyncTransactions } from '@/hooks/use-sync-transactions'
+import { ThemeButton } from '@/components/theme-button'
+import { Icon } from '@/components/icons'
 
 export const TransactionHistoryButton = () => {
   const { openDialog } = useDialog()
@@ -31,12 +32,12 @@ export const TransactionHistoryButton = () => {
   return (
     <Tooltip open={showPendingAlert && !!pendingTx}>
       <TooltipTrigger asChild>
-        <Button className="rounded-xl" variant="outline" onClick={onClick}>
-          <Clock3 /> History
-        </Button>
+        <ThemeButton variant="secondarySmall" onClick={onClick}>
+          <Icon name="clock" /> History
+        </ThemeButton>
       </TooltipTrigger>
       <TooltipContent
-        className="bg-blade cursor-pointer rounded-xl p-3 text-white"
+        className="bg-blade text-leah cursor-pointer rounded-xl p-3"
         arrowClassName="bg-blade fill-blade"
         onClick={onClick}
       >

@@ -76,7 +76,7 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="bg-lawrence min-h-1/2 w-full gap-6 rounded-4xl border-0 p-6 md:min-w-3xl md:p-12">
         <CredenzaHeader className="flex items-start">
-          <CredenzaTitle className="mb-4 text-base font-semibold text-white md:text-2xl">Connect Wallet</CredenzaTitle>
+          <CredenzaTitle className="text-leah mb-4 text-base font-semibold md:text-2xl">Connect Wallet</CredenzaTitle>
           <VisuallyHidden>
             <CredenzaDescription>&nbsp;</CredenzaDescription>
           </VisuallyHidden>
@@ -106,7 +106,7 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
                     >
                       <Image src={`/wallets/${wallet.key}.svg`} alt="" width="32" height="32" />
                       <div className="flex-1">
-                        <div className="font-medium text-white">{wallet.label}</div>
+                        <div className="text-leah font-medium">{wallet.label}</div>
                         <div className="text-xs">
                           {isInstalled ? (
                             isConnected ? (

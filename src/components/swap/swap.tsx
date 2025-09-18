@@ -69,7 +69,7 @@ export const Swap = () => {
 
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-medium text-white">Swap</h1>
+            <h1 className="text-leah text-2xl font-medium">Swap</h1>
           </div>
           <SwapSlippage />
         </div>

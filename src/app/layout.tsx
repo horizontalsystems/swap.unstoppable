@@ -3,6 +3,7 @@ import { ReactQueryProvider } from '@/components/react-query/react-query-provide
 import { Toaster } from '@/components/ui/sonner'
 import { Manrope } from 'next/font/google'
 import './globals.css'
+import { ThemeProvider } from 'next-themes'
 
 export const metadata: Metadata = {
   title: 'THORChain Swap',
@@ -16,9 +17,11 @@ const manrope = Manrope({
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${manrope.className} antialiased`}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${manrope.className} bg-tyler antialiased`}>
+        <ReactQueryProvider>
+          <ThemeProvider attribute="class">{children}</ThemeProvider>
+        </ReactQueryProvider>
         <Toaster />
       </body>
     </html>

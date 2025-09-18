@@ -64,7 +64,7 @@ export const SwapInputFrom = () => {
               {assetFrom?.chain ? networkLabel(assetFrom.chain) : <Skeleton className="mt-0.5 h-3 w-16" />}
             </span>
           </div>
-          <ChevronDown className="h-4 w-4 text-white" />
+          <ChevronDown className="text-leah h-4 w-4" />
         </div>
       </div>
 

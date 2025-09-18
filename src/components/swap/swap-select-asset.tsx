@@ -86,7 +86,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="bg-lawrence min-h-1/2 w-full gap-10 rounded-4xl border-0 p-12 pb-0 md:min-w-3xl">
         <CredenzaHeader>
-          <CredenzaTitle className="hidden text-2xl font-medium text-white md:block">Select coin</CredenzaTitle>
+          <CredenzaTitle className="text-leah hidden text-2xl font-medium md:block">Select coin</CredenzaTitle>
           <VisuallyHidden>
             <CredenzaDescription>&nbsp;</CredenzaDescription>
           </VisuallyHidden>
@@ -115,7 +115,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
                         height="24"
                       />
                     </div>
-                    <span className="text-sm text-white">
+                    <span className="text-leah text-sm">
                       {network === Filter.All ? 'All Networks' : networkLabel(network as Network)}
                     </span>
                   </div>

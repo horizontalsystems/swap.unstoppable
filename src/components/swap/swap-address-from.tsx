@@ -12,7 +12,7 @@ import { cn, truncate } from '@/lib/utils'
 import { useAssetFrom } from '@/hooks/use-swap'
 import { WalletConnectDialog } from '@/components/header/wallet-connect-dialog'
 import { useDialog } from '@/components/global-dialog'
-import { Plus } from '@/components/icons'
+import { Icon } from '@/components/icons'
 
 export const SwapAddressFrom = () => {
   const { accounts, selected, select } = useAccounts()
@@ -75,7 +75,7 @@ export const SwapAddressFrom = () => {
             onClick={() => openDialog(WalletConnectDialog, {})}
           >
             <div className="flex items-center gap-4">
-              <Plus className="text-storm-purple size-6" />
+              <Icon name="plus" className="text-storm-purple size-6" />
               <span className="text-storm-purple text-sm font-medium">Connect Wallet</span>
             </div>
           </DropdownMenuItem>

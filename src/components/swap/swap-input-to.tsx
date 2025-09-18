@@ -39,15 +39,13 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
     <div className="px-6 py-8">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="text-2xl font-medium text-white">
-            <DecimalInput
-              className="text-leah w-full bg-transparent text-2xl font-medium outline-none"
-              amount={amount}
-              onAmountChange={() => null}
-              autoComplete="off"
-              disabled
-            />
-          </div>
+          <DecimalInput
+            className="text-leah w-full bg-transparent text-2xl font-medium outline-none"
+            amount={amount}
+            onAmountChange={() => null}
+            autoComplete="off"
+            disabled
+          />
           <div className="text-gray mt-1 text-sm">
             <DecimalFiat amount={valueTo} />
           </div>
@@ -62,7 +60,7 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
               {assetTo?.chain ? networkLabel(assetTo.chain) : <Skeleton className="mt-0.5 h-3 w-16" />}
             </span>
           </div>
-          <ChevronDown className="h-4 w-4 text-white" />
+          <ChevronDown className="text-leah h-4 w-4" />
         </div>
       </div>
     </div>
