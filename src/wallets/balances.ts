@@ -63,7 +63,7 @@ class BalanceProvider {
       }
       case Network.BitcoinCash: {
         const res = await axios.get(`${this.url}/${address}`)
-        return res.data.balance.confirmed
+        return BigInt(res.data.balance.confirmed)
       }
       case Network.Xrp: {
         // const res = await axios.get(`${this.url}/v1/accounts/${address}/balances`)

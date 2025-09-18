@@ -22,7 +22,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <Image src="/logo.svg" alt="THORChain Swap" width={32} height={32} priority />
             <div className="flex items-center gap-2">
-              <div className="text-xl font-bold text-white">THORChain Swap</div>
+              <div className="text-sm font-semibold text-white">THORChain Swap</div>
               <Image src="/beta.svg" alt="Beta" width={37} height={17} priority />
             </div>
           </div>

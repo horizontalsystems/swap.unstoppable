@@ -1,7 +1,5 @@
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
-import { useAssetTo, useSetDestination } from '@/hooks/use-swap'
-import { networkLabel, validateAddress } from 'rujira.js'
+import { ThemeButton } from '@/components/theme-button'
 import {
   Credenza,
   CredenzaContent,
@@ -10,8 +8,10 @@ import {
   CredenzaHeader,
   CredenzaTitle
 } from '@/components/ui/credenza'
+import { useState } from 'react'
+import { useAssetTo, useSetDestination } from '@/hooks/use-swap'
+import { networkLabel, validateAddress } from 'rujira.js'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 
 interface SwapAddressProps {
   isOpen: boolean
@@ -58,9 +58,9 @@ export const SwapAddressCustom = ({ isOpen, onOpenChange }: SwapAddressProps) =>
           />
 
           {!address.length && (
-            <Button
-              className="text-leah absolute inset-y-0 end-4 my-auto rounded-3xl border-0 text-xs font-semibold"
-              variant="outline"
+            <ThemeButton
+              variant="secondarySmall"
+              className="absolute end-4 top-1/2 -translate-y-1/2"
               onClick={() => {
                 navigator.clipboard.readText().then(text => {
                   setAddress(text)
@@ -68,23 +68,20 @@ export const SwapAddressCustom = ({ isOpen, onOpenChange }: SwapAddressProps) =>
               }}
             >
               Paste
-            </Button>
+            </ThemeButton>
           )}
 
           {!isValid && <div className="text-lucian text-xs font-semibold">Invalid address</div>}
         </div>
         <CredenzaFooter className="sm:justify-start">
-          <button
-            className={cn(
-              'flex w-full cursor-pointer items-center justify-center gap-2 disabled:cursor-auto',
-              'text-lawrence disabled:text-andy disabled:bg-blade h-14 rounded-4xl px-10 text-base font-semibold transition-colors',
-              'bg-liquidity-green hover:bg-liquidity-green/90'
-            )}
+          <ThemeButton
+            variant="primaryMedium"
+            className="w-full"
             disabled={!isValid || !address.length}
             onClick={onSave}
           >
             Save
-          </button>
+          </ThemeButton>
         </CredenzaFooter>
       </CredenzaContent>
     </Credenza>

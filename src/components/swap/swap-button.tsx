@@ -5,11 +5,11 @@ import { getSelectedContext, useAccounts } from '@/hooks/use-accounts'
 import { useQuote } from '@/hooks/use-quote'
 import { useSimulation } from '@/hooks/use-simulation'
 import { WalletConnectDialog } from '@/components/header/wallet-connect-dialog'
+import { ThemeButton } from '@/components/theme-button'
 import { signAndBroadcast, simulate } from '@/wallets'
 import { useBalance } from '@/hooks/use-balance'
 import { useDialog } from '@/components/global-dialog'
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
 
 interface SwapButtonProps {
   onSwap: () => void
@@ -95,20 +95,14 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
   const state = getState()
 
   return (
-    <button
-      className={cn(
-        'flex items-center justify-center gap-2',
-        'text-lawrence disabled:text-andy disabled:bg-blade h-14 w-full rounded-4xl text-base font-semibold transition-colors',
-        {
-          'bg-liquidity-green hover:bg-liquidity-green/90': state.accent,
-          'bg-leah hover:bg-leah/90': !state.accent
-        }
-      )}
+    <ThemeButton
+      variant={state.accent ? 'primaryMedium' : 'secondaryMedium'}
+      className="w-full"
       onClick={state.onClick}
       disabled={!state.onClick}
     >
       {state.spinner && <LoaderCircle size={20} className="animate-spin" />}
       {state.text}
-    </button>
+    </ThemeButton>
   )
 }

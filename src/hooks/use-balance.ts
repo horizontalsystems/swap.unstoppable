@@ -89,7 +89,7 @@ export const useBalance = (): UseBalance => {
         fee = (simulationFee * 11n) / 10n // surcharge by 10%
       }
 
-      const spendable = amount - fee > 0 ? amount - fee : 0n
+      const spendable = amount - fee > 0n ? amount - fee : 0n
 
       return { amount, spendable }
     },

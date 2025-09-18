@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { LoaderCircle } from 'lucide-react'
 import { Network, networkLabel } from 'rujira.js'
+import { ThemeButton } from '@/components/theme-button'
 import {
   Credenza,
   CredenzaContent,
@@ -165,18 +166,14 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
         </div>
         <CredenzaFooter>
           <div className="flex justify-end">
-            <button
-              className={cn(
-                'flex cursor-pointer items-center justify-center gap-2',
-                'text-lawrence disabled:text-andy disabled:bg-blade h-14 rounded-4xl px-10 text-base font-semibold transition-colors',
-                'bg-liquidity-green hover:bg-liquidity-green/90'
-              )}
+            <ThemeButton
+              variant="primaryMedium"
               disabled={selectedWallets.length < 1 || connecting}
               onClick={() => handleConnect()}
             >
               {connecting && <LoaderCircle size={20} className="animate-spin" />}
               {connecting ? 'Connecting' : 'Connect'} {selectedWallets.length || ''} Wallet
-            </button>
+            </ThemeButton>
           </div>
         </CredenzaFooter>
       </CredenzaContent>

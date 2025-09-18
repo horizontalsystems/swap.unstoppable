@@ -1,6 +1,6 @@
 import { OctagonAlert } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+import { ThemeButton } from '@/components/theme-button'
 
 export const SwapBetaAlert = () => {
   return (
@@ -12,11 +12,11 @@ export const SwapBetaAlert = () => {
           <AlertDescription className="text-xs">The official URL will be swap.thorchain.org</AlertDescription>
         </div>
       </div>
-      <Button className="text-leah rounded-3xl border-0 text-xs font-semibold" variant="outline">
+      <ThemeButton variant="secondarySmall">
         <a href="https://gitlab.com/thorchain/client/ui/-/issues" rel="noopener noreferrer" target="_blank">
           Report Bug
         </a>
-      </Button>
+      </ThemeButton>
     </Alert>
   )
 }

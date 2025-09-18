@@ -4,7 +4,6 @@ import { ChevronDown } from 'lucide-react'
 import { DecimalInput } from '@/components/decimal/decimal-input'
 import { DecimalFiat } from '@/components/decimal/decimal-fiat'
 import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
-import { Button } from '@/components/ui/button'
 import { useAssetFrom, useSetAssetFrom, useSwap } from '@/hooks/use-swap'
 import { AssetIcon } from '@/components/asset-icon'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -12,6 +11,7 @@ import { useDialog } from '@/components/global-dialog'
 import { useBalance } from '@/hooks/use-balance'
 import { useRate } from '@/hooks/use-rates'
 import { SwapBalance } from '@/components/swap/swap-balance'
+import { ThemeButton } from '@/components/theme-button'
 
 export const SwapInputFrom = () => {
   const assetFrom = useAssetFrom()
@@ -56,11 +56,11 @@ export const SwapInputFrom = () => {
         </div>
         <div className="flex cursor-pointer items-center gap-3" onClick={onClick}>
           <AssetIcon url={assetFrom ? `/coins/${assetFrom.metadata.symbol.toLowerCase()}.svg` : null} />
-          <div className="flex w-15 flex-col items-start">
+          <div className="flex w-16 flex-col items-start">
             <span className="text-leah inline-block w-full truncate text-lg font-semibold">
               {assetFrom ? assetFrom.metadata.symbol : <Skeleton className="mb-0.5 h-6 w-12" />}
             </span>
-            <span className="text-gray inline-block w-full truncate text-sm">
+            <span className="text-gray inline-block w-full truncate text-xs">
               {assetFrom?.chain ? networkLabel(assetFrom.chain) : <Skeleton className="mt-0.5 h-3 w-16" />}
             </span>
           </div>
@@ -70,27 +70,23 @@ export const SwapInputFrom = () => {
 
       <div className="mt-4 flex items-end justify-between">
         <div className="flex gap-2">
-          <Button
-            className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
-            onClick={() => setAmountFrom(0n)}
-            disabled={amountFrom === 0n}
-          >
+          <ThemeButton variant="secondarySmall" onClick={() => setAmountFrom(0n)} disabled={amountFrom === 0n}>
             Clear
-          </Button>
-          <Button
-            className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
+          </ThemeButton>
+          <ThemeButton
+            variant="secondarySmall"
             onClick={() => handleSetPercent(50n)}
             disabled={!balance || balance.spendable === 0n}
           >
             50%
-          </Button>
-          <Button
-            className="text-leah bg-blade rounded-full px-3 py-1 text-sm hover:bg-zinc-800"
+          </ThemeButton>
+          <ThemeButton
+            variant="secondarySmall"
             onClick={() => handleSetPercent(100n)}
             disabled={!balance || balance.spendable === 0n}
           >
             100%
-          </Button>
+          </ThemeButton>
         </div>
 
         <SwapBalance />

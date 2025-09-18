@@ -34,7 +34,7 @@ export const SwapAddressFrom = () => {
               )}
               <span className="text-gray text-sm">{selected?.provider || 'Source Wallet'}</span>
             </div>
-            <div className="text-leah text-sm">
+            <div className="text-leah text-sm font-semibold">
               <span>{selected?.address ? truncate(selected.address) : ''}</span>
               <ChevronDown className="ms-2 inline h-4 w-4" />
             </div>
