@@ -84,6 +84,16 @@ const WarningIcon = memo<IconProps>(props => (
   </SVG>
 ))
 
+const DisconnectIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path
+      d="M17 3.33975C18.9064 4.44042 20.3964 6.13939 21.2388 8.17316C22.0812 10.2069 22.229 12.4619 21.6593 14.5882C21.0895 16.7145 19.8341 18.5934 18.0876 19.9335C16.3412 21.2736 14.2013 22 12 22C9.79866 22 7.65883 21.2736 5.91239 19.9335C4.16594 18.5934 2.91049 16.7145 2.34074 14.5882C1.77099 12.4619 1.91879 10.2069 2.7612 8.17317C3.60362 6.13939 5.09358 4.44042 7 3.33975L8 5.0718C6.47486 5.95233 5.2829 7.31151 4.60896 8.93853C3.93503 10.5656 3.81679 12.3695 4.27259 14.0706C4.72839 15.7716 5.73276 17.2748 7.12991 18.3468C8.52706 19.4189 10.2389 20 12 20C13.7611 20 15.4729 19.4189 16.8701 18.3468C18.2672 17.2748 19.2716 15.7716 19.7274 14.0706C20.1832 12.3695 20.065 10.5656 19.391 8.93853C18.7171 7.31151 17.5251 5.95233 16 5.0718L17 3.33975Z"
+      fill="currentColor"
+    />
+    <rect x="11" y="12" width="10" height="2" transform="rotate(-90 11 12)" fill="currentColor" />
+  </SVG>
+))
+
 // Icon name mapping
 const iconMap = {
   plus: PlusIcon,
@@ -92,7 +102,8 @@ const iconMap = {
   'light-mode': LightModeIcon,
   'dark-mode': DarkModeIcon,
   manage: ManageIcon,
-  warning: WarningIcon
+  warning: WarningIcon,
+  disconnect: DisconnectIcon
 } as const
 
 export type IconName = keyof typeof iconMap
