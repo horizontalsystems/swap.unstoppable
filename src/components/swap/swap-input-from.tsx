@@ -1,6 +1,5 @@
 import Decimal from 'decimal.js'
 import { networkLabel } from 'rujira.js'
-import { ChevronDown } from 'lucide-react'
 import { DecimalInput } from '@/components/decimal/decimal-input'
 import { DecimalFiat } from '@/components/decimal/decimal-fiat'
 import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
@@ -12,6 +11,7 @@ import { useBalance } from '@/hooks/use-balance'
 import { useRate } from '@/hooks/use-rates'
 import { SwapBalance } from '@/components/swap/swap-balance'
 import { ThemeButton } from '@/components/theme-button'
+import { Icon } from '@/components/icons'
 
 export const SwapInputFrom = () => {
   const assetFrom = useAssetFrom()
@@ -54,7 +54,7 @@ export const SwapInputFrom = () => {
             <DecimalFiat amount={valueFrom} />
           </div>
         </div>
-        <div className="flex cursor-pointer items-center gap-3" onClick={onClick}>
+        <div className="flex cursor-pointer items-center gap-2" onClick={onClick}>
           <AssetIcon url={assetFrom ? `/coins/${assetFrom.metadata.symbol.toLowerCase()}.svg` : null} />
           <div className="flex w-16 flex-col items-start">
             <span className="text-leah inline-block w-full truncate text-lg font-semibold">
@@ -64,7 +64,7 @@ export const SwapInputFrom = () => {
               {assetFrom?.chain ? networkLabel(assetFrom.chain) : <Skeleton className="mt-0.5 h-3 w-16" />}
             </span>
           </div>
-          <ChevronDown className="text-leah h-4 w-4" />
+          <Icon name="arrow-s-down" className="text-thor-gray size-5" />
         </div>
       </div>
 

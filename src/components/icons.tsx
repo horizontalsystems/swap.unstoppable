@@ -94,6 +94,54 @@ const DisconnectIcon = memo<IconProps>(props => (
   </SVG>
 ))
 
+const ArrowSDownIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path d="M12 16L6 9H18L12 16Z" fill="currentColor" />
+  </SVG>
+))
+
+const ArrowSUpIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path d="M18 15H6L12 8L18 15Z" fill="currentColor" />
+  </SVG>
+))
+
+const ArrowMDownIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path
+      d="M13 16.1719L17.0859 12.0859L18.5 13.5L12 20L5.5 13.5L6.91406 12.0859L11 16.1719V4H13V16.1719Z"
+      fill="currentColor"
+    />
+  </SVG>
+))
+
+const InfoIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path
+      d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM13 17H11V11H13V17ZM13 9H11V7H13V9Z"
+      fill="currentColor"
+    />
+  </SVG>
+))
+
+const WalletOutIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path
+      d="M6.41406 14.4141L4.82812 16H11V18H4.82812L6.41406 19.5859L5 21L1 17L5 13L6.41406 14.4141ZM20 5H4V7H22V21H13V19H20V17H18.5C16.8431 17 15.5 15.6569 15.5 14C15.5 12.3431 16.8431 11 18.5 11H20V9H4V11H2V3H20V5ZM18.5 13C17.9477 13 17.5 13.4477 17.5 14C17.5 14.5523 17.9477 15 18.5 15H20V13H18.5Z"
+      fill="currentColor"
+    />
+  </SVG>
+))
+
+const WalletInIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path
+      d="M11 17L7 21L5.58594 19.5859L7.17188 18H1V16H7.17188L5.58594 14.4141L7 13L11 17ZM20 5H4V7H22V21H13V19H20V17H18.5C16.8431 17 15.5 15.6569 15.5 14C15.5 12.3431 16.8431 11 18.5 11H20V9H4V11H2V3H20V5ZM18.5 13C17.9477 13 17.5 13.4477 17.5 14C17.5 14.5523 17.9477 15 18.5 15H20V13H18.5Z"
+      fill="currentColor"
+    />
+  </SVG>
+))
+
 // Icon name mapping
 const iconMap = {
   plus: PlusIcon,
@@ -103,7 +151,13 @@ const iconMap = {
   'dark-mode': DarkModeIcon,
   manage: ManageIcon,
   warning: WarningIcon,
-  disconnect: DisconnectIcon
+  disconnect: DisconnectIcon,
+  'arrow-s-down': ArrowSDownIcon,
+  'arrow-s-up': ArrowSUpIcon,
+  'arrow-m-down': ArrowMDownIcon,
+  info: InfoIcon,
+  'wallet-out': WalletOutIcon,
+  'wallet-in': WalletInIcon
 } as const
 
 export type IconName = keyof typeof iconMap

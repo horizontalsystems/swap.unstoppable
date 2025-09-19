@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import { ChevronDown } from 'lucide-react'
 import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
 import { DecimalInput } from '@/components/decimal/decimal-input'
 import { AssetIcon } from '@/components/asset-icon'
@@ -10,6 +9,7 @@ import { Quote } from '@/hooks/use-quote'
 import { useAssetTo, useSetAssetTo } from '@/hooks/use-swap'
 import { useDialog } from '@/components/global-dialog'
 import { useRate } from '@/hooks/use-rates'
+import { Icon } from '@/components/icons'
 
 interface SwapInputProps {
   quote?: Quote
@@ -50,7 +50,7 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
             <DecimalFiat amount={valueTo} />
           </div>
         </div>
-        <div className="flex cursor-pointer items-center gap-3" onClick={onClick}>
+        <div className="flex cursor-pointer items-center gap-2" onClick={onClick}>
           <AssetIcon url={assetTo ? `/coins/${assetTo.metadata.symbol.toLowerCase()}.svg` : null} />
           <div className="flex w-16 flex-col items-start">
             <span className="text-leah inline-block w-full truncate text-lg font-semibold">
@@ -60,7 +60,7 @@ export const SwapInputTo = ({ quote }: SwapInputProps) => {
               {assetTo?.chain ? networkLabel(assetTo.chain) : <Skeleton className="mt-0.5 h-3 w-16" />}
             </span>
           </div>
-          <ChevronDown className="text-leah h-4 w-4" />
+          <Icon name="arrow-s-down" className="text-thor-gray size-5" />
         </div>
       </div>
     </div>

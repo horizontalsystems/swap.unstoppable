@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { ChevronDown, Wallet } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,28 +23,26 @@ export const SwapAddressFrom = () => {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <div className="cursor-pointer border-b-1 p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {selected ? (
-                <Image src={`/wallets/${selected.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
-              ) : (
-                <Wallet className="text-thor-gray h-6 w-6" />
-              )}
-              <span className="text-thor-gray text-sm">{selected?.provider || 'Source Wallet'}</span>
-            </div>
-            <div className="text-leah text-sm font-semibold">
-              <span>{selected?.address ? truncate(selected.address) : ''}</span>
-              <ChevronDown className="ms-2 inline h-4 w-4" />
-            </div>
+        <div className="text-thor-gray flex cursor-pointer items-center justify-between border-b-1 p-4 text-sm">
+          <div className="flex items-center gap-4">
+            {selected ? (
+              <Image src={`/wallets/${selected.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
+            ) : (
+              <Icon name="wallet-out" className="size-6" />
+            )}
+            <span>{selected?.provider || 'Source Wallet'}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-leah font-semibold">{selected?.address ? truncate(selected.address) : ''}</span>
+            <Icon name="arrow-s-down" className="size-5" />
           </div>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-tyler rounded-2xl border-0 p-0">
         <div className="border-b p-4">
-          <div className="flex items-center gap-4">
-            <Wallet className="text-thor-gray h-6 w-6" />
-            <DropdownMenuLabel className="text-thor-gray p-0 text-sm font-medium">Source Wallet</DropdownMenuLabel>
+          <div className="text-thor-gray flex items-center gap-4">
+            <Icon name="wallet-out" className="size-6" />
+            <DropdownMenuLabel className="p-0 text-sm">Source Wallet</DropdownMenuLabel>
           </div>
         </div>
 
