@@ -53,7 +53,7 @@ export const useSwap = () => {
   }, [pools, setInitialAssets])
 
   return {
-    slippageLimit: BigInt(slippageLimit),
+    slippageLimit: slippageLimit,
     setSlippageLimit,
     destination,
     setDestination,

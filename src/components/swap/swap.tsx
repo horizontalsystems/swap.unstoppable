@@ -2,7 +2,7 @@
 
 import { SwapAddressFrom } from '@/components/swap/swap-address-from'
 import { SwapAddressTo } from '@/components/swap/swap-address-to'
-import { SwapSlippage } from '@/components/swap/swap-slippage'
+import { SwapSettings } from '@/components/swap/swap-settings'
 import { SwapInputFrom } from '@/components/swap/swap-input-from'
 import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
@@ -71,7 +71,7 @@ export const Swap = () => {
           <div className="flex items-center gap-2">
             <h1 className="text-leah text-2xl font-medium">Swap</h1>
           </div>
-          <SwapSlippage />
+          <SwapSettings />
         </div>
 
         <div className="bg-lawrence border-blade rounded-3xl border-1">

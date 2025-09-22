@@ -57,7 +57,7 @@ export const useQuote = (): UseQote => {
       destination: destination?.address,
       streamingInterval: 1,
       streamingQuantity: '0',
-      liquidityToleranceBps: Number(slippageLimit)
+      tolerance_bps: slippageLimit ? slippageLimit * 100 : undefined
     }),
     [amountFrom, assetFrom, assetTo, destination, slippageLimit]
   )
@@ -80,7 +80,7 @@ export const useQuote = (): UseQote => {
         destination: params.destination,
         streaming_interval: params.streamingInterval,
         streaming_quantity: params.streamingQuantity,
-        liquidity_tolerance_bps: params.liquidityToleranceBps
+        tolerance_bps: params.tolerance_bps
       }),
     enabled: !!(params.amount && params.fromAsset && params.toAsset),
     retry: false
