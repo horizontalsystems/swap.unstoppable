@@ -11,8 +11,8 @@ export const useSetAssetFrom = () => useSwapStore(state => state.setAssetFrom)
 export const useAssetTo = () => useSwapStore(state => state.assetTo)
 export const useSetAssetTo = () => useSwapStore(state => state.setAssetTo)
 
-export const useSlippageLimit = () => useSwapStore(state => state.slippageLimit)
-export const useSetSlippageLimit = () => useSwapStore(state => state.setSlippageLimit)
+export const useSlippage = () => useSwapStore(state => state.slippage)
+export const useSetSlippage = () => useSwapStore(state => state.setSlippage)
 
 export const useDestination = () => useSwapStore(state => state.destination)
 export const useSetDestination = () => useSwapStore(state => state.setDestination)
@@ -35,10 +35,10 @@ export const useSourceWallet = () => {
 export const useSwap = () => {
   const { pools } = usePools()
   const {
-    slippageLimit,
+    slippage,
     destination,
     setDestination,
-    setSlippageLimit,
+    setSlippage,
     amountFrom,
     hasHydrated,
     setAmountFrom,
@@ -53,12 +53,12 @@ export const useSwap = () => {
   }, [pools, setInitialAssets])
 
   return {
-    slippageLimit: slippageLimit,
-    setSlippageLimit,
+    slippage,
+    setSlippage,
     destination,
     setDestination,
     amountFrom: hasHydrated ? BigInt(amountFrom) : 0n,
-    setAmountFrom: setAmountFrom,
+    setAmountFrom,
     setAssetTo,
     feeWarning: BigInt(feeWarning)
   }

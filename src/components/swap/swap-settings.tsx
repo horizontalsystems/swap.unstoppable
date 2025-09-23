@@ -1,16 +1,16 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useSetSlippageLimit, useSlippageLimit } from '@/hooks/use-swap'
+import { useSetSlippage, useSlippage } from '@/hooks/use-swap'
 import { ThemeButton } from '@/components/theme-button'
 import { Icon } from '@/components/icons'
 import { useState } from 'react'
 import { Slider } from '@/components/ui/slider'
-import { INITIAL_SLIPPAGE_LIMIT } from '@/store/swap-store'
+import { INITIAL_SLIPPAGE } from '@/store/swap-store'
 
 export const SwapSettings = () => {
-  const slippageLimit = useSlippageLimit()
-  const setSlippageLimit = useSetSlippageLimit()
+  const slippage = useSlippage()
+  const setSlippage = useSetSlippage()
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [sliderValue, setSliderValue] = useState([toSliderValue(slippageLimit)])
+  const [sliderValue, setSliderValue] = useState([toSliderValue(slippage)])
 
   const enabledSteps = [...Array(20).keys(), 25]
   const ramExpansions = [toSlippageValue(0), 'No Protection']
@@ -38,7 +38,7 @@ export const SwapSettings = () => {
       open={dropdownOpen}
       onOpenChange={open => {
         if (open) {
-          setSliderValue([toSliderValue(slippageLimit)])
+          setSliderValue([toSliderValue(slippage)])
         }
 
         setDropdownOpen(open)
@@ -75,10 +75,10 @@ export const SwapSettings = () => {
               variant="secondarySmall"
               className="flex-1"
               onClick={() => {
-                setSlippageLimit(INITIAL_SLIPPAGE_LIMIT)
+                setSlippage(INITIAL_SLIPPAGE)
                 setDropdownOpen(false)
               }}
-              disabled={slippageLimit === INITIAL_SLIPPAGE_LIMIT}
+              disabled={slippage === INITIAL_SLIPPAGE}
             >
               Reset
             </ThemeButton>
@@ -87,10 +87,10 @@ export const SwapSettings = () => {
               variant="primarySmall"
               className="flex-1"
               onClick={() => {
-                setSlippageLimit(toSlippageValue(sliderValue[0]))
+                setSlippage(toSlippageValue(sliderValue[0]))
                 setDropdownOpen(false)
               }}
-              disabled={currentSlippage === slippageLimit}
+              disabled={currentSlippage === slippage}
             >
               Save
             </ThemeButton>

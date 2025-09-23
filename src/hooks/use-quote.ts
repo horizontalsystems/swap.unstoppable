@@ -43,7 +43,7 @@ type UseQote = {
 }
 
 export const useQuote = (): UseQote => {
-  const { amountFrom, destination, slippageLimit } = useSwap()
+  const { amountFrom, destination, slippage } = useSwap()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
 
@@ -57,9 +57,9 @@ export const useQuote = (): UseQote => {
       destination: destination?.address,
       streamingInterval: 1,
       streamingQuantity: 0,
-      liquidity_tolerance_bps: slippageLimit ? slippageLimit * 100 : undefined
+      liquidity_tolerance_bps: slippage ? slippage * 100 : undefined
     }),
-    [amountFrom, assetFrom, assetTo, destination, slippageLimit]
+    [amountFrom, assetFrom, assetTo, destination, slippage]
   )
 
   const {

@@ -8,7 +8,7 @@ import { useAccountStore } from '@/store/account-store'
 const INITIAL_ASSET_FROM = 'BTC.BTC'
 const INITIAL_ASSET_TO = 'THOR.RUNE'
 const INITIAL_AMOUNT_FROM = 50_000_000n
-export const INITIAL_SLIPPAGE_LIMIT = 3
+export const INITIAL_SLIPPAGE = 3
 
 interface Destination<P> {
   address: string
@@ -21,11 +21,11 @@ interface SwapState {
   assetTo?: Asset
   amountFrom: string
   destination?: Destination<Provider>
-  slippageLimit?: number
+  slippage?: number
   feeWarning: string
   hasHydrated: boolean
 
-  setSlippageLimit: (limit?: number) => void
+  setSlippage: (limit?: number) => void
   setDestination: (destination?: Destination<Provider>) => void
   setAmountFrom: (amount: bigint) => void
   resolveDestination: () => void
@@ -39,12 +39,12 @@ interface SwapState {
 export const useSwapStore = create<SwapState>()(
   persist(
     (set, get) => ({
-      slippageLimit: INITIAL_SLIPPAGE_LIMIT,
+      slippage: INITIAL_SLIPPAGE,
       amountFrom: INITIAL_AMOUNT_FROM.toString(),
       feeWarning: '500',
       hasHydrated: false,
 
-      setSlippageLimit: slippageLimit => set({ slippageLimit: slippageLimit }),
+      setSlippage: slippage => set({ slippage: slippage }),
       setDestination: destination => set({ destination }),
       setAmountFrom: fromAmount => set({ amountFrom: fromAmount.toString() }),
 
@@ -123,7 +123,7 @@ export const useSwapStore = create<SwapState>()(
         state?.setHasHydrated(true)
       },
       partialize: state => ({
-        slippageLimit: state.slippageLimit,
+        slippage: state.slippage,
         amountFrom: state.amountFrom,
         feeWarning: state.feeWarning,
         assetFrom: state.assetFrom,
