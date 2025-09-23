@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Decimal from 'decimal.js'
 import { Fragment, useState } from 'react'
 import { format, isSameDay, isToday, isYesterday } from 'date-fns'
@@ -13,6 +12,7 @@ import { CopyButton } from '@/components/button-copy'
 import { useTransactions } from '@/store/transaction-store'
 import { useRates } from '@/hooks/use-rates'
 import { cn, truncate } from '@/lib/utils'
+import { AssetIcon } from '@/components/asset-icon'
 
 interface HistoryDialogProps {
   isOpen: boolean
@@ -90,14 +90,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                 <div className={cn('px-4', { 'border-b': i !== transactions.length - 1, 'bg-blade': isExpanded })}>
                   <div className="grid grid-cols-3 py-3" onClick={() => setExpandTx(isExpanded ? null : tx.hash)}>
                     <div className="flex items-center gap-2">
-                      <div className="flex h-8 w-8 rounded-full">
-                        <Image
-                          src={`/coins/${tx.fromAsset?.metadata.symbol.toLowerCase()}.svg`}
-                          alt=""
-                          width="32"
-                          height="32"
-                        />
-                      </div>
+                      {tx.fromAsset && <AssetIcon asset={tx.fromAsset} />}
                       <div className="flex flex-col">
                         <DecimalText className="text-leah font-base font-medium" amount={fromAmount} />
                         <span className="text-thor-gray text-sm">{tx.fromAsset?.metadata.symbol}</span>
@@ -120,14 +113,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         <DecimalText className="text-leah text-base font-medium" amount={toAmount} />
                         <span className="text-thor-gray text-sm">{tx.toAsset?.metadata?.symbol}</span>
                       </div>
-                      <div className="flex h-8 w-8 rounded-full">
-                        <Image
-                          src={`/coins/${tx.toAsset?.metadata.symbol.toLowerCase()}.svg`}
-                          alt=""
-                          width="32"
-                          height="32"
-                        />
-                      </div>
+                      {tx.toAsset && <AssetIcon asset={tx.toAsset} />}
                     </div>
                   </div>
                   {isExpanded && (

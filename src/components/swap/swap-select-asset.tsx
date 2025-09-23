@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { usePools } from '@/hooks/use-pools'
 import { cn } from '@/lib/utils'
+import { AssetIcon } from '@/components/asset-icon'
 
 interface SwapSelectAssetProps {
   isOpen: boolean
@@ -144,14 +145,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
                   className="hover:bg-blade flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full">
-                      <Image
-                        src={`/coins/${item.metadata.symbol.toLowerCase()}.svg`}
-                        alt={item.metadata.symbol}
-                        width="32"
-                        height="32"
-                      />
-                    </div>
+                    <AssetIcon asset={item} />
                     <div className="text-left">
                       <div className="text-leah font-semibold">{item.metadata.symbol}</div>
                       <div className="text-thor-gray text-sm">{networkLabel(item.chain)}</div>

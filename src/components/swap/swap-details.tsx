@@ -163,7 +163,7 @@ export function SwapDetails() {
           <div className="flex items-center justify-between">
             Estimated Time
             <div className="flex items-center gap-2">
-              {quote && (
+              {quote && quote.total_swap_seconds ? (
                 <span className="text-leah">
                   {formatDuration(
                     intervalToDuration({
@@ -173,6 +173,8 @@ export function SwapDetails() {
                     { format: ['hours', 'minutes', 'seconds'], zero: false }
                   )}
                 </span>
+              ) : (
+                <span className="text-thor-gray">n/a</span>
               )}
             </div>
           </div>

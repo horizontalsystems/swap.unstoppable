@@ -8,7 +8,7 @@ import { useAccountStore } from '@/store/account-store'
 const INITIAL_ASSET_FROM = 'BTC.BTC'
 const INITIAL_ASSET_TO = 'THOR.RUNE'
 const INITIAL_AMOUNT_FROM = 50_000_000n
-export const INITIAL_SLIPPAGE = 3
+export const INITIAL_SLIPPAGE = 1
 
 interface Destination<P> {
   address: string
