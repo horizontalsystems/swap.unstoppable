@@ -11,7 +11,7 @@ export function AssetIcon({ asset }: { asset: Asset | undefined }) {
   }
 
   return (
-    <div className="relative h-8 w-8">
+    <div className="relative flex h-8 w-8">
       {loading && <Skeleton className="absolute inset-0 h-8 w-8 rounded-full" />}
       {!loading && !isNativeAsset(asset) && (
         <Image
@@ -23,7 +23,7 @@ export function AssetIcon({ asset }: { asset: Asset | undefined }) {
         />
       )}
       <Image
-        className="rounded-full"
+        className="shrink-0 rounded-full"
         src={`/coins/${asset.metadata.symbol.toLowerCase()}.svg`}
         alt={asset.metadata.symbol}
         width={32}

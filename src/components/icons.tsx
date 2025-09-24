@@ -84,6 +84,15 @@ const WarningIcon = memo<IconProps>(props => (
   </SVG>
 ))
 
+const WarningFilledIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path
+      d="M22 7.625V16.375L16.375 22H7.625L2 16.375V7.625L7.625 2H16.375L22 7.625ZM11 18H13V16H11V18ZM11 14H13V7H11V14Z"
+      fill="currentColor"
+    />
+  </SVG>
+))
+
 const DisconnectIcon = memo<IconProps>(props => (
   <SVG {...props}>
     <path
@@ -151,6 +160,7 @@ const iconMap = {
   'dark-mode': DarkModeIcon,
   manage: ManageIcon,
   warning: WarningIcon,
+  'warning-filled': WarningFilledIcon,
   disconnect: DisconnectIcon,
   'arrow-s-down': ArrowSDownIcon,
   'arrow-s-up': ArrowSUpIcon,
