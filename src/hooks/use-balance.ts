@@ -34,11 +34,7 @@ export const useBalance = (): UseBalance => {
         return null
       }
 
-      const amount = await BalanceFetcher.fetch({
-        network: assetFrom.chain,
-        address: selected.address,
-        asset: assetFrom.asset
-      })
+      const amount = await BalanceFetcher.fetch(assetFrom.asset, selected.address)
 
       let fee = 0n
 
