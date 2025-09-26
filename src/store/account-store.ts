@@ -42,9 +42,9 @@ export const useAccountStore = create<AccountsState>()(
         })
       },
 
-      connect: async provider => {
+      connect: async (provider, config) => {
         try {
-          const accs = await getAccounts(provider)
+          const accs = await getAccounts(provider, config)
           if (!accs.length) throw new Error(`No accounts found on ${provider}`)
           const { resolveDestination } = useSwapStore.getState()
 

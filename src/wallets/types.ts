@@ -10,6 +10,7 @@ import { KeplrContext } from './providers/keplr'
 import { OkxContext } from './providers/okx'
 import { VulticonnectContext } from './providers/vulticonnect'
 import { TronlinkContext } from './providers/tronlink'
+import { LedgerContext } from '@/wallets/providers/ledger'
 
 export type Provider = keyof Providers
 export type Account = BaseAccount<Provider>
@@ -24,4 +25,5 @@ export type Providers = {
   Okx: OkxContext
   Tronlink: TronlinkContext
   Phantom: JsonRpcSigner
+  Ledger: LedgerContext
 }

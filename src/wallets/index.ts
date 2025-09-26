@@ -8,6 +8,7 @@ import okx from './providers/okx'
 import vulticonnect from './providers/vulticonnect'
 import tronlink from './providers/tronlink'
 import phantom from './providers/phantom'
+import ledger from './providers/ledger'
 
 export type * from './types'
 
@@ -18,7 +19,8 @@ const providers: Record<Provider, () => WalletProvider<any>> = {
   Metamask: metamask,
   Okx: okx,
   Tronlink: tronlink,
-  Phantom: phantom
+  Phantom: phantom,
+  Ledger: ledger
 }
 
 const isClient = () => typeof window !== 'undefined'
@@ -40,12 +42,13 @@ const getWalletProvider = <P extends Provider>(provider: P): WalletProvider<P> |
 }
 
 export const getAccounts = async <T extends Provider>(
-  provider: T
+  provider: T,
+  config?: any
 ): Promise<{ context: Providers[T]; account: BaseAccount<T> }[]> => {
   const walletProvider = getWalletProvider(provider)
   if (!walletProvider) throw new Error(`Wallet provider ${provider} not available`)
 
-  const accounts = await walletProvider.getAccounts()
+  const accounts = await walletProvider.getAccounts(config)
   return accounts.map(({ context, account }) => ({
     context: context as unknown as Providers[T],
     account: { ...account, provider }

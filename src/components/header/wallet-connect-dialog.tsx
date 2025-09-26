@@ -13,11 +13,13 @@ import {
   CredenzaTitle
 } from '@/components/ui/credenza'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import { WalletConnectLedger } from '@/components/header/wallet-connect-ledger'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Provider } from '@/wallets'
 import { usePools } from '@/hooks/use-pools'
 import { useAccounts } from '@/hooks/use-accounts'
 import { cn } from '@/lib/utils'
+import { useDialog } from '@/components/global-dialog'
 
 interface WalletProps<T> {
   key: string
@@ -33,10 +35,11 @@ interface WalletConnectDialogProps {
 }
 
 export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialogProps) => {
-  const { connect, isAvailable, accounts } = useAccounts()
   const [connecting, setConnecting] = useState(false)
   const [selectedWallets, setSelectedWallets] = useState<Provider[]>([])
   const [selectedNetworks, setSelectedNetworks] = useState<Network[]>([])
+  const { connect, isAvailable, accounts } = useAccounts()
+  const { openDialog } = useDialog()
   const { pools } = usePools()
 
   const connectedProviders = useMemo(() => [...new Set(accounts?.map(a => a.provider))], [accounts])
@@ -68,9 +71,17 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
   }, [isAvailable])
 
   const toggleWalletSelection = (provider: Provider) => {
-    setSelectedWallets(prev =>
-      prev.includes(provider) ? prev.filter(p => p !== provider) : [...prev, provider]
-    )
+    setSelectedWallets(prev => {
+      if (prev.includes(provider)) {
+        return prev.filter(p => p !== provider)
+      }
+
+      if (provider === 'Ledger') {
+        openDialog(WalletConnectLedger, {})
+      }
+
+      return [...prev, provider]
+    })
   }
 
   const toggleNetworkSelection = (network: Network) => {
@@ -304,11 +315,13 @@ const WALLETS: WalletProps<Provider>[] = [
       Network.Thorchain
     ]
   },
-  // {
-  //   key: "ledger",
-  //   label: "Ledger",
-  //   provider: "Ledger",
-  // },
+  {
+    key: 'ledger',
+    label: 'Ledger',
+    provider: 'Ledger',
+    link: 'https://www.ledger.com',
+    supportedChains: [Network.Avalanche, Network.Bsc, Network.Ethereum, Network.Thorchain, Network.Bitcoin]
+  },
   {
     key: 'okx',
     label: 'OKX',

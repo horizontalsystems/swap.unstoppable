@@ -12,7 +12,7 @@ export interface AccountProvider<P> {
       address?: string
     } | null
   ) => void
-  connect: (provider: P) => ConnectionResponse
+  connect: (provider: P, config?: any) => ConnectionResponse
   disconnect: (provider: P) => void
   disconnectAll: () => void
   isAvailable: (provider: P) => boolean
@@ -28,6 +28,7 @@ export interface Account<P> {
   address: string
   provider: P
   network: Network
+  config?: any
 }
 
 export type ConnectionResponse = Promise<void>
@@ -61,7 +62,7 @@ export interface WalletProvider<C, P> {
   /**
    * Retrieves the connected account(s) from the current provider
    */
-  getAccounts(): Promise<{ context: C; account: { address: string; network: Network } }[]>
+  getAccounts(config?: any): Promise<{ context: C; account: { address: string; network: Network } }[]>
   /**
    * Simulates a Rujira Network Tx for displaying gas fees etc
    * @param account The currently selected account
