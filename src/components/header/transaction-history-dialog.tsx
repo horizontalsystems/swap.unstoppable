@@ -40,14 +40,14 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
 
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
-      <CredenzaContent className="bg-lawrence h-5/6 max-w-xl gap-10 overflow-hidden rounded-4xl border-0 p-0">
-        <CredenzaHeader className="p-12 pb-0">
+      <CredenzaContent>
+        <CredenzaHeader>
           <CredenzaTitle className="text-leah text-base font-semibold md:text-2xl">History</CredenzaTitle>
         </CredenzaHeader>
 
         {transactions.length ? (
           <div className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full px-12">
+            <ScrollArea className="h-full px-4 md:px-8">
               {transactions.map((tx, i) => {
                 const txDate = new Date(tx.timestamp)
                 const shouldRenderHeader = !lastDate || !isSameDay(txDate, lastDate)
@@ -84,7 +84,11 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         {formatDate(txDate)}
                       </div>
                     )}
-                    <div className="border-blade mb-3 rounded-xl border-1">
+                    <div
+                      className={cn('border-blade mb-3 rounded-xl border-1', {
+                        'mb-4 md:mb-8': i === transactions.length - 1
+                      })}
+                    >
                       <div
                         className="grid cursor-pointer grid-cols-3 px-4 py-3"
                         onClick={() => setExpandTx(isExpanded ? null : tx.hash)}
@@ -227,7 +231,6 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         </>
                       )}
                     </div>
-                    {i === transactions.length - 1 && <div className="mb-6">&nbsp;</div>}
                   </Fragment>
                 )
               })}

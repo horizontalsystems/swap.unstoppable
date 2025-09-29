@@ -19,20 +19,33 @@ export function Header() {
   return (
     <header className="">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-2">
             <Image src="/logo.svg" alt="THORChain Swap" width={32} height={32} priority />
             <div className="flex items-center gap-2">
-              <div className="text-leah text-sm font-semibold">THORChain Swap</div>
+              <div className="text-leah text-sm font-semibold whitespace-nowrap">THORChain Swap</div>
               <Image src="/beta.svg" alt="Beta" width={37} height={17} priority />
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
             <ThemeSwitchButton />
             <TransactionHistoryButton />
-            <ThemeButton variant="secondarySmall" onClick={() => openDialog(WalletConnectDialog, {})}>
+            <ThemeButton
+              variant="secondarySmall"
+              className="hidden md:flex"
+              onClick={() => openDialog(WalletConnectDialog, {})}
+            >
               Connect Wallet
+            </ThemeButton>
+            <ThemeButton
+              variant="circleSmall"
+              className="flex md:hidden"
+              onClick={() => {
+                openDialog(WalletConnectDialog, {})
+              }}
+            >
+              <Icon name="plus" />
             </ThemeButton>
             {connectedProviders.map((provider, i) => (
               <DropdownMenu key={i}>

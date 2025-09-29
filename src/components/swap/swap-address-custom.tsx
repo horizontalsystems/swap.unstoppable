@@ -36,15 +36,15 @@ export const SwapAddressCustom = ({ isOpen, onOpenChange }: SwapAddressProps) =>
 
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
-      <CredenzaContent className="bg-lawrence gap-5 rounded-4xl border-0 p-12 sm:max-w-md">
+      <CredenzaContent className="h-auto md:max-w-lg">
         <CredenzaHeader>
           <CredenzaTitle>Destination</CredenzaTitle>
-          <CredenzaDescription className="mt-5">
+          <CredenzaDescription>
             Enter the destination address for the swap. Make sure it is correct, as sending to an incorrect address may
             result in loss of funds.
           </CredenzaDescription>
         </CredenzaHeader>
-        <div className="relative grid gap-2">
+        <div className="relative mx-4 grid gap-2 md:mx-8">
           <Input
             placeholder={assetTo ? `${networkLabel(assetTo.chain)} address` : 'Enter address'}
             value={address}
@@ -73,7 +73,7 @@ export const SwapAddressCustom = ({ isOpen, onOpenChange }: SwapAddressProps) =>
 
           {!isValid && <div className="text-lucian text-xs font-semibold">Invalid address</div>}
         </div>
-        <CredenzaFooter className="sm:justify-start">
+        <CredenzaFooter className="px-4 py-4 md:px-8 md:py-8">
           <ThemeButton
             variant="primaryMedium"
             className="w-full"

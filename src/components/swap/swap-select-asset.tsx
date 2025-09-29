@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
-import { Credenza, CredenzaContent, CredenzaDescription, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Search } from 'lucide-react'
 import { Network, networkLabel } from 'rujira.js'
@@ -86,48 +85,44 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
 
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
-      <CredenzaContent className="bg-lawrence min-h-1/2 w-full gap-10 rounded-4xl border-0 p-12 pb-0 md:min-w-3xl">
+      <CredenzaContent>
         <CredenzaHeader>
-          <CredenzaTitle className="text-leah hidden text-2xl font-medium md:block">Select coin</CredenzaTitle>
-          <VisuallyHidden>
-            <CredenzaDescription>&nbsp;</CredenzaDescription>
-          </VisuallyHidden>
+          <CredenzaTitle>Select coin</CredenzaTitle>
         </CredenzaHeader>
-        <div className={cn('flex flex-col gap-0 md:flex-row md:gap-8', { 'h-full': isMobile })}>
-          <div className="min-w-[280px] shrink-0 border-b md:border-r md:border-b-0">
-            <ScrollArea className={cn({ 'h-full max-h-[30vh] md:max-h-[60vh]': !isMobile, 'w-full': isMobile })}>
-              <div className={cn({ 'flex w-max gap-2': isMobile })}>
-                {networks.map((network, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleChainSelect(network)}
-                    className={cn(
-                      'hover:bg-blade m-0 flex cursor-pointer items-center gap-3 rounded-lg border border-transparent px-4 py-3 md:mr-10 md:mb-2',
-                      {
-                        'border-runes-blue': selectedChain === network,
-                        'py-0': isMobile
-                      }
-                    )}
-                  >
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full">
-                      <Image
-                        src={network === Filter.All ? '/icons/windows.svg' : `/networks/${network.toLowerCase()}.svg`}
-                        alt=""
-                        width="24"
-                        height="24"
-                      />
-                    </div>
-                    <span className="text-leah text-sm">
-                      {network === Filter.All ? 'All Networks' : networkLabel(network as Network)}
-                    </span>
+
+        <div className="flex flex-1 flex-col overflow-hidden border-b md:flex-row md:border-r md:border-b-0">
+          <ScrollArea className="md:mr-8 md:w-2/5 md:pl-8">
+            <div className="mx-4 mb-4 flex w-max gap-2 md:mx-0 md:mb-8 md:block md:w-full">
+              {networks.map((network, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleChainSelect(network)}
+                  className={cn(
+                    'hover:bg-blade m-0 flex cursor-pointer items-center gap-3 rounded-lg border border-transparent px-4 py-2 md:mr-10 md:mb-2 md:py-3',
+                    {
+                      'border-runes-blue': selectedChain === network
+                    }
+                  )}
+                >
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full">
+                    <Image
+                      src={network === Filter.All ? '/icons/windows.svg' : `/networks/${network.toLowerCase()}.svg`}
+                      alt=""
+                      width="24"
+                      height="24"
+                    />
                   </div>
-                ))}
-              </div>
-              {isMobile && <ScrollBar orientation="horizontal" />}
-            </ScrollArea>
-          </div>
-          <div className="flex-1">
-            <div className="relative">
+                  <span className="text-leah text-sm">
+                    {network === Filter.All ? 'All Networks' : networkLabel(network as Network)}
+                  </span>
+                </div>
+              ))}
+            </div>
+            {isMobile && <ScrollBar orientation="horizontal" />}
+          </ScrollArea>
+
+          <div className="mt-2 flex flex-1 flex-col overflow-hidden md:mt-0">
+            <div className="relative mx-4 md:mr-8 md:ml-0">
               <Search className="text-thor-gray absolute top-1/2 left-4 -translate-y-1/2 transform" size={24} />
               <Input
                 placeholder="Search"
@@ -137,30 +132,36 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
               />
             </div>
 
-            <ScrollArea className="mt-5 h-full max-h-[30vh] md:max-h-[51vh]">
-              {chainAssets.map((item, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleAssetSelect(item)}
-                  className="hover:bg-blade flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <AssetIcon asset={item} />
-                    <div className="text-left">
-                      <div className="text-leah font-semibold">{item.metadata.symbol}</div>
-                      <div className="text-thor-gray text-sm">{networkLabel(item.chain)}</div>
-                    </div>
-                  </div>
-                  {item.asset === selected?.asset && (
+            <div className="mt-4 flex flex-1 overflow-hidden">
+              <ScrollArea className="flex-1">
+                <div className="mb-4 md:mb-8">
+                  {chainAssets.map((item, index) => (
                     <div
-                      className={cn('border-gray text-thor-gray rounded-full border px-1.5 py-0.5 text-xs font-medium')}
+                      key={index}
+                      onClick={() => handleAssetSelect(item)}
+                      className="hover:bg-blade mx-4 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3 md:mr-8 md:ml-0"
                     >
-                      Selected
+                      <div className="flex items-center gap-3">
+                        <AssetIcon asset={item} />
+                        <div className="text-left">
+                          <div className="text-leah font-semibold">{item.metadata.symbol}</div>
+                          <div className="text-thor-gray text-sm">{networkLabel(item.chain)}</div>
+                        </div>
+                      </div>
+                      {item.asset === selected?.asset && (
+                        <div
+                          className={cn(
+                            'border-gray text-thor-gray rounded-full border px-1.5 py-0.5 text-xs font-medium'
+                          )}
+                        >
+                          Selected
+                        </div>
+                      )}
                     </div>
-                  )}
+                  ))}
                 </div>
-              ))}
-            </ScrollArea>
+              </ScrollArea>
+            </div>
           </div>
         </div>
       </CredenzaContent>

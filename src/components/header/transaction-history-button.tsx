@@ -32,9 +32,14 @@ export const TransactionHistoryButton = () => {
   return (
     <Tooltip open={showPendingAlert && !!pendingTx}>
       <TooltipTrigger asChild>
-        <ThemeButton variant="secondarySmall" onClick={onClick}>
-          <Icon name="clock" /> History
-        </ThemeButton>
+        <div>
+          <ThemeButton variant="secondarySmall" className="hidden md:flex" onClick={onClick}>
+            <Icon name="clock" /> History
+          </ThemeButton>
+          <ThemeButton variant="circleSmall" className="flex md:hidden" onClick={onClick}>
+            <Icon name="clock" />
+          </ThemeButton>
+        </div>
       </TooltipTrigger>
       <TooltipContent
         className="bg-blade text-leah cursor-pointer rounded-xl p-3"

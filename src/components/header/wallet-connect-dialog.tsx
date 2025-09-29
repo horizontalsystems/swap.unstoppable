@@ -4,15 +4,7 @@ import { toast } from 'sonner'
 import { LoaderCircle } from 'lucide-react'
 import { Network, networkLabel } from 'rujira.js'
 import { ThemeButton } from '@/components/theme-button'
-import {
-  Credenza,
-  CredenzaContent,
-  CredenzaDescription,
-  CredenzaFooter,
-  CredenzaHeader,
-  CredenzaTitle
-} from '@/components/ui/credenza'
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import { Credenza, CredenzaContent, CredenzaFooter, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { WalletConnectLedger } from '@/components/header/wallet-connect-ledger'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Provider } from '@/wallets'
@@ -20,6 +12,7 @@ import { usePools } from '@/hooks/use-pools'
 import { useAccounts } from '@/hooks/use-accounts'
 import { cn } from '@/lib/utils'
 import { useDialog } from '@/components/global-dialog'
+import { Separator } from '@/components/ui/separator'
 
 interface WalletProps<T> {
   key: string
@@ -128,20 +121,17 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
 
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
-      <CredenzaContent className="bg-lawrence min-h-1/2 w-full gap-6 rounded-4xl border-0 p-6 md:min-w-3xl md:p-12">
-        <CredenzaHeader className="flex items-start">
-          <CredenzaTitle className="text-leah mb-4 text-base font-semibold md:text-2xl">Connect Wallet</CredenzaTitle>
-          <VisuallyHidden>
-            <CredenzaDescription>&nbsp;</CredenzaDescription>
-          </VisuallyHidden>
+      <CredenzaContent>
+        <CredenzaHeader>
+          <CredenzaTitle>Connect Wallet</CredenzaTitle>
         </CredenzaHeader>
 
-        <div className="grid flex-1 grid-cols-1 gap-8 md:grid-cols-5">
-          <div className="col-span-2 border-0 md:border-r">
-            <div className="text-thor-gray mb-5 hidden text-base font-semibold md:block">Wallets</div>
-            <ScrollArea className="h-full max-h-[40vh] md:max-h-[50vh]">
-              <div className="space-y-1">
-                {wallets.map(wallet => {
+        <div className="flex flex-1 flex-col md:pb-8">
+          <div className="flex flex-1 flex-col">
+            <div className="text-thor-gray mx-8 mb-3 hidden text-base font-semibold md:block">Select Wallets</div>
+            <ScrollArea className="flex-1 basis-0 overflow-hidden">
+              <div className="grid px-4 pb-5 md:grid-cols-3 md:px-8">
+                {wallets.map((wallet, index) => {
                   const isConnected = connectedProviders.find(w => w === wallet.provider)
                   const isInstalled = isAvailable(wallet.provider)
                   const isSelected = selectedWallets.includes(wallet.provider)
@@ -149,8 +139,8 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
 
                   return (
                     <div
-                      key={wallet.key}
-                      className={cn('mr-10 flex items-center space-x-3 rounded-lg border-1 border-transparent p-3', {
+                      key={index}
+                      className={cn('flex items-center space-x-3 rounded-lg border-1 border-transparent p-3', {
                         'border-runes-blue bg-blade': isSelected,
                         'opacity-25': selectedNetworks.length > 0 && !isHighlighted,
                         'hover:bg-blade cursor-pointer': isInstalled && !isConnected
@@ -184,15 +174,11 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
             </ScrollArea>
           </div>
 
-          <div className="col-span-3 hidden md:block">
-            <h3 className="text-thor-gray mb-5 text-base font-semibold">Chains</h3>
-            <div
-              className="grid grid-flow-col gap-2"
-              style={{
-                gridTemplateRows: `repeat(${Math.ceil(networks.length / 2)}, minmax(0, 1fr))`,
-                gridTemplateColumns: 'repeat(2, 1fr)'
-              }}
-            >
+          <Separator className="hidden md:block" />
+
+          <div className="hidden flex-col px-8 md:flex">
+            <div className="text-thor-gray mt-8 mb-3 text-base font-semibold">Select Chains</div>
+            <div className="flex flex-wrap gap-2">
               {networks.map(network => {
                 const isSelected = selectedNetworks.includes(network)
                 const isHighlighted = isNetworkHighlighted(network)
@@ -201,7 +187,7 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
                   <div
                     key={network}
                     className={cn(
-                      'hover:bg-blade flex cursor-pointer items-center gap-3 rounded-lg border-1 border-transparent px-4 py-3',
+                      'hover:bg-blade flex cursor-pointer items-center rounded-lg border-1 border-transparent p-3',
                       {
                         'bg-blade': isSelected || isHighlighted,
                         'opacity-25': (selectedWallets.length > 0 || selectedNetworks.length > 0) && !isHighlighted
@@ -209,18 +195,26 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
                     )}
                     onClick={() => toggleNetworkSelection(network)}
                   >
-                    <Image src={`/networks/${network.toLowerCase()}.svg`} alt={network} width="24" height="24" />
-                    <div className="text-sm">{networkLabel(network)}</div>
+                    <Image
+                      src={`/networks/${network.toLowerCase()}.svg`}
+                      alt={network}
+                      className="shrink-0"
+                      width={32}
+                      height={32}
+                    />
+                    {/*<div className="text-sm">{networkLabel(network)}</div>*/}
                   </div>
                 )
               })}
             </div>
           </div>
         </div>
+
         <CredenzaFooter>
-          <div className="flex justify-end">
+          <div className="flex justify-end pb-4 md:px-8 md:pb-8">
             <ThemeButton
               variant="primaryMedium"
+              className="w-full"
               disabled={selectedWallets.length < 1 || connecting}
               onClick={() => handleConnect()}
             >

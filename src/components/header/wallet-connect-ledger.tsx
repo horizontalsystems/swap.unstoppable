@@ -79,63 +79,67 @@ export const WalletConnectLedger = ({ isOpen, onOpenChange }: LedgerConfigProps)
 
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
-      <CredenzaContent className="bg-lawrence gap-5 rounded-4xl border-0 p-12 sm:max-w-lg">
+      <CredenzaContent className="h-auto md:max-w-lg">
         <CredenzaHeader>
           <CredenzaTitle>Connect your Ledger Wallet</CredenzaTitle>
           <CredenzaDescription>Select networks and accounts to connect.</CredenzaDescription>
         </CredenzaHeader>
-        <div className="flex flex-wrap gap-2">
-          {networks.map(item => (
-            <ThemeButton
-              key={item}
-              variant="secondarySmall"
-              onClick={() => {
-                setChain(item)
-                setPath(undefined)
-              }}
-            >
-              {chain === item && <Check className="size-4" />}
-              <Image
-                className="rounded-full"
-                src={`/networks/${(item === 'EMVs' ? Network.Ethereum : item).toLowerCase()}.svg`}
-                alt={chain}
-                width="24"
-                height="24"
-              />
-              {item === 'EMVs' ? 'EVMs' : networkLabel(item as Network)}
-            </ThemeButton>
-          ))}
+
+        <div className="px-8">
+          <div className="flex flex-wrap gap-2">
+            {networks.map(item => (
+              <ThemeButton
+                key={item}
+                variant="secondarySmall"
+                onClick={() => {
+                  setChain(item)
+                  setPath(undefined)
+                }}
+              >
+                {chain === item && <Check className="size-4" />}
+                <Image
+                  className="rounded-full"
+                  src={`/networks/${(item === 'EMVs' ? Network.Ethereum : item).toLowerCase()}.svg`}
+                  alt={chain}
+                  width="24"
+                  height="24"
+                />
+                {item === 'EMVs' ? 'EVMs' : networkLabel(item as Network)}
+              </ThemeButton>
+            ))}
+          </div>
+
+          {pathOptions && (
+            <div className="mt-6 grid w-full grid-cols-5 gap-3">
+              <div className="col-span-4">
+                <div className="mb-2 block">Derivation Path</div>
+                <Select value={path} onValueChange={setPath} disabled={connecting}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select account type" />
+                  </SelectTrigger>
+                  <SelectContent position="item-aligned">
+                    {pathOptions.map(item => (
+                      <SelectItem key={item} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="col-span-1">
+                <div className="mb-2 block">Index</div>
+                <Input
+                  className="h-9"
+                  placeholder="0"
+                  onChange={v => setIndex(parseInt(v.target.value || '0'))}
+                  disabled={connecting}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {pathOptions && (
-          <div className="grid w-full grid-cols-5 gap-3">
-            <div className="col-span-4">
-              <div className="mb-2 block">Derivation Path</div>
-              <Select value={path} onValueChange={setPath} disabled={connecting}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select account type" />
-                </SelectTrigger>
-                <SelectContent position="item-aligned">
-                  {pathOptions.map(item => (
-                    <SelectItem key={item} value={item}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="col-span-1">
-              <div className="mb-2 block">Index</div>
-              <Input
-                className="h-9"
-                placeholder="0"
-                onChange={v => setIndex(parseInt(v.target.value || '0'))}
-                disabled={connecting}
-              />
-            </div>
-          </div>
-        )}
-        <CredenzaFooter className="flex">
+        <CredenzaFooter className="flex p-8">
           <ThemeButton variant="secondaryMedium" onClick={() => onOpenChange(false)} disabled={connecting}>
             Cancel
           </ThemeButton>
