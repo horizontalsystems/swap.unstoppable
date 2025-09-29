@@ -130,7 +130,7 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
           <div className="flex flex-1 flex-col">
             <div className="text-thor-gray mx-8 mb-3 hidden text-base font-semibold md:block">Select Wallets</div>
             <ScrollArea className="flex-1 basis-0 overflow-hidden">
-              <div className="grid px-4 pb-5 md:grid-cols-3 md:px-8">
+              <div className="grid gap-2 px-4 pb-5 md:grid-cols-3 md:px-8">
                 {wallets.map((wallet, index) => {
                   const isConnected = connectedProviders.find(w => w === wallet.provider)
                   const isInstalled = isAvailable(wallet.provider)
