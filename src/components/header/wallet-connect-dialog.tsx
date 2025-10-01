@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { LoaderCircle } from 'lucide-react'
 import { Network, networkLabel } from 'rujira.js'
 import { ThemeButton } from '@/components/theme-button'
-import { Credenza, CredenzaContent, CredenzaFooter, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
+import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { WalletConnectLedger } from '@/components/header/wallet-connect-ledger'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Provider } from '@/wallets'
@@ -12,10 +12,15 @@ import { usePools } from '@/hooks/use-pools'
 import { useAccounts } from '@/hooks/use-accounts'
 import { cn } from '@/lib/utils'
 import { useDialog } from '@/components/global-dialog'
-import { Separator } from '@/components/ui/separator'
+
+enum WalletType {
+  browser,
+  hardware
+}
 
 interface WalletProps<T> {
   key: string
+  type: WalletType
   label: string
   provider: T
   link: string
@@ -29,8 +34,8 @@ interface WalletConnectDialogProps {
 
 export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialogProps) => {
   const [connecting, setConnecting] = useState(false)
-  const [selectedWallets, setSelectedWallets] = useState<Provider[]>([])
-  const [selectedNetworks, setSelectedNetworks] = useState<Network[]>([])
+  const [selectedWallet, setSelectedWallet] = useState<WalletProps<Provider> | undefined>(undefined)
+  const [selectedNetwork, setSelectedNetwork] = useState<Network | undefined>(undefined)
   const { connect, isAvailable, accounts } = useAccounts()
   const { openDialog } = useDialog()
   const { pools } = usePools()
@@ -44,8 +49,6 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
   }, [pools])
 
   const wallets = useMemo(() => {
-    const sortByLabel = (a: WalletProps<Provider>, b: WalletProps<Provider>) => a.label.localeCompare(b.label)
-
     const installed: WalletProps<Provider>[] = []
     const others: WalletProps<Provider>[] = []
 
@@ -57,55 +60,61 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
       }
     })
 
+    const sortByLabel = (a: WalletProps<Provider>, b: WalletProps<Provider>) => a.label.localeCompare(b.label)
+
     installed.sort(sortByLabel)
     others.sort(sortByLabel)
 
-    return [...installed, ...others]
+    const getWalletsByType = (type: WalletType) => [
+      ...installed.filter(w => w.type === type),
+      ...others.filter(w => w.type === type)
+    ]
+
+    return {
+      [WalletType.browser]: getWalletsByType(WalletType.browser),
+      [WalletType.hardware]: getWalletsByType(WalletType.hardware)
+    }
   }, [isAvailable])
 
-  const toggleWalletSelection = (provider: Provider) => {
-    setSelectedWallets(prev => {
-      if (prev.includes(provider)) {
-        return prev.filter(p => p !== provider)
+  const onSelectWallet = (wallet: WalletProps<Provider>) => {
+    setSelectedWallet(prev => {
+      if (prev === wallet) {
+        return undefined
       }
 
-      if (provider === 'Ledger') {
+      if (wallet.key === 'ledger') {
         openDialog(WalletConnectLedger, {})
       }
 
-      return [...prev, provider]
+      return wallet
     })
+    setSelectedNetwork(undefined)
   }
 
-  const toggleNetworkSelection = (network: Network) => {
-    setSelectedNetworks(prev => (prev.includes(network) ? prev.filter(net => net !== network) : [...prev, network]))
-  }
-
-  const getSelectedWalletsChains = () => {
-    if (selectedWallets.length === 0) return []
-    return WALLETS.filter(wallet => selectedWallets.includes(wallet.provider)).flatMap(wallet => wallet.supportedChains)
-  }
-
-  const isNetworkHighlighted = (network: Network) => {
-    // Highlight if network is selected OR if any selected wallet supports it
-    return (
-      selectedNetworks.includes(network) || (selectedWallets.length > 0 && getSelectedWalletsChains().includes(network))
-    )
+  const onSelectNetwork = (network: Network) => {
+    setSelectedNetwork(prev => (prev === network ? undefined : network))
+    setSelectedWallet(undefined)
   }
 
   const isWalletHighlighted = (walletProvider: Provider) => {
-    // Highlight if wallet is selected OR if any selected network is supported by this wallet
+    if (!selectedNetwork) return true
+
     const wallet = WALLETS.find(w => w.provider === walletProvider)
-    return (
-      selectedWallets.includes(walletProvider) ||
-      (selectedNetworks.length > 0 && wallet && wallet.supportedChains.some(chain => selectedNetworks.includes(chain)))
-    )
+    return wallet && wallet.supportedChains.includes(selectedNetwork)
+  }
+
+  const isNetworkHighlighted = (network: Network) => {
+    if (!selectedWallet) return true
+
+    return selectedWallet.supportedChains.includes(network)
   }
 
   const handleConnect = async () => {
+    if (!selectedWallet) return
+
     setConnecting(true)
 
-    withTimeout(Promise.all(selectedWallets.map(provider => connect(provider))), 20_000)
+    withTimeout(connect(selectedWallet.provider), 20_000)
       .then(() => {
         onOpenChange(false)
       })
@@ -113,10 +122,51 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
         console.log(err.message)
       })
       .finally(() => {
-        setSelectedWallets([])
-        setSelectedNetworks([])
         setConnecting(false)
       })
+  }
+
+  const walletList = (wallets: WalletProps<Provider>[]) => {
+    return wallets.map((wallet, index) => {
+      const isConnected = connectedProviders.find(w => w === wallet.provider)
+      const isInstalled = isAvailable(wallet.provider)
+      const isSelected = wallet === selectedWallet
+      const isHighlighted = isWalletHighlighted(wallet.provider)
+
+      return (
+        <div
+          key={index}
+          className={cn('mb-1 flex items-center space-x-3 rounded-2xl border-1 border-transparent p-3', {
+            'border-runes-blue': isSelected,
+            'opacity-25': !isHighlighted,
+            'hover:bg-blade cursor-pointer': isInstalled && !isConnected,
+            'mb-4 md:mb-8': index === wallets.length - 1
+          })}
+          onClick={() => {
+            if (isConnected || !isInstalled) return
+            onSelectWallet(wallet)
+          }}
+        >
+          <Image src={`/wallets/${wallet.key}.svg`} alt="" width="32" height="32" />
+          <div className="flex-1">
+            <div className="text-leah font-medium">{wallet.label}</div>
+            <div className="text-xs">
+              {isInstalled ? (
+                isConnected ? (
+                  <span className="text-liquidity-green">Connected</span>
+                ) : (
+                  <span>Disconnected</span>
+                )
+              ) : (
+                <a href={wallet.link} className="text-jacob" rel="noopener noreferrer" target="_blank">
+                  Install
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )
+    })
   }
 
   return (
@@ -126,103 +176,67 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
           <CredenzaTitle>Connect Wallet</CredenzaTitle>
         </CredenzaHeader>
 
-        <div className="flex flex-1 flex-col md:pb-8">
-          <div className="flex flex-1 flex-col">
-            <div className="text-thor-gray mx-8 mb-3 hidden text-base font-semibold md:block">Select Wallets</div>
-            <ScrollArea className="flex-1 basis-0 overflow-hidden">
-              <div className="grid gap-2 px-4 pb-5 md:grid-cols-3 md:px-8">
-                {wallets.map((wallet, index) => {
-                  const isConnected = connectedProviders.find(w => w === wallet.provider)
-                  const isInstalled = isAvailable(wallet.provider)
-                  const isSelected = selectedWallets.includes(wallet.provider)
-                  const isHighlighted = isWalletHighlighted(wallet.provider)
+        <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
+          <ScrollArea className="overflow-hidden md:mb-0 md:w-2/5 md:border-r md:pr-8 md:pl-8">
+            <div className="mx-4 block gap-2 md:mx-0 md:block md:w-full">
+              <div className="text-thor-gray mb-3 text-base font-semibold md:block">Browser Wallets</div>
+              {walletList(wallets[WalletType.browser])}
 
-                  return (
-                    <div
-                      key={index}
-                      className={cn('flex items-center space-x-3 rounded-lg border-1 border-transparent p-3', {
-                        'border-runes-blue bg-blade': isSelected,
-                        'opacity-25': selectedNetworks.length > 0 && !isHighlighted,
-                        'hover:bg-blade cursor-pointer': isInstalled && !isConnected
-                      })}
-                      onClick={() => {
-                        if (isConnected || !isInstalled) return
-                        toggleWalletSelection(wallet.provider)
-                      }}
-                    >
-                      <Image src={`/wallets/${wallet.key}.svg`} alt="" width="32" height="32" />
-                      <div className="flex-1">
-                        <div className="text-leah font-medium">{wallet.label}</div>
-                        <div className="text-xs">
-                          {isInstalled ? (
-                            isConnected ? (
-                              <span className="text-liquidity-green">Connected</span>
-                            ) : (
-                              <span>Disconnected</span>
-                            )
-                          ) : (
-                            <a href={wallet.link} className="text-jacob" rel="noopener noreferrer" target="_blank">
-                              Install
-                            </a>
-                          )}
-                        </div>
+              <div className="text-thor-gray mb-3 text-base font-semibold md:block">Hardware & Keystore</div>
+              {walletList(wallets[WalletType.hardware])}
+            </div>
+          </ScrollArea>
+
+          <div className="flex flex-col md:flex-1 md:overflow-hidden">
+            <div className="text-thor-gray mb-3 hidden px-8 text-base font-semibold md:block">Chains</div>
+
+            <div className="hidden flex-1 overflow-hidden md:flex">
+              <ScrollArea className="mb-4 flex-1 px-8">
+                <div
+                  className="grid flex-1 grid-flow-col gap-2"
+                  style={{
+                    gridTemplateRows: `repeat(${Math.ceil(networks.length / 2)}, minmax(0, 1fr))`,
+                    gridTemplateColumns: 'repeat(2, 1fr)'
+                  }}
+                >
+                  {networks.map(network => {
+                    const isSelected = selectedNetwork === network
+                    const isHighlighted = isNetworkHighlighted(network)
+
+                    return (
+                      <div
+                        key={network}
+                        className={cn(
+                          'hover:bg-blade flex cursor-pointer items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3',
+                          {
+                            'border-runes-blue': isSelected,
+                            'opacity-25': !isHighlighted
+                          }
+                        )}
+                        onClick={() => onSelectNetwork(network)}
+                      >
+                        <Image src={`/networks/${network.toLowerCase()}.svg`} alt={network} width="24" height="24" />
+                        <div className="text-sm">{networkLabel(network)}</div>
                       </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </ScrollArea>
-          </div>
+                    )
+                  })}
+                </div>
+              </ScrollArea>
+            </div>
 
-          <Separator className="hidden md:block" />
-
-          <div className="hidden flex-col px-8 md:flex">
-            <div className="text-thor-gray mt-8 mb-3 text-base font-semibold">Select Chains</div>
-            <div className="flex flex-wrap gap-2">
-              {networks.map(network => {
-                const isSelected = selectedNetworks.includes(network)
-                const isHighlighted = isNetworkHighlighted(network)
-
-                return (
-                  <div
-                    key={network}
-                    className={cn(
-                      'hover:bg-blade flex cursor-pointer items-center rounded-lg border-1 border-transparent p-3',
-                      {
-                        'bg-blade': isSelected || isHighlighted,
-                        'opacity-25': (selectedWallets.length > 0 || selectedNetworks.length > 0) && !isHighlighted
-                      }
-                    )}
-                    onClick={() => toggleNetworkSelection(network)}
-                  >
-                    <Image
-                      src={`/networks/${network.toLowerCase()}.svg`}
-                      alt={network}
-                      className="shrink-0"
-                      width={32}
-                      height={32}
-                    />
-                    {/*<div className="text-sm">{networkLabel(network)}</div>*/}
-                  </div>
-                )
-              })}
+            <div className="flex p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
+              <ThemeButton
+                variant="primaryMedium"
+                className="w-full md:w-auto"
+                disabled={!selectedWallet || connecting}
+                onClick={() => handleConnect()}
+              >
+                {connecting && <LoaderCircle size={20} className="animate-spin" />}
+                Connect Wallet
+              </ThemeButton>
             </div>
           </div>
         </div>
-
-        <CredenzaFooter>
-          <div className="flex justify-end pb-4 md:px-8 md:pb-8">
-            <ThemeButton
-              variant="primaryMedium"
-              className="w-full"
-              disabled={selectedWallets.length < 1 || connecting}
-              onClick={() => handleConnect()}
-            >
-              {connecting && <LoaderCircle size={20} className="animate-spin" />}
-              {connecting ? 'Connecting' : 'Connect'} {selectedWallets.length || ''} Wallet
-            </ThemeButton>
-          </div>
-        </CredenzaFooter>
       </CredenzaContent>
     </Credenza>
   )
@@ -249,6 +263,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 const WALLETS: WalletProps<Provider>[] = [
   {
     key: 'metamask',
+    type: WalletType.browser,
     label: 'Metamask',
     provider: 'Metamask',
     link: 'https://metamask.io',
@@ -256,6 +271,7 @@ const WALLETS: WalletProps<Provider>[] = [
   },
   {
     key: 'vultisig',
+    type: WalletType.browser,
     label: 'Vultisig',
     provider: 'Vultisig',
     link: 'https://vultisig.com',
@@ -273,6 +289,7 @@ const WALLETS: WalletProps<Provider>[] = [
   },
   {
     key: 'phantom',
+    type: WalletType.browser,
     label: 'Phantom',
     provider: 'Phantom',
     link: 'https://phantom.app',
@@ -280,6 +297,7 @@ const WALLETS: WalletProps<Provider>[] = [
   },
   {
     key: 'ctrl',
+    type: WalletType.browser,
     label: 'Ctrl',
     provider: 'Ctrl',
     link: 'https://ctrl.xyz',
@@ -297,6 +315,7 @@ const WALLETS: WalletProps<Provider>[] = [
   },
   {
     key: 'keplr',
+    type: WalletType.browser,
     label: 'Keplr',
     provider: 'Keplr',
     link: 'https://www.keplr.app',
@@ -310,14 +329,8 @@ const WALLETS: WalletProps<Provider>[] = [
     ]
   },
   {
-    key: 'ledger',
-    label: 'Ledger',
-    provider: 'Ledger',
-    link: 'https://www.ledger.com',
-    supportedChains: [Network.Avalanche, Network.Bsc, Network.Ethereum, Network.Thorchain, Network.Bitcoin]
-  },
-  {
     key: 'okx',
+    type: WalletType.browser,
     label: 'OKX',
     provider: 'Okx',
     link: 'https://web3.okx.com',
@@ -332,9 +345,27 @@ const WALLETS: WalletProps<Provider>[] = [
   },
   {
     key: 'tronlink',
+    type: WalletType.browser,
     label: 'TronLink',
     provider: 'Tronlink',
     link: 'https://www.tronlink.org',
     supportedChains: [Network.Tron, Network.Bsc, Network.Ethereum]
+  },
+  {
+    key: 'ledger',
+    type: WalletType.hardware,
+    label: 'Ledger',
+    provider: 'Ledger',
+    link: 'https://www.ledger.com',
+    supportedChains: [
+      Network.Avalanche,
+      Network.Base,
+      Network.BitcoinCash,
+      Network.Bitcoin,
+      Network.Bsc,
+      Network.Ethereum,
+      Network.Litecoin,
+      Network.Thorchain
+    ]
   }
 ]

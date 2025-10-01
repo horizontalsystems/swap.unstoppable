@@ -35,7 +35,7 @@ export function Header() {
         'border-blade border-b': isScrolled
       })}
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-4 px-4 md:px-0">
         <div className="flex items-center gap-2">
           <Image src="/logo.svg" alt="THORChain Swap" width={32} height={32} priority />
           <div className="flex items-center gap-2">
