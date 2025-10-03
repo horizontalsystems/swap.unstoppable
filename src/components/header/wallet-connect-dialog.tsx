@@ -8,10 +8,9 @@ import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/comp
 import { WalletConnectLedger } from '@/components/header/wallet-connect-ledger'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Provider } from '@/wallets'
-import { usePools } from '@/hooks/use-pools'
+import { useDialog } from '@/components/global-dialog'
 import { useAccounts } from '@/hooks/use-accounts'
 import { cn } from '@/lib/utils'
-import { useDialog } from '@/components/global-dialog'
 
 enum WalletType {
   browser,
@@ -38,15 +37,29 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
   const [selectedNetwork, setSelectedNetwork] = useState<Network | undefined>(undefined)
   const { connect, isAvailable, accounts } = useAccounts()
   const { openDialog } = useDialog()
-  const { pools } = usePools()
 
   const connectedProviders = useMemo(() => [...new Set(accounts?.map(a => a.provider))], [accounts])
-
-  const networks = useMemo(() => {
-    return [...new Set((pools || []).map(p => p.chain))].sort((a, b) => {
-      return networkLabel(a).localeCompare(networkLabel(b))
-    })
-  }, [pools])
+  const networks = useMemo(
+    () =>
+      [
+        Network.Avalanche,
+        Network.Base,
+        Network.Bitcoin,
+        Network.BitcoinCash,
+        Network.Bsc,
+        Network.Gaia,
+        Network.Dogecoin,
+        Network.Ethereum,
+        Network.Litecoin,
+        Network.Solana,
+        Network.Thorchain,
+        Network.Tron,
+        Network.Xrp
+      ].sort((a, b) => {
+        return networkLabel(a).localeCompare(networkLabel(b))
+      }),
+    []
+  )
 
   const wallets = useMemo(() => {
     const installed: WalletProps<Provider>[] = []
@@ -202,21 +215,26 @@ export const WalletConnectDialog = ({ isOpen, onOpenChange }: WalletConnectDialo
                   {networks.map(network => {
                     const isSelected = selectedNetwork === network
                     const isHighlighted = isNetworkHighlighted(network)
+                    const isComingSoon = network === Network.Solana
 
                     return (
                       <div
                         key={network}
                         className={cn(
-                          'hover:bg-blade flex cursor-pointer items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3',
+                          'flex items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3',
                           {
                             'border-runes-blue': isSelected,
-                            'opacity-25': !isHighlighted
+                            'opacity-25': !isHighlighted,
+                            'cursor-pointer hover:bg-blade': !isComingSoon
                           }
                         )}
-                        onClick={() => onSelectNetwork(network)}
+                        onClick={() => !isComingSoon && onSelectNetwork(network)}
                       >
                         <Image src={`/networks/${network.toLowerCase()}.svg`} alt={network} width="24" height="24" />
-                        <div className="text-sm">{networkLabel(network)}</div>
+                        <div className="flex items-center gap-3 text-sm">
+                          {networkLabel(network)}
+                          {isComingSoon ? <Image src="/soon.svg" alt="Soon" width={37} height={17} /> : null}
+                        </div>
                       </div>
                     )
                   })}
