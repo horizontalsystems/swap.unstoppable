@@ -17,12 +17,14 @@ import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { signAndBroadcast } from '@/wallets'
 import { toast } from 'sonner'
+import { useBalance } from '@/hooks/use-balance'
 
 export const Swap = () => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const { selected } = useAccounts()
-  const { amountFrom } = useSwap()
+  const { amountFrom, setAmountFrom } = useSwap()
+  const { refetch: refetchBalance } = useBalance()
   const { quote, error: quoteError } = useQuote()
   const { simulationData, error: simulationError } = useSimulation()
   const { setTransaction } = transactionStore()
@@ -45,6 +47,9 @@ export const Swap = () => {
           status: 'pending'
         })
 
+        setAmountFrom(0n)
+        refetchBalance()
+
         return res
       })
       .catch(err => {
@@ -63,7 +68,7 @@ export const Swap = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 pt-0">
+    <div className="flex flex-col items-center justify-center px-4 pb-4 md:pb-20">
       <div className="w-full max-w-md">
         <SwapBetaAlert />
 
