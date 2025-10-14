@@ -17,7 +17,7 @@ const thornode = axios.create({
 const swapkit = axios.create({
   baseURL: 'https://api.swapkit.dev',
   headers: {
-    'X-Version': 3
+    'x-api-key': process.env.NEXT_PUBLIC_SWAP_KIT_API_KEY
   }
 })
 

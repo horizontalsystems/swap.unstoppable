@@ -77,6 +77,7 @@ export function getSwapKit() {
   swapKit = createSwapKit({
     config: {
       apiKeys: {
+        swapKit: process.env.NEXT_PUBLIC_SWAP_KIT_API_KEY
       }
     }
   })
