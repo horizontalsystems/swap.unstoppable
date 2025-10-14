@@ -2,14 +2,17 @@ import Decimal from 'decimal.js'
 import { ReactNode, useState } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Separator } from '@/components/ui/separator'
-import { DecimalText } from '@/components/decimal/decimal-text'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
-import { useRates } from '@/hooks/use-rates'
-import { useSimulation } from '@/hooks/use-simulation'
 import { Icon } from '@/components/icons'
 import { DecimalFiat } from '@/components/decimal/decimal-fiat'
-import { LoaderCircle } from 'lucide-react'
+import { formatDuration, intervalToDuration } from 'date-fns'
+
+interface FeeData {
+  amount: Decimal
+  usd: Decimal
+  symbol: string
+}
 
 export function SwapDetails() {
   const assetFrom = useAssetFrom()
@@ -17,30 +20,69 @@ export function SwapDetails() {
   const [showMore, setShowMore] = useState(false)
   const { amountFrom } = useSwap()
   const { quote } = useQuote()
-  const { simulationData, isLoading: isSimulating } = useSimulation()
-  const { rates } = useRates()
 
   if (!quote) return null
 
-  const _rateTo = assetTo && rates[assetTo.asset]
-  const rateTo = _rateTo && new Decimal(_rateTo)
+  const price = new Decimal(quote.expectedBuyAmount)
+    .div(new Decimal(amountFrom.toString()).div(10 ** 8))
+    .toDecimalPlaces(8)
 
-  // const _rateGas = simulationData && rates[simulationData.simulation.symbol]
-  const _rateGas = assetFrom && rates[assetFrom.asset]
-  const rateGas = _rateGas && new Decimal(_rateGas)
+  const feeData = (type: string): FeeData | undefined => {
+    const fee = quote.fees.find(f => f.type === type)
 
-  const price = quote && BigInt(new Decimal(quote.expectedBuyAmount).mul(10 ** 12).floor().toString()) / amountFrom
+    if (!fee) return undefined
 
-  const gasFee =
-    simulationData &&
-    new Decimal(simulationData.amount.toString()).div(10 ** simulationData.decimals)
-  // todo
-  // const swapFee = quote && new Decimal(quote.fees.total).div(10n ** 8n)
-  const swapFee = quote && quote.fees.reduce((a, b) => a.add(new Decimal(b.amount)), new Decimal(0))
+    const amount = new Decimal(fee.amount)
+    const meta = quote.meta.assets?.find(f => f.asset === fee.asset)
 
-  const gasFeeInUsd = gasFee && rateGas && gasFee.mul(rateGas)
-  const swapFeeInUsd = swapFee && rateTo && swapFee.mul(rateTo)
-  const feeInUsd = gasFeeInUsd && swapFeeInUsd && gasFeeInUsd.add(swapFeeInUsd)
+    const [, symbol] = fee.asset.split('.')
+    const [code] = symbol.split('-')
+
+    return {
+      amount: amount.toDecimalPlaces(8),
+      usd: meta ? amount.mul(new Decimal(meta.price)).toDecimalPlaces(8) : new Decimal(0),
+      symbol: code
+    }
+  }
+
+  const inbound = feeData('inbound')
+  const outbound = feeData('outbound')
+  const liquidity = feeData('liquidity')
+  const affiliate = feeData('affiliate')
+
+  const total = (inbound?.usd || new Decimal(0))
+    .add(outbound?.usd || new Decimal(0))
+    .add(liquidity?.usd || new Decimal(0))
+    .add(affiliate?.usd || new Decimal(0))
+
+  const feeSection = (title: string, info: string, fee?: FeeData) => {
+    return (
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          {title} <InfoTooltip>{info}</InfoTooltip>
+        </div>
+        <div className="text-leah flex items-center gap-2">
+          {fee ? (
+            <>
+              {fee.amount.gt(0) && (
+                <span className="text-thor-gray">
+                  {fee.amount.toString()} {fee.symbol}
+                </span>
+              )}
+
+              {fee.usd.gt(0) ? (
+                <DecimalFiat className="text-leah" amount={fee.usd.toString()} symbol="$" decimals={2} />
+              ) : (
+                0
+              )}
+            </>
+          ) : (
+            0
+          )}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -50,20 +92,8 @@ export function SwapDetails() {
             <span>Total Fee</span>
           </div>
 
-          <div className="text-thor-gray flex items-center gap-2 text-sm font-semibold">
-            <span>Fees:</span>
-            {isSimulating ? (
-              <LoaderCircle size={16} className="animate-spin" />
-            ) : simulationData ? (
-              feeInUsd ? (
-                <DecimalFiat className="text-leah" amount={feeInUsd.toString()} symbol="$" decimals={2} />
-              ) : (
-                <DecimalFiat amount="0" symbol="$" decimals={0} />
-              )
-            ) : (
-              <span>n/a</span>
-            )}
-
+          <div className="text-leah flex items-center gap-2 text-sm font-semibold">
+            <DecimalFiat className="text-leah" amount={total.toString()} symbol="$" decimals={2} />
             <Icon name={showMore ? 'arrow-s-up' : 'arrow-s-down'} className="size-5" />
           </div>
         </div>
@@ -79,117 +109,33 @@ export function SwapDetails() {
               {price ? (
                 <>
                   <span>1 {assetFrom?.metadata.symbol} =</span>
-                  <DecimalText amount={price} symbol={assetTo?.metadata.symbol} decimals={12} />
+                  {price.toString()} {assetTo?.metadata.symbol}
                 </>
               ) : null}
             </div>
           </div>
 
-          {quote?.fees.map(fee => {
-            return (
-              <div key={fee.type} className="flex items-center justify-between">
-                <div className="flex items-center">{fee.type}</div>
-                <div className="flex items-center gap-2">
-                  <DecimalFiat
-                    className="text-leah"
-                    amount={new Decimal(fee.amount).mul(rateTo || 1).toString()}
-                    symbol="$"
-                    decimals={2}
-                  />
-                </div>
-              </div>
-            )
-          })}
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              Inbound Fee <InfoTooltip>Fee for sending inbound transaction</InfoTooltip>
-            </div>
-            <div className="flex items-center gap-2">
-              {/*{isSimulating ? (*/}
-              {/*  <LoaderCircle size={16} className="animate-spin" />*/}
-              {/*) : (*/}
-              {/*  <>*/}
-              {/*    {simulationData ? (*/}
-              {/*      <>*/}
-              {/*        <DecimalText*/}
-              {/*          amount={simulationData?.simulation.amount || 0n}*/}
-              {/*          symbol={assetFrom && gasToken(assetFrom.chain).symbol}*/}
-              {/*          decimals={simulationData?.simulation.decimals}*/}
-              {/*        />*/}
-
-              {/*        {gasFeeInUsd && (*/}
-              {/*          <DecimalFiat className="text-leah" amount={gasFeeInUsd.toString()} symbol="$" decimals={2} />*/}
-              {/*        )}*/}
-              {/*      </>*/}
-              {/*    ) : (*/}
-              {/*      <span className="text-thor-gray">n/a</span>*/}
-              {/*    )}*/}
-              {/*  </>*/}
-              {/*)}*/}
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              Liquidity Fee
-              <InfoTooltip>Fee for liquidity providers on the route</InfoTooltip>
-            </div>
-            <div className="flex items-center gap-2">
-              {/*{quote && <DecimalText amount={BigInt(quote.fees.liquidity || 0)} symbol={assetTo?.metadata.symbol} />}*/}
-
-              {/*{quote && rateTo && (*/}
-              {/*  <DecimalFiat*/}
-              {/*    className="text-leah"*/}
-              {/*    amount={rateTo*/}
-              {/*      .mul(quote.fees.liquidity)*/}
-              {/*      .div(10 ** 8)*/}
-              {/*      .toString()}*/}
-              {/*    symbol="$"*/}
-              {/*    decimals={2}*/}
-              {/*  />*/}
-              {/*)}*/}
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              Outbound Fee
-              <InfoTooltip>Fee for sending outbound transaction</InfoTooltip>
-            </div>
-            <div className="flex items-center gap-2">
-              {/*{quote && <DecimalText amount={BigInt(quote.fees.outbound || 0)} symbol={assetTo?.metadata.symbol} />}*/}
-
-              {/*{quote && rateTo && (*/}
-              {/*  <DecimalFiat*/}
-              {/*    className="text-leah"*/}
-              {/*    amount={rateTo*/}
-              {/*      .mul(quote.fees.outbound)*/}
-              {/*      .div(10 ** 8)*/}
-              {/*      .toString()}*/}
-              {/*    symbol="$"*/}
-              {/*    decimals={2}*/}
-              {/*  />*/}
-              {/*)}*/}
-            </div>
-          </div>
+          {feeSection('Inbound Fee', 'Fee for sending inbound transaction', inbound)}
+          {feeSection('Outbound Fee', 'Fee for sending outbound transaction', outbound)}
+          {feeSection('Liquidity Fee', 'Fee for liquidity providers on the route', liquidity)}
+          {feeSection('Exchange Fee', 'Fee charged by THORChain Swap', affiliate)}
 
           <div className="flex items-center justify-between">
             Estimated Time
             <div className="flex items-center gap-2">
-              {/*{quote && quote.total_swap_seconds ? (*/}
-              {/*  <span className="text-leah">*/}
-              {/*    {formatDuration(*/}
-              {/*      intervalToDuration({*/}
-              {/*        start: 0,*/}
-              {/*        end: (quote.total_swap_seconds || 0) * 1000*/}
-              {/*      }),*/}
-              {/*      { format: ['hours', 'minutes', 'seconds'], zero: false }*/}
-              {/*    )}*/}
-              {/*  </span>*/}
-              {/*) : (*/}
-              {/*  <span className="text-thor-gray">n/a</span>*/}
-              {/*)}*/}
+              {quote.estimatedTime ? (
+                <span className="text-leah">
+                  {formatDuration(
+                    intervalToDuration({
+                      start: 0,
+                      end: (quote.estimatedTime.total || 0) * 1000
+                    }),
+                    { format: ['hours', 'minutes', 'seconds'], zero: false }
+                  )}
+                </span>
+              ) : (
+                <span className="text-thor-gray">n/a</span>
+              )}
             </div>
           </div>
         </div>
