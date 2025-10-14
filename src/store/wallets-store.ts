@@ -99,8 +99,6 @@ export const useWalletStore = create<WalletState>()(
           return console.log(error)
         }
 
-        console.log(' ---------------> onRehydrateStorage', { state })
-
         Promise.allSettled(
           state.connectedWallets.map(w => {
             return getAccounts(w, supportedChains[w])

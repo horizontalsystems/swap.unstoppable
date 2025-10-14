@@ -67,14 +67,12 @@ function createSwapKit(config: Parameters<typeof SwapKit>[0] = {}) {
   return SwapKit({ ...config, plugins: defaultPlugins, wallets: defaultWallets })
 }
 
-let swapKit: ReturnType<typeof createSwapKit> | undefined = undefined
+let instance: ReturnType<typeof createSwapKit> | undefined = undefined
 
 export function getSwapKit() {
-  if (swapKit) {
-    return swapKit
-  }
+  if (instance) return instance
 
-  swapKit = createSwapKit({
+  instance = createSwapKit({
     config: {
       apiKeys: {
         swapKit: process.env.NEXT_PUBLIC_SWAP_KIT_API_KEY
@@ -82,61 +80,61 @@ export function getSwapKit() {
     }
   })
 
-  return swapKit
+  return instance
 }
 
 export async function connectWallet(option: WalletOption, chains: Chain[], config?: any): Promise<boolean> {
-  if (!swapKit) swapKit = getSwapKit()
+  const kit = getSwapKit()
 
   switch (option) {
     case WalletOption.METAMASK:
       const metamask = getEIP6963Wallets().providers.find(p => p.info.name === 'MetaMask')
-      return swapKit.connectEVMWallet([Chain.Ethereum], WalletOption.METAMASK, metamask?.provider)
+      return kit.connectEVMWallet([Chain.Ethereum], WalletOption.METAMASK, metamask?.provider)
     case WalletOption.COINBASE_WEB:
     case WalletOption.TRUSTWALLET_WEB:
-      return swapKit.connectEVMWallet(chains)
+      return kit.connectEVMWallet(chains)
     case WalletOption.COSMOSTATION:
-      return swapKit.connectCosmostation(chains)
+      return kit.connectCosmostation(chains)
     case WalletOption.PHANTOM:
-      return swapKit.connectPhantom(chains)
+      return kit.connectPhantom(chains)
     case WalletOption.KEPLR:
-      return swapKit.connectKeplr([Chain.THORChain])
+      return kit.connectKeplr([Chain.THORChain])
     case WalletOption.WALLETCONNECT:
-      return swapKit.connectWalletconnect(chains)
+      return kit.connectWalletconnect(chains)
     case WalletOption.COINBASE_MOBILE:
-      return swapKit.connectCoinbaseWallet(chains)
+      return kit.connectCoinbaseWallet(chains)
     case WalletOption.BITGET:
-      return swapKit.connectBitget(chains)
+      return kit.connectBitget(chains)
     case WalletOption.CTRL:
-      return swapKit.connectCtrl([Chain.Ethereum])
+      return kit.connectCtrl([Chain.Ethereum])
     case WalletOption.KEEPKEY:
-      return swapKit.connectKeepkey(chains)
+      return kit.connectKeepkey(chains)
     case WalletOption.KEEPKEY_BEX:
-      return swapKit.connectKeepkeyBex?.(chains)
+      return kit.connectKeepkeyBex?.(chains)
     case WalletOption.ONEKEY:
-      return swapKit.connectOnekeyWallet?.(chains)
+      return kit.connectOnekeyWallet?.(chains)
     case WalletOption.OKX:
     case WalletOption.OKX_MOBILE:
-      return swapKit.connectOkx(chains)
+      return kit.connectOkx(chains)
     case WalletOption.POLKADOT_JS:
-      return swapKit.connectPolkadotJs(chains)
+      return kit.connectPolkadotJs(chains)
     case WalletOption.RADIX_WALLET:
-      return swapKit.connectRadixWallet(chains)
+      return kit.connectRadixWallet(chains)
     case WalletOption.TALISMAN:
-      return swapKit.connectTalisman(chains)
+      return kit.connectTalisman(chains)
     case WalletOption.VULTISIG:
-      return swapKit.connectVultisig(chains)
+      return kit.connectVultisig(chains)
     case WalletOption.LEDGER: {
       for (let i = 0; i < chains.length; i += 1) {
         const chain = chains[i]
-        await swapKit.connectLedger([chain], config?.derivationPath)
+        await kit.connectLedger([chain], config?.derivationPath)
       }
       return true
     }
     case WalletOption.TREZOR: {
       const [chain] = chains
       if (!chain) throw new Error('Chain is required for Trezor')
-      return swapKit.connectTrezor(chains, NetworkDerivationPath[chain])
+      return kit.connectTrezor(chains, NetworkDerivationPath[chain])
     }
     default: {
       throw new Error(`Unsupported wallet option: ${option}`)
@@ -149,14 +147,14 @@ export async function getAccounts(
   chains: Chain[],
   config?: any
 ): Promise<{ address: string; network: Chain; provider: WalletOption }[]> {
-  if (!swapKit) swapKit = getSwapKit()
+  const kit = getSwapKit()
 
   const connected = await connectWallet(option, chains, config)
   if (!connected) return []
 
   return chains
     .map(chain => {
-      const address = swapKit?.getAddress(chain)
+      const address = kit.getAddress(chain)
       return address ? { address, network: chain, provider: option } : null
     })
     .filter(acc => acc !== null)

@@ -23,6 +23,7 @@ import type { createPlugin } from '@swapkit/plugins'
 import type { FullWallet } from '@swapkit/toolboxes'
 import type { EVMCreateTransactionParams, EVMTransferParams } from '@swapkit/toolboxes/evm'
 import type { createWallet } from '@swapkit/wallets'
+import { useWalletStore } from '@/store/wallets-store'
 
 export type SwapKitParams<P, W> = { config?: SKConfigState; plugins?: P; wallets?: W }
 
@@ -48,7 +49,7 @@ export function SwapKit<
 
   const availablePlugins = Object.entries(plugins || {}).reduce(
     (acc, [pluginName, plugin]) => {
-      const methods = plugin({ getWallet: getWalletByChain })
+      const methods = plugin({ getWallet: getSelectedWallet })
 
       acc[pluginName as PluginName] = methods as ReturnType<Plugins[keyof Plugins]>
       return acc
@@ -157,6 +158,15 @@ export function SwapKit<
 
   function getWalletByChain<T extends ConnectedChains>(chain: T) {
     return connectedWalletsByChain[chain]
+  }
+
+  function getSelectedWallet<T extends ConnectedChains>(chain: T): FullWallet[T] {
+    const selected = useWalletStore.getState().selected
+    if (!selected) {
+      throw new Error(`Unknown connected chain: ${chain}`)
+    }
+
+    return getWallet(selected.provider)
   }
 
   function getAllWallets() {
@@ -347,6 +357,8 @@ export function SwapKit<
     )
   }
 
+  console.log({ availablePlugins })
+
   return {
     ...availablePlugins,
     ...connectWalletMethods,
@@ -366,7 +378,9 @@ export function SwapKit<
     signMessage,
     swap,
     transfer,
-    verifyMessage
+    verifyMessage,
+    connectedWalletsByChain,
+    connectedWalletsByOption
   }
 }
 

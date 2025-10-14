@@ -5,7 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { LoaderCircle } from 'lucide-react'
 import { TransactionHistoryDialog } from '@/components/header/transaction-history-dialog'
 import { useDialog } from '@/components/global-dialog'
-import { useConnectedProviders } from '@/store/account-store'
+import { useConnectedWallets } from '@/store/wallets-store'
 import { useSyncTransactions } from '@/hooks/use-sync-transactions'
 import { ThemeButton } from '@/components/theme-button'
 import { Icon } from '@/components/icons'
@@ -16,7 +16,7 @@ export const TransactionHistoryButton = () => {
   const pendingTx = useLastPendingTx()
   const showPendingAlert = useShowPendingAlert()
   const setPendingAlert = useSetPendingAlert()
-  const connectedProviders = useConnectedProviders()
+  const connectedProviders = useConnectedWallets()
 
   useSyncTransactions()
 

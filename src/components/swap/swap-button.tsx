@@ -1,5 +1,4 @@
 import { LoaderCircle } from 'lucide-react'
-import { InsufficientAllowanceError } from '@/lib/errors'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { useAccounts } from '@/hooks/use-wallets'
 import { useQuote } from '@/hooks/use-quote'
@@ -31,7 +30,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
   const { selected } = useAccounts()
   const { amountFrom, destination } = useSwap()
   const { isLoading: isQuoting, refetch: refetchQuote } = useQuote()
-  const { isLoading: isSimulating, simulationData, error: simulationError } = useSimulation()
+  const { isLoading: isSimulating, approveData } = useSimulation()
   const { balance, isLoading: isBalanceLoading } = useBalance()
 
   const { openDialog } = useDialog()
@@ -61,7 +60,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
         accent: false
       }
     }
-    if (simulationError instanceof InsufficientAllowanceError) {
+    if (approveData) {
       return {
         text: `Approve ${assetFrom.metadata.symbol}`,
         spinner: false,
@@ -71,11 +70,12 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
           if (!wallet) return
           const promise = wallet
             .approve({
-              assetAddress: simulationError.contract,
-              spenderAddress: simulationError.spender,
-              amount: simulationError.amount
+              assetAddress: approveData.contract,
+              spenderAddress: approveData.spender,
+              amount: approveData.amount
             })
-            .then(() => {
+            .then((res) => {
+              console.log({ res })
               refetchQuote()
             })
 
@@ -87,7 +87,6 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
         }
       }
     }
-    if (!simulationData) return { text: 'No Valid Quotes', spinner: false, accent: false }
     return { text: 'Swap', spinner: false, accent: true, onClick: onSwap }
   }
 

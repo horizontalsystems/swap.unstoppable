@@ -1,5 +1,6 @@
 'use client'
 
+import Decimal from 'decimal.js'
 import { SwapAddressFrom } from '@/components/swap/swap-address-from'
 import { SwapAddressTo } from '@/components/swap/swap-address-to'
 import { SwapSettings } from '@/components/swap/swap-settings'
@@ -12,7 +13,6 @@ import { SwapButton } from '@/components/swap/swap-button'
 import { SwapBetaAlert } from '@/components/swap/swap-beta-alert'
 import { useAccounts } from '@/hooks/use-wallets'
 import { transactionStore } from '@/store/transaction-store'
-import { useSimulation } from '@/hooks/use-simulation'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { toast } from 'sonner'
@@ -20,51 +20,49 @@ import { FeeOption } from '@swapkit/core'
 import { getSwapKit } from '@/lib/wallets'
 
 export const Swap = () => {
+  const swapkit = getSwapKit()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const { selected } = useAccounts()
   const { amountFrom } = useSwap()
   const { quote, error: quoteError } = useQuote()
-  const { simulationData, error: simulationError } = useSimulation()
   const { setTransaction } = transactionStore()
-  const swapkit = getSwapKit()
 
   const onSwap = async () => {
-    if (!simulationData || !selected || !quote) {
+    if (!selected || !quote) {
       return
     }
 
-    const broadcast = swapkit.swap({
-      route: quote as any,
-      feeOptionKey: FeeOption.Fast
-    })
-
-    // todo
-    // const func = signAndBroadcast(getSelectedContext(), selected, simulationData.inboundAddress)
-    // const broadcast = func(simulationData.simulation, simulationData.msg)
-    //   .then(res => {
-    //     setTransaction({
-    //       hash: res.txHash,
-    //       timestamp: new Date(),
-    //       fromAsset: assetFrom,
-    //       fromAmount: amountFrom.toString(),
-    //       toAmount: quote?.expectedBuyAmount,
-    //       toAsset: assetTo,
-    //       status: 'pending'
-    //     })
-    //
-    //     return res
-    //   })
-    //   .catch(err => {
-    //     console.error(err)
-    //     throw err
-    //   })
+    const broadcast = swapkit
+      .swap({
+        route: quote as any,
+        feeOptionKey: FeeOption.Fast
+      })
+      .then((hash: string) => {
+        const toAmount = new Decimal(quote?.expectedBuyAmount || 0)
+        setTransaction({
+          hash: hash,
+          timestamp: new Date(),
+          fromAsset: assetFrom,
+          fromAmount: amountFrom.toString(),
+          toAmount: toAmount
+            .mul(10 ** 8)
+            .floor()
+            .toString(),
+          toAsset: assetTo,
+          status: 'pending'
+        })
+      })
+      .catch((err: any) => {
+        console.log(err)
+        throw err
+      })
 
     toast.promise(broadcast, {
       loading: 'Submitting Transaction',
       success: () => 'Transaction submitted',
       error: (err: any) => {
-        console.error(err)
+        console.log(err)
         return 'Error Submitting Transaction'
       }
     })
@@ -90,7 +88,7 @@ export const Swap = () => {
           <SwapAddressTo />
         </div>
 
-        <SwapError error={quoteError || simulationError} />
+        <SwapError error={quoteError} />
         <SwapButton onSwap={onSwap} />
         <SwapDetails />
       </div>
