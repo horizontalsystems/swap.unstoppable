@@ -105,7 +105,7 @@ export function SwapDetails() {
         <div className="text-thor-gray space-y-4 px-4 pt-2 pb-5 text-sm font-semibold">
           <div className="flex items-center justify-between">
             <div className="flex items-center">Price</div>
-            <div className="flex items-center gap-1">
+            <div className="text-leah flex items-center gap-1">
               {price ? (
                 <>
                   <span>1 {assetFrom?.metadata.symbol} =</span>
