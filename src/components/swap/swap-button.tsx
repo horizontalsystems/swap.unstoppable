@@ -66,7 +66,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
         spinner: false,
         accent: false,
         onClick: async () => {
-          const wallet = swapkit.getWallet<EVMChain>(selected.provider)
+          const wallet = swapkit.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
           if (!wallet) return
           const promise = wallet
             .approve({
@@ -74,7 +74,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
               spenderAddress: approveData.spender,
               amount: approveData.amount
             })
-            .then((res) => {
+            .then(res => {
               console.log({ res })
               refetchQuote()
             })

@@ -47,7 +47,7 @@ export const useSimulation = (): UseSimulation => {
       })
 
       if (!assetValue.isGasAsset && assetValue.address) {
-        const wallet = swapkit.getWallet<EVMChain>(selected.provider)
+        const wallet = swapkit.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
         const approved = await wallet?.isApproved({
           assetAddress: assetValue.address,
           spenderAddress: quote.targetAddress,

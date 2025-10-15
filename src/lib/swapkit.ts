@@ -35,7 +35,7 @@ export function SwapKit<
 
   type PluginName = keyof Plugins
   const connectedWalletsByChain = {} as FullWallet
-  const connectedWalletsByOption = new Map<WalletOption, FullWallet[Chain]>()
+  const connectedWalletsByOption = new Map<WalletOption, Map<Chain, FullWallet[Chain]>>()
   type ConnectedChains = keyof typeof connectedWalletsByChain
   type ActionType = 'transfer' | 'approve' | 'swap'
 
@@ -90,7 +90,15 @@ export function SwapKit<
     const wallet = { ...currentWallet, ...connectWallet, balance }
 
     connectedWalletsByChain[connectWallet.chain] = wallet as FullWallet[T]
-    connectedWalletsByOption.set(connectWallet.walletType as WalletOption, wallet as FullWallet[T])
+
+    const walletOption = connectWallet.walletType as WalletOption
+    let chainMap = connectedWalletsByOption.get(walletOption)
+    if (!chainMap) {
+      chainMap = new Map<Chain, any>()
+      connectedWalletsByOption.set(walletOption, chainMap)
+    }
+
+    chainMap.set(connectWallet.chain, wallet as FullWallet[T])
 
     return wallet
   }
@@ -150,8 +158,8 @@ export function SwapKit<
    * @Public
    */
 
-  function getWallet<T extends Chain>(walletOption: WalletOption) {
-    return connectedWalletsByOption.get(walletOption) as FullWallet[T]
+  function getWallet<T extends Chain>(walletOption: WalletOption, chain: T): FullWallet[T] {
+    return connectedWalletsByOption.get(walletOption)?.get(chain) as FullWallet[T]
   }
 
   function getWalletByChain<T extends ConnectedChains>(chain: T) {
@@ -164,7 +172,7 @@ export function SwapKit<
       throw new Error(`Unknown connected chain: ${chain}`)
     }
 
-    return getWallet(selected.provider)
+    return getWallet(selected.provider, chain) as FullWallet[T]
   }
 
   function getAllWallets() {
@@ -185,6 +193,16 @@ export function SwapKit<
 
   function disconnectChain<T extends Chain>(chain: T) {
     const wallet = getWalletByChain(chain)
+    if (wallet?.walletType) {
+      const chainMap = connectedWalletsByOption.get(wallet.walletType as WalletOption)
+      if (chainMap) {
+        chainMap.delete(chain)
+        if (chainMap.size === 0) {
+          connectedWalletsByOption.delete(wallet.walletType as WalletOption)
+        }
+      }
+    }
+
     wallet?.disconnect?.()
     delete connectedWalletsByChain[chain]
   }

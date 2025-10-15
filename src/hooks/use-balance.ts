@@ -64,7 +64,7 @@ export const useBalance = (): UseBalance => {
         }
 
         if (EVMChains.includes(assetFrom.chain as EVMChain)) {
-          const wallet = swapkit.getWallet<EVMChain>(selected.provider)
+          const wallet = swapkit.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
           estimation = await wallet?.estimateTransactionFee({
             to: inbound.address,
             from: selected.address,
@@ -76,7 +76,7 @@ export const useBalance = (): UseBalance => {
         }
 
         if (UTXOChains.includes(assetFrom.chain as UTXOChain)) {
-          const wallet = swapkit.getWallet<UTXOChain>(selected.provider)
+          const wallet = swapkit.getWallet<UTXOChain>(selected.provider, selected.network as UTXOChain)
           estimation = await wallet?.estimateTransactionFee({
             recipient: inbound.address,
             sender: selected.address,
@@ -86,7 +86,7 @@ export const useBalance = (): UseBalance => {
         }
 
         if (assetFrom.chain === Chain.Tron) {
-          const wallet = swapkit.getWallet<Chain.Tron>(selected.provider)
+          const wallet = swapkit.getWallet<Chain.Tron>(selected.provider, selected.network as Chain.Tron)
           estimation = await wallet?.estimateTransactionFee({
             sender: selected.address,
             recipient: inbound.address,
