@@ -25,8 +25,6 @@ import type { EVMCreateTransactionParams, EVMTransferParams } from '@swapkit/too
 import type { createWallet } from '@swapkit/wallets'
 import { useWalletStore } from '@/store/wallets-store'
 
-export type SwapKitParams<P, W> = { config?: SKConfigState; plugins?: P; wallets?: W }
-
 export function SwapKit<
   Plugins extends ReturnType<typeof createPlugin>,
   Wallets extends ReturnType<typeof createWallet>
@@ -376,9 +374,7 @@ export function SwapKit<
     signMessage,
     swap,
     transfer,
-    verifyMessage,
-    connectedWalletsByChain,
-    connectedWalletsByOption
+    verifyMessage
   }
 }
 

@@ -1,13 +1,3 @@
-export class InsufficientAllowanceError extends Error {
-  constructor(
-    public spender: string,
-    public contract: string,
-    public amount: bigint
-  ) {
-    super()
-  }
-}
-
 export const translateError = (message: string): string => {
   if (
     message.includes('failed to simulate swap') &&
