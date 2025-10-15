@@ -75,6 +75,7 @@ export function getSwapKit() {
   instance = createSwapKit({
     config: {
       apiKeys: {
+        blockchair: process.env.NEXT_PUBLIC_BLOCKCHAIR_API_KEY,
         swapKit: process.env.NEXT_PUBLIC_SWAP_KIT_API_KEY
       }
     }
@@ -138,6 +139,7 @@ export async function connectWallet(option: WalletOption, chains: Chain[], confi
     case WalletOption.VULTISIG:
       return connectEach(c => kit.connectVultisig(c))
     case WalletOption.LEDGER:
+      console.log({ option, chains, config })
       return connectEach(c => kit.connectLedger(c, config?.derivationPath))
     case WalletOption.TREZOR: {
       const [chain] = chains

@@ -78,7 +78,7 @@ export const Ledger = ({ wallet, onConnect }: { wallet: WalletProps; onConnect: 
 
     setConnecting(true)
 
-    connect(WalletOption.LEDGER, chains as Chain[], derivationPath)
+    connect(WalletOption.LEDGER, chains as Chain[], { derivationPath })
       .then(() => {
         onConnect()
       })
