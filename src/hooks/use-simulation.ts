@@ -3,7 +3,7 @@ import { useAssetFrom, useSwap } from '@/hooks/use-swap'
 import { AssetValue, EVMChains } from '@swapkit/core'
 import { type EVMChain } from '@swapkit/helpers'
 import { useQuote } from '@/hooks/use-quote'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { useBalance } from '@/hooks/use-balance'
 import { getSwapKit } from '@/lib/wallets'
 
@@ -20,7 +20,7 @@ type UseSimulation = {
 export const useSimulation = (): UseSimulation => {
   const swapkit = getSwapKit()
   const assetFrom = useAssetFrom()
-  const { selected } = useAccounts()
+  const { selected } = useWallets()
   const { amountFrom } = useSwap()
   const { quote } = useQuote()
   const { balance } = useBalance()

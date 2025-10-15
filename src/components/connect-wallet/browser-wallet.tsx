@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
 import { ThemeButton } from '@/components/theme-button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 import { ALL_CHAINS, chainLabel, COMING_SOON_CHAINS, WalletProps } from '@/components/connect-wallet/config'
 import { Chain } from '@swapkit/core'
@@ -21,7 +21,7 @@ export const BrowserWallet = ({
 
   const [connecting, setConnecting] = useState(false)
   const [selectedChains, setSelectedChains] = useState<Chain[]>(availableChains)
-  const { connect } = useAccounts()
+  const { connect } = useWallets()
 
   const onSelectChain = (chain: Chain) => {
     setSelectedChains(prev => (prev.includes(chain) ? prev.filter(net => net !== chain) : [...prev, chain]))

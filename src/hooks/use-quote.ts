@@ -4,7 +4,7 @@ import { AxiosError } from 'axios'
 import { RefetchOptions, useQuery } from '@tanstack/react-query'
 import { getSwapkitQuote } from '@/lib/api'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { QuoteResponseRoute } from '@swapkit/api'
 
 type UseQote = {
@@ -16,7 +16,7 @@ type UseQote = {
 
 export const useQuote = (): UseQote => {
   const { amountFrom, destination, slippage } = useSwap()
-  const { selected } = useAccounts()
+  const { selected } = useWallets()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
 

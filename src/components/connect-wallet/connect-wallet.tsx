@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { useMemo, useState } from 'react'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 import {
   ALL_CHAINS,
@@ -25,7 +25,7 @@ interface WalletConnectDialogProps {
 export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps) => {
   const [selectedWallet, setSelectedWallet] = useState<WalletProps | undefined>(undefined)
   const [selectedChain, setSelectedChain] = useState<Chain | undefined>(undefined)
-  const { isAvailable, connectedWallets } = useAccounts()
+  const { isAvailable, connectedWallets } = useWallets()
 
   const chains = useMemo(
     () =>

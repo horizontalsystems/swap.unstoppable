@@ -6,7 +6,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { cn, truncate } from '@/lib/utils'
 import { useAssetFrom } from '@/hooks/use-swap'
 import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
@@ -15,7 +15,7 @@ import { Icon } from '@/components/icons'
 import { wallet } from '@/components/connect-wallet/config'
 
 export const SwapAddressFrom = () => {
-  const { accounts, selected, select } = useAccounts()
+  const { accounts, selected, select } = useWallets()
   const assetFrom = useAssetFrom()
   const { openDialog } = useDialog()
 

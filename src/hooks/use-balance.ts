@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAssetFrom, useSwap } from '@/hooks/use-swap'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { BalanceFetcher } from '@/wallets/balances'
 import { useInboundAddresses } from '@/hooks/use-inbound-addresses'
 import {
@@ -31,7 +31,7 @@ export const useBalance = (): UseBalance => {
   const swapkit = getSwapKit()
   const assetFrom = useAssetFrom()
   const { amountFrom } = useSwap()
-  const { selected } = useAccounts()
+  const { selected } = useWallets()
   const { data: inboundAddresses } = useInboundAddresses()
 
   const {

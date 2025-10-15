@@ -1,10 +1,10 @@
+import Image from 'next/image'
 import { ThemeButton } from '@/components/theme-button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { useEffect, useMemo, useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
-import Image from 'next/image'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'
 import { chainLabel, WalletProps } from '@/components/connect-wallet/config'
@@ -58,7 +58,7 @@ export const Ledger = ({ wallet, onConnect }: { wallet: WalletProps; onConnect: 
   const evmChains = [Chain.Ethereum, Chain.BinanceSmartChain, Chain.Base, Chain.Avalanche]
   const chains = ['EVM', Chain.Bitcoin, Chain.BitcoinCash, Chain.Litecoin, Chain.THORChain]
 
-  const { connect } = useAccounts()
+  const { connect } = useWallets()
   const [connecting, setConnecting] = useState(false)
   const [index, setIndex] = useState(0)
   const [selectedChain, setSelectedChain] = useState<string>(Chain.Bitcoin)

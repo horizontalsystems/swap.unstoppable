@@ -1,6 +1,6 @@
 import { LoaderCircle } from 'lucide-react'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { useQuote } from '@/hooks/use-quote'
 import { useSimulation } from '@/hooks/use-simulation'
 import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
@@ -27,7 +27,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const swapkit = getSwapKit()
-  const { selected } = useAccounts()
+  const { selected } = useWallets()
   const { amountFrom, destination } = useSwap()
   const { isLoading: isQuoting, refetch: refetchQuote } = useQuote()
   const { isLoading: isSimulating, approveData } = useSimulation()

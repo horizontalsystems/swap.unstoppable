@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { SwapAddressCustom } from '@/components/swap/swap-address-custom'
 import { useAssetTo, useDestination, useSetDestination } from '@/hooks/use-swap'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { useDialog } from '@/components/global-dialog'
 import { cn, truncate } from '@/lib/utils'
 import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
@@ -19,7 +19,7 @@ import { wallet } from '@/components/connect-wallet/config'
 
 export const SwapAddressTo = () => {
   const { openDialog } = useDialog()
-  const { accounts } = useAccounts()
+  const { accounts } = useWallets()
   const assetTo = useAssetTo()
   const destination = useDestination()
   const setDestination = useSetDestination()

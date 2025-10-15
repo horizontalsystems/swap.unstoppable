@@ -11,7 +11,7 @@ import { SwapError } from '@/components/swap/swap-error'
 import { SwapDetails } from '@/components/swap/swap-details'
 import { SwapButton } from '@/components/swap/swap-button'
 import { SwapBetaAlert } from '@/components/swap/swap-beta-alert'
-import { useAccounts } from '@/hooks/use-wallets'
+import { useWallets } from '@/hooks/use-wallets'
 import { transactionStore } from '@/store/transaction-store'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
@@ -24,7 +24,7 @@ export const Swap = () => {
   const swapkit = getSwapKit()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
-  const { selected } = useAccounts()
+  const { selected } = useWallets()
   const { amountFrom, setAmountFrom } = useSwap()
   const { refetch: refetchBalance } = useBalance()
   const { quote, error: quoteError } = useQuote()
