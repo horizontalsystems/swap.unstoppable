@@ -85,56 +85,64 @@ export function getSwapKit() {
 
 export async function connectWallet(option: WalletOption, chains: Chain[], config?: any): Promise<boolean> {
   const kit = getSwapKit()
+  const connectEach = async (connect: (chain: Chain[]) => Promise<boolean>) => {
+    let successCount = 0
+    for (const chain of chains) {
+      try {
+        await connect([chain])
+        successCount++
+      } catch (error) {
+        console.warn(`Failed to connect to ${chain}:`, error)
+      }
+    }
+
+    return successCount > 0
+  }
 
   switch (option) {
     case WalletOption.METAMASK:
       const metamask = getEIP6963Wallets().providers.find(p => p.info.name === 'MetaMask')
-      return kit.connectEVMWallet([Chain.Ethereum], WalletOption.METAMASK, metamask?.provider)
+      return connectEach(c => kit.connectEVMWallet(c, WalletOption.METAMASK, metamask?.provider))
     case WalletOption.COINBASE_WEB:
     case WalletOption.TRUSTWALLET_WEB:
-      return kit.connectEVMWallet(chains)
+      return connectEach(c => kit.connectEVMWallet(c))
     case WalletOption.COSMOSTATION:
-      return kit.connectCosmostation(chains)
+      return connectEach(c => kit.connectCosmostation(c))
     case WalletOption.PHANTOM:
-      return kit.connectPhantom(chains)
+      return connectEach(c => kit.connectPhantom(c))
     case WalletOption.KEPLR:
-      return kit.connectKeplr([Chain.THORChain])
+      return connectEach(c => kit.connectKeplr(c))
     case WalletOption.WALLETCONNECT:
-      return kit.connectWalletconnect(chains)
+      return connectEach(c => kit.connectWalletconnect(c))
     case WalletOption.COINBASE_MOBILE:
-      return kit.connectCoinbaseWallet(chains)
+      return connectEach(c => kit.connectCoinbaseWallet(c))
     case WalletOption.BITGET:
-      return kit.connectBitget(chains)
+      return connectEach(c => kit.connectBitget(c))
     case WalletOption.CTRL:
-      return kit.connectCtrl([Chain.Ethereum])
+      return connectEach(c => kit.connectCtrl(c))
     case WalletOption.KEEPKEY:
-      return kit.connectKeepkey(chains)
+      return connectEach(c => kit.connectKeepkey(c))
     case WalletOption.KEEPKEY_BEX:
-      return kit.connectKeepkeyBex?.(chains)
+      return connectEach(c => kit.connectKeepkeyBex?.(c))
     case WalletOption.ONEKEY:
-      return kit.connectOnekeyWallet?.(chains)
+      return connectEach(c => kit.connectOnekeyWallet?.(c))
     case WalletOption.OKX:
     case WalletOption.OKX_MOBILE:
-      return kit.connectOkx(chains)
+      return connectEach(c => kit.connectOkx(c))
     case WalletOption.POLKADOT_JS:
-      return kit.connectPolkadotJs(chains)
+      return connectEach(c => kit.connectPolkadotJs(c))
     case WalletOption.RADIX_WALLET:
-      return kit.connectRadixWallet(chains)
+      return connectEach(c => kit.connectRadixWallet(c))
     case WalletOption.TALISMAN:
-      return kit.connectTalisman(chains)
+      return connectEach(c => kit.connectTalisman(c))
     case WalletOption.VULTISIG:
-      return kit.connectVultisig(chains)
-    case WalletOption.LEDGER: {
-      for (let i = 0; i < chains.length; i += 1) {
-        const chain = chains[i]
-        await kit.connectLedger([chain], config?.derivationPath)
-      }
-      return true
-    }
+      return connectEach(c => kit.connectVultisig(c))
+    case WalletOption.LEDGER:
+      return connectEach(c => kit.connectLedger(c, config?.derivationPath))
     case WalletOption.TREZOR: {
       const [chain] = chains
       if (!chain) throw new Error('Chain is required for Trezor')
-      return kit.connectTrezor(chains, NetworkDerivationPath[chain])
+      return connectEach(c => kit.connectTrezor(c, NetworkDerivationPath[chain]))
     }
     default: {
       throw new Error(`Unsupported wallet option: ${option}`)

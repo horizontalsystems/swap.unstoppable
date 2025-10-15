@@ -357,8 +357,6 @@ export function SwapKit<
     )
   }
 
-  console.log({ availablePlugins })
-
   return {
     ...availablePlugins,
     ...connectWalletMethods,
