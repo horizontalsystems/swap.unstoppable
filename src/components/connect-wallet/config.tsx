@@ -107,3 +107,5 @@ export const chainLabel = (c: Chain): string => {
       return getChainConfig(c).name
   }
 }
+
+export const wallet = (option: WalletOption): WalletProps | undefined => WALLETS.find(w => w.option === option)

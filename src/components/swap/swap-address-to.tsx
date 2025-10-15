@@ -1,13 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { SwapAddressCustom } from '@/components/swap/swap-address-custom'
 import { useAssetTo, useDestination, useSetDestination } from '@/hooks/use-swap'
 import { useAccounts } from '@/hooks/use-wallets'
@@ -15,6 +9,7 @@ import { useDialog } from '@/components/global-dialog'
 import { cn, truncate } from '@/lib/utils'
 import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
 import { Icon } from '@/components/icons'
+import { wallet } from '@/components/connect-wallet/config'
 
 export const SwapAddressTo = () => {
   const { openDialog } = useDialog()
@@ -36,7 +31,7 @@ export const SwapAddressTo = () => {
               ) : (
                 <Icon name="wallet-in" className="size-6" />
               )}
-              <span>{destination?.provider || 'Destination Wallet'}</span>
+              <span>{(destination?.provider && wallet(destination.provider)?.label) || 'Destination Wallet'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-leah font-semibold">
@@ -64,7 +59,7 @@ export const SwapAddressTo = () => {
             >
               <div className="flex items-center gap-4">
                 <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
-                <span className="text-thor-gray text-sm font-medium">{account.provider}</span>
+                <span className="text-thor-gray text-sm font-medium">{wallet(account.provider)?.label}</span>
               </div>
               <span
                 className={cn('ms-5 text-sm font-semibold', {

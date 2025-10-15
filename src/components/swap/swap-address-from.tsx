@@ -12,6 +12,7 @@ import { useAssetFrom } from '@/hooks/use-swap'
 import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
 import { useDialog } from '@/components/global-dialog'
 import { Icon } from '@/components/icons'
+import { wallet } from '@/components/connect-wallet/config'
 
 export const SwapAddressFrom = () => {
   const { accounts, selected, select } = useAccounts()
@@ -30,7 +31,7 @@ export const SwapAddressFrom = () => {
             ) : (
               <Icon name="wallet-out" className="size-6" />
             )}
-            <span>{selected?.provider || 'Source Wallet'}</span>
+            <span>{(selected && wallet(selected.provider)?.label) || 'Source Wallet'}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-leah font-semibold">{selected?.address ? truncate(selected.address) : ''}</span>
@@ -55,7 +56,7 @@ export const SwapAddressFrom = () => {
             >
               <div className="flex items-center gap-4">
                 <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
-                <span className="text-thor-gray text-sm font-medium">{account.provider}</span>
+                <span className="text-thor-gray text-sm font-medium">{wallet(account.provider)?.label}</span>
               </div>
               <span
                 className={cn('ms-5 text-sm font-semibold', {
