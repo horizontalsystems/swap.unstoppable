@@ -30,7 +30,7 @@ export const BrowserWallet = ({
   const handleConnect = async () => {
     setConnecting(true)
 
-    connect(wallet.option, wallet.supportedChains)
+    connect(wallet.option, selectedChains)
       .then(() => {
         onConnect()
       })

@@ -1,8 +1,6 @@
 import { useWalletStore } from '@/store/wallets-store'
 import { WalletOption } from '@swapkit/core'
 
-export const getSelectedContext = (): any => 1
-
 export const useAccounts = () => {
   const accounts = useWalletStore(s => s.accounts)
   const isHydrated = useWalletStore(s => s.hasHydrated)

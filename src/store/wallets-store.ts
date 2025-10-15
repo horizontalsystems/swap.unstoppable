@@ -100,8 +100,8 @@ export const useWalletStore = create<WalletState>()(
         }
 
         Promise.allSettled(
-          state.connectedWallets.map(w => {
-            return getAccounts(w, supportedChains[w])
+          state.accounts.map(w => {
+            return getAccounts(w.provider, [w.network])
           })
         )
           .then(res => {
