@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@confio/ics23": "^0.6.8",
+    "@cosmjs/amino": "^0.36.1",
+    "@cosmjs/proto-signing": "^0.36.1",
     "@ethereumjs/util": "^10.0.0",
     "@keplr-wallet/types": "^0.12.263",
     "@noble/secp256k1": "^2.3.0",

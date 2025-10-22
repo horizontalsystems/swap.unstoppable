@@ -7,7 +7,7 @@ import { LoaderCircle } from 'lucide-react'
 import { useWallets } from '@/hooks/use-wallets'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'
-import { chainLabel, WalletProps } from '@/components/connect-wallet/config'
+import { chainLabel, WalletParams } from '@/components/connect-wallet/config'
 import { Chain, WalletOption } from '@swapkit/core'
 
 const DERIVATION_PATHS = {
@@ -46,7 +46,7 @@ const DERIVATION_PATHS = {
     pathTitle: "m/44'/931'/0'/0/{index}",
     path: (index: number) => [44, 931, 0, 0, index]
   }
-} as const
+}
 
 const CHAIN_PATH_MAP: Record<string, Array<keyof typeof DERIVATION_PATHS>> = {
   EVM: ['metamask', 'ledger_live', 'legacy'],
@@ -54,7 +54,7 @@ const CHAIN_PATH_MAP: Record<string, Array<keyof typeof DERIVATION_PATHS>> = {
   [Chain.THORChain]: ['thorchain']
 }
 
-export const Ledger = ({ wallet, onConnect }: { wallet: WalletProps; onConnect: () => void }) => {
+export const Ledger = ({ wallet, onConnect }: { wallet: WalletParams; onConnect: () => void }) => {
   const evmChains = [Chain.Ethereum, Chain.BinanceSmartChain, Chain.Base, Chain.Avalanche]
   const chains = ['EVM', Chain.Bitcoin, Chain.BitcoinCash, Chain.Litecoin, Chain.THORChain]
 

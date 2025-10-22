@@ -5,7 +5,7 @@ import { ThemeButton } from '@/components/theme-button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
-import { ALL_CHAINS, chainLabel, COMING_SOON_CHAINS, WalletProps } from '@/components/connect-wallet/config'
+import { ALL_CHAINS, chainLabel, COMING_SOON_CHAINS, WalletParams } from '@/components/connect-wallet/config'
 import { Chain } from '@swapkit/core'
 
 export const BrowserWallet = ({
@@ -13,7 +13,7 @@ export const BrowserWallet = ({
   chains,
   onConnect
 }: {
-  wallet: WalletProps
+  wallet: WalletParams
   chains: Chain[]
   onConnect: () => void
 }) => {

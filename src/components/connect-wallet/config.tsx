@@ -7,7 +7,7 @@ export enum WalletType {
   hardware
 }
 
-export interface WalletProps {
+export type WalletParams = {
   key: string
   type: WalletType
   label: string
@@ -32,7 +32,7 @@ export const ALL_CHAINS = [
 
 export const COMING_SOON_CHAINS = [Chain.Solana]
 
-export const WALLETS: WalletProps[] = [
+export const WALLETS: WalletParams[] = [
   {
     key: 'metamask',
     label: 'MetaMask',
@@ -96,7 +96,15 @@ export const WALLETS: WalletProps[] = [
     option: WalletOption.LEDGER,
     link: 'https://www.ledger.com',
     supportedChains: supportedChains[WalletOption.LEDGER]
-  }
+  },
+  {
+    key: 'keystore',
+    type: WalletType.hardware,
+    label: 'Keystore',
+    option: WalletOption.KEYSTORE,
+    link: 'https://www.keystore.com',
+    supportedChains: supportedChains[WalletOption.KEYSTORE]
+  },
 ]
 
 export const chainLabel = (c: Chain): string => {
@@ -108,4 +116,4 @@ export const chainLabel = (c: Chain): string => {
   }
 }
 
-export const wallet = (option: WalletOption): WalletProps | undefined => WALLETS.find(w => w.option === option)
+export const wallet = (option: WalletOption): WalletParams | undefined => WALLETS.find(w => w.option === option)

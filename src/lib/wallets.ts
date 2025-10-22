@@ -138,8 +138,9 @@ export async function connectWallet(option: WalletOption, chains: Chain[], confi
       return connectEach(c => kit.connectTalisman(c))
     case WalletOption.VULTISIG:
       return connectEach(c => kit.connectVultisig(c))
+    case WalletOption.KEYSTORE:
+      return kit.connectKeystore(chains, config?.phrase, config?.derivationPath)
     case WalletOption.LEDGER:
-      console.log({ option, chains, config })
       return connectEach(c => kit.connectLedger(c, config?.derivationPath))
     case WalletOption.TREZOR: {
       const [chain] = chains

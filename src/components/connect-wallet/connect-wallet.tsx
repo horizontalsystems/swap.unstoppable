@@ -8,22 +8,23 @@ import {
   ALL_CHAINS,
   chainLabel,
   COMING_SOON_CHAINS,
-  WalletProps,
+  WalletParams,
   WALLETS,
   WalletType
 } from '@/components/connect-wallet/config'
 import { BrowserWallet } from '@/components/connect-wallet/browser-wallet'
+import { Keystore } from '@/components/connect-wallet/keystore'
 import { Ledger } from '@/components/connect-wallet/ledger'
 import { Icon } from '@/components/icons'
 import { Chain, WalletOption } from '@swapkit/core'
 
-interface WalletConnectDialogProps {
+interface ConnectWalletProps {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
 }
 
-export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps) => {
-  const [selectedWallet, setSelectedWallet] = useState<WalletProps | undefined>(undefined)
+export const ConnectWallet = ({ isOpen, onOpenChange }: ConnectWalletProps) => {
+  const [selectedWallet, setSelectedWallet] = useState<WalletParams | undefined>(undefined)
   const [selectedChain, setSelectedChain] = useState<Chain | undefined>(undefined)
   const { isAvailable, connectedWallets } = useWallets()
 
@@ -36,8 +37,8 @@ export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps
   )
 
   const wallets = useMemo(() => {
-    const installed: WalletProps[] = []
-    const others: WalletProps[] = []
+    const installed: WalletParams[] = []
+    const others: WalletParams[] = []
 
     WALLETS.forEach(wallet => {
       if (isAvailable(wallet.option)) {
@@ -47,7 +48,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps
       }
     })
 
-    const sortByLabel = (a: WalletProps, b: WalletProps) => a.label.localeCompare(b.label)
+    const sortByLabel = (a: WalletParams, b: WalletParams) => a.label.localeCompare(b.label)
 
     installed.sort(sortByLabel)
     others.sort(sortByLabel)
@@ -55,7 +56,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps
     return [...installed, ...others]
   }, [isAvailable])
 
-  const onSelectWallet = (wallet: WalletProps) => {
+  const onSelectWallet = (wallet: WalletParams) => {
     setSelectedWallet(prev => (prev === wallet ? undefined : wallet))
     setSelectedChain(undefined)
   }
@@ -71,7 +72,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps
     return wallet && wallet.supportedChains.includes(selectedChain)
   }
 
-  const walletList = (wallets: WalletProps[]) => {
+  const walletList = (wallets: WalletParams[]) => {
     return wallets.map((wallet, index) => {
       const isConnected = connectedWallets.find(w => w === wallet.option)
       const isInstalled = isAvailable(wallet.option)
@@ -114,7 +115,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps
     })
   }
 
-  const connectWallet = (wallet: WalletProps) => {
+  const renderSelectedWallet = (wallet: WalletParams) => {
     const onConnect = () => {
       onOpenChange(false)
     }
@@ -125,6 +126,10 @@ export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps
 
     if (wallet.key === 'ledger') {
       return <Ledger key={wallet.key} wallet={wallet} onConnect={onConnect} />
+    }
+
+    if (wallet.key === 'keystore') {
+      return <Keystore key={wallet.key} wallet={wallet} onConnect={onConnect} />
     }
 
     return null
@@ -161,7 +166,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps
 
           <div className="flex flex-1 flex-col overflow-hidden">
             {selectedWallet ? (
-              connectWallet(selectedWallet)
+              renderSelectedWallet(selectedWallet)
             ) : (
               <>
                 <div className="text-thor-gray mb-3 hidden px-8 text-base font-semibold md:block">Chains</div>
