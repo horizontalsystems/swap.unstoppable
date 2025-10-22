@@ -2,7 +2,6 @@ import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
 import { DecimalInput } from '@/components/decimal/decimal-input'
 import { AssetIcon } from '@/components/asset-icon'
 import { Skeleton } from '@/components/ui/skeleton'
-import { DecimalFiat } from '@/components/decimal/decimal-fiat'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetTo, useSetAssetTo } from '@/hooks/use-swap'
 import { useDialog } from '@/components/global-dialog'
@@ -42,9 +41,7 @@ export const SwapInputTo = () => {
             autoComplete="off"
             disabled
           />
-          <div className="text-thor-gray mt-1 text-sm">
-            <DecimalFiat amount={fiatValueTo.toCurrency()} />
-          </div>
+          <div className="text-thor-gray mt-1 text-sm">{fiatValueTo.toCurrency()}</div>
         </div>
         <div className="flex cursor-pointer items-center gap-2" onClick={onClick}>
           <AssetIcon asset={assetTo} />

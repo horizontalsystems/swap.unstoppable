@@ -1,17 +1,15 @@
-import Decimal from 'decimal.js'
 import { ReactNode, useState } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Separator } from '@/components/ui/separator'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { Icon } from '@/components/icons'
-import { DecimalFiat } from '@/components/decimal/decimal-fiat'
 import { formatDuration, intervalToDuration } from 'date-fns'
-import { SwapKitNumber } from '@swapkit/core'
+import { assetFromString, SwapKitNumber } from '@swapkit/core'
 
 interface FeeData {
-  amount: Decimal
-  usd: Decimal
+  amount: SwapKitNumber
+  usd: SwapKitNumber
   symbol: string
 }
 
@@ -31,16 +29,15 @@ export function SwapDetails() {
 
     if (!fee) return undefined
 
-    const amount = new Decimal(fee.amount)
+    const amount = new SwapKitNumber(fee.amount)
     const meta = quote.meta.assets?.find(f => f.asset === fee.asset)
 
-    const [, symbol] = fee.asset.split('.')
-    const [code] = symbol.split('-')
+    const asset = assetFromString(fee.asset)
 
     return {
-      amount: amount.toDecimalPlaces(8),
-      usd: meta ? amount.mul(new Decimal(meta.price)).toDecimalPlaces(8) : new Decimal(0),
-      symbol: code
+      amount: amount,
+      usd: meta ? amount.mul(new SwapKitNumber(meta.price)) : new SwapKitNumber(0),
+      symbol: asset.ticker || asset.symbol
     }
   }
 
@@ -49,10 +46,10 @@ export function SwapDetails() {
   const liquidity = feeData('liquidity')
   const affiliate = feeData('affiliate')
 
-  const total = (inbound?.usd || new Decimal(0))
-    .add(outbound?.usd || new Decimal(0))
-    .add(liquidity?.usd || new Decimal(0))
-    .add(affiliate?.usd || new Decimal(0))
+  const total = (inbound?.usd || new SwapKitNumber(0))
+    .add(outbound?.usd || new SwapKitNumber(0))
+    .add(liquidity?.usd || new SwapKitNumber(0))
+    .add(affiliate?.usd || new SwapKitNumber(0))
 
   const feeSection = (title: string, info: string, fee?: FeeData) => {
     return (
@@ -65,15 +62,11 @@ export function SwapDetails() {
             <>
               {fee.amount.gt(0) && (
                 <span className="text-thor-gray">
-                  {fee.amount.toString()} {fee.symbol}
+                  {fee.amount.toSignificant()} {fee.symbol}
                 </span>
               )}
 
-              {fee.usd.gt(0) ? (
-                <DecimalFiat className="text-leah" amount={fee.usd.toString()} symbol="$" decimals={2} />
-              ) : (
-                0
-              )}
+              {fee.usd.gt(0) ? <span className="text-leah">{fee.usd.toCurrency()}</span> : 0}
             </>
           ) : (
             0
@@ -92,7 +85,7 @@ export function SwapDetails() {
           </div>
 
           <div className="text-leah flex items-center gap-2 text-sm font-semibold">
-            <DecimalFiat className="text-leah" amount={total.toString()} symbol="$" decimals={2} />
+            <span className="text-leah">{total.toCurrency()}</span>
             <Icon name={showMore ? 'arrow-s-up' : 'arrow-s-down'} className="size-5" />
           </div>
         </div>
