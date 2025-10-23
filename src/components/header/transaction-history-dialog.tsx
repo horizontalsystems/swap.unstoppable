@@ -11,14 +11,8 @@ import { cn, truncate } from '@/lib/utils'
 import { AssetIcon } from '@/components/asset-icon'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { Icon } from '@/components/icons'
-import {
-  assetFromString,
-  ChainId,
-  ChainIdToChain,
-  getChainConfig,
-  getExplorerTxUrl,
-  SwapKitNumber
-} from '@swapkit/core'
+import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, SwapKitNumber } from '@swapkit/core'
+import { chainLabel } from '@/components/connect-wallet/config'
 
 interface HistoryDialogProps {
   isOpen: boolean
@@ -54,7 +48,6 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
         : `Swap ${from.ticker} to ${to.ticker}`
 
     const chain = ChainIdToChain[legTx.chainId as ChainId]
-    const chainConfig = getChainConfig(chain)
     const explorerUrl = getExplorerTxUrl({ chain: chain, txHash: legTx.hash })
 
     return (
@@ -68,7 +61,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
           <span>{text}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span>{chainConfig.name}</span>
+          <span>{chainLabel(chain)}</span>
           <Icon
             name="globe"
             className="size-5 cursor-pointer"
@@ -164,7 +157,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         <>
                           <div className="space-y-4 border-t p-4">
                             <div className="text-thor-gray flex justify-between text-sm">
-                              <span>You Deposited</span>
+                              <span>Deposit</span>
                               <div className="flex gap-2">
                                 <span className="text-leah font-semibold">
                                   {amountFrom.toSignificant()} {tx.assetFrom?.metadata.symbol}
@@ -174,7 +167,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                             </div>
 
                             <div className="text-thor-gray flex justify-between text-sm">
-                              <span>Min. payout</span>
+                              <span>Receive</span>
                               <div className="flex gap-2">
                                 <span className="text-leah font-semibold">
                                   {amountTo.toSignificant()} {tx.assetTo?.metadata.symbol}

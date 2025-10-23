@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { AxiosError } from 'axios'
 import { RefetchOptions, useQuery } from '@tanstack/react-query'
 import { getSwapkitQuote } from '@/lib/api'
@@ -6,35 +5,32 @@ import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { useWallets } from '@/hooks/use-wallets'
 import { QuoteResponseRoute } from '@swapkit/api'
 
-type UseQote = {
+type UseQuote = {
   isLoading: boolean
   refetch: (options?: RefetchOptions) => void
   quote?: QuoteResponseRoute
   error: Error | null
 }
 
-export const useQuote = (): UseQote => {
+export const useQuote = (): UseQuote => {
   const { valueFrom, destination, slippage } = useSwap()
   const { selected } = useWallets()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
 
-  const params = useMemo(
-    () => ({
-      amount: valueFrom.eqValue(0) ? undefined : valueFrom.toSignificant(),
-      fromAsset: assetFrom?.asset,
-      toAsset: assetTo?.asset,
-      affiliate: ['sto'],
-      affiliateBps: [0],
-      sourceAddress: selected?.address,
-      destination: destination?.address,
-      streamingInterval: 1,
-      streamingQuantity: 0,
-      liquidity_tolerance_bps: slippage ? slippage * 100 : undefined
-    }),
-    [valueFrom, assetFrom?.asset, assetTo?.asset, destination?.address, selected?.address, slippage]
-  )
-
+  const queryKey = [
+    'quote',
+    valueFrom.toSignificant(),
+    assetFrom?.asset,
+    assetTo?.asset,
+    destination?.address,
+    selected?.address,
+    assetFrom?.chain,
+    selected?.network,
+    assetTo?.chain,
+    destination?.network,
+    slippage
+  ]
   const {
     data: quote,
     refetch,
@@ -42,23 +38,36 @@ export const useQuote = (): UseQote => {
     isRefetching,
     error
   } = useQuery({
-    queryKey: ['quote', params],
+    queryKey: queryKey,
     queryFn: () => {
+      if (valueFrom.eqValue(0)) return
+      if (!assetFrom?.asset || !assetTo?.asset || !selected?.address || !destination?.address) return
+      if (assetFrom?.chain !== selected?.network) return
+      if (assetTo?.chain !== destination?.network) return
+
       return getSwapkitQuote({
-        buyAsset: params.toAsset,
-        destinationAddress: params.destination,
-        sellAmount: params.amount,
-        sellAsset: params.fromAsset,
-        affiliate: 'sto',
-        affiliateFee: 0,
-        sourceAddress: params.sourceAddress,
-        includeTx: !!(params.destination && selected?.address),
-        // includeTx: false,
+        buyAsset: assetTo.asset,
+        destinationAddress: destination.address,
+        sellAmount: valueFrom.toSignificant(),
+        sellAsset: assetFrom.asset,
+        affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
+        affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE),
+        sourceAddress: selected.address,
+        includeTx: false,
         slippage: slippage
       })
     },
-    enabled: !!(params.amount && params.fromAsset && params.toAsset),
-    retry: false
+    enabled: !!(
+      !valueFrom.eqValue(0) &&
+      assetFrom?.asset &&
+      assetTo?.asset &&
+      selected?.address &&
+      destination?.address &&
+      assetFrom?.chain === selected?.network &&
+      assetTo?.chain === destination?.network
+    ),
+    retry: false,
+    refetchOnMount: false
   })
 
   let newError = error

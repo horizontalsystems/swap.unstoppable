@@ -5,13 +5,8 @@ import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { Icon } from '@/components/icons'
 import { formatDuration, intervalToDuration } from 'date-fns'
-import { assetFromString, SwapKitNumber } from '@swapkit/core'
-
-interface FeeData {
-  amount: SwapKitNumber
-  usd: SwapKitNumber
-  symbol: string
-}
+import { SwapKitNumber } from '@swapkit/core'
+import { FeeData, resolveFees } from '@/components/swap/swap-helpers'
 
 export function SwapDetails() {
   const assetFrom = useAssetFrom()
@@ -24,32 +19,7 @@ export function SwapDetails() {
 
   const price = new SwapKitNumber(quote.expectedBuyAmount).div(valueFrom)
 
-  const feeData = (type: string): FeeData | undefined => {
-    const fee = quote.fees.find(f => f.type === type)
-
-    if (!fee) return undefined
-
-    const amount = new SwapKitNumber(fee.amount)
-    const meta = quote.meta.assets?.find(f => f.asset === fee.asset)
-
-    const asset = assetFromString(fee.asset)
-
-    return {
-      amount: amount,
-      usd: meta ? amount.mul(new SwapKitNumber(meta.price)) : new SwapKitNumber(0),
-      symbol: asset.ticker || asset.symbol
-    }
-  }
-
-  const inbound = feeData('inbound')
-  const outbound = feeData('outbound')
-  const liquidity = feeData('liquidity')
-  const affiliate = feeData('affiliate')
-
-  const total = (inbound?.usd || new SwapKitNumber(0))
-    .add(outbound?.usd || new SwapKitNumber(0))
-    .add(liquidity?.usd || new SwapKitNumber(0))
-    .add(affiliate?.usd || new SwapKitNumber(0))
+  const { inbound, outbound, liquidity, affiliate, total } = resolveFees(quote)
 
   const feeSection = (title: string, info: string, fee?: FeeData) => {
     return (
