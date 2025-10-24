@@ -18,7 +18,7 @@ type UseSimulation = {
 }
 
 export const useSimulation = (): UseSimulation => {
-  const swapkit = getSwapKit()
+  const swapKit = getSwapKit()
   const assetFrom = useAssetFrom()
   const { selected } = useWallets()
   const { valueFrom } = useSwap()
@@ -47,7 +47,7 @@ export const useSimulation = (): UseSimulation => {
       })
 
       if (!assetValue.isGasAsset && assetValue.address) {
-        const wallet = swapkit.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
+        const wallet = swapKit.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
         const approved = await wallet?.isApproved({
           assetAddress: assetValue.address,
           spenderAddress: quote.targetAddress,

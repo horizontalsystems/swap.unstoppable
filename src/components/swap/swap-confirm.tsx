@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ThemeButton } from '@/components/theme-button'
-import { getSwapkitQuote } from '@/lib/api'
+import { getSwapKitQuote } from '@/lib/api'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { useWallets } from '@/hooks/use-wallets'
 import { QuoteResponseRoute } from '@swapkit/api'
@@ -47,7 +47,7 @@ export const SwapConfirm = ({ isOpen, onOpenChange }: SwapConfirmProps) => {
   const getQuote = () => {
     if (!assetFrom || !assetTo || !selected || !destination) return
 
-    getSwapkitQuote({
+    getSwapKitQuote({
       buyAsset: assetTo.asset,
       destinationAddress: destination.address,
       sellAmount: valueFrom.toSignificant(),

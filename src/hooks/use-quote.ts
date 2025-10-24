@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 import { RefetchOptions, useQuery } from '@tanstack/react-query'
-import { getSwapkitQuote } from '@/lib/api'
+import { getSwapKitQuote } from '@/lib/api'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { QuoteResponseRoute } from '@swapkit/api'
 
@@ -25,6 +25,7 @@ export const useQuote = (): UseQuote => {
     assetTo?.chain,
     slippage
   ]
+
   const {
     data: quote,
     refetch,
@@ -33,19 +34,22 @@ export const useQuote = (): UseQuote => {
     error
   } = useQuery({
     queryKey: queryKey,
-    queryFn: () => {
+    queryFn: ({ signal }) => {
       if (valueFrom.eqValue(0)) return
       if (!assetFrom?.asset || !assetTo?.asset) return
 
-      return getSwapkitQuote({
-        buyAsset: assetTo.asset,
-        sellAmount: valueFrom.toSignificant(),
-        sellAsset: assetFrom.asset,
-        affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
-        affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE),
-        includeTx: false,
-        slippage: slippage
-      })
+      return getSwapKitQuote(
+        {
+          buyAsset: assetTo.asset,
+          sellAmount: valueFrom.toSignificant(),
+          sellAsset: assetFrom.asset,
+          affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
+          affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE),
+          includeTx: false,
+          slippage: slippage
+        },
+        signal
+      )
     },
     enabled: !!(!valueFrom.eqValue(0) && assetFrom?.asset && assetTo?.asset),
     retry: false,

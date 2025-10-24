@@ -26,7 +26,7 @@ interface ButtonState {
 export const SwapButton = ({ onSwap }: SwapButtonProps) => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
-  const swapkit = getSwapKit()
+  const swapKit = getSwapKit()
   const { selected } = useWallets()
   const { valueFrom, destination } = useSwap()
   const { isLoading: isQuoting, refetch: refetchQuote } = useQuote()
@@ -66,7 +66,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
         spinner: false,
         accent: false,
         onClick: async () => {
-          const wallet = swapkit.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
+          const wallet = swapKit.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
           if (!wallet) return
           const promise = wallet
             .approve({
