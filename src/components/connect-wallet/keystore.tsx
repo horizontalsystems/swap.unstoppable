@@ -1,3 +1,5 @@
+'use client'
+
 import { ThemeButton } from '@/components/theme-button'
 import { ALL_CHAINS, WalletParams } from '@/components/connect-wallet/config'
 import { useMemo, useRef, useState } from 'react'
