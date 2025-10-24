@@ -29,7 +29,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
   const swapKit = getSwapKit()
   const { selected } = useWallets()
   const { valueFrom, destination } = useSwap()
-  const { isLoading: isQuoting, refetch: refetchQuote } = useQuote()
+  const { quote, isLoading: isQuoting, refetch: refetchQuote } = useQuote()
   const { isLoading: isSimulating, approveData } = useSimulation()
   const { balance, isLoading: isBalanceLoading } = useBalance()
 
@@ -87,7 +87,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
         }
       }
     }
-    return { text: 'Swap', spinner: false, accent: true, onClick: onSwap }
+    return { text: 'Swap', spinner: false, accent: true, onClick: quote && onSwap }
   }
 
   const state = getState()
