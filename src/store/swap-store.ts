@@ -31,7 +31,7 @@ interface SwapState {
   resolveDestination: () => void
   setAssetFrom: (asset: Asset) => void
   setAssetTo: (asset: Asset) => void
-  swapAssets: () => void
+  swapAssets: (amount?: string) => void
   setInitialAssets: (pools: Asset[]) => void
   setHasHydrated: (state: boolean) => void
 }
@@ -96,13 +96,13 @@ export const useSwapStore = create<SwapState>()(
         resolveDestination()
       },
 
-      swapAssets: () => {
+      swapAssets: (amount?: string) => {
         const { assetFrom, assetTo, resolveDestination } = get()
 
         set({
           assetFrom: assetTo,
           assetTo: assetFrom,
-          amountFrom: ''
+          amountFrom: amount || ''
         })
 
         useWalletStore.getState().resolveSource()
