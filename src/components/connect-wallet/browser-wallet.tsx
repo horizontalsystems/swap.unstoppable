@@ -57,7 +57,7 @@ export const BrowserWallet = ({
             {networks.map(network => {
               const isSelected = selectedNetworks.includes(network)
               const isAvailable = wallet.supportedChains.includes(network)
-              const isComingSoon = network === Network.Solana
+              const isComingSoon = network === Network.Solana || network === Network.Monero
 
               return (
                 <div

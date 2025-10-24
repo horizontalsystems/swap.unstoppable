@@ -35,6 +35,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps
         Network.Dogecoin,
         Network.Ethereum,
         Network.Litecoin,
+        Network.Monero,
         Network.Solana,
         Network.Thorchain,
         Network.Tron,
@@ -187,7 +188,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange }: WalletConnectDialogProps
                     >
                       {networks.map(network => {
                         const isSelected = selectedNetwork === network
-                        const isComingSoon = network === Network.Solana
+                        const isComingSoon = network === Network.Solana || network === Network.Monero
 
                         return (
                           <div

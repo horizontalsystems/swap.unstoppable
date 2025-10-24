@@ -13,6 +13,7 @@ export enum Network {
   Gaia = 'GAIA',
   Kujira = 'KUJI',
   Litecoin = 'LTC',
+  Monero = 'XMR',
   Noble = 'NOBLE',
   Osmo = 'OSMO',
   Solana = 'SOL',
@@ -45,6 +46,8 @@ export const gasToken = (n: Network): { symbol: string; decimals: number } => {
       return { symbol: 'KUJI', decimals: 6 }
     case Network.Litecoin:
       return { symbol: 'LTC', decimals: 8 }
+    case Network.Monero:
+      return { symbol: 'XMR', decimals: 12 }
     case Network.Noble:
       return { symbol: 'USDC', decimals: 6 }
     case Network.Osmo:
@@ -86,6 +89,8 @@ export const networkTxLink = ({ network, txHash }: { network: Network; txHash: s
       return `https://chainsco.pe/kujira/tx/${txHash}`
     case Network.Litecoin:
       return `https://blockchair.com/litecoin/transaction/${txHash}`
+    case Network.Monero:
+      return `https://xmrchain.net/tx/${txHash}`
     case Network.Noble:
       return `https://www.mintscan.io/noble/tx/${txHash}`
     case Network.Osmo:
@@ -127,6 +132,8 @@ export const networkLabel = (n: Network): string => {
       return 'Kujira'
     case Network.Litecoin:
       return 'Litecoin'
+    case Network.Monero:
+      return 'Monero'
     case Network.Noble:
       return 'Noble'
     case Network.Osmo:
@@ -185,6 +192,8 @@ export const networkConfirmationTime = (n: Network): number => {
       return 6 + networkConfirmationTime(Network.Thorchain)
     case Network.Litecoin:
       return 150 + networkConfirmationTime(Network.Thorchain)
+    case Network.Monero:
+      return 120 + networkConfirmationTime(Network.Thorchain)
     case Network.Noble:
       return 6 + networkConfirmationTime(Network.Thorchain)
     case Network.Osmo:
@@ -221,6 +230,13 @@ export const validateAddress = (n: Network, str: string): boolean => {
         return fromBech32(str).prefix === 'cosmos'
       case Network.Kujira:
         return fromBech32(str).prefix === 'kujira'
+      case Network.Monero:
+        // Monero addresses: Standard (95 chars starting with 4), Integrated (106 chars starting with 4), Subaddress (95 chars starting with 8)
+        return (
+          ((str.length === 95 && (str.startsWith('4') || str.startsWith('8'))) ||
+            (str.length === 106 && str.startsWith('4'))) &&
+          !!decodeBase58(str)
+        )
       case Network.Noble:
         return fromBech32(str).prefix === 'noble'
       case Network.Osmo:
