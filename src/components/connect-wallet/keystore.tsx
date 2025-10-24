@@ -1,51 +1,62 @@
 import { ThemeButton } from '@/components/theme-button'
 import { ALL_CHAINS, WalletParams } from '@/components/connect-wallet/config'
 import { useMemo, useRef, useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { Alert } from '@/components/ui/alert'
 import { Icon } from '@/components/icons'
 import { useWallets } from '@/hooks/use-wallets'
 import { WalletOption } from '@swapkit/core'
 import { decryptFromKeystore, encryptToKeyStore, generatePhrase } from '@swapkit/wallets/keystore'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { CopyButton } from '@/components/button-copy'
+import { Separator } from '../ui/separator'
+import { cn } from '@/lib/utils'
 
 export const Keystore = ({ onConnect }: { wallet: WalletParams; onConnect: () => void }) => {
-  const [walletType, setWalletType] = useState<'new' | 'import' | null>(null)
+  const [walletType, setWalletType] = useState<'create' | 'import' | null>(null)
 
   const onBack = () => setWalletType(null)
 
-  if (walletType === 'new') {
-    return <NewWallet onBack={onBack} onConnect={onConnect} />
+  if (walletType === 'create') {
+    return <CreateWallet onBack={onBack} onConnect={onConnect} />
   }
   if (walletType === 'import') {
     return <ImportWallet onBack={onBack} onConnect={onConnect} />
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center">
-      <div className="flex flex-col gap-2">
-        <ThemeButton variant="primarySmall" onClick={() => setWalletType('new')}>
-          Create a new wallet
+    <div className="flex flex-1 flex-col items-center justify-center">
+      <div className="px-8">
+        <div className="text-leah mb-3 text-base font-semibold">Add Wallet</div>
+        <p className="text-thor-gray mb-5 text-sm">
+          You may load wallet or import wallet from a Seed phrase, or create a new wallet
+        </p>
+      </div>
+
+      <div className="grid w-full px-8">
+        <ThemeButton className="w-full" variant="primaryMedium" onClick={() => setWalletType('create')}>
+          Create New Wallet
         </ThemeButton>
-        <ThemeButton variant="primarySmall" onClick={() => setWalletType('import')}>
-          Import existing
+        <div className="relative flex items-center justify-center overflow-hidden py-3">
+          <Separator />
+          <span className="mx-1 px-2 text-sm">or</span>
+          <Separator />
+        </div>
+        <ThemeButton className="w-full" variant="secondaryMedium" onClick={() => setWalletType('import')}>
+          Import File
         </ThemeButton>
       </div>
     </div>
   )
 }
 
-function NewWallet({ onBack, onConnect }: { onBack: () => void; onConnect: () => void }) {
-  const [showWords, setShowWords] = useState(false)
+function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConnect: () => void }) {
   const [showPassword, setShowPassword] = useState(false)
   const [connecting, setConnecting] = useState(false)
   const [phrase] = useState(generatePhrase(12))
   const { connect } = useWallets()
 
-  const words = useMemo(() => phrase.split(' '), [phrase])
+  const seedWords = useMemo(() => phrase.split(' '), [phrase])
 
   const onSetup = async (password: string) => {
     try {
@@ -79,38 +90,38 @@ function NewWallet({ onBack, onConnect }: { onBack: () => void; onConnect: () =>
   return (
     <div className="flex flex-1 flex-col">
       <div className="flex-1 px-8">
-        <div className="mb-4 text-xl font-bold">Your Secret Recovery Phrase</div>
+        <div className="text-leah mb-3 text-base font-semibold">Seed Phrases</div>
 
-        <p className="text-gray mb-4">
+        <p className="text-thor-gray mb-5 text-sm">
           Write these 12 words down and store them securely offline. This 12 word phrase is used to recover your wallet
           private keys.
         </p>
 
-        <div className="grid grid-cols-3 gap-2">
-          {[...Array(12)].map((_, index) => (
-            <div key={index} className="bg-leah flex items-center gap-1 rounded-xl p-2">
-              <span className="text-sm text-white">{index + 1}</span>
-              <span className="text-sm text-white">{showWords ? words[index] : '• • • • • •'}</span>
-            </div>
-          ))}
-        </div>
-        <div className="flex items-center justify-center gap-2 pt-3">
-          <Button variant="link" className="underline" onClick={() => setShowWords(!showWords)}>
-            <EyeOffIcon className="text-muted-foreground h-5 w-5" /> Show
-          </Button>
-          <Button variant="link" className="underline">
-            <CopyButton text={phrase} /> Copy
-          </Button>
+        <div className="flex flex-col items-center gap-6 rounded-2xl bg-black p-8 pb-4">
+          <div className="flex flex-wrap justify-center gap-2">
+            {seedWords.map((word, index) => (
+              <div key={index} className="flex items-center gap-1 p-2">
+                <span className="text-gray text-sm">{index + 1}</span>
+                <span className="text-sm text-white">{word}</span>
+              </div>
+            ))}
+          </div>
+
+          <ThemeButton variant="secondarySmall">Copy Phrase</ThemeButton>
         </div>
       </div>
 
-      <div className="flex gap-2 p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
-        <ThemeButton variant="primarySmall" onClick={onBack}>
+      <div className="flex gap-6 p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
+        <ThemeButton variant="secondaryMedium" onClick={onBack}>
           Back
         </ThemeButton>
-
-        <ThemeButton variant="primarySmall" onClick={() => setShowPassword(true)}>
-          Next
+        <ThemeButton
+          variant="primaryMedium"
+          className="flex-1 md:flex-0"
+          disabled={connecting}
+          onClick={() => setShowPassword(true)}
+        >
+          {connecting && <LoaderCircle size={20} className="animate-spin" />} Create
         </ThemeButton>
       </div>
     </div>
@@ -123,76 +134,57 @@ function SetupPassword({
   connecting
 }: {
   onBack: () => void
-  onSetup: (pwd: string) => void
+  onSetup: (p: string) => void
   connecting: boolean
 }) {
-  const [showPassword, setShowPassword] = useState(false)
   const [password1, setPassword1] = useState('')
   const [password2, setPassword2] = useState('')
 
   return (
     <div className="flex flex-1 flex-col">
       <div className="flex-1 px-8">
-        <h1 className="mb-4 text-xl font-bold">Create a New Password</h1>
-        <p className="text-gray mb-4">
+        <div className="text-leah mb-3 text-base font-semibold">Create a New Password</div>
+        <p className="text-thor-gray mb-5 text-sm">
           Enter a strong password to encrypt your imported wallet. This is how you will access your wallet.
         </p>
 
-        <Alert className="my-4 flex">
-          <div className="flex items-center gap-3">
-            <Icon name="warning" className="text-jacob size-6 shrink-0" />
-            <span className="text-jacob text-xs">Note: If you forget your password, you can’t recover it.</span>
-          </div>
-        </Alert>
-
         <div className="space-y-4">
-          <div className="focus-within:ring-ring relative flex items-center rounded-md border pe-2 focus-within:ring-1">
+          <Input
+            placeholder="Enter Password"
+            type="password"
+            onChange={e => setPassword1(e.target.value)}
+            className={cn(
+              'text-leah placeholder:text-andy border-blade focus-visible:border-blade rounded-xl border-1 p-4 text-base focus:ring-0 focus-visible:ring-0'
+            )}
+          />
+          <div>
             <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Enter Password"
-              value={password1}
-              onChange={e => setPassword1(e.target.value)}
-              className="border-0 shadow-none focus-visible:ring-0"
-              disabled={connecting}
-            />
-            <button onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? (
-                <EyeOffIcon className="text-muted-foreground h-5 w-5" />
-              ) : (
-                <EyeIcon className="text-muted-foreground h-5 w-5" />
-              )}
-            </button>
-          </div>
-          <div className="focus-within:ring-ring relative flex items-center rounded-md border pe-2 focus-within:ring-1">
-            <Input
-              type={showPassword ? 'text' : 'password'}
               placeholder="Confirm Password"
-              value={password2}
+              type="password"
               onChange={e => setPassword2(e.target.value)}
-              className="border-0 shadow-none focus-visible:ring-0"
-              disabled={connecting}
-            />
-            <button onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? (
-                <EyeOffIcon className="text-muted-foreground h-5 w-5" />
-              ) : (
-                <EyeIcon className="text-muted-foreground h-5 w-5" />
+              className={cn(
+                'text-leah placeholder:text-andy border-blade focus-visible:border-blade none rounded-xl border-1 p-4 text-base focus:ring-0 focus-visible:ring-0',
+                {
+                  'border-lucian focus-visible:border-lucian': password2 && password1 !== password2
+                }
               )}
-            </button>
+            />
+            {password2 && password1 !== password2 && <span className="text-lucian text-xs">Password must match</span>}
           </div>
         </div>
       </div>
 
-      <div className="flex gap-2 p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
-        <ThemeButton variant="primarySmall" onClick={onBack} disabled={connecting}>
+      <div className="flex gap-6 p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
+        <ThemeButton variant="secondaryMedium" onClick={onBack}>
           Back
         </ThemeButton>
         <ThemeButton
-          variant="primarySmall"
+          variant="primaryMedium"
+          className="flex-1 md:flex-0"
           disabled={!password1.length || !password2.length || password1 !== password2 || connecting}
           onClick={() => onSetup(password1)}
         >
-          {password1 !== password2 ? 'Password must match' : 'Connect'}
+          {connecting && <LoaderCircle size={20} className="animate-spin" />} Connect
         </ThemeButton>
       </div>
     </div>
@@ -243,13 +235,13 @@ function ImportWallet({ onBack, onConnect }: { onBack: () => void; onConnect: ()
       <div className="flex-1 px-8">
         <div className="mb-4 text-xl font-bold">Import Wallet</div>
 
-        <p className="text-gray mb-4">
+        <p className="text-thor-gray mb-4 text-sm">
           Import wallet using your Secret Recovery Phrase or by loading your keystore file.
         </p>
 
         <div className="flex flex-col gap-2">
           <Textarea
-            className="text-center"
+            className="border-blade h-35 text-center"
             placeholder={file?.name || 'Type your phrase here.'}
             disabled={!!file || connecting}
             onChange={e => setPhrase(e.target.value)}
@@ -264,9 +256,9 @@ function ImportWallet({ onBack, onConnect }: { onBack: () => void; onConnect: ()
               setFile(e.target.files?.[0])
             }}
           />
-          <Button onClick={() => fileRef.current?.click()} disabled={connecting}>
+          <ThemeButton variant="secondarySmall" onClick={() => fileRef.current?.click()} disabled={connecting}>
             Upload keystore file
-          </Button>
+          </ThemeButton>
         </div>
         {file && (
           <div className="mt-2 flex flex-col gap-2">
@@ -276,6 +268,9 @@ function ImportWallet({ onBack, onConnect }: { onBack: () => void; onConnect: ()
               placeholder="Password"
               onChange={e => setPassword(e.target.value)}
               disabled={connecting}
+              className={cn(
+                'text-leah placeholder:text-andy border-blade focus-visible:border-blade rounded-xl border-1 p-4 text-base focus:ring-0 focus-visible:ring-0'
+              )}
             />
           </div>
         )}
@@ -290,13 +285,13 @@ function ImportWallet({ onBack, onConnect }: { onBack: () => void; onConnect: ()
         )}
       </div>
 
-      <div className="flex gap-2 p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
-        <ThemeButton variant="primarySmall" onClick={onBack}>
+      <div className="flex gap-6 p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
+        <ThemeButton variant="secondaryMedium" onClick={onBack}>
           Back
         </ThemeButton>
 
-        <ThemeButton variant="primarySmall" onClick={onNext} disabled={connecting}>
-          Next
+        <ThemeButton variant="primaryMedium" onClick={onNext} disabled={connecting}>
+          {connecting && <LoaderCircle size={20} className="animate-spin" />} Next
         </ThemeButton>
       </div>
     </div>
