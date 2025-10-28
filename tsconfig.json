@@ -18,10 +18,7 @@
         "name": "next"
       }
     ],
-    "paths": {
-      "@/*": ["./src/*"],
-      "rujira.js": ["./vendor/rujira.js"]
-    }
+    "paths": {"@/*": ["./src/*"]}
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "vendor/**/*"],
   "exclude": ["node_modules"]
