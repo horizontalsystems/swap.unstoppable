@@ -25,6 +25,7 @@ import { trezorWallet } from '@swapkit/wallets/trezor'
 import { tronlinkWallet } from '@swapkit/wallets/tronlink'
 import { vultisigWallet } from '@swapkit/wallets/vultisig'
 import { walletconnectWallet } from '@swapkit/wallets/walletconnect'
+import { walletSelectorWallet } from '@swapkit/wallets/near-wallet-selector'
 import { xamanWallet } from '@swapkit/wallets/xaman'
 import { cosmostationWallet } from '@swapkit/wallets/cosmostation'
 import { SwapKit } from '@/lib/swapkit'
@@ -60,6 +61,7 @@ const defaultWallets = {
   ...tronlinkWallet,
   ...vultisigWallet,
   ...walletconnectWallet,
+  ...walletSelectorWallet,
   ...xamanWallet
 }
 
@@ -200,5 +202,6 @@ export const supportedChains: Record<WalletOption, Chain[]> = {
   [WalletOption.TRUSTWALLET_WEB]: evmWallet.connectEVMWallet.supportedChains,
   [WalletOption.VULTISIG]: vultisigWallet.connectVultisig.supportedChains,
   [WalletOption.WALLETCONNECT]: walletconnectWallet.connectWalletconnect.supportedChains,
+  [WalletOption.WALLET_SELECTOR]: [Chain.Near],
   [WalletOption.XAMAN]: xamanWallet.connectXaman.supportedChains
 }
