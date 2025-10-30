@@ -8,6 +8,7 @@ import {
   ALL_CHAINS,
   chainLabel,
   COMING_SOON_CHAINS,
+  isWalletAvailable,
   WalletParams,
   WALLETS,
   WalletType
@@ -27,7 +28,7 @@ interface ConnectWalletProps {
 export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProps) => {
   const [selectedWallet, setSelectedWallet] = useState<WalletParams | undefined>(undefined)
   const [selectedChain, setSelectedChain] = useState<Chain | undefined>(chain)
-  const { isAvailable, connectedWallets } = useWallets()
+  const { connectedWallets } = useWallets()
 
   const chains = useMemo(
     () =>
@@ -42,7 +43,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
     const others: WalletParams[] = []
 
     WALLETS.forEach(wallet => {
-      if (isAvailable(wallet.option)) {
+      if (isWalletAvailable(wallet.option)) {
         installed.push(wallet)
       } else {
         others.push(wallet)
@@ -55,7 +56,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
     others.sort(sortByLabel)
 
     return [...installed, ...others]
-  }, [isAvailable])
+  }, [])
 
   const onSelectWallet = (wallet: WalletParams) => {
     setSelectedWallet(prev => (prev === wallet ? undefined : wallet))
@@ -76,7 +77,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
   const walletList = (wallets: WalletParams[]) => {
     return wallets.map((wallet, index) => {
       const isConnected = connectedWallets.find(w => w === wallet.option)
-      const isInstalled = isAvailable(wallet.option)
+      const isInstalled = isWalletAvailable(wallet.option)
       const isSelected = wallet === selectedWallet
       const isHighlighted = isWalletHighlighted(wallet.option)
 

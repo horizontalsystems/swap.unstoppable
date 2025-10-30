@@ -9,7 +9,6 @@ export const useWallets = () => {
   const select = useWalletStore(s => s.select)
   const connect = useWalletStore(s => s.connect)
   const disconnect = useWalletStore(s => s.disconnect)
-  // const isAvailable = useWalletStore(s => s.isAvailable)
 
   return {
     accounts,
@@ -17,7 +16,6 @@ export const useWallets = () => {
     connectedWallets,
     select,
     connect,
-    disconnect,
-    isAvailable: (option: WalletOption) => true // todo
+    disconnect
   }
 }

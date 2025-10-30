@@ -1,5 +1,5 @@
 import { supportedChains } from '@/lib/wallets'
-import { Chain, WalletOption } from '@swapkit/core'
+import { Chain, okxMobileEnabled, WalletOption } from '@swapkit/core'
 import { getChainConfig } from '@swapkit/helpers'
 
 export enum WalletType {
@@ -107,6 +107,41 @@ export const WALLETS: WalletParams[] = [
   }
 ]
 
+export const wallet = (option: WalletOption) => {
+  return WALLETS.find(w => w.option === option)
+}
+
+export const isWalletAvailable = (option: WalletOption) => {
+  // prettier-ignore
+  switch (option) {
+    case WalletOption.METAMASK: return window?.ethereum && !window.ethereum?.isBraveWallet
+    case WalletOption.VULTISIG: return window?.vultisig
+    case WalletOption.PHANTOM: return window?.phantom
+    case WalletOption.CTRL: return window?.xfi || window?.ethereum?.__XDEFI
+    case WalletOption.KEPLR: return window?.keplr
+    case WalletOption.OKX: return window?.okxwallet
+    case WalletOption.TRONLINK: return window?.tronLink || window?.tronWeb
+    case WalletOption.LEDGER:
+    case WalletOption.KEYSTORE: return true
+
+    case WalletOption.BRAVE:
+      return window?.ethereum?.isBraveWallet
+    case WalletOption.TRUSTWALLET_WEB:
+      return window?.ethereum?.isTrust || window?.trustwallet
+    case WalletOption.COINBASE_WEB:
+      return ((window?.ethereum?.overrideIsMetaMask && window?.ethereum?.selectedProvider?.isCoinbaseWallet) || window?.coinbaseWalletExtension)
+    case WalletOption.OKX_MOBILE:
+      return okxMobileEnabled()
+    case WalletOption.BITGET:
+      return window?.bitkeep?.ethereum
+    case WalletOption.ONEKEY:
+      return window?.$onekey?.ethereum
+
+    default:
+      return false
+  }
+}
+
 export const chainLabel = (c: Chain | string): string => {
   switch (c) {
     case Chain.BinanceSmartChain:
@@ -117,5 +152,3 @@ export const chainLabel = (c: Chain | string): string => {
       return getChainConfig(c as Chain).name
   }
 }
-
-export const wallet = (option: WalletOption): WalletParams | undefined => WALLETS.find(w => w.option === option)
