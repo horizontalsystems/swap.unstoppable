@@ -39,6 +39,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
     if (!assetFrom || !assetTo) return { text: '', spinner: true, accent: false }
     if (valueFrom.eqValue(0)) return { text: 'Enter Amount', spinner: false, accent: false }
     if (isQuoting || isSimulating) return { text: 'Quoting...', spinner: true, accent: false }
+    if (!quote) return { text: 'No Valid Quotes', spinner: false, accent: false }
     if (!selected)
       return {
         text: `Connect ${chainLabel(assetFrom.chain)} Wallet`,

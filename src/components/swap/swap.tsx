@@ -6,7 +6,6 @@ import { SwapSettings } from '@/components/swap/swap-settings'
 import { SwapInputFrom } from '@/components/swap/swap-input-from'
 import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
-import { SwapError } from '@/components/swap/swap-error'
 import { SwapDetails } from '@/components/swap/swap-details'
 import { SwapButton } from '@/components/swap/swap-button'
 import { useQuote } from '@/hooks/use-quote'
@@ -18,7 +17,7 @@ export const Swap = () => {
   const { openDialog } = useDialog()
 
   return (
-    <div className="flex flex-col items-center justify-center px-4 pb-4 md:pb-20">
+    <div className="flex flex-col items-center justify-center px-4 pt-4 pb-4 md:pb-20">
       <div className="w-full max-w-md">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -35,9 +34,9 @@ export const Swap = () => {
           <SwapAddressTo />
         </div>
 
-        <div className="px-4">
-          <SwapError error={quoteError} />
-        </div>
+        {/*<div className="px-4">*/}
+        {/*  <SwapError error={quoteError} />*/}
+        {/*</div>*/}
 
         <SwapButton
           onSwap={() => {

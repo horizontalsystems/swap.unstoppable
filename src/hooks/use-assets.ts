@@ -29,7 +29,7 @@ export const useAssets = (): { assets: Asset[] | undefined; isLoading: boolean }
         .reduce((acc: Map<string, Asset>, cur: Asset) => {
           return {
             ...acc,
-            [`${cur.chain}-${cur.identifier}`]: cur
+            [`${cur.chain}-${cur.identifier}`.toLowerCase()]: cur
           }
         }, new Map<string, Asset>())
 
