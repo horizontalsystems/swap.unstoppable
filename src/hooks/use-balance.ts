@@ -40,7 +40,7 @@ export const useBalance = (): UseBalance => {
     isLoading,
     error
   } = useQuery({
-    queryKey: ['balance', assetFrom?.asset, selected?.address],
+    queryKey: ['balance', assetFrom?.identifier, selected?.address],
     queryFn: async () => {
       if (!selected || !assetFrom || !inboundAddresses) {
         return null
@@ -56,7 +56,9 @@ export const useBalance = (): UseBalance => {
 
       if ('getBalance' in wallet) {
         const balances = await wallet.getBalance(wallet.address, true)
-        const balance = balances.find(b => `${b.chain}.${b.symbol}`.toLowerCase() === assetFrom.asset.toLowerCase())
+        const balance = balances.find(
+          b => `${b.chain}.${b.symbol}`.toLowerCase() === assetFrom.identifier.toLowerCase()
+        )
 
         if (balance) {
           value = balance
@@ -66,7 +68,7 @@ export const useBalance = (): UseBalance => {
       let fee = new SwapKitNumber(0)
 
       try {
-        if (isGasAsset({ chain: assetFrom.chain, symbol: assetFrom.metadata.symbol }) && value.gt(0)) {
+        if (isGasAsset({ chain: assetFrom.chain, symbol: assetFrom.ticker }) && value.gt(0)) {
           const inbound = inboundAddresses.find((a: any) => a.chain === assetFrom.chain)
 
           if (!inbound) {

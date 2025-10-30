@@ -68,8 +68,8 @@ export function SwapDetails() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">Price</div>
             <div className="text-leah flex items-center gap-1">
-              <span>1 {assetFrom?.metadata.symbol} =</span>
-              {price.toSignificant()} {assetTo?.metadata.symbol}
+              <span>1 {assetFrom?.ticker} =</span>
+              {price.toSignificant()} {assetTo?.ticker}
             </div>
           </div>
 

@@ -32,7 +32,7 @@ interface SwapState {
   setAssetFrom: (asset: Asset) => void
   setAssetTo: (asset: Asset) => void
   swapAssets: (amount?: string) => void
-  setInitialAssets: (pools: Asset[]) => void
+  setInitialAssets: (assets: Asset[]) => void
   setHasHydrated: (state: boolean) => void
 }
 
@@ -77,7 +77,7 @@ export const useSwapStore = create<SwapState>()(
 
         set({
           assetFrom: asset,
-          assetTo: assetTo?.asset === asset.asset ? assetFrom : assetTo
+          assetTo: assetTo?.identifier === asset.identifier ? assetFrom : assetTo
         })
 
         useWalletStore.getState().resolveSource()
@@ -88,7 +88,7 @@ export const useSwapStore = create<SwapState>()(
         const { assetFrom, assetTo, resolveDestination } = get()
 
         set({
-          assetFrom: assetFrom?.asset === asset.asset ? assetTo : assetFrom,
+          assetFrom: assetFrom?.identifier === asset.identifier ? assetTo : assetFrom,
           assetTo: asset
         })
 
@@ -109,15 +109,15 @@ export const useSwapStore = create<SwapState>()(
         resolveDestination()
       },
 
-      setInitialAssets: (pools: Asset[]) => {
+      setInitialAssets: (assets: Asset[]) => {
         const state = get()
         if (state.assetFrom && state.assetTo) {
           return
         }
 
         set({
-          assetFrom: pools.find(v => v.asset === INITIAL_ASSET_FROM),
-          assetTo: pools.find(v => v.asset === INITIAL_ASSET_TO)
+          assetFrom: assets.find(a => a.identifier === INITIAL_ASSET_FROM),
+          assetTo: assets.find(a => a.identifier === INITIAL_ASSET_TO)
         })
       },
 
@@ -125,6 +125,7 @@ export const useSwapStore = create<SwapState>()(
     }),
     {
       name: 'swap-store',
+      version: 2,
       onRehydrateStorage: () => state => {
         state?.setHasHydrated(true)
       },

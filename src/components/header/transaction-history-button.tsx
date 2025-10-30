@@ -50,7 +50,7 @@ export const TransactionHistoryButton = () => {
       >
         <div className="flex items-center gap-2">
           <div>
-            {pendingTx?.assetFrom?.metadata?.symbol} to {pendingTx?.assetTo?.metadata?.symbol}
+            {pendingTx?.assetFrom?.ticker} to {pendingTx?.assetTo?.ticker}
           </div>
           <LoaderCircle size={16} className="animate-spin" />
         </div>

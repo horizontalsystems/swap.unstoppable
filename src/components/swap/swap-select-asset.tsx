@@ -6,11 +6,11 @@ import { Search } from 'lucide-react'
 import { Asset } from '@/components/swap/asset'
 import { Input } from '@/components/ui/input'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { usePools } from '@/hooks/use-pools'
 import { cn } from '@/lib/utils'
 import { AssetIcon } from '@/components/asset-icon'
 import { AssetValue, Chain } from '@swapkit/core'
 import { chainLabel } from '@/components/connect-wallet/config'
+import { useAssets } from '@/hooks/use-assets'
 
 interface SwapSelectAssetProps {
   isOpen: boolean
@@ -30,15 +30,15 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
   const [selectedChain, setSelectedChain] = useState<FilterChain>(Filter.All)
   const [searchQuery, setSearchQuery] = useState('')
 
-  const { pools } = usePools()
+  const { assets } = useAssets()
 
   const chainMap: Map<FilterChain, Asset[]> = useMemo(() => {
-    if (!pools?.length) return new Map()
+    if (!assets?.length) return new Map()
 
     const chainMap: Map<FilterChain, Asset[]> = new Map()
     const allAssets: Asset[] = []
 
-    for (const asset of pools) {
+    for (const asset of assets) {
       allAssets.push(asset)
 
       const chainAssets = chainMap.get(asset.chain)
@@ -52,7 +52,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
     chainMap.set(Filter.All, allAssets)
 
     return chainMap
-  }, [pools])
+  }, [assets])
 
   const chains = useMemo(() => {
     return Array.from(chainMap.keys()).sort((a, b) => {
@@ -68,18 +68,18 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
       ? assets
       : assets.filter(asset => {
           const assetValue = AssetValue.from({
-            asset: asset.asset
+            asset: asset.identifier
           })
 
           if (assetValue.isGasAsset && chainLabel(asset.chain).toLowerCase().includes(searchQuery.toLowerCase())) {
             return true
           }
 
-          return asset.metadata.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+          return asset.ticker.toLowerCase().includes(searchQuery.toLowerCase())
         })
 
     return filteredAssets.sort((a, b) => {
-      return a.metadata.symbol.toUpperCase().localeCompare(b.metadata.symbol.toUpperCase())
+      return a.ticker.toLowerCase().localeCompare(b.ticker.toLowerCase())
     })
   }, [chainMap, selectedChain, searchQuery])
 
@@ -107,7 +107,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
                   key={index}
                   onClick={() => handleChainSelect(chain)}
                   className={cn(
-                    'hover:bg-blade m-0 flex cursor-pointer items-center gap-3 rounded-lg border border-transparent px-4 py-2 md:mr-10 md:mb-2 md:py-3',
+                    'hover:bg-blade/50 m-0 flex cursor-pointer items-center gap-3 rounded-lg border border-transparent px-4 py-2 md:mr-10 md:mb-2 md:py-3',
                     {
                       'border-runes-blue': selectedChain === chain
                     }
@@ -142,20 +142,20 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
             <div className="mt-4 flex flex-1 overflow-hidden">
               <ScrollArea className="flex-1">
                 <div className="mb-4 md:mb-8">
-                  {chainAssets.map((item, index) => (
+                  {chainAssets.map((asset, index) => (
                     <div
                       key={index}
-                      onClick={() => handleAssetSelect(item)}
-                      className="hover:bg-blade mx-4 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3 md:mr-8 md:ml-0"
+                      onClick={() => handleAssetSelect(asset)}
+                      className="hover:bg-blade/50 mx-4 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3 md:mr-8 md:ml-0"
                     >
                       <div className="flex items-center gap-3">
-                        <AssetIcon asset={item} />
+                        <AssetIcon key={asset.identifier} asset={asset} />
                         <div className="text-left">
-                          <div className="text-leah font-semibold">{item.metadata.symbol}</div>
-                          <div className="text-thor-gray text-sm">{chainLabel(item.chain)}</div>
+                          <div className="text-leah max-w-30 truncate font-semibold">{asset.ticker}</div>
+                          <div className="text-thor-gray text-sm">{chainLabel(asset.chain)}</div>
                         </div>
                       </div>
-                      {item.asset === selected?.asset && (
+                      {asset.identifier === selected?.identifier && (
                         <div
                           className={cn(
                             'border-gray text-thor-gray rounded-full border px-1.5 py-0.5 text-xs font-medium'

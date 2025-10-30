@@ -19,8 +19,8 @@ export const useQuote = (): UseQuote => {
   const queryKey = [
     'quote',
     valueFrom.toSignificant(),
-    assetFrom?.asset,
-    assetTo?.asset,
+    assetFrom?.identifier,
+    assetTo?.identifier,
     assetFrom?.chain,
     assetTo?.chain,
     slippage
@@ -36,13 +36,13 @@ export const useQuote = (): UseQuote => {
     queryKey: queryKey,
     queryFn: ({ signal }) => {
       if (valueFrom.eqValue(0)) return
-      if (!assetFrom?.asset || !assetTo?.asset) return
+      if (!assetFrom?.identifier || !assetTo?.identifier) return
 
       return getSwapKitQuote(
         {
-          buyAsset: assetTo.asset,
+          buyAsset: assetTo.identifier,
           sellAmount: valueFrom.toSignificant(),
-          sellAsset: assetFrom.asset,
+          sellAsset: assetFrom.identifier,
           affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
           affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE),
           includeTx: false,
@@ -51,7 +51,7 @@ export const useQuote = (): UseQuote => {
         signal
       )
     },
-    enabled: !!(!valueFrom.eqValue(0) && assetFrom?.asset && assetTo?.asset),
+    enabled: !!(!valueFrom.eqValue(0) && assetFrom?.identifier && assetTo?.identifier),
     retry: false,
     refetchOnMount: false
   })

@@ -62,7 +62,7 @@ export const SwapButton = ({ onSwap }: SwapButtonProps) => {
     }
     if (approveData) {
       return {
-        text: `Approve ${assetFrom.metadata.symbol}`,
+        text: `Approve ${assetFrom.ticker}`,
         spinner: false,
         accent: false,
         onClick: async () => {

@@ -77,7 +77,7 @@ export const BrowserWallet = ({
                   className={cn('flex items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3', {
                     'border-runes-blue': isSelected,
                     'opacity-25': !isAvailable,
-                    'hover:bg-blade cursor-pointer': isAvailable
+                    'hover:bg-blade/50 cursor-pointer': isAvailable
                   })}
                   onClick={() => isAvailable && onSelectChain(chain as Chain)}
                 >

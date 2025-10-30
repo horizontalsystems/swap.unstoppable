@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { usePools } from '@/hooks/use-pools'
+import { useAssets } from '@/hooks/use-assets'
 import { useSwapStore } from '@/store/swap-store'
 import { NumberPrimitives, SwapKitNumber } from '@swapkit/core'
 
@@ -22,7 +22,7 @@ export const useSwapAssets = () => useSwapStore(state => state.swapAssets)
 // Hooks
 
 export const useSwap = () => {
-  const { pools } = usePools()
+  const { assets } = useAssets()
   const {
     slippage,
     destination,
@@ -37,9 +37,9 @@ export const useSwap = () => {
   } = useSwapStore()
 
   useEffect(() => {
-    if (!pools?.length) return
-    setInitialAssets(pools)
-  }, [pools, setInitialAssets])
+    if (!assets?.length) return
+    setInitialAssets(assets)
+  }, [assets, setInitialAssets])
 
   const amount = hasHydrated ? amountFrom : ''
 

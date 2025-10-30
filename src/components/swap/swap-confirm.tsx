@@ -48,10 +48,10 @@ export const SwapConfirm = ({ isOpen, onOpenChange }: SwapConfirmProps) => {
     if (!assetFrom || !assetTo || !selected || !destination) return
 
     getSwapKitQuote({
-      buyAsset: assetTo.asset,
+      buyAsset: assetTo.identifier,
       destinationAddress: destination.address,
       sellAmount: valueFrom.toSignificant(),
-      sellAsset: assetFrom.asset,
+      sellAsset: assetFrom.identifier,
       affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
       affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE),
       sourceAddress: selected.address,
@@ -129,10 +129,10 @@ export const SwapConfirm = ({ isOpen, onOpenChange }: SwapConfirmProps) => {
     const expectedBuyAmount = new SwapKitNumber(quote.expectedBuyAmount)
     const expectedBuyAmountMaxSlippage = new SwapKitNumber(quote.expectedBuyAmountMaxSlippage)
 
-    const rawPriceFrom = quote.meta.assets?.find(a => a.asset.toLowerCase() === assetFrom.asset.toLowerCase())?.price
+    const rawPriceFrom = quote.meta.assets?.find(a => a.asset.toLowerCase() === assetFrom.identifier.toLowerCase())?.price
     const priceFrom = rawPriceFrom && new SwapKitNumber(rawPriceFrom)
 
-    const rawPriceTo = quote.meta.assets?.find(a => a.asset.toLowerCase() === assetTo.asset.toLowerCase())?.price
+    const rawPriceTo = quote.meta.assets?.find(a => a.asset.toLowerCase() === assetTo.identifier.toLowerCase())?.price
     const priceTo = rawPriceTo && new SwapKitNumber(rawPriceTo)
 
     const { total: totalFee } = resolveFees(quote)
@@ -148,7 +148,7 @@ export const SwapConfirm = ({ isOpen, onOpenChange }: SwapConfirmProps) => {
                 <div className="flex items-center gap-4">
                   <AssetIcon asset={assetFrom} />
                   <div className="flex flex-col">
-                    <span className="text-leah text-base font-semibold">{assetFrom.metadata.symbol}</span>
+                    <span className="text-leah text-base font-semibold">{assetFrom.ticker}</span>
                     <span className="text-thor-gray text-sm">{chainLabel(assetFrom.chain)}</span>
                   </div>
                 </div>
@@ -164,7 +164,7 @@ export const SwapConfirm = ({ isOpen, onOpenChange }: SwapConfirmProps) => {
                 <div className="flex items-center gap-4">
                   <AssetIcon asset={assetTo} />
                   <div className="flex flex-col">
-                    <span className="text-leah text-base font-semibold">{assetTo.metadata.symbol}</span>
+                    <span className="text-leah text-base font-semibold">{assetTo.ticker}</span>
                     <span className="text-thor-gray text-sm">{chainLabel(assetTo.chain)}</span>
                   </div>
                 </div>
@@ -185,7 +185,7 @@ export const SwapConfirm = ({ isOpen, onOpenChange }: SwapConfirmProps) => {
               <span>Min. payout</span>
               <div className="flex gap-2">
                 <span className="text-leah font-semibold">
-                  {expectedBuyAmountMaxSlippage.toSignificant()} {assetTo.metadata.symbol}
+                  {expectedBuyAmountMaxSlippage.toSignificant()} {assetTo.ticker}
                 </span>
                 {priceTo && (
                   <span className="font-medium">({expectedBuyAmountMaxSlippage.mul(priceTo).toCurrency()})</span>

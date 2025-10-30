@@ -14,7 +14,7 @@ export const SwapBalance = () => {
     if (balance) {
       return (
         <span>
-          {balance.spendable.toSignificant()} {assetFrom?.metadata.symbol}
+          {balance.spendable.toSignificant()} {assetFrom?.ticker}
         </span>
       )
     }

@@ -87,7 +87,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
           className={cn('mb-1 flex items-center space-x-3 rounded-2xl border-1 border-transparent p-3', {
             'border-runes-blue': isSelected,
             'opacity-25': !isHighlighted,
-            'hover:bg-blade cursor-pointer': isInstalled && !isConnected && isHighlighted,
+            'hover:bg-blade/50 cursor-pointer': isInstalled && !isConnected && isHighlighted,
             'mb-4 md:mb-8': index === wallets.length - 1
           })}
           onClick={() => {
@@ -191,7 +191,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
                             key={chain}
                             className={cn('flex items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3', {
                               'border-runes-blue': isSelected,
-                              'hover:bg-blade cursor-pointer': !isComingSoon
+                              'hover:bg-blade/50 cursor-pointer': !isComingSoon
                             })}
                             onClick={() => !isComingSoon && onSelectChain(chain as Chain)}
                           >

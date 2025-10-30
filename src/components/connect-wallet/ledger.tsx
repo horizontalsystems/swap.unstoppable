@@ -107,7 +107,7 @@ export const Ledger = ({ wallet, onConnect }: { wallet: WalletParams; onConnect:
                 <div
                   key={chain}
                   className={cn(
-                    'hover:bg-blade flex cursor-pointer items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3',
+                    'hover:bg-blade/50 flex cursor-pointer items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3',
                     {
                       'border-runes-blue': isSelected
                     }

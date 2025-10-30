@@ -93,13 +93,11 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                 const status = tx.status
 
                 const amountFrom = new SwapKitNumber(tx.amountFrom)
-                const rawRateFrom = rates[tx.assetFrom.asset]
-                const rateFrom = rawRateFrom && new SwapKitNumber(rawRateFrom)
+                const rateFrom = rates[tx.assetFrom.identifier]
                 const fiatFrom = rateFrom && rateFrom.mul(amountFrom)
 
                 const amountTo = new SwapKitNumber(tx.amountTo)
-                const rawRateTo = rates[tx.assetTo.asset]
-                const rateTo = rawRateTo && new SwapKitNumber(rawRateTo)
+                const rateTo = rates[tx.assetTo.identifier]
                 const fiatTo = rateTo && rateTo.mul(amountTo)
 
                 const isExpanded = expandTx === tx.hash
@@ -124,7 +122,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                           {tx.assetFrom && <AssetIcon asset={tx.assetFrom} />}
                           <div className="flex flex-col">
                             <span className="text-leah text-base font-semibold">{amountFrom.toSignificant()}</span>
-                            <span className="text-thor-gray text-sm">{tx.assetFrom?.metadata.symbol}</span>
+                            <span className="text-thor-gray text-sm">{tx.assetFrom?.ticker}</span>
                           </div>
                         </div>
                         <div className="flex flex-col items-center justify-center">
@@ -148,7 +146,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         <div className="flex items-center justify-end gap-3">
                           <div className="flex flex-col text-right">
                             <span className="text-leah text-base font-semibold">{amountTo.toSignificant()}</span>
-                            <span className="text-thor-gray text-sm">{tx.assetTo?.metadata?.symbol}</span>
+                            <span className="text-thor-gray text-sm">{tx.assetTo?.ticker}</span>
                           </div>
                           {tx.assetTo && <AssetIcon asset={tx.assetTo} />}
                         </div>
@@ -160,7 +158,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                               <span>Deposit</span>
                               <div className="flex gap-2">
                                 <span className="text-leah font-semibold">
-                                  {amountFrom.toSignificant()} {tx.assetFrom?.metadata.symbol}
+                                  {amountFrom.toSignificant()} {tx.assetFrom?.ticker}
                                 </span>
                                 {fiatFrom && <span className="font-medium">({fiatFrom.toCurrency()})</span>}
                               </div>
@@ -170,7 +168,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                               <span>Receive</span>
                               <div className="flex gap-2">
                                 <span className="text-leah font-semibold">
-                                  {amountTo.toSignificant()} {tx.assetTo?.metadata.symbol}
+                                  {amountTo.toSignificant()} {tx.assetTo?.ticker}
                                 </span>
                                 {fiatTo && <span className="font-medium">({fiatTo.toCurrency()})</span>}
                               </div>

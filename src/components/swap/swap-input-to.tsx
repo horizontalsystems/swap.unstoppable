@@ -15,11 +15,11 @@ export const SwapInputTo = () => {
   const setAssetTo = useSetAssetTo()
   const { quote } = useQuote()
   const { openDialog } = useDialog()
-  const { rate } = useRate(assetTo?.asset)
+  const { rate } = useRate(assetTo?.identifier)
 
   const value = quote && new SwapKitNumber(quote.expectedBuyAmount)
 
-  const rateTo = rate && new SwapKitNumber(rate)
+  const rateTo = rate || new SwapKitNumber(0)
   const fiatValueTo = (rateTo && value && value.mul(rateTo)) || new SwapKitNumber(0)
 
   const onClick = () =>
@@ -47,7 +47,7 @@ export const SwapInputTo = () => {
           <AssetIcon asset={assetTo} />
           <div className="flex w-16 flex-col items-start">
             <span className="text-leah inline-block w-full truncate text-lg font-semibold">
-              {assetTo ? assetTo.metadata.symbol : <Skeleton className="mb-0.5 h-6 w-12" />}
+              {assetTo ? assetTo.ticker : <Skeleton className="mb-0.5 h-6 w-12" />}
             </span>
             <span className="text-thor-gray inline-block w-full truncate text-xs">
               {assetTo?.chain ? chainLabel(assetTo.chain) : <Skeleton className="mt-0.5 h-3 w-16" />}

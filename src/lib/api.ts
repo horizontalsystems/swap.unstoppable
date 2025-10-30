@@ -23,12 +23,12 @@ const swapKit = axios.create({
 
 const coingecko = axios.create({ baseURL: 'https://api.coingecko.com/api/v3' })
 
-export const getPools = async () => {
-  return midgard.get('/v2/pools').then(res => res.data)
+export const getAssetRates = async (ids: string) => {
+  return coingecko.get(`/simple/price?ids=${ids}&vs_currencies=usd`).then(res => res.data)
 }
 
-export const getPoolsRates = async (assets: string) => {
-  return coingecko.get(`/simple/price?ids=${assets}&vs_currencies=usd`).then(res => res.data)
+export const getTokenList = async (provider: string) => {
+  return swapKit.get(`/tokens?provider=${provider}`).then(res => res.data)
 }
 
 export const getSwapKitQuote = async (data: Record<string, any>, signal?: AbortSignal) => {

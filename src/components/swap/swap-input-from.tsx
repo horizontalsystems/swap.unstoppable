@@ -17,7 +17,7 @@ export const SwapInputFrom = () => {
   const setAssetFrom = useSetAssetFrom()
   const { openDialog } = useDialog()
   const { amountFrom, setAmountFrom, valueFrom, setValueFrom } = useSwap()
-  const { rate } = useRate(assetFrom?.asset)
+  const { rate } = useRate(assetFrom?.identifier)
   const { balance } = useBalance()
 
   const handleSetPercent = (percent: number) => {
@@ -25,7 +25,7 @@ export const SwapInputFrom = () => {
     setValueFrom(balance.spendable.mul(percent / 100))
   }
 
-  const rateFrom = new SwapKitNumber(rate || 0)
+  const rateFrom = rate || new SwapKitNumber(0)
   const fiatValueFrom = valueFrom.mul(rateFrom)
 
   const onClick = () => {
@@ -53,7 +53,7 @@ export const SwapInputFrom = () => {
           <AssetIcon asset={assetFrom} />
           <div className="flex w-16 flex-col items-start">
             <span className="text-leah inline-block w-full truncate text-lg font-semibold">
-              {assetFrom ? assetFrom.metadata.symbol : <Skeleton className="mb-0.5 h-6 w-12" />}
+              {assetFrom ? assetFrom.ticker : <Skeleton className="mb-0.5 h-6 w-12" />}
             </span>
             <span className="text-thor-gray inline-block w-full truncate text-xs">
               {assetFrom?.chain ? chainLabel(assetFrom.chain) : <Skeleton className="mt-0.5 h-3 w-16" />}

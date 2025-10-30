@@ -1,42 +1,44 @@
 import Image from 'next/image'
-import { useState } from 'react'
-import { Skeleton } from '@/components/ui/skeleton'
+import { useEffect, useState } from 'react'
 import { Asset } from '@/components/swap/asset'
+import { cn } from '@/lib/utils'
 
 export function AssetIcon({ asset }: { asset: Asset | undefined }) {
-  const [loading, setLoading] = useState(true)
-
-  if (!asset) {
-    return <Skeleton className="h-8 w-8 rounded-full" />
-  }
+  const [loaded, setLoaded] = useState(false)
 
   return (
-    <div className="relative flex h-8 w-8">
-      {loading && <Skeleton className="absolute inset-0 h-8 w-8 rounded-full" />}
-      {!loading && !isNativeAsset(asset) && (
-        <Image
-          className="outline-lawrence bg-lawrence absolute -top-1 -right-1 h-4 w-4 rounded-md"
-          src={`/networks/${asset.chain.toLowerCase()}.svg`}
-          alt={asset.chain.toLowerCase()}
-          width={16}
-          height={16}
-        />
+    <div className="bg-blade relative flex h-8 w-8 rounded-full">
+      {asset && (
+        <>
+          {!isNativeAsset(asset) && (
+            <Image
+              className="outline-lawrence bg-lawrence absolute -top-1 -right-1 h-4 w-4 rounded-md"
+              src={`/networks/${asset.chain.toLowerCase()}.svg`}
+              alt={asset.chain.toLowerCase()}
+              width={16}
+              height={16}
+            />
+          )}
+          {asset.logoURI && (
+            <img
+              className={cn('shrink-0 rounded-full', { 'opacity-0': !loaded })}
+              src={asset.logoURI}
+              alt={asset.ticker}
+              width={32}
+              height={32}
+              onLoad={() => setLoaded(true)}
+              onError={() => setLoaded(false)}
+            />
+          )}
+        </>
       )}
-      <Image
-        className="shrink-0 rounded-full"
-        src={`/coins/${asset.metadata.symbol.toLowerCase()}.svg`}
-        alt={asset.metadata.symbol}
-        width={32}
-        height={32}
-        onLoad={() => setLoading(false)}
-      />
     </div>
   )
 }
 
 function isNativeAsset(asset: Asset): boolean {
   return (
-    ['THOR.RUNE', 'BSC.BNB', 'GAIA.ATOM'].includes(asset.asset) ||
-    asset.chain.toLowerCase() === asset.metadata.symbol.toLowerCase()
+    ['THOR.RUNE', 'BSC.BNB', 'GAIA.ATOM'].includes(asset.identifier) ||
+    asset.chain.toLowerCase() === asset.ticker.toLowerCase()
   )
 }
