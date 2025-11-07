@@ -33,6 +33,7 @@
     "@swapkit/plugin-thorchain": "^2.5.27",
     "@swapkit/sdk": "^4.1.9",
     "@tanstack/react-query": "^5.90.5",
+    "@tanstack/react-virtual": "^3.13.12",
     "axios": "^1.12.2",
     "bitcoinjs-lib": "^7.0.0",
     "cashaddrjs": "^0.4.4",

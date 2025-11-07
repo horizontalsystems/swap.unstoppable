@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Search } from 'lucide-react'
@@ -11,6 +11,7 @@ import { AssetIcon } from '@/components/asset-icon'
 import { AssetValue, Chain } from '@swapkit/core'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { useAssets } from '@/hooks/use-assets'
+import { useVirtualizer } from '@tanstack/react-virtual'
 
 interface SwapSelectAssetProps {
   isOpen: boolean
@@ -92,6 +93,24 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
     onOpenChange(false)
   }
 
+  const parentRef = useRef<HTMLDivElement>(null)
+
+  const virtualizer = useVirtualizer({
+    count: chainAssets.length,
+    getScrollElement: () => {
+      return parentRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement
+    },
+    estimateSize: () => 70,
+    overscan: 5
+  })
+
+  useEffect(() => {
+    const ref = parentRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement
+    if (ref) {
+      ref.scrollTop = 0
+    }
+  }, [chainAssets])
+
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent>
@@ -140,32 +159,53 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
             </div>
 
             <div className="mt-4 flex flex-1 overflow-hidden">
-              <ScrollArea className="flex-1">
-                <div className="mb-4 md:mb-8">
-                  {chainAssets.map((asset, index) => (
-                    <div
-                      key={index}
-                      onClick={() => handleAssetSelect(asset)}
-                      className="hover:bg-blade/50 mx-4 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3 md:mr-8 md:ml-0"
-                    >
-                      <div className="flex items-center gap-3">
-                        <AssetIcon key={asset.identifier} asset={asset} />
-                        <div className="text-left">
-                          <div className="text-leah max-w-30 truncate font-semibold">{asset.ticker}</div>
-                          <div className="text-thor-gray text-sm">{chainLabel(asset.chain)}</div>
+              <ScrollArea className="flex-1" ref={parentRef}>
+                <div
+                  style={{
+                    height: `${virtualizer.getTotalSize() + 20}px`,
+                    width: '100%',
+                    position: 'relative'
+                  }}
+                >
+                  {virtualizer.getVirtualItems().map(virtualItem => {
+                    const asset = chainAssets[virtualItem.index]
+
+                    return (
+                      <div
+                        key={virtualItem.key}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: `${virtualItem.size}px`,
+                          transform: `translateY(${virtualItem.start}px)`
+                        }}
+                      >
+                        <div
+                          onClick={() => handleAssetSelect(asset)}
+                          className="hover:bg-blade/50 mx-4 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3 md:mr-8 md:ml-0"
+                        >
+                          <div className="flex items-center gap-3">
+                            <AssetIcon key={asset.identifier} asset={asset} />
+                            <div className="text-left">
+                              <div className="text-leah max-w-30 truncate font-semibold">{asset.ticker}</div>
+                              <div className="text-thor-gray text-sm">{chainLabel(asset.chain)}</div>
+                            </div>
+                          </div>
+                          {asset.identifier === selected?.identifier && (
+                            <div
+                              className={cn(
+                                'border-gray text-thor-gray rounded-full border px-1.5 py-0.5 text-xs font-medium'
+                              )}
+                            >
+                              Selected
+                            </div>
+                          )}
                         </div>
                       </div>
-                      {asset.identifier === selected?.identifier && (
-                        <div
-                          className={cn(
-                            'border-gray text-thor-gray rounded-full border px-1.5 py-0.5 text-xs font-medium'
-                          )}
-                        >
-                          Selected
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </ScrollArea>
             </div>
