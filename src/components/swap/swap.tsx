@@ -11,10 +11,15 @@ import { SwapButton } from '@/components/swap/swap-button'
 import { useQuote } from '@/hooks/use-quote'
 import { useDialog } from '@/components/global-dialog'
 import { SwapConfirm } from '@/components/swap/swap-confirm'
+import { useResolveSource } from '@/hooks/use-resolve-source'
+import { useResolveDestination } from '@/hooks/use-resolve-destination'
 
 export const Swap = () => {
   const { error: quoteError } = useQuote()
   const { openDialog } = useDialog()
+
+  useResolveSource()
+  useResolveDestination()
 
   return (
     <div className="flex flex-col items-center justify-center px-4 pt-4 pb-4 md:pb-20">

@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Chain, WalletOption } from '@swapkit/core'
 import { getAccounts, getSwapKit, supportedChains } from '@/lib/wallets'
-import { useSwapStore } from '@/store/swap-store'
 import { toast } from 'sonner'
 
 export interface WalletAccount {
@@ -20,7 +19,6 @@ interface WalletState {
   select: (account?: WalletAccount) => void
   connect: (wallet: WalletOption, chains: Chain[], config?: any) => Promise<void>
   disconnect: (wallet: WalletOption) => void
-  resolveSource: () => void
 }
 
 const swapKit = getSwapKit()
@@ -47,16 +45,12 @@ export const useWalletStore = create<WalletState>()(
           set(state => {
             const filtered = state.accounts.filter(acc => acc.provider !== wallet)
             const accounts = [...filtered, ...newAccounts]
-            const toSelect = resolveSelectedWallet(accounts, state.selected)
 
             return {
               accounts,
-              selected: toSelect,
               connectedWallets: Array.from(new Set([...state.connectedWallets, wallet]))
             }
           })
-
-          useSwapStore.getState().resolveDestination()
         } catch (err: any) {
           toast.error(err.message)
         }
@@ -70,21 +64,12 @@ export const useWalletStore = create<WalletState>()(
         set(state => {
           const accounts = state.accounts.filter(acc => acc.provider !== wallet)
           const wallets = state.connectedWallets.filter(w => w !== wallet)
-          const toSelect = resolveSelectedWallet(accounts, state.selected)
 
           return {
             accounts,
-            selected: toSelect,
             connectedWallets: wallets
           }
         })
-
-        useSwapStore.getState().resolveDestination()
-      },
-
-      resolveSource: async () => {
-        const { accounts, selected } = get()
-        set({ selected: resolveSelectedWallet(accounts, selected) })
       }
     }),
     {
@@ -110,20 +95,10 @@ export const useWalletStore = create<WalletState>()(
               []
             )
 
-            const { selected } = state
-            const wallet = accounts.find(
-              a =>
-                a.provider === selected?.provider &&
-                a.network === selected?.network &&
-                (!selected.address || a.address === selected.address)
-            )
-
             useWalletStore.setState({
               accounts,
-              selected: wallet,
               connectedWallets: Array.from(new Set(accounts.map(w => w.provider)))
             })
-            useSwapStore.getState().resolveDestination()
           })
           .finally(() => useWalletStore.setState({ hasHydrated: true }))
       }
@@ -134,16 +109,6 @@ export const useWalletStore = create<WalletState>()(
 useWalletStore.subscribe(state => {
   // todo
 })
-
-function resolveSelectedWallet(accounts: WalletAccount[], previous?: WalletAccount) {
-  const { assetFrom } = useSwapStore.getState()
-
-  const fromPrevious = accounts?.find(
-    w => w.provider === previous?.provider && w.address === previous?.address && w.network === assetFrom?.chain
-  )
-
-  return fromPrevious ?? accounts?.find(a => a.network === assetFrom?.chain)
-}
 
 export const useAccounts = () => useWalletStore(state => state.accounts)
 export const useConnectWallet = () => useWalletStore(state => state.connect)
