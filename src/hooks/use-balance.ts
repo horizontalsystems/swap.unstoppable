@@ -40,13 +40,13 @@ export const useBalance = (): UseBalance => {
     isLoading,
     error
   } = useQuery({
-    queryKey: ['balance', assetFrom?.identifier, selected?.address],
+    queryKey: ['balance', assetFrom?.identifier, selected?.provider],
     queryFn: async () => {
       if (!selected || !assetFrom || !inboundAddresses) {
         return null
       }
 
-      const wallet = swapKit.getWallet(selected.provider, selected.network)
+      const wallet = swapKit.getWallet(selected.provider, assetFrom.chain)
 
       if (!wallet) {
         return null
