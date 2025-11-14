@@ -8,7 +8,10 @@ const thornode = axios.create({
 })
 
 const uKit = axios.create({
-  baseURL: 'https://swap-api.unstoppable.money'
+  baseURL: process.env.NEXT_PUBLIC_UKIT_API_URL,
+  headers: {
+    'x-api-key': process.env.NEXT_PUBLIC_UKIT_API_KEY
+  }
 })
 
 const memoless = axios.create({

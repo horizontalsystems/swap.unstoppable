@@ -78,10 +78,13 @@ export function getSwapKit() {
     config: {
       apiKeys: {
         blockchair: process.env.NEXT_PUBLIC_BLOCKCHAIR_API_KEY,
-        swapKit: process.env.NEXT_PUBLIC_SWAP_KIT_API_KEY
+        swapKit: process.env.NEXT_PUBLIC_UKIT_API_KEY
       },
       rpcUrls: {
         [Chain.Ethereum]: ['https://eth.drpc.org', 'https://eth.llamarpc.com', 'https://ethereum-rpc.publicnode.com']
+      },
+      envs: {
+        apiUrl: process.env.NEXT_PUBLIC_UKIT_API_URL
       }
     }
   })
