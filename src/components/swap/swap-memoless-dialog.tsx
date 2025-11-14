@@ -85,7 +85,7 @@ export const SwapMemolessDialog = ({ provider, isOpen, onOpenChange }: SwapMemol
           <>
             <SwapConfirm quote={quote} />
 
-            <div className="p-4 md:p-8 md:pt-4">
+            <div className="p-4 md:p-8">
               <ThemeButton
                 variant={channel ? 'secondaryMedium' : 'primaryMedium'}
                 className="w-full"

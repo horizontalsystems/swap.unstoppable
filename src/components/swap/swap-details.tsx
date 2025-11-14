@@ -28,7 +28,7 @@ export function SwapDetails() {
   const feeSection = (title: string, info: string, fee?: FeeData) => {
     return (
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           {title} <InfoTooltip>{info}</InfoTooltip>
         </div>
         <div className="text-leah flex items-center gap-2">

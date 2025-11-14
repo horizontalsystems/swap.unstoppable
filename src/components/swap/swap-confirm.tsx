@@ -1,7 +1,7 @@
 import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
-import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
+import { useAssetFrom, useAssetTo, useSlippage } from '@/hooks/use-swap'
 import { QuoteResponseRoute } from '@swapkit/helpers/api'
-import { truncate } from '@/lib/utils'
+import { cn, truncate } from '@/lib/utils'
 import { AssetIcon } from '@/components/asset-icon'
 import { CopyButton } from '@/components/button-copy'
 import { resolveFees } from '@/components/swap/swap-helpers'
@@ -10,8 +10,9 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Icon } from '@/components/icons'
 import { SwapKitNumber } from '@swapkit/core'
 import { chainLabel } from '@/components/connect-wallet/config'
-import { useRate } from '@/hooks/use-rates'
+import { useRate, useSwapRates } from '@/hooks/use-rates'
 import { useMemo } from 'react'
+import { InfoTooltip } from '@/components/info-tooltip'
 
 interface SwapConfirmProps {
   quote: QuoteResponseRoute
@@ -20,27 +21,28 @@ interface SwapConfirmProps {
 export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
+  const slippage = useSlippage()
 
   if (!assetFrom || !assetTo) return null
 
   const identifiers = useMemo(() => quote.fees.map(t => t.asset).sort(), [quote.fees])
   const { rates } = useRate(identifiers)
+  const { rate: rateFrom } = useSwapRates(assetFrom?.identifier)
+  const { rate: rateTo } = useSwapRates(assetTo?.identifier)
 
   const sellAmount = new SwapKitNumber(quote.sellAmount)
   const expectedBuyAmount = new SwapKitNumber(quote.expectedBuyAmount)
   const expectedBuyAmountMaxSlippage = new SwapKitNumber(quote.expectedBuyAmountMaxSlippage)
 
-  const priceFrom = rates[assetFrom.identifier]
-  const priceTo = rates[assetTo.identifier]
-
   const { total: totalFee } = resolveFees(quote, rates)
 
-  const buyAmountInUsd = priceFrom && expectedBuyAmount.mul(priceTo)
-  const sellAmountInUsd = priceTo && sellAmount.mul(priceFrom)
+  const sellAmountInUsd = rateFrom && sellAmount.mul(rateFrom)
+  const buyAmountInUsd = rateTo && expectedBuyAmount.mul(rateTo)
 
   const hundredPercent = new SwapKitNumber(100)
   const toPriceRatio = buyAmountInUsd && sellAmountInUsd && buyAmountInUsd.mul(hundredPercent).div(sellAmountInUsd)
-  const slippage = toPriceRatio && toPriceRatio.sub(hundredPercent)
+  const priceImpact =
+    toPriceRatio && (toPriceRatio.gt(hundredPercent) ? new SwapKitNumber(0) : hundredPercent.sub(toPriceRatio))
 
   return (
     <>
@@ -49,7 +51,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
       </CredenzaHeader>
 
       <ScrollArea className="flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
-        <div className="border-blade mb-4 rounded-xl border-1 md:mb-8">
+        <div className="border-blade rounded-xl border-1">
           <div className="relative flex flex-col">
             <div className="text-thor-gray flex justify-between p-4 text-sm">
               <div className="flex items-center gap-4">
@@ -62,7 +64,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
               <div className="flex flex-col items-end">
                 <span className="text-leah text-base font-semibold">{sellAmount.toSignificant()}</span>
                 <span className="text-thor-gray text-sm">
-                  {priceFrom ? sellAmount.mul(priceFrom).toCurrency() : 'n/a'}
+                  {rateFrom ? sellAmount.mul(rateFrom).toCurrency() : 'n/a'}
                 </span>
               </div>
             </div>
@@ -78,7 +80,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
               <div className="flex flex-col items-end">
                 <span className="text-leah text-base font-semibold">{expectedBuyAmount.toSignificant()}</span>
                 <span className="text-thor-gray text-sm">
-                  {priceTo ? expectedBuyAmount.mul(priceTo).toCurrency() : 'n/a'}
+                  {rateTo ? expectedBuyAmount.mul(rateTo).toCurrency() : 'n/a'}
                 </span>
               </div>
             </div>
@@ -88,19 +90,38 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
             </div>
           </div>
 
-          <div className="text-thor-gray flex justify-between border-t p-4 text-sm">
-            <span>Min. payout</span>
-            <div className="flex gap-2">
-              <span className="text-leah font-semibold">
-                {expectedBuyAmountMaxSlippage.toSignificant()} {assetTo.ticker}
-              </span>
-              {priceTo && (
-                <span className="font-medium">({expectedBuyAmountMaxSlippage.mul(priceTo).toCurrency()})</span>
+          <div className="space-y-4 border-t p-4">
+            <div className="text-thor-gray flex justify-between text-sm">
+              <div className="flex items-center gap-1">
+                Min. Payout{' '}
+                {slippage && (
+                  <span
+                    className={cn({
+                      'text-jacob': slippage > 3
+                    })}
+                  >
+                    ({slippage}%)
+                  </span>
+                )}
+                <InfoTooltip>
+                  Minimum guaranteed amount based on your slippage tolerance. If market conditions would give you less,
+                  the transaction will be canceled automatically.
+                </InfoTooltip>
+              </div>
+              {slippage ? (
+                <div className="flex gap-2">
+                  <span className="text-leah font-semibold">
+                    {expectedBuyAmountMaxSlippage.toSignificant()} {assetTo.ticker}
+                  </span>
+                  {rateTo && (
+                    <span className="font-medium">({expectedBuyAmountMaxSlippage.mul(rateTo).toCurrency()})</span>
+                  )}
+                </div>
+              ) : (
+                <span className="text-lucian font-semibold">Not Protected</span>
               )}
             </div>
-          </div>
 
-          <div className="space-y-4 border-t p-4">
             {quote.sourceAddress && quote.sourceAddress !== '{sourceAddress}' && (
               <div className="text-thor-gray flex justify-between text-sm">
                 <span>Source Address</span>
@@ -118,36 +139,48 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                 <CopyButton text={quote.destinationAddress} />
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="border-blade space-y-4 rounded-xl border-1 p-4">
-          <div className="text-thor-gray flex justify-between text-sm">
-            <span>Fee</span>
-            <span className="text-leah font-semibold">{totalFee.toCurrency()}</span>
-          </div>
+            {priceImpact && (
+              <div className="text-thor-gray flex justify-between text-sm">
+                <div className="flex items-center gap-1">
+                  Price Impact
+                  <InfoTooltip>
+                    The difference between the market price and your actual swap rate due to trade size. Larger trades
+                    typically have higher price impact.
+                  </InfoTooltip>
+                </div>
+                <span
+                  className={cn('font-semibold', {
+                    'text-leah': priceImpact.lte(10),
+                    'text-jacob': priceImpact.gt(10) && priceImpact.lte(20),
+                    'text-lucian': priceImpact.gt(20)
+                  })}
+                >
+                  {priceImpact.toSignificant(2)}%
+                </span>
+              </div>
+            )}
 
-          {quote.estimatedTime && (
+            {quote.estimatedTime && (
+              <div className="text-thor-gray flex justify-between text-sm">
+                <span>Estimated Time</span>
+                <span className="text-leah font-semibold">
+                  {formatDuration(
+                    intervalToDuration({
+                      start: 0,
+                      end: (quote.estimatedTime.total || 0) * 1000
+                    }),
+                    { format: ['hours', 'minutes', 'seconds'], zero: false }
+                  )}
+                </span>
+              </div>
+            )}
+
             <div className="text-thor-gray flex justify-between text-sm">
-              <span>Estimated Time</span>
-              <span className="text-leah font-semibold">
-                {formatDuration(
-                  intervalToDuration({
-                    start: 0,
-                    end: (quote.estimatedTime.total || 0) * 1000
-                  }),
-                  { format: ['hours', 'minutes', 'seconds'], zero: false }
-                )}
-              </span>
+              <span>Fee</span>
+              <span className="text-leah font-semibold">{totalFee.toCurrency()}</span>
             </div>
-          )}
-
-          {slippage && (
-            <div className="text-thor-gray flex justify-between text-sm">
-              <span>Slippage</span>
-              <span className="text-leah font-semibold">{slippage.toSignificant(3)}%</span>
-            </div>
-          )}
+          </div>
         </div>
       </ScrollArea>
     </>

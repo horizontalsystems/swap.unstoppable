@@ -5,7 +5,7 @@ import { Asset } from '@/components/swap/asset'
 const INITIAL_ASSET_FROM = 'BTC.BTC'
 const INITIAL_ASSET_TO = 'THOR.RUNE'
 const INITIAL_AMOUNT_FROM = 0.5
-export const INITIAL_SLIPPAGE = 1
+export const INITIAL_SLIPPAGE = 3
 
 interface SwapState {
   assetFrom?: Asset

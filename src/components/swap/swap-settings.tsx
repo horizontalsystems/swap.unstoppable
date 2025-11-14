@@ -57,7 +57,7 @@ export const SwapSettings = () => {
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
             <div className="flex justify-between text-sm font-semibold">
-              <div className="flex items-center">
+              <div className="flex items-center gap-1">
                 <span>Slippage Tolerance</span>
                 <InfoTooltip>
                   Due to market volatility, prices may change before completion. This setting ensures you receive at

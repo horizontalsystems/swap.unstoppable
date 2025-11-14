@@ -57,7 +57,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
       affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE),
       sourceAddress: selectedAccount?.address,
       includeTx: !!selectedAccount,
-      slippage: slippage,
+      slippage: slippage ?? 99,
       providers: [provider]
     })
       .then(quotes => {

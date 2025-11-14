@@ -47,7 +47,7 @@ export const useQuote = (): UseQuote => {
           affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
           affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE),
           includeTx: false,
-          slippage: slippage
+          slippage: slippage ?? 99
         },
         signal
       ).then(quotes => {
