@@ -8,10 +8,33 @@ import { Input } from '@/components/ui/input'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 import { AssetIcon } from '@/components/asset-icon'
-import { AssetValue, Chain } from '@swapkit/core'
+import { Chain } from '@swapkit/core'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { useAssets } from '@/hooks/use-assets'
 import { useVirtualizer } from '@tanstack/react-virtual'
+
+const FEATURED_ASSETS = [
+  'AVAX.AVAX',
+  'BASE.ETH',
+  'BCH.BCH',
+  'BSC.BNB',
+  'BTC.BTC',
+  'DOGE.DOGE',
+  'ETH.ETH',
+  'GAIA.ATOM',
+  'LTC.LTC',
+  'TRON.TRX',
+  'XRP.XRP',
+  'THOR.RUNE',
+  'OP.ETH',
+  'ARB.ETH',
+  'BERA.BERA',
+  'SOL.SOL',
+  'POL.POL',
+  'GNO.xDAI',
+  'ZEC.ZEC',
+  'NEAR.NEAR'
+]
 
 interface SwapSelectAssetProps {
   isOpen: boolean
@@ -65,22 +88,58 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
 
   const chainAssets = useMemo(() => {
     const assets = chainMap.get(selectedChain) || []
-    const filteredAssets = !searchQuery
-      ? assets
-      : assets.filter(asset => {
-          const assetValue = AssetValue.from({
-            asset: asset.identifier
-          })
+    const query = searchQuery.toLowerCase()
 
-          if (assetValue.isGasAsset && chainLabel(asset.chain).toLowerCase().includes(searchQuery.toLowerCase())) {
-            return true
-          }
+    const filteredAssets = () => {
+      if (!searchQuery) {
+        if (selectedChain === Filter.All) {
+          return assets.filter(asset => FEATURED_ASSETS.includes(asset.identifier))
+        } else {
+          return assets
+        }
+      }
 
-          return asset.ticker.toLowerCase().includes(searchQuery.toLowerCase())
-        })
+      return assets.filter(asset => {
+        const ticker = asset.ticker.toLowerCase()
+        const name = (asset.name || '').toLowerCase()
 
-    return filteredAssets.sort((a, b) => {
-      return a.ticker.toLowerCase().localeCompare(b.ticker.toLowerCase())
+        return ticker.includes(query) || name.includes(query)
+      })
+    }
+
+    return filteredAssets().sort((a, b) => {
+      const aTickerLower = a.ticker.toLowerCase()
+      const bTickerLower = b.ticker.toLowerCase()
+
+      const getPriority = (asset: Asset) => {
+        if (query) {
+          const ticker = asset.ticker.toLowerCase()
+
+          if (ticker === query) return 1
+          if (ticker.startsWith(query)) return 2
+          if (ticker.includes(query)) return 3
+
+          const name = (asset.name || '').toLowerCase()
+
+          if (name.startsWith(query)) return 4
+          if (name.includes(query)) return 5
+        }
+
+        const isFeatured = FEATURED_ASSETS.includes(asset.identifier)
+
+        if (isFeatured) return 6
+
+        return 7
+      }
+
+      const aPriority = getPriority(a)
+      const bPriority = getPriority(b)
+
+      if (aPriority !== bPriority) {
+        return aPriority - bPriority
+      }
+
+      return aTickerLower.localeCompare(bTickerLower)
     })
   }, [chainMap, selectedChain, searchQuery])
 
