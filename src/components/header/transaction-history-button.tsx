@@ -9,7 +9,6 @@ import { useConnectedWallets } from '@/hooks/use-wallets'
 import { useSyncTransactions } from '@/hooks/use-sync-transactions'
 import { ThemeButton } from '@/components/theme-button'
 import { Icon } from '@/components/icons'
-import { useMigrateTransactions } from '@/hooks/use-migrate-transactions'
 
 export const TransactionHistoryButton = () => {
   const { openDialog } = useDialog()
@@ -19,7 +18,6 @@ export const TransactionHistoryButton = () => {
   const setPendingAlert = useSetPendingAlert()
   const connectedProviders = useConnectedWallets()
 
-  useMigrateTransactions()
   useSyncTransactions()
 
   if (!connectedProviders.length) {
