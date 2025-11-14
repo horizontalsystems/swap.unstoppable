@@ -11,13 +11,6 @@ const uKit = axios.create({
   baseURL: 'https://swap-api.unstoppable.money'
 })
 
-const swapKit = axios.create({
-  baseURL: 'https://api.swapkit.dev',
-  headers: {
-    'x-api-key': process.env.NEXT_PUBLIC_SWAP_KIT_API_KEY
-  }
-})
-
 const memoless = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_MEMOLESS_API}/api/v1`
 })
@@ -54,7 +47,7 @@ export const getQuotes = async (data: Record<string, any>, signal?: AbortSignal)
 }
 
 export const getSwapKitTrack = async (data: Record<string, any>) => {
-  return swapKit.post('/track', data).then(res => res.data)
+  return uKit.post('/track', data).then(res => res.data)
 }
 
 export const getInboundAddresses = async () => {

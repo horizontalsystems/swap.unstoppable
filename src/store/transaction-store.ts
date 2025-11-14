@@ -11,6 +11,9 @@ interface Transaction {
   assetTo: Asset
   amountFrom: string
   amountTo: string
+  addressFrom: string
+  addressTo: string
+  addressDeposit: string
   status: 'not_started' | 'pending' | 'swapping' | 'completed' | 'failed' | 'refunded' | 'unknown'
   details?: any
 }
@@ -101,7 +104,8 @@ export const transactionStore = create<TransactionStore>()(
       setPendingAlert: (show: boolean) => set(state => ({ ...state, showPendingAlert: show }))
     }),
     {
-      name: 'transactions'
+      name: 'transactions',
+      version: 2
     }
   )
 )

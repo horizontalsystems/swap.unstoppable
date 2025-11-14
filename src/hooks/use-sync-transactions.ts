@@ -18,7 +18,14 @@ export const useSyncTransactions = () => {
       queryFn: () =>
         getSwapKitTrack({
           hash: item.hash,
-          chainId: getChainConfig(item.assetFrom.chain).chainId
+          chainId: getChainConfig(item.assetFrom.chain).chainId,
+          fromAsset: item.assetFrom.identifier,
+          fromAddress: item.addressFrom,
+          fromAmount: item.amountFrom,
+          toAsset: item.assetTo.identifier,
+          toAddress: item.addressTo,
+          toAmount: item.amountTo,
+          depositAddress: item.addressDeposit
         })
           .then(data => {
             setTransactionDetails(item.hash, data)
