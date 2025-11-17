@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { SwapKitNumber } from '@swapkit/core'
+import { Asset } from '@/components/swap/asset'
 
 const thornode = axios.create({
   baseURL: process.env.NEXT_PUBLIC_THORCHAIN_API,
@@ -40,11 +42,38 @@ export const getTokenList = async (provider: string) => {
   return uKit.get(`/tokens?provider=${provider}`).then(res => res.data)
 }
 
-export const getQuotes = async (data: Record<string, any>, signal?: AbortSignal) => {
+export const getQuotes = async (
+  data: {
+    buyAsset: Asset
+    sellAsset: Asset
+    sellAmount: SwapKitNumber
+    sourceAddress?: string
+    destinationAddress?: string
+    includeTx: boolean
+    slippage: number | undefined
+    providers?: string[]
+  },
+  signal?: AbortSignal
+) => {
   return uKit
-    .post('/quote', data, {
-      signal
-    })
+    .post(
+      '/quote',
+      {
+        buyAsset: data.buyAsset.identifier,
+        sellAsset: data.sellAsset.identifier,
+        sellAmount: data.sellAmount.toSignificant(),
+        sourceAddress: data.sourceAddress,
+        destinationAddress: data.destinationAddress,
+        includeTx: data.includeTx,
+        slippage: data.slippage ?? 99,
+        providers: data.providers,
+        affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
+        affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE)
+      },
+      {
+        signal
+      }
+    )
     .then(res => res.data)
     .then(data => data.routes || [])
 }

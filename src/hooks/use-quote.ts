@@ -41,13 +41,11 @@ export const useQuote = (): UseQuote => {
 
       return getQuotes(
         {
-          buyAsset: assetTo.identifier,
-          sellAmount: valueFrom.toSignificant(),
-          sellAsset: assetFrom.identifier,
-          affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
-          affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE),
+          buyAsset: assetTo,
+          sellAsset: assetFrom,
+          sellAmount: valueFrom,
           includeTx: false,
-          slippage: slippage ?? 99
+          slippage: slippage
         },
         signal
       ).then(quotes => {

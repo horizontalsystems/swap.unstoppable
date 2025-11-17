@@ -49,15 +49,13 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
     setQuoting(true)
 
     getQuotes({
-      buyAsset: assetTo.identifier,
-      destinationAddress: address,
-      sellAmount: valueFrom.toSignificant(),
-      sellAsset: assetFrom.identifier,
-      affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
-      affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE),
+      buyAsset: assetTo,
+      sellAsset: assetFrom,
+      sellAmount: valueFrom,
       sourceAddress: selectedAccount?.address,
+      destinationAddress: address,
       includeTx: !!selectedAccount,
-      slippage: slippage ?? 99,
+      slippage: slippage,
       providers: [provider]
     })
       .then(quotes => {
