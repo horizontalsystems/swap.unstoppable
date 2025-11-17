@@ -40,7 +40,9 @@ export function Header() {
           <Image src="/logo.svg" alt="THORChain Swap" width={32} height={32} priority />
           <div className="flex items-center gap-2">
             <div className="text-leah text-sm font-semibold whitespace-nowrap">THORChain Swap</div>
-            <Image src="/beta.svg" alt="Beta" width={37} height={17} priority />
+            <div className="text-storm-purple border-storm-purple rounded-full border px-1.5 py-[1px] text-[10px] font-semibold">
+              BETA
+            </div>
           </div>
         </div>
 
