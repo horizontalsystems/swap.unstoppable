@@ -66,9 +66,7 @@ export const getQuotes = async (
         destinationAddress: data.destinationAddress,
         includeTx: data.includeTx,
         slippage: data.slippage ?? 99,
-        providers: data.providers,
-        affiliate: process.env.NEXT_PUBLIC_AFFILIATE,
-        affiliateFee: Number(process.env.NEXT_PUBLIC_AFFILIATE_FEE)
+        providers: data.providers
       },
       {
         signal

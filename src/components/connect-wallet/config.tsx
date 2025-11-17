@@ -146,6 +146,8 @@ export const chainLabel = (c: Chain | string): string => {
   switch (c) {
     case Chain.BinanceSmartChain:
       return 'BNB Chain'
+    case Chain.BitcoinCash:
+      return 'Bitcoin Cash'
     case 'XMR':
       return 'Monero'
     default:
