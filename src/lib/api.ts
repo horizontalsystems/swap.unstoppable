@@ -2,13 +2,6 @@ import axios from 'axios'
 import { SwapKitNumber } from '@swapkit/core'
 import { Asset } from '@/components/swap/asset'
 
-const thornode = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_THORCHAIN_API,
-  headers: {
-    'x-client-id': process.env.NEXT_PUBLIC_XCLIENT_ID
-  }
-})
-
 const uKit = axios.create({
   baseURL: process.env.NEXT_PUBLIC_UKIT_API_URL,
   headers: {
@@ -78,8 +71,4 @@ export const getQuotes = async (
 
 export const getSwapKitTrack = async (data: Record<string, any>) => {
   return uKit.post('/track', data).then(res => res.data)
-}
-
-export const getInboundAddresses = async () => {
-  return thornode.get('/thorchain/inbound_addresses').then(res => res.data)
 }
