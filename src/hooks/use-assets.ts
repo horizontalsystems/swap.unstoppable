@@ -39,7 +39,8 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
         geckoMap
       }
     },
-    refetchOnMount: false
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   })
 
   return {
