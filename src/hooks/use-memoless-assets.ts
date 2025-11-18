@@ -15,7 +15,9 @@ export const useMemolessAssets = (): { assets: MemolessAsset[] | undefined; isLo
         .then(data => data.assets)
         .then(assets => assets.filter((asset: any) => asset.status === 'Available'))
         .then(assets => assets.map((asset: any) => asset as MemolessAsset))
-    }
+    },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   })
 
   return { assets: data, isLoading }
