@@ -24,23 +24,23 @@ export const useRates = (identifiers: string[]): { rates: AssetRateMap; isLoadin
       const cached: AssetRateMap = {}
       const missing: string[] = []
 
-      for (const id of identifiers) {
-        const value = queryClient.getQueryData<SwapKitNumber>(['asset-rate', id])
-        if (value) cached[id] = value
-        else missing.push(id)
+      for (const identifier of identifiers) {
+        const value = queryClient.getQueryData<SwapKitNumber>(['asset-rate', identifier])
+        if (value) cached[identifier] = value
+        else missing.push(identifier)
       }
 
       if (missing.length === 0) return cached
 
       const idMap = new Map<string, string>()
-      for (const id of missing) {
-        const gid = geckoMap.get(id)
-        if (gid) idMap.set(gid, id)
+      for (const identifier of missing) {
+        const gid = geckoMap.get(identifier)
+        if (gid) idMap.set(identifier, gid)
       }
 
       if (!idMap.size) return cached
 
-      const fetched = await fetchRates(Array.from(idMap.keys()), Array.from(idMap.values()))
+      const fetched = await fetchRates(Array.from(idMap.values()), Array.from(idMap.keys()))
 
       Object.entries(fetched).forEach(([id, rate]) => {
         queryClient.setQueryData(['asset-rate', id], rate)
@@ -71,7 +71,9 @@ export const useSwapRates = (identifier?: string) => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const identifiers = [assetFrom?.identifier, assetTo?.identifier].filter(Boolean).sort() as string[]
+  console.log({ identifiers })
   const { rates } = useRates(identifiers)
+  console.log({ rates })
 
   return { rate: identifier ? rates[identifier] : undefined }
 }
