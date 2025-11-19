@@ -32,7 +32,7 @@ export const useSimulation = (): UseSimulation => {
   } = useQuery({
     queryKey: ['simulation', quote],
     queryFn: async () => {
-      if (!quote || !quote.targetAddress || !selected || !assetFrom) {
+      if (!quote || !selected || !assetFrom) {
         return null
       }
 
@@ -46,18 +46,18 @@ export const useSimulation = (): UseSimulation => {
         asyncTokenLookup: true
       })
 
-      if (!assetValue.isGasAsset && assetValue.address) {
+      if (!assetValue.isGasAsset && assetValue.address && quote.meta.approvalAddress) {
         const wallet = swapKit.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
         const approved = await wallet?.isApproved({
           assetAddress: assetValue.address,
-          spenderAddress: quote.targetAddress,
+          spenderAddress: quote.meta.approvalAddress,
           from: selected.address,
           amount: assetValue.getValue('bigint')
         })
 
         if (!approved) {
           return {
-            spender: quote.targetAddress,
+            spender: quote.meta.approvalAddress,
             contract: assetValue.address,
             amount: assetValue.getValue('bigint')
           }
