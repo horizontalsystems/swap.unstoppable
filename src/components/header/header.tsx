@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
+import { HeaderThorchain } from '@/components/header/header-thorchain'
 import { useConnectedWallets, useDisconnect } from '@/hooks/use-wallets'
 import { useDialog } from '@/components/global-dialog'
 import { TransactionHistoryButton } from '@/components/header/transaction-history-button'
@@ -38,12 +39,7 @@ export function Header() {
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-2">
           <Image src="/logo.svg" alt="THORChain Swap" width={32} height={32} priority />
-          <div className="flex items-center gap-2">
-            <div className="text-leah text-sm font-semibold whitespace-nowrap">THORChain Swap</div>
-            <div className="text-storm-purple border-storm-purple rounded-full border px-1.5 py-[1px] text-[10px] font-semibold">
-              BETA
-            </div>
-          </div>
+          <HeaderThorchain />
         </div>
 
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
