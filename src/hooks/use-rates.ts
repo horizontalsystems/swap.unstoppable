@@ -1,79 +1,115 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getAssetRates } from '@/lib/api'
-import { SwapKitNumber } from '@swapkit/core'
+import { assetFromString, getCommonAssetInfo, SwapKitNumber } from '@swapkit/core'
 import { useAssets } from '@/hooks/use-assets'
 import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
+import { useEffect } from 'react'
 
 export type AssetRateMap = Record<string, SwapKitNumber>
 
-export const useRates = (identifiers: string[]): { rates: AssetRateMap; isLoading: boolean } => {
-  const queryClient = useQueryClient()
-  const { geckoMap } = useAssets()
+class RateIdentifierCache {
+  private maxSize: number
+  private cache: Map<string, number>
 
-  queryClient.setQueryDefaults(['asset-rate'], { staleTime: 3 * 60_000 })
+  constructor(maxSize: number = 100) {
+    this.maxSize = maxSize
+    this.cache = new Map()
+  }
+
+  add(identifiers: string[]): boolean {
+    let hasNew = false
+    const now = Date.now()
+
+    for (const id of identifiers) {
+      if (!this.cache.has(id)) {
+        hasNew = true
+      }
+      this.cache.delete(id)
+      this.cache.set(id, now)
+    }
+
+    while (this.cache.size > this.maxSize) {
+      const oldestKey = this.cache.keys().next().value
+      if (oldestKey) {
+        this.cache.delete(oldestKey)
+      }
+    }
+
+    return hasNew
+  }
+
+  getAll(): string[] {
+    return Array.from(this.cache.keys())
+  }
+
+  size(): number {
+    return this.cache.size
+  }
+}
+
+const identifierCache = new RateIdentifierCache(100)
+
+export const useRates = (identifiers: string[]): { rates: AssetRateMap; isLoading: boolean } => {
+  const { geckoMap } = useAssets()
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    const gasIdentifiers = identifiers.map(id => getCommonAssetInfo(assetFromString(id).chain).identifier)
+    const hasNew = identifierCache.add([...identifiers, ...gasIdentifiers])
+
+    if (hasNew) {
+      queryClient.invalidateQueries({ queryKey: ['asset-rates-accumulated'] })
+    }
+  }, [identifiers, queryClient])
 
   const { data, isLoading } = useQuery({
-    queryKey: ['asset-rates', ...identifiers],
-    enabled: !!geckoMap && identifiers.length > 0,
+    queryKey: ['asset-rates-accumulated'],
+    enabled: !!geckoMap && identifierCache.size() > 0,
     retry: false,
     staleTime: 3 * 60_000,
     refetchOnMount: false,
     queryFn: async () => {
-      if (!geckoMap || identifiers.length === 0) return {}
+      if (!geckoMap || identifierCache.size() === 0) return {}
 
-      const cached: AssetRateMap = {}
-      const missing: string[] = []
-
-      for (const identifier of identifiers) {
-        const value = queryClient.getQueryData<SwapKitNumber>(['asset-rate', identifier])
-        if (value) cached[identifier] = value
-        else missing.push(identifier)
-      }
-
-      if (missing.length === 0) return cached
-
+      const allIdentifiers = identifierCache.getAll()
       const idMap = new Map<string, string>()
-      for (const identifier of missing) {
+
+      for (const identifier of allIdentifiers) {
         const gid = geckoMap.get(identifier)
         if (gid) idMap.set(identifier, gid)
       }
 
-      if (!idMap.size) return cached
+      if (!idMap.size) return {}
 
-      const fetched = await fetchRates(Array.from(idMap.values()), Array.from(idMap.keys()))
-
-      Object.entries(fetched).forEach(([id, rate]) => {
-        queryClient.setQueryData(['asset-rate', id], rate)
-      })
-
-      return { ...cached, ...fetched }
+      return await fetchRates(Array.from(idMap.values()), Array.from(idMap.keys()))
     }
   })
 
+  const rates: AssetRateMap = {}
+  if (data) {
+    for (const id of identifiers) {
+      if (data[id]) {
+        rates[id] = data[id]
+      }
+    }
+  }
+
   return {
-    rates: data || {},
+    rates,
     isLoading: isLoading || !geckoMap || identifiers.length === 0
   }
 }
 
-export const useRate = (identifiers?: string | string[]) => {
-  const ids = Array.isArray(identifiers) ? identifiers : identifiers ? [identifiers] : []
-  const { rates, isLoading } = useRates(ids)
-
-  return {
-    rates,
-    rate: ids.length === 1 ? rates[ids[0]] : undefined,
-    isLoading
-  }
-}
-
-export const useSwapRates = (identifier?: string) => {
+export const useSwapRates = () => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const identifiers = [assetFrom?.identifier, assetTo?.identifier].filter(Boolean).sort() as string[]
   const { rates } = useRates(identifiers)
 
-  return { rate: identifier ? rates[identifier] : undefined }
+  return {
+    rateFrom: assetFrom && rates[assetFrom.identifier],
+    rateTo: assetTo && rates[assetTo.identifier]
+  }
 }
 
 async function fetchRates(geckoIds: string[], identifiers: string[]): Promise<AssetRateMap> {

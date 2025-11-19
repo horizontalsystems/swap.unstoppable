@@ -10,7 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Icon } from '@/components/icons'
 import { SwapKitNumber } from '@swapkit/core'
 import { chainLabel } from '@/components/connect-wallet/config'
-import { useRate, useSwapRates } from '@/hooks/use-rates'
+import { useRates, useSwapRates } from '@/hooks/use-rates'
 import { useMemo } from 'react'
 import { InfoTooltip } from '@/components/info-tooltip'
 
@@ -25,10 +25,9 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
 
   if (!assetFrom || !assetTo) return null
 
-  const identifiers = useMemo(() => quote.fees.map(t => t.asset).sort(), [quote.fees])
-  const { rates } = useRate(identifiers)
-  const { rate: rateFrom } = useSwapRates(assetFrom?.identifier)
-  const { rate: rateTo } = useSwapRates(assetTo?.identifier)
+  const identifiers = useMemo(() => quote.fees.map(f => f.asset).sort(), [quote.fees])
+  const { rates } = useRates(identifiers)
+  const { rateFrom, rateTo } = useSwapRates()
 
   const sellAmount = new SwapKitNumber(quote.sellAmount)
   const expectedBuyAmount = new SwapKitNumber(quote.expectedBuyAmount)

@@ -3,7 +3,7 @@ import { DecimalInput } from '@/components/decimal/decimal-input'
 import { AssetIcon } from '@/components/asset-icon'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useQuote } from '@/hooks/use-quote'
-import { useAssetFrom, useAssetTo, useSetAssetTo } from '@/hooks/use-swap'
+import { useAssetTo, useSetAssetTo } from '@/hooks/use-swap'
 import { useDialog } from '@/components/global-dialog'
 import { useSwapRates } from '@/hooks/use-rates'
 import { Icon } from '@/components/icons'
@@ -12,13 +12,11 @@ import { SwapKitNumber } from '@swapkit/core'
 import { cn } from '@/lib/utils'
 
 export const SwapInputTo = () => {
-  const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const setAssetTo = useSetAssetTo()
   const { quote } = useQuote()
   const { openDialog } = useDialog()
-  const { rate: rateFrom } = useSwapRates(assetFrom?.identifier)
-  const { rate: rateTo } = useSwapRates(assetTo?.identifier)
+  const { rateFrom, rateTo } = useSwapRates()
 
   const value = quote && new SwapKitNumber(quote.expectedBuyAmount)
   const fiatValueTo = (rateTo && value && value.mul(rateTo)) || new SwapKitNumber(0)

@@ -17,8 +17,8 @@ export const SwapInputFrom = () => {
   const setAssetFrom = useSetAssetFrom()
   const { openDialog } = useDialog()
   const { amountFrom, setAmountFrom, valueFrom, setValueFrom } = useSwap()
-  const { rate } = useSwapRates(assetFrom?.identifier)
   const { balance } = useBalance()
+  const { rateFrom: rate } = useSwapRates()
 
   const handleSetPercent = (percent: number) => {
     if (!balance) return

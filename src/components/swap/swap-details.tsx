@@ -6,7 +6,7 @@ import { Icon } from '@/components/icons'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { SwapKitNumber } from '@swapkit/core'
 import { FeeData, resolveFees } from '@/components/swap/swap-helpers'
-import { useRate } from '@/hooks/use-rates'
+import { useRates } from '@/hooks/use-rates'
 import { InfoTooltip } from '@/components/info-tooltip'
 import { animated, useSpring } from '@react-spring/web'
 
@@ -19,8 +19,8 @@ export function SwapDetails() {
   const contentRef = useRef<HTMLDivElement>(null)
   const [contentHeight, setContentHeight] = useState(0)
 
-  const identifiers = useMemo(() => quote?.fees.map(t => t.asset).sort(), [quote?.fees])
-  const { rates } = useRate(identifiers)
+  const identifiers = useMemo(() => quote?.fees.map(t => t.asset).sort() || [], [quote?.fees])
+  const { rates } = useRates(identifiers)
 
   useLayoutEffect(() => {
     if (contentRef.current && quote) {
