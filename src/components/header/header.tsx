@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils'
 export function Header() {
   const { openDialog } = useDialog()
 
+  const homeLink = process.env.NEXT_PUBLIC_HOME_LINK
   const connectedProviders = useConnectedWallets()
   const disconnectProvider = useDisconnect()
 
@@ -37,10 +38,15 @@ export function Header() {
       })}
     >
       <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-2">
+        <a
+          href={homeLink || '/'}
+          className="flex items-center gap-2"
+          rel="noopener noreferrer"
+          target={homeLink ? '_blank' : '_self'}
+        >
           <Image src="/logo.svg" alt="THORChain Swap" width={32} height={32} priority />
           <HeaderThorchain />
-        </div>
+        </a>
 
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
           <ThemeSwitchButton />
