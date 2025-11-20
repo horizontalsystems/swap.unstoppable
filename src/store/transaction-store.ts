@@ -117,9 +117,10 @@ export const useShowPendingAlert = () => transactionStore(state => state.showPen
 export const useSetPendingAlert = () => transactionStore(state => state.setPendingAlert)
 export const useSetTxDetails = () => transactionStore(state => state.setTransactionDetails)
 export const useSetTxUnknown = () => transactionStore(state => state.setTransactionUnknown)
-export const usePendingTxs = () =>
-  transactionStore(useShallow(state => state.transactions.filter(t => !t.details || t.status === 'pending')))
-
 export const useTransactions = () => transactionStore(sortedTransactions)
+
+export const isTxPending = (status: string) => status === 'not_started' || status === 'swapping' || status === 'pending'
+export const usePendingTxs = () =>
+  transactionStore(useShallow(state => state.transactions.filter(t => !t.details || isTxPending(t.status))))
 export const useLastPendingTx = () =>
-  transactionStore(state => sortedTransactions(state).find(t => t.status === 'pending'))
+  transactionStore(state => sortedTransactions(state).find(t => isTxPending(t.status)))

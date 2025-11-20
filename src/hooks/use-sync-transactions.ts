@@ -1,5 +1,5 @@
 import { useQueries } from '@tanstack/react-query'
-import { usePendingTxs, useSetTxDetails, useSetTxUnknown } from '@/store/transaction-store'
+import { isTxPending, usePendingTxs, useSetTxDetails, useSetTxUnknown } from '@/store/transaction-store'
 import { getSwapKitTrack } from '@/lib/api'
 import { getChainConfig } from '@swapkit/core'
 import { AxiosError } from 'axios'
@@ -12,7 +12,7 @@ export const useSyncTransactions = () => {
   const queries = pendingTxs.map(item => {
     return {
       queryKey: ['transaction', item.hash],
-      enabled: item.status != 'unknown' && (!item.details || item.status === 'pending'),
+      enabled: item.status != 'unknown' && (!item.details || isTxPending(item.status)),
       retry: true,
       retryDelay: 5_000,
       queryFn: () =>
