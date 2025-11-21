@@ -95,6 +95,7 @@ export const useBalance = (): UseBalance => {
               recipient: selected.address,
               sender: selected.address,
               assetValue: value,
+              memo: '00000000000000000000000000000000000000000000000000000000000000000000000000000000', // 80 chars
               feeOptionKey: FeeOption.Fast
             })
           } else if (CosmosChains.includes(assetFrom.chain as CosmosChain)) {

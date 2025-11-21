@@ -170,14 +170,23 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
     }
   }, [chainAssets])
 
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        virtualizer.measure()
+      }, 0)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen, virtualizer])
+
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
-      <CredenzaContent>
+      <CredenzaContent className="flex max-h-5/6 flex-col">
         <CredenzaHeader>
           <CredenzaTitle>Select coin</CredenzaTitle>
         </CredenzaHeader>
 
-        <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
+        <div className="flex min-h-0 flex-1 flex-col md:flex-row">
           <ScrollArea className="border-b md:mr-8 md:w-2/5 md:border-r md:border-b-0 md:pl-8">
             <div className="mx-4 mb-4 flex w-max gap-2 md:mx-0 md:mb-8 md:block md:w-full">
               {chains.map((chain, index) => (
@@ -206,7 +215,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
             {isMobile && <ScrollBar orientation="horizontal" />}
           </ScrollArea>
 
-          <div className="mt-2 flex flex-1 flex-col overflow-hidden md:mt-0">
+          <div className="mt-2 flex min-h-0 flex-1 flex-col md:mt-0">
             <div className="relative mx-4 md:mr-8 md:ml-0">
               <Search className="text-thor-gray absolute top-1/2 left-4 -translate-y-1/2 transform" size={24} />
               <Input
@@ -214,10 +223,11 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className="bg-blade rounded-3xl border-0 py-3 pl-12"
+                tabIndex={isMobile ? -1 : 0}
               />
             </div>
 
-            <div className="mt-4 flex flex-1 overflow-hidden">
+            <div className="mt-4 flex min-h-0 flex-1">
               <ScrollArea className="flex-1" ref={parentRef}>
                 <div
                   style={{
