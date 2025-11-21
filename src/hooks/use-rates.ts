@@ -21,11 +21,12 @@ class RateIdentifierCache {
     const now = Date.now()
 
     for (const id of identifiers) {
-      if (!this.cache.has(id)) {
+      const _id = id.toLowerCase()
+      if (!this.cache.has(_id)) {
         hasNew = true
       }
-      this.cache.delete(id)
-      this.cache.set(id, now)
+      this.cache.delete(_id)
+      this.cache.set(_id, now)
     }
 
     while (this.cache.size > this.maxSize) {
@@ -88,8 +89,9 @@ export const useRates = (identifiers: string[]): { rates: AssetRateMap; isLoadin
   const rates: AssetRateMap = {}
   if (data) {
     for (const id of identifiers) {
-      if (data[id]) {
-        rates[id] = data[id]
+      const _id = id.toLowerCase()
+      if (data[_id]) {
+        rates[id] = data[_id]
       }
     }
   }

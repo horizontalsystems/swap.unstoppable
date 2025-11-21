@@ -30,7 +30,7 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
         })
 
         if (token.coingeckoId) {
-          geckoMap.set(token.identifier, token.coingeckoId)
+          geckoMap.set(token.identifier.toLowerCase(), token.coingeckoId)
         }
       }
 
