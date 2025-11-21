@@ -15,6 +15,7 @@ import Image from 'next/image'
 import { getQuotes } from '@/lib/api'
 import { AxiosError } from 'axios'
 import { SwapError } from '@/components/swap/swap-error'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 interface SwapRecipientProps {
   provider: string
@@ -22,6 +23,7 @@ interface SwapRecipientProps {
 }
 
 export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) => {
+  const isMobile = useIsMobile()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const { valueFrom } = useSwap()
@@ -119,12 +121,13 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
               <div className="relative">
                 <Input
-                  placeholder={`${chainLabel(assetTo.chain)} address`}
+                  placeholder={isMobile ? undefined : `${chainLabel(assetTo.chain)} address`}
                   value={address}
                   onChange={e => setAddress(e.target.value)}
-                  className={cn({
+                  className={cn('pr-15', {
                     'border-lucian focus-visible:border-lucian': !isValid
                   })}
+                  tabIndex={isMobile ? -1 : 0}
                 />
 
                 {address.length ? (
@@ -140,7 +143,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
                 ) : (
                   <ThemeButton
                     variant="secondarySmall"
-                    className="absolute end-4 top-1/2 -translate-y-1/2"
+                    className="absolute end-4 top-1/2 hidden -translate-y-1/2 md:block"
                     onClick={() => {
                       navigator.clipboard.readText().then(text => {
                         setAddress(text)
