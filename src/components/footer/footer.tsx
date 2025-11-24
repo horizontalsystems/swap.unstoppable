@@ -1,5 +1,7 @@
 import { Icon } from '@/components/icons'
 
+const SUPPORT_EMAIL = 'swap@horizontalsystems.io'
+
 export function Footer() {
   return (
     <footer className="bg-tyler fixed inset-x-0 bottom-0 mx-auto hidden md:block">
@@ -13,12 +15,20 @@ export function Footer() {
             </a>
           </div>
 
-          <div className="text-thor-gray flex items-center gap-2">
-            <span className="text-xs">Got questions?</span>
+          <div className="text-thor-gray flex items-center gap-3 text-xs">
             <div className="flex items-center gap-2">
-              <a href="mailto:swap@horizontalsystems.io">
+              <span>
+                Report bugs to{' '}
+                <a className="underline" href={`mailto:${SUPPORT_EMAIL}`}>
+                  {SUPPORT_EMAIL}
+                </a>
+              </span>
+              <a href={`mailto:${SUPPORT_EMAIL}`}>
                 <Icon width={20} height={20} viewBox="0 0 20 20" name="email" />
               </a>
+            </div>
+            <div className="flex items-center gap-2">
+              <span>Got questions?</span>
               <a href="https://discord.gg/eGrrwNE95w" rel="noopener noreferrer" target="_blank">
                 <Icon width={20} height={20} viewBox="0 0 20 20" name="discord" />
               </a>
