@@ -10,7 +10,10 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: AppConfig.title,
-  description: AppConfig.description
+  description: AppConfig.description,
+  icons: {
+    icon: AppConfig.favicon
+  }
 }
 
 const manrope = Manrope({

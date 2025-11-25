@@ -6,6 +6,7 @@ type AppKey = 'thorchain' | 'unstoppable'
 type App = {
   title: string
   description: string
+  favicon: string
   logo: string
   LogoText: () => JSX.Element
   logoLink?: string
@@ -18,13 +19,15 @@ const apps: Record<AppKey, App> = {
   unstoppable: {
     title: 'Unstoppable Swap',
     description: 'Unstoppable Swap',
-    logo: '/logo-unstoppable.svg',
+    favicon: '/favicon.ico',
+    logo: '/logo.svg',
     LogoText: HeaderUnstoppable
   },
   thorchain: {
     title: 'THORChain Swap',
     description: 'THORChain Swap',
-    logo: '/logo.svg',
+    favicon: '/favicon-thorchain.ico',
+    logo: '/logo-thorchain.svg',
     LogoText: HeaderThorchain,
     logoLink: 'https://www.thorchain.org',
     gtag: 'G-VZ0FQ1WC7G',
