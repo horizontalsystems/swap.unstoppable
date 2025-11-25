@@ -3,6 +3,8 @@ import { RefetchOptions, useQuery } from '@tanstack/react-query'
 import { getQuotes } from '@/lib/api'
 import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
 import { QuoteResponseRoute } from '@swapkit/helpers/api'
+import { AppConfig } from '@/config'
+import { SwapKitNumber } from '@swapkit/core'
 
 type UseQuote = {
   isLoading: boolean
@@ -49,10 +51,18 @@ export const useQuote = (): UseQuote => {
         },
         signal
       ).then(quotes => {
-        return (
-          quotes.find((q: any) => q.providers[0] === 'THORCHAIN_STREAMING') ||
-          quotes.find((q: any) => q.providers[0] === 'THORCHAIN') ||
-          quotes[0]
+        if (AppConfig.id === 'thorchain') {
+          const thorchainQuote =
+            quotes.find((q: any) => q.providers[0] === 'THORCHAIN_STREAMING') ||
+            quotes.find((q: any) => q.providers[0] === 'THORCHAIN')
+
+          if (thorchainQuote) {
+            return thorchainQuote
+          }
+        }
+
+        return quotes.reduce((best: any, current: any) =>
+          new SwapKitNumber(current.expectedBuyAmount).gt(new SwapKitNumber(best.expectedBuyAmount)) ? current : best
         )
       })
     },
