@@ -44,9 +44,11 @@ export function SwapDetails() {
 
   const price = new SwapKitNumber(quote.expectedBuyAmount).div(valueFrom)
 
-  const { inbound, outbound, liquidity, affiliate, total } = resolveFees(quote, rates)
+  const { inbound, outbound, liquidity, affiliate, service, total } = resolveFees(quote, rates)
 
   const feeSection = (title: string, info: string, fee?: FeeData) => {
+    if (!fee) return null
+
     return (
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
@@ -69,6 +71,12 @@ export function SwapDetails() {
         </div>
       </div>
     )
+  }
+
+  const exchange: FeeData | undefined = (affiliate || service) && {
+    amount: (affiliate?.amount || new SwapKitNumber(0)).add(service?.amount || new SwapKitNumber(0)),
+    usd: (affiliate?.usd || new SwapKitNumber(0)).add(service?.usd || new SwapKitNumber(0)),
+    ticker: affiliate?.ticker || service?.ticker || ''
   }
 
   return (
@@ -103,7 +111,7 @@ export function SwapDetails() {
           {feeSection('Inbound Fee', 'Fee for sending inbound transaction', inbound)}
           {feeSection('Outbound Fee', 'Fee for sending outbound transaction', outbound)}
           {feeSection('Liquidity Fee', 'Fee for liquidity providers on the route', liquidity)}
-          {feeSection('Exchange Fee', `Fee charged by ${AppConfig.title}`, affiliate)}
+          {feeSection('Exchange Fee', `Fee charged by ${AppConfig.title}`, exchange)}
 
           <div className="flex items-center justify-between">
             Estimated Time

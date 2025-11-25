@@ -30,17 +30,20 @@ export const resolveFees = (quote: QuoteResponseRoute, rates: AssetRateMap) => {
   const outbound = feeData('outbound')
   const liquidity = feeData('liquidity')
   const affiliate = feeData('affiliate')
+  const service = feeData('service')
 
   const total = (inbound?.usd || new SwapKitNumber(0))
     .add(outbound?.usd || new SwapKitNumber(0))
     .add(liquidity?.usd || new SwapKitNumber(0))
     .add(affiliate?.usd || new SwapKitNumber(0))
+    .add(service?.usd || new SwapKitNumber(0))
 
   return {
     inbound,
     outbound,
     liquidity,
     affiliate,
+    service,
     total
   }
 }
