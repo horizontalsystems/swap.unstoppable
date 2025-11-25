@@ -16,7 +16,6 @@ import { cn } from '@/lib/utils'
 export function Header() {
   const { openDialog } = useDialog()
 
-  const homeLink = process.env.NEXT_PUBLIC_HOME_LINK
   const connectedProviders = useConnectedWallets()
   const disconnectProvider = useDisconnect()
 
@@ -39,10 +38,10 @@ export function Header() {
     >
       <div className="flex items-start justify-between gap-4">
         <a
-          href={homeLink || '/'}
+          href={AppConfig.logoLink || '/'}
           className="flex items-center gap-2"
           rel="noopener noreferrer"
-          target={homeLink ? '_blank' : '_self'}
+          target={AppConfig.logoLink ? '_blank' : '_self'}
         >
           <Image src={AppConfig.logo} alt={AppConfig.title} width={32} height={32} priority />
           <AppConfig.LogoText />
