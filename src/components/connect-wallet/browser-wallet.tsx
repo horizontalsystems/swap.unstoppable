@@ -45,6 +45,8 @@ export const BrowserWallet = ({
       })
   }
 
+  const filteredChains = chains.filter(c => availableChains.includes(c))
+
   return (
     <>
       <div className="mb-3 flex items-center justify-between px-4 md:px-8">
@@ -57,16 +59,16 @@ export const BrowserWallet = ({
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1">
-        <ScrollArea className="flex-1 px-4 md:mb-4 md:px-8">
+      <div className="relative flex min-h-0 flex-1">
+        <ScrollArea className="flex-1 px-4 md:px-8">
           <div
-            className="grid flex-1 grid-flow-col gap-2"
+            className="grid flex-1 grid-flow-col gap-2 pb-4"
             style={{
-              gridTemplateRows: `repeat(${Math.ceil(chains.length / 2)}, minmax(0, 1fr))`,
+              gridTemplateRows: `repeat(${Math.ceil(filteredChains.length / 2)}, minmax(0, 1fr))`,
               gridTemplateColumns: 'repeat(2, 1fr)'
             }}
           >
-            {chains.map(chain => {
+            {filteredChains.map(chain => {
               const isSelected = selectedChains.includes(chain)
               const isAvailable = availableChains.includes(chain)
               const isComingSoon = COMING_SOON_CHAINS.includes(chain)
@@ -93,9 +95,11 @@ export const BrowserWallet = ({
             })}
           </div>
         </ScrollArea>
+
+        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-[1px] h-4 bg-linear-to-t to-transparent" />
       </div>
 
-      <div className="flex p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
+      <div className="flex p-4 pt-2 md:justify-end md:px-8 md:pb-8">
         <ThemeButton
           variant="primaryMedium"
           className="w-full md:w-auto"

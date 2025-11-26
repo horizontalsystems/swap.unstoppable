@@ -9,6 +9,7 @@ import { preflightMemoless, registerMemoless } from '@/lib/api'
 import { AxiosError } from 'axios'
 import { useAssetFrom, useSwap } from '@/hooks/use-swap'
 import { SwapMemolessChannel } from '@/components/swap/swap-memoless-channel'
+import { SwapError } from '@/components/swap/swap-error'
 
 interface SwapMemolessDialogProps {
   provider: string
@@ -85,7 +86,13 @@ export const SwapMemolessDialog = ({ provider, isOpen, onOpenChange }: SwapMemol
           <>
             <SwapConfirm quote={quote} />
 
-            <div className="p-4 md:p-8">
+            {error && (
+              <div className="px-8 pt-2 pb-4">
+                <SwapError error={error} />
+              </div>
+            )}
+
+            <div className="p-4 pt-2 md:p-8 md:pt-2">
               <ThemeButton
                 variant={channel ? 'secondaryMedium' : 'primaryMedium'}
                 className="w-full"

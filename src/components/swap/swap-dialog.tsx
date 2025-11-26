@@ -82,7 +82,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
           <>
             <SwapConfirm quote={quote} />
 
-            <div className="p-4 md:p-8">
+            <div className="p-4 pt-2 md:p-8 md:pt-2">
               <ThemeButton
                 variant="primaryMedium"
                 className="w-full"

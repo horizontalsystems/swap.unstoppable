@@ -91,10 +91,10 @@ export const Ledger = ({ wallet, onConnect }: { wallet: WalletParams; onConnect:
     <>
       <div className="text-thor-gray mb-3 hidden px-8 text-base font-semibold md:block">Chains</div>
 
-      <div className="flex flex-1 overflow-hidden">
-        <ScrollArea className="flex-1 px-4 md:mb-4 md:px-8">
+      <div className="relative flex min-h-0 flex-1">
+        <ScrollArea className="flex-1 px-4 md:px-8">
           <div
-            className="grid flex-1 grid-flow-col gap-2"
+            className="mb-4 grid flex-1 grid-flow-col gap-2"
             style={{
               gridTemplateRows: `repeat(${Math.ceil(chains.length / 2)}, minmax(0, 1fr))`,
               gridTemplateColumns: 'repeat(2, 1fr)'
@@ -146,10 +146,12 @@ export const Ledger = ({ wallet, onConnect }: { wallet: WalletParams; onConnect:
             })}
           </div>
         </ScrollArea>
+
+        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-[1px] h-4 bg-linear-to-t to-transparent" />
       </div>
 
       {pathOptions && (
-        <div className="mt-4 mb-3 grid grid-cols-5 gap-3 px-8 md:mb-6">
+        <div className="mt-2 grid grid-cols-5 gap-3 px-8 md:mb-4">
           <div className="col-span-4">
             <div className="text-thor-gray mb-2 font-semibold">Derivation Path</div>
             <Select value={path} onValueChange={setPath} disabled={connecting}>

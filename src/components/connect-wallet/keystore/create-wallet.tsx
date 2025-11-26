@@ -58,8 +58,8 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
 
   return (
     <>
-      <div className="flex min-h-0 flex-1">
-        <ScrollArea className="flex-1 px-4 md:mb-4 md:px-8">
+      <div className="relative flex min-h-0 flex-1">
+        <ScrollArea className="flex-1 px-4 md:px-8">
           <div className="flex flex-col">
             <div className="text-leah mb-3 text-base font-semibold">Create New Wallet</div>
 
@@ -96,9 +96,11 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
             </div>
           </div>
         </ScrollArea>
+
+        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-[1px] h-4 bg-linear-to-t to-transparent" />
       </div>
 
-      <div className="flex gap-6 p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
+      <div className="flex gap-6 p-4 pt-2 md:justify-end md:px-8 md:pb-8">
         <ThemeButton variant="secondaryMedium" onClick={onBack}>
           Back
         </ThemeButton>
@@ -129,9 +131,9 @@ export function SetupPassword({
 
   return (
     <>
-      <div className="flex min-h-0 flex-1">
-        <ScrollArea className="flex-1 px-4 md:mb-4 md:px-8">
-          <div className="flex flex-col">
+      <div className="relative flex min-h-0 flex-1">
+        <ScrollArea className="flex-1 px-4 md:px-8">
+          <div className="mb-4 flex flex-col">
             <div className="text-leah mb-3 text-base font-semibold">Setup Decryption Password</div>
             <p className="text-thor-gray mb-5 text-sm">
               Enter a strong password to encrypt your created wallet. This is how you will access your wallet.
@@ -155,9 +157,11 @@ export function SetupPassword({
             </div>
           </div>
         </ScrollArea>
+
+        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-[1px] h-4 bg-linear-to-t to-transparent" />
       </div>
 
-      <div className="flex gap-3 p-4 md:justify-end md:gap-6 md:px-8 md:pt-0 md:pb-8">
+      <div className="flex gap-3 p-4 pt-2 md:justify-end md:gap-6 md:px-8 md:pb-8">
         <ThemeButton variant="secondaryMedium" onClick={onBack}>
           Back
         </ThemeButton>

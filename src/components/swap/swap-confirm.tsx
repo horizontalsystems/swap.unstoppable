@@ -50,8 +50,8 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
         <CredenzaTitle>Confirm Swap</CredenzaTitle>
       </CredenzaHeader>
 
-      <ScrollArea className="flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
-        <div className="border-blade rounded-xl border-1">
+      <ScrollArea className="relative flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
+        <div className="border-blade rounded-xl border-1 mb-4">
           <div className="relative flex flex-col">
             <div className="text-thor-gray flex justify-between p-4 text-sm">
               <div className="flex items-center gap-4">
@@ -194,6 +194,8 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
             </div>
           )}
         </div>
+
+        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-[1px] h-4 bg-linear-to-t to-transparent" />
       </ScrollArea>
     </>
   )

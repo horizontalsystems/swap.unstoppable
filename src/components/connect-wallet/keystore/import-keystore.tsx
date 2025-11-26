@@ -93,9 +93,9 @@ export function ImportKeystore({ onBack, onConnect }: { onBack: () => void; onCo
 
   return (
     <>
-      <div className="flex min-h-0 flex-1">
-        <ScrollArea className="flex-1 px-4 md:mb-4 md:px-8">
-          <div className="flex flex-col">
+      <div className="relative flex min-h-0 flex-1">
+        <ScrollArea className="flex-1 px-4 md:px-8">
+          <div className="mb-4 flex flex-col">
             <div className="mb-4 text-base font-semibold">Import Keystore</div>
 
             <div
@@ -159,9 +159,11 @@ export function ImportKeystore({ onBack, onConnect }: { onBack: () => void; onCo
             )}
           </div>
         </ScrollArea>
+
+        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-[1px] h-4 bg-linear-to-t to-transparent" />
       </div>
 
-      <div className="flex gap-3 p-4 md:justify-end md:gap-6 md:px-8 md:pt-0 md:pb-8">
+      <div className="flex gap-3 p-4 pt-2 md:justify-end md:gap-6 md:px-8 md:pb-8">
         <ThemeButton variant="secondaryMedium" onClick={onBack}>
           Back
         </ThemeButton>

@@ -88,8 +88,8 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
         <CredenzaTitle>{options.length ? 'Choose Receiving Address' : 'Enter Receiving Address'}</CredenzaTitle>
       </CredenzaHeader>
 
-      <ScrollArea className="flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
-        <div className="flex flex-col gap-6">
+      <ScrollArea className="relative flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
+        <div className="mb-4 flex flex-col gap-6">
           {options.length > 0 && (
             <div className="flex flex-col gap-2">
               <div className="border-blade flex flex-col gap-2 overflow-hidden rounded-xl border">
@@ -171,9 +171,11 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
           {quoteError && <SwapError error={quoteError} />}
         </div>
+
+        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-[1px] h-4 bg-linear-to-t to-transparent" />
       </ScrollArea>
 
-      <div className="p-4 pt-6 md:p-8 md:pt-6">
+      <div className="p-4 pt-2 md:p-8 md:pt-2">
         <ThemeButton
           variant="primaryMedium"
           className="w-full"
