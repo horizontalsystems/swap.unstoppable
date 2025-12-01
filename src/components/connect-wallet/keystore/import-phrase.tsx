@@ -39,7 +39,7 @@ export function ImportPhrase({ onBack, onConnect }: { onBack: () => void; onConn
 
             <div className="flex flex-col gap-2">
               <Textarea
-                className="h-40 resize-none"
+                className="h-40"
                 placeholder="Type your seed phrase"
                 disabled={connecting}
                 onChange={e => {

@@ -5,8 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Icon } from '@/components/icons'
 import { LoaderCircle } from 'lucide-react'
 import { QuoteResponseRoute } from '@swapkit/helpers/api'
-import { Input } from '@/components/ui/input'
-import { chainLabel, wallet } from '@/components/connect-wallet/config'
+import { chainLabel } from '@/components/connect-wallet/config'
 import { cn, truncate } from '@/lib/utils'
 import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
 import { getAddressValidator } from '@swapkit/toolboxes'
@@ -18,6 +17,9 @@ import { SwapError } from '@/components/swap/swap-error'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { ProviderName } from '@swapkit/helpers'
 import { Asset } from '@/components/swap/asset'
+import { Textarea } from '@/components/ui/textarea'
+import { WalletAccount } from '@/store/wallets-store'
+import { Tooltip } from '@/components/tooltip'
 
 interface SwapRecipientProps {
   provider: ProviderName
@@ -104,19 +106,36 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
     !quoting &&
     (refundRequired ? isValidRefund && refundAddress.length : true)
 
-  const addressInput = (asset: Asset, address: string, setAddress: (address: string) => void, isValid: boolean) => {
+  const addressInput = (
+    asset: Asset,
+    address: string,
+    setAddress: (address: string) => void,
+    isValid: boolean,
+    options: WalletAccount[] = []
+  ) => {
+    const currentOption = options.find(a => a.address.toLowerCase() === address.toLowerCase())
+
     return (
       <>
         <div className="relative">
-          <Input
+          <Textarea
             placeholder={isMobile ? undefined : `${chainLabel(asset.chain)} address`}
             value={address}
+            aria-invalid={!isValid}
             onChange={e => setAddress(e.target.value)}
-            className={cn('pr-15', {
-              'border-lucian focus-visible:border-lucian': !isValid
-            })}
+            className={cn('max-h-21 pr-15', { 'pl-13': currentOption })}
             tabIndex={isMobile ? -1 : 0}
           />
+
+          {currentOption && (
+            <Image
+              src={`/wallets/${currentOption.provider.toLowerCase()}.svg`}
+              alt={currentOption.provider}
+              width="24"
+              height="24"
+              className="absolute top-1/2 left-4 -translate-y-1/2"
+            />
+          )}
 
           {address.length ? (
             <ThemeButton
@@ -129,17 +148,36 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
               <Icon name="trash" />
             </ThemeButton>
           ) : (
-            <ThemeButton
-              variant="secondarySmall"
-              className="absolute end-4 top-1/2 hidden -translate-y-1/2 md:block"
-              onClick={() => {
-                navigator.clipboard.readText().then(text => {
-                  setAddress(text)
-                })
-              }}
-            >
-              Paste
-            </ThemeButton>
+            <div className="absolute end-4 top-1/2 flex -translate-y-1/2 gap-2">
+              {[...options].map((account, index) => (
+                <Tooltip key={index} content={truncate(account.address)}>
+                  <ThemeButton
+                    variant="circleSmall"
+                    className="rounded-xl"
+                    onClick={() => setDestinationAddress(account.address)}
+                  >
+                    <Image
+                      src={`/wallets/${account.provider.toLowerCase()}.svg`}
+                      alt={account.provider}
+                      width="24"
+                      height="24"
+                    />
+                  </ThemeButton>
+                </Tooltip>
+              ))}
+
+              <ThemeButton
+                variant="secondarySmall"
+                className="hidden md:block"
+                onClick={() => {
+                  navigator.clipboard.readText().then(text => {
+                    setAddress(text)
+                  })
+                }}
+              >
+                Paste
+              </ThemeButton>
+            </div>
           )}
         </div>
 
@@ -166,36 +204,8 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
               )}
 
               <div className="flex flex-col gap-3">
-                <div className="text-thor-gray text-sm font-semibold">
-                  {options.length ? 'Select or enter receiving address:' : 'Enter receiving address:'}
-                </div>
-
-                {options.length > 0 && (
-                  <div className="border-blade flex flex-col gap-2 overflow-hidden rounded-xl border">
-                    {options.map((account, index) => (
-                      <div
-                        key={index}
-                        className="hover:bg-blade/30 flex cursor-pointer items-center justify-between p-4"
-                        onClick={() => setDestinationAddress(account.address)}
-                      >
-                        <div className="flex items-center gap-4">
-                          <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt="" width="24" height="24" />
-                          <span className="text-thor-gray text-xs font-semibold">
-                            {wallet(account.provider)?.label}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-semibold">{truncate(account.address)}</span>
-                          {account.address === destinationAddress && (
-                            <Icon name="done-e" className="text-brand-first size-5" />
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {addressInput(assetTo, destinationAddress, setDestinationAddress, isValidDestination)}
+                <div className="text-thor-gray text-sm font-semibold">Enter receiving address:</div>
+                {addressInput(assetTo, destinationAddress, setDestinationAddress, isValidDestination, options)}
               </div>
             </div>
 
