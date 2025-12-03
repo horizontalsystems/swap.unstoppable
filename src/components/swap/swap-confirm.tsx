@@ -163,7 +163,9 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
             {inbound && (
               <div className="text-thor-gray flex justify-between text-sm">
                 <span>Tx Fee</span>
-                <span className="text-leah font-semibold">{inbound.usd.toCurrency()}</span>
+                <span className="text-leah font-semibold">
+                  {inbound.usd.lt(0.01) ? `< ${new SwapKitNumber(0.01).toCurrency()}` : inbound.usd.toCurrency()}
+                </span>
               </div>
             )}
 

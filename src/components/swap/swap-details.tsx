@@ -75,7 +75,9 @@ export function SwapDetails({ priceImpact }: { priceImpact?: SwapKitNumber }) {
           {inbound && (
             <div className="text-thor-gray flex items-center gap-2 p-4">
               <span>Tx Fee:</span>
-              <span className="text-leah">{inbound.usd.toCurrency()}</span>
+              <span className="text-leah">
+                {inbound.usd.lt(0.01) ? `< ${new SwapKitNumber(0.01).toCurrency()}` : inbound.usd.toCurrency()}
+              </span>
               <animated.div style={arrowSpring}>
                 <Icon name="arrow-s-down" className="size-5" />
               </animated.div>
