@@ -69,7 +69,7 @@ const defaultWallets = {
   ...xamanWallet
 }
 
-function createSwapKit(config: Parameters<typeof USwap>[0] = {}) {
+function createUSwap(config: Parameters<typeof USwap>[0] = {}) {
   return USwap({
     ...config,
     plugins: defaultPlugins,
@@ -78,12 +78,12 @@ function createSwapKit(config: Parameters<typeof USwap>[0] = {}) {
   })
 }
 
-let instance: ReturnType<typeof createSwapKit> | undefined = undefined
+let instance: ReturnType<typeof createUSwap> | undefined = undefined
 
-export function getSwapKit() {
+export function getUSwap() {
   if (instance) return instance
 
-  instance = createSwapKit({
+  instance = createUSwap({
     config: {
       apiKeys: {
         blockchair: process.env.NEXT_PUBLIC_BLOCKCHAIR_API_KEY,
@@ -102,7 +102,7 @@ export function getSwapKit() {
 }
 
 export async function connectWallet(option: WalletOption, chains: Chain[], config?: any): Promise<boolean> {
-  const kit = getSwapKit()
+  const uSwap = getUSwap()
   const connectEach = async (connect: (chain: Chain[]) => Promise<boolean>) => {
     let successCount = 0
     for (const chain of chains) {
@@ -120,49 +120,49 @@ export async function connectWallet(option: WalletOption, chains: Chain[], confi
   switch (option) {
     case WalletOption.METAMASK:
       const metamask = getEIP6963Wallets().providers.find(p => p.info.name === 'MetaMask')
-      return connectEach(c => kit.connectEVMWallet(c, WalletOption.METAMASK, metamask?.provider))
+      return connectEach(c => uSwap.connectEVMWallet(c, WalletOption.METAMASK, metamask?.provider))
     case WalletOption.COINBASE_WEB:
     case WalletOption.TRUSTWALLET_WEB:
-      return connectEach(c => kit.connectEVMWallet(c))
+      return connectEach(c => uSwap.connectEVMWallet(c))
     case WalletOption.COSMOSTATION:
-      return connectEach(c => kit.connectCosmostation(c))
+      return connectEach(c => uSwap.connectCosmostation(c))
     case WalletOption.PHANTOM:
-      return connectEach(c => kit.connectPhantom(c))
+      return connectEach(c => uSwap.connectPhantom(c))
     case WalletOption.KEPLR:
-      return connectEach(c => kit.connectKeplr(c))
+      return connectEach(c => uSwap.connectKeplr(c))
     case WalletOption.WALLETCONNECT:
-      return connectEach(c => kit.connectWalletconnect(c))
+      return connectEach(c => uSwap.connectWalletconnect(c))
     case WalletOption.COINBASE_MOBILE:
-      return connectEach(c => kit.connectCoinbaseWallet(c))
+      return connectEach(c => uSwap.connectCoinbaseWallet(c))
     case WalletOption.BITGET:
-      return connectEach(c => kit.connectBitget(c))
+      return connectEach(c => uSwap.connectBitget(c))
     case WalletOption.CTRL:
-      return connectEach(c => kit.connectCtrl(c))
+      return connectEach(c => uSwap.connectCtrl(c))
     case WalletOption.KEEPKEY:
-      return connectEach(c => kit.connectKeepkey(c))
+      return connectEach(c => uSwap.connectKeepkey(c))
     case WalletOption.KEEPKEY_BEX:
-      return connectEach(c => kit.connectKeepkeyBex?.(c))
+      return connectEach(c => uSwap.connectKeepkeyBex?.(c))
     case WalletOption.ONEKEY:
-      return connectEach(c => kit.connectOnekeyWallet?.(c))
+      return connectEach(c => uSwap.connectOnekeyWallet?.(c))
     case WalletOption.OKX:
     case WalletOption.OKX_MOBILE:
-      return connectEach(c => kit.connectOkx(c))
+      return connectEach(c => uSwap.connectOkx(c))
     case WalletOption.POLKADOT_JS:
-      return connectEach(c => kit.connectPolkadotJs(c))
+      return connectEach(c => uSwap.connectPolkadotJs(c))
     case WalletOption.RADIX_WALLET:
-      return connectEach(c => kit.connectRadixWallet(c))
+      return connectEach(c => uSwap.connectRadixWallet(c))
     case WalletOption.TALISMAN:
-      return connectEach(c => kit.connectTalisman(c))
+      return connectEach(c => uSwap.connectTalisman(c))
     case WalletOption.VULTISIG:
-      return connectEach(c => kit.connectVultisig(c))
+      return connectEach(c => uSwap.connectVultisig(c))
     case WalletOption.KEYSTORE:
-      return kit.connectKeystore(chains, config?.phrase, config?.derivationPath)
+      return uSwap.connectKeystore(chains, config?.phrase, config?.derivationPath)
     case WalletOption.LEDGER:
-      return connectEach(c => kit.connectLedger(c, config?.derivationPath))
+      return connectEach(c => uSwap.connectLedger(c, config?.derivationPath))
     case WalletOption.TREZOR: {
       const [chain] = chains
       if (!chain) throw new Error('Chain is required for Trezor')
-      return connectEach(c => kit.connectTrezor(c, NetworkDerivationPath[chain]))
+      return connectEach(c => uSwap.connectTrezor(c, NetworkDerivationPath[chain]))
     }
     default: {
       throw new Error(`Unsupported wallet option: ${option}`)
@@ -175,14 +175,14 @@ export async function getAccounts(
   chains: Chain[],
   config?: any
 ): Promise<{ address: string; network: Chain; provider: WalletOption }[]> {
-  const kit = getSwapKit()
+  const uSwap = getUSwap()
 
   const connected = await connectWallet(option, chains, config)
   if (!connected) return []
 
   return chains
     .map(chain => {
-      const address = kit.getAddress(chain)
+      const address = uSwap.getAddress(chain)
       return address ? { address, network: chain, provider: option } : null
     })
     .filter(acc => acc !== null)

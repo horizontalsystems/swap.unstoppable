@@ -8,7 +8,7 @@ import { ThemeButton } from '@/components/theme-button'
 import { useBalance } from '@/hooks/use-balance'
 import { useDialog } from '@/components/global-dialog'
 import { toast } from 'sonner'
-import { getSwapKit } from '@/lib/wallets'
+import { getUSwap } from '@/lib/wallets'
 import { EVMChain } from '@uswap/core'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { SwapDialog } from '@/components/swap/swap-dialog'
@@ -30,7 +30,7 @@ interface ButtonState {
 export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapButtonProps) => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
-  const swapKit = getSwapKit()
+  const uSwap = getUSwap()
   const selectedAccount = useSelectedAccount()
   const { valueFrom } = useSwap()
   const { quote, isLoading: isQuoting, refetch: refetchQuote } = useQuote()
@@ -85,7 +85,7 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
         spinner: false,
         accent: false,
         onClick: async () => {
-          const wallet = swapKit.getWallet<EVMChain>(selectedAccount.provider, selectedAccount.network as EVMChain)
+          const wallet = uSwap.getWallet<EVMChain>(selectedAccount.provider, selectedAccount.network as EVMChain)
           if (!wallet) return
           const promise = wallet
             .approve({

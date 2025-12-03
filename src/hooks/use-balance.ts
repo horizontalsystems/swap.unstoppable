@@ -15,7 +15,7 @@ import {
   UTXOChains
 } from '@uswap/core'
 import { getBalance } from '@/lib/api'
-import { getSwapKit } from '@/lib/wallets'
+import { getUSwap } from '@/lib/wallets'
 import { estimateTransactionFee } from '@uswap/toolboxes/cosmos'
 
 type UseBalance = {
@@ -29,7 +29,7 @@ type UseBalance = {
 }
 
 export const useBalance = (): UseBalance => {
-  const swapKit = getSwapKit()
+  const uSwap = getUSwap()
   const assetFrom = useAssetFrom()
   const { selected } = useWallets()
 
@@ -45,7 +45,7 @@ export const useBalance = (): UseBalance => {
         return null
       }
 
-      const wallet = swapKit.getWallet(selected.provider, assetFrom.chain)
+      const wallet = uSwap.getWallet(selected.provider, assetFrom.chain)
 
       if (!wallet) {
         return null
@@ -73,7 +73,7 @@ export const useBalance = (): UseBalance => {
         try {
           if (EVMChains.includes(assetFrom.chain as EVMChain)) {
             const gasLimit = 300_000n
-            const evmWallet = swapKit.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
+            const evmWallet = uSwap.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
 
             const estimateFn = evmWallet.estimateGasPrices
             const gasPrices = await (typeof estimateFn === 'function' ? estimateFn() : estimateFn)
@@ -90,7 +90,7 @@ export const useBalance = (): UseBalance => {
 
             return new SwapKitNumber(0)
           } else if (UTXOChains.includes(assetFrom.chain as UTXOChain)) {
-            const utxoWallet = swapKit.getWallet<UTXOChain>(selected.provider, selected.network as UTXOChain)
+            const utxoWallet = uSwap.getWallet<UTXOChain>(selected.provider, selected.network as UTXOChain)
             return await utxoWallet.estimateTransactionFee({
               recipient: selected.address,
               sender: selected.address,

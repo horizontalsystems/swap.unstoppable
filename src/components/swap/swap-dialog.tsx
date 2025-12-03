@@ -7,7 +7,7 @@ import { ThemeButton } from '@/components/theme-button'
 import { LoaderCircle } from 'lucide-react'
 import { FeeOption, getChainConfig, SwapKitNumber } from '@uswap/core'
 import { toast } from 'sonner'
-import { getSwapKit } from '@/lib/wallets'
+import { getUSwap } from '@/lib/wallets'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { useBalance } from '@/hooks/use-balance'
 import { transactionStore } from '@/store/transaction-store'
@@ -20,7 +20,7 @@ interface SwapDialogProps {
 }
 
 export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) => {
-  const swapKit = getSwapKit()
+  const uSwap = getUSwap()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const { valueFrom, setAmountFrom } = useSwap()
@@ -35,7 +35,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
 
     setSubmitting(true)
 
-    const broadcast = swapKit
+    const broadcast = uSwap
       .swap({
         route: quote as any,
         feeOptionKey: FeeOption.Fast

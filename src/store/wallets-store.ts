@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Chain, WalletOption } from '@uswap/core'
-import { getAccounts, getSwapKit, supportedChains } from '@/lib/wallets'
+import { getAccounts, getUSwap, supportedChains } from '@/lib/wallets'
 import { toast } from 'sonner'
 
 export interface WalletAccount {
@@ -21,7 +21,7 @@ interface WalletState {
   disconnect: (wallet: WalletOption) => void
 }
 
-const swapKit = getSwapKit()
+const uSwap = getUSwap()
 
 export const useWalletStore = create<WalletState>()(
   persist(
@@ -58,7 +58,7 @@ export const useWalletStore = create<WalletState>()(
 
       disconnect: (wallet: WalletOption) => {
         supportedChains[wallet].forEach(chain => {
-          swapKit.disconnectChain(chain)
+          uSwap.disconnectChain(chain)
         })
 
         set(state => {
