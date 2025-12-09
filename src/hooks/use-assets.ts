@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getTokenList } from '@/lib/api'
 import { Asset } from '@/components/swap/asset'
 
-const PROVIDERS = ['THORCHAIN', 'NEAR', 'ONEINCH']
+const PROVIDERS = ['THORCHAIN', 'NEAR', 'ONEINCH', 'MAYACHAIN']
 
 export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>; isLoading: boolean } => {
   const { data, isLoading } = useQuery({

@@ -75,7 +75,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
       sellAmount: valueFrom,
       sourceAddress: selectedAccount?.address,
       destinationAddress: destinationAddress,
-      refundAddress: refundRequired ? refundAddress : selectedAccount?.address,
+      refundAddress: refundRequired ? refundAddress : provider === 'MAYACHAIN' ? undefined : selectedAccount?.address,
       dry: !(refundRequired || selectedAccount),
       slippage: slippage,
       providers: [provider]
@@ -221,7 +221,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
           {quoteError && <SwapError error={quoteError} />}
         </div>
 
-        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-[1px] h-4 bg-linear-to-t to-transparent" />
+        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-px h-4 bg-linear-to-t to-transparent" />
       </ScrollArea>
 
       <div className="p-4 pt-2 md:p-8 md:pt-2">

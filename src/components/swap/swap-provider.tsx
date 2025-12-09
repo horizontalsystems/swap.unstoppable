@@ -8,6 +8,9 @@ export const SwapProvider = ({ provider }: { provider: ProviderName }) => {
   if (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING') {
     title = 'THORChain'
     icon = 'thorchain'
+  } else if (provider === 'MAYACHAIN' || provider === 'MAYACHAIN_STREAMING') {
+    title = 'MayaChain'
+    icon = 'mayachain'
   } else if (provider === 'NEAR') {
     title = 'Near'
     icon = 'near'
