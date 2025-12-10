@@ -24,15 +24,16 @@ export const ALL_CHAINS = [
   Chain.Bitcoin,
   Chain.BitcoinCash,
   Chain.Cosmos,
-  Chain.Dogecoin,
   Chain.Dash,
+  Chain.Dogecoin,
   Chain.Ethereum,
   Chain.Litecoin,
+  Chain.Maya,
   Chain.Near,
+  Chain.Polygon,
   Chain.Solana,
   Chain.THORChain,
   Chain.Tron,
-  Chain.Polygon,
   Chain.Zcash
 ]
 
