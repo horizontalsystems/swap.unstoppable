@@ -46,7 +46,7 @@ export const useSimulation = (): UseSimulation => {
         asyncTokenLookup: true
       })
 
-      if (!assetValue.isGasAsset && assetValue.address && quote.meta.approvalAddress) {
+      if (!assetValue.isGasAsset && assetValue.address && quote.meta?.approvalAddress) {
         const wallet = uSwap.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
         const approved = await wallet?.isApproved({
           assetAddress: assetValue.address,
