@@ -73,7 +73,7 @@ export const useBalance = (): UseBalance => {
         try {
           if (EVMChains.includes(assetFrom.chain as EVMChain)) {
             const gasLimit = 300_000n
-            const evmWallet = uSwap.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
+            const evmWallet = uSwap.getWallet<EVMChain>(selected.provider, assetFrom.chain as EVMChain)
 
             const estimateFn = evmWallet.estimateGasPrices
             const gasPrices = await (typeof estimateFn === 'function' ? estimateFn() : estimateFn)
@@ -90,7 +90,7 @@ export const useBalance = (): UseBalance => {
 
             return new USwapNumber(0)
           } else if (UTXOChains.includes(assetFrom.chain as UTXOChain)) {
-            const utxoWallet = uSwap.getWallet<UTXOChain>(selected.provider, selected.network as UTXOChain)
+            const utxoWallet = uSwap.getWallet<UTXOChain>(selected.provider, assetFrom.chain as UTXOChain)
             return await utxoWallet.estimateTransactionFee({
               recipient: selected.address,
               sender: selected.address,
