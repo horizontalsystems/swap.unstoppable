@@ -151,7 +151,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
                 disabled={creatingChannel}
               >
                 {creatingChannel && <LoaderCircle size={20} className="animate-spin" />}
-                <span>{creatingChannel ? 'Creating Address' : 'Create Deposit Address'}</span>
+                <span>{creatingChannel ? 'Confirming' : 'Confirm'}</span>
               </ThemeButton>
             </div>
           </>
