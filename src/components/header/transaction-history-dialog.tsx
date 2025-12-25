@@ -11,6 +11,7 @@ import { cn, truncate } from '@/lib/utils'
 import { AssetIcon } from '@/components/asset-icon'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { Icon } from '@/components/icons'
+import { ProviderName } from '@uswap/helpers'
 import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, USwapNumber } from '@uswap/core'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { ThemeButton } from '@/components/theme-button'
@@ -47,49 +48,6 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
       return 'Yesterday'
     }
     return format(date, 'd MMMM')
-  }
-
-  const leg = (tx: any, legTx: any) => {
-    const from = assetFromString(legTx.fromAsset)
-    const to = assetFromString(legTx.toAsset)
-
-    const text =
-      legTx.fromAsset === legTx.toAsset
-        ? legTx.fromAsset.toLowerCase() === tx.assetFrom.identifier.toLowerCase()
-          ? `Deposit ${from.ticker}`
-          : `Send ${to.ticker}`
-        : `Swap ${from.ticker} to ${to.ticker}`
-
-    const chain = ChainIdToChain[legTx.chainId as ChainId]
-    const explorerUrl = legTx.hash && getExplorerTxUrl({ chain: chain, txHash: legTx.hash })
-
-    return (
-      <div className="text-thor-gray flex justify-between">
-        <div className="flex items-center gap-2">
-          {legTx.status === 'completed' ? (
-            <CircleCheck className="text-brand-first" size={16} />
-          ) : legTx.status === 'not_started' ? (
-            <ClockFading size={16} />
-          ) : (
-            <LoaderCircle className="animate-spin" size={16} />
-          )}
-          <span>{text}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span>{chainLabel(chain)}</span>
-
-          {explorerUrl && (
-            <Icon
-              name="globe"
-              className="size-5 cursor-pointer"
-              onClick={() => {
-                window.open(explorerUrl, '_blank')
-              }}
-            />
-          )}
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -145,7 +103,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                       {formatDate(txDate)}
                     </div>
                   )}
-                  <div className="bg-blade/25 mb-3 rounded-xl border-1">
+                  <div className="bg-blade/25 mb-3 rounded-xl border">
                     <div
                       className="flex cursor-pointer px-4 py-3"
                       onClick={() => setExpandTx(isExpanded ? null : tx.uid)}
@@ -218,38 +176,46 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                       </div>
                     )}
 
-                    {isExpanded && (
+                    {isExpanded && details && (
                       <>
-                        {details && (
-                          <>
-                            <div className="space-y-4 border-t p-4 text-xs font-semibold">
-                              {details.fromAddress && (
-                                <div className="text-thor-gray flex items-center justify-between">
-                                  <span>Source Address</span>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-leah">{truncate(details.fromAddress)}</span>
-                                    <CopyButton text={details.fromAddress} />
-                                  </div>
-                                </div>
-                              )}
-
-                              <div className="text-thor-gray flex items-center justify-between">
-                                <span>Destination Address</span>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-leah">{truncate(details.toAddress)}</span>
-                                  <CopyButton text={details.toAddress} />
-                                </div>
+                        <div className="space-y-4 border-t p-4 text-xs font-semibold">
+                          {details.fromAddress && (
+                            <div className="text-thor-gray flex items-center justify-between">
+                              <span>Source Address</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-leah">{truncate(details.fromAddress)}</span>
+                                <CopyButton text={details.fromAddress} />
                               </div>
                             </div>
+                          )}
 
-                            <div className="space-y-4 border-t p-4 text-xs font-semibold">
-                              {details.legs.map((legTx: any, i: number) => {
-                                return <div key={i}>{leg(tx, legTx)}</div>
-                              })}
+                          <div className="text-thor-gray flex items-center justify-between">
+                            <span>Destination Address</span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-leah">{truncate(details.toAddress)}</span>
+                              <CopyButton text={details.toAddress} />
                             </div>
-                          </>
-                        )}
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 border-t p-4 text-xs font-semibold">
+                          {details.legs.map((legTx: any, i: number) => {
+                            return <div key={i}>{renderLeg(tx, legTx)}</div>
+                          })}
+                        </div>
                       </>
+                    )}
+                    {isExpanded && tx.provider === ProviderName.THORCHAIN && tx.hash && (
+                      <a
+                        href={`https://thorchain.net/tx/${tx.hash}`}
+                        className="flex justify-end px-4 py-3"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <ThemeButton variant="secondarySmall">
+                          <Icon name="globe" className="size-5" /> thorchain.net
+                        </ThemeButton>
+                      </a>
                     )}
                   </div>
                 </Fragment>
@@ -259,5 +225,42 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
         </ScrollArea>
       </CredenzaContent>
     </Credenza>
+  )
+}
+
+function renderLeg(tx: any, legTx: any) {
+  const from = assetFromString(legTx.fromAsset)
+  const to = assetFromString(legTx.toAsset)
+
+  const text =
+    legTx.fromAsset === legTx.toAsset
+      ? legTx.fromAsset.toLowerCase() === tx.assetFrom.identifier.toLowerCase()
+        ? `Deposit ${from.ticker}`
+        : `Send ${to.ticker}`
+      : `Swap ${from.ticker} to ${to.ticker}`
+
+  const chain = ChainIdToChain[legTx.chainId as ChainId]
+  const explorerUrl = legTx.hash && getExplorerTxUrl({ chain: chain, txHash: legTx.hash })
+
+  return (
+    <div className="text-thor-gray flex justify-between">
+      <div className="flex items-center gap-2">
+        {legTx.status === 'completed' ? (
+          <CircleCheck className="text-brand-first" size={16} />
+        ) : legTx.status === 'not_started' ? (
+          <ClockFading size={16} />
+        ) : (
+          <LoaderCircle className="animate-spin" size={16} />
+        )}
+        <span>{text}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span>{chainLabel(chain)}</span>
+
+        {explorerUrl && (
+          <Icon name="globe" className="size-5 cursor-pointer" onClick={() => window.open(explorerUrl, '_blank')} />
+        )}
+      </div>
+    </div>
   )
 }
