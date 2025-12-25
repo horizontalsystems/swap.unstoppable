@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
+import { CredenzaDescription, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { CopyButton } from '@/components/button-copy'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Icon } from '@/components/icons'
@@ -18,6 +18,13 @@ export const InstantSwap = ({ asset, channel }: SwapMemolessChannelProps) => {
     <>
       <CredenzaHeader>
         <CredenzaTitle>External Wallet Instructions</CredenzaTitle>
+        <CredenzaDescription>
+          Send exactly{' '}
+          <b>
+            {channel.value} {asset.ticker}
+          </b>{' '}
+          to the address below from a self custody wallet.
+        </CredenzaDescription>
       </CredenzaHeader>
 
       <ScrollArea className="flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
@@ -25,11 +32,8 @@ export const InstantSwap = ({ asset, channel }: SwapMemolessChannelProps) => {
           <div className="border-jacob flex items-center gap-3 rounded-xl border p-4">
             <Icon name="warning" className="text-jacob size-6 shrink-0" />
             <div className="text-thor-gray text-sm font-semibold">
-              Please send{' '}
-              <b>
-                exactly {channel.value} {asset.ticker}
-              </b>{' '}
-              to the specified address. Do not modify the amount, as incorrect transfers may result in lost funds.
+              DO NOT send a different amount - funds could be lost <br />
+              DO NOT send from a contract or exchange - funds will be lost
             </div>
           </div>
 

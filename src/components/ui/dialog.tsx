@@ -70,7 +70,9 @@ function DialogContent({
 }
 
 function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="dialog-header" className={cn('flex flex-col gap-2 p-8 text-left', className)} {...props} />
+  return (
+    <div data-slot="dialog-header" className={cn('flex flex-col gap-2 p-8 pb-6 text-left', className)} {...props} />
+  )
 }
 
 function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
@@ -97,7 +99,7 @@ function DialogDescription({ className, ...props }: React.ComponentProps<typeof 
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn('text-muted-foreground mt-4 text-sm', className)}
+      className={cn('text-muted-foreground mt-3 text-sm', className)}
       {...props}
     />
   )
