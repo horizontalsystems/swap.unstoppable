@@ -26,11 +26,11 @@ export const Keystore = ({ onConnect }: { wallet: WalletParams; onConnect: () =>
 
   return (
     <div className="mb-8 flex flex-1 flex-col items-center justify-center gap-3 px-8 md:mb-0 md:px-16">
-      <ThemeButton className="w-full" variant="primaryMedium" onClick={() => setWalletType('create')}>
-        Create New Wallet
+      <ThemeButton className="w-full" variant="primaryMedium" onClick={() => setWalletType('import_keystore')}>
+        Open Keystore
       </ThemeButton>
-      <ThemeButton className="w-full" variant="secondaryMedium" onClick={() => setWalletType('import_keystore')}>
-        Import Keystore
+      <ThemeButton className="w-full" variant="secondaryMedium" onClick={() => setWalletType('create')}>
+        Create New Wallet
       </ThemeButton>
       <ThemeButton className="w-full" variant="secondaryMedium" onClick={() => setWalletType('import_phrase')}>
         Import Seed Phrase
