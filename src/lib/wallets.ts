@@ -62,7 +62,8 @@ export function getUSwap() {
         [Chain.Ethereum]: ['https://eth.llamarpc.com', 'https://ethereum-rpc.publicnode.com']
       },
       envs: {
-        apiUrl: process.env.NEXT_PUBLIC_USWAP_API_URL
+        apiUrl: process.env.NEXT_PUBLIC_USWAP_API_URL,
+        memolessApiUrl: process.env.NEXT_PUBLIC_MEMOLESS_API
       }
     }
   })
