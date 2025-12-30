@@ -13,7 +13,7 @@ interface InstantSwapDialogProps {
 export const InstantSwapChannelDialog = ({ assetFrom, channel, isOpen, onOpenChange }: InstantSwapDialogProps) => {
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
-      <CredenzaContent className="flex h-auto max-h-5/6 flex-col md:max-w-lg">
+      <CredenzaContent className="flex h-auto max-h-5/6 flex-col md:max-w-xl">
         <InstantSwap asset={assetFrom} channel={channel} />
       </CredenzaContent>
     </Credenza>
