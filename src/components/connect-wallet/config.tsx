@@ -30,6 +30,7 @@ export const ALL_CHAINS = [
   Chain.Litecoin,
   Chain.Maya,
   Chain.Near,
+  Chain.Optimism,
   Chain.Polygon,
   Chain.Solana,
   Chain.THORChain,
