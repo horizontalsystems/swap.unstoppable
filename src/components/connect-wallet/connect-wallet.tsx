@@ -33,7 +33,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
   const chains = useMemo(
     () =>
       [...ALL_CHAINS, ...COMING_SOON_CHAINS].sort((a, b) => {
-        return chainLabel(a).localeCompare(chainLabel(b))
+        return chainLabel(a)?.localeCompare(chainLabel(b))
       }),
     []
   )

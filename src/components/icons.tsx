@@ -42,7 +42,7 @@ const ClockIcon = memo<IconProps>(props => (
 
 const ClockFilledIcon = memo<IconProps>(props => (
   <SVG {...props}>
-    <g clip-path="url(#clip0_3005_29216)">
+    <g clipPath="url(#clip0_3005_29216)">
       <path
         d="M7.99902 1.33203C11.6809 1.33203 14.666 4.31713 14.666 7.99902C14.666 11.6809 11.6809 14.666 7.99902 14.666C4.31713 14.666 1.33203 11.6809 1.33203 7.99902C1.33203 4.31713 4.31713 1.33203 7.99902 1.33203ZM7.3291 8.27246L9.88574 10.8262L10.8262 9.88574L8.66211 7.71875V2.66211H7.3291V8.27246Z"
         fill="currentColor"

@@ -82,7 +82,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
     return Array.from(chainMap.keys()).sort((a, b) => {
       if (a === Filter.All) return -1
       if (b === Filter.All) return 1
-      return chainLabel(a).localeCompare(chainLabel(b))
+      return chainLabel(a)?.localeCompare(chainLabel(b))
     })
   }, [chainMap])
 
