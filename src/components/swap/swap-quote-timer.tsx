@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
-import { useQuote } from '@/hooks/use-quote'
 import { Tooltip } from '@/components/tooltip'
+import { RefetchOptions } from '@tanstack/react-query'
+import { QuoteResponseRoute } from '@uswap/helpers/api'
 
 const QUOTE_EXPIRATION_MS = 60000
 
-export const QuoteTimer = () => {
-  const { quote, isLoading, refetch } = useQuote()
+interface SwapQuoteTimerProps {
+  quote?: QuoteResponseRoute | undefined
+  refetch: (options?: RefetchOptions) => void
+  isLoading: boolean
+}
 
+export const SwapQuoteTimer = ({ quote, isLoading, refetch }: SwapQuoteTimerProps) => {
   const [timeRemaining, setTimeRemaining] = useState(QUOTE_EXPIRATION_MS)
   const [progress, setProgress] = useState(100)
   const [expiresAt, setExpiresAt] = useState<number | null>(null)

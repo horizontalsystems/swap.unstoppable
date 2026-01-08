@@ -16,15 +16,14 @@ import { SwapError } from '@/components/swap/swap-error'
 import { AssetValue, USwapNumber } from '@uswap/core'
 import { type MemolessAsset } from '@uswap/helpers/api'
 import { SwapAddressFrom } from '@/components/swap/swap-address-from'
-import { QuoteTimer } from '@/components/swap/quote-timer'
+import { SwapQuoteTimer } from '@/components/swap/swap-quote-timer'
 import { resolvePriceImpact } from '@/components/swap/swap-helpers'
 import { useSwapRates } from '@/hooks/use-rates'
 
 export const Swap = () => {
   const assetFrom = useAssetFrom()
   const { valueFrom } = useSwap()
-  const { quote } = useQuote()
-  const selectedAccount = useSelectedAccount()
+  const { quote, isLoading, refetch } = useQuote()
   const { assets: memolessAssets } = useMemolessAssets()
   const { rateFrom, rateTo } = useSwapRates()
 
@@ -67,7 +66,7 @@ export const Swap = () => {
         <div className="mb-3 flex items-center justify-between">
           <h1 className="text-leah text-xl font-medium">Swap</h1>
           <div className="flex items-center gap-4">
-            <QuoteTimer />
+            <SwapQuoteTimer quote={quote} isLoading={isLoading} refetch={refetch} />
             <SwapAddressFrom />
             <SwapSettings />
           </div>
