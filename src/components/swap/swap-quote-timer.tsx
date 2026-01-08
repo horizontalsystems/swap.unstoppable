@@ -52,7 +52,7 @@ export const SwapQuoteTimer = ({ quote, isLoading, refetch }: SwapQuoteTimerProp
     }
 
     updateTimer()
-    intervalRef.current = setInterval(updateTimer, 100)
+    intervalRef.current = setInterval(updateTimer, 1000)
 
     const timeUntilExpiration = expiresAt - Date.now()
     if (timeUntilExpiration > 0) {
