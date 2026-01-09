@@ -1,5 +1,6 @@
-import { AssetRateMap } from '@/hooks/use-rates'
+import { intervalToDuration } from 'date-fns'
 import { assetFromString, USwapNumber } from '@uswap/core'
+import { AssetRateMap } from '@/hooks/use-rates'
 import { QuoteResponseRoute } from '@uswap/helpers/api'
 
 export type FeeData = {
@@ -62,4 +63,20 @@ export const resolvePriceImpact = (quote?: QuoteResponseRoute, rateFrom?: USwapN
 
 export const generateId = () => {
   return Date.now().toString(36) + Math.random().toString(36).substring(2)
+}
+
+export const formatExpiration = (seconds: number) => {
+  const duration = intervalToDuration({ start: 0, end: seconds * 1000 })
+  const parts = []
+
+  if (duration.months) parts.push(`${duration.months}M`)
+  if (duration.weeks) parts.push(`${duration.weeks}w`)
+  if (duration.days) parts.push(`${duration.days}d`)
+  if (duration.hours) parts.push(`${duration.hours}h`)
+  if (duration.minutes) parts.push(`${duration.minutes}m`)
+  if (duration.seconds && !(duration.hours || duration.days || duration.weeks)) {
+    parts.push(`${duration.seconds}s`)
+  }
+
+  return parts.join(' ')
 }

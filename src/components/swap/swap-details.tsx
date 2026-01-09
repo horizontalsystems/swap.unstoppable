@@ -3,10 +3,9 @@ import { Separator } from '@/components/ui/separator'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { Icon } from '@/components/icons'
-import { intervalToDuration } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { USwapNumber } from '@uswap/core'
-import { resolveFees } from '@/components/swap/swap-helpers'
+import { formatExpiration, resolveFees } from '@/components/swap/swap-helpers'
 import { useRates } from '@/hooks/use-rates'
 import { InfoTooltip } from '@/components/tooltip'
 import { animated, useSpring } from '@react-spring/web'
@@ -57,17 +56,6 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
   const price = priceDirect ? valueTo.div(valueFrom) : valueFrom.div(valueTo)
 
   const { inbound, outbound, liquidity, platform, included } = resolveFees(quote, rates)
-  const formatTime = (seconds: number) => {
-    const duration = intervalToDuration({ start: 0, end: seconds * 1000 })
-    const parts = []
-    if (duration.months) parts.push(`${duration.months}M`)
-    if (duration.weeks) parts.push(`${duration.weeks}w`)
-    if (duration.days) parts.push(`${duration.days}d`)
-    if (duration.hours) parts.push(`${duration.hours}h`)
-    if (duration.minutes) parts.push(`${duration.minutes}m`)
-    if (duration.seconds && !duration.hours) parts.push(`${duration.seconds}s`)
-    return parts.join(' ')
-  }
 
   return (
     <>
@@ -92,7 +80,7 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
                 })}
               >
                 <Icon width={16} height={16} viewBox="0 0 16 16" name="clock-filled" />
-                <span className="ms-1 text-xs">{formatTime(quote.estimatedTime.total)}</span>
+                <span className="ms-1 text-xs">{formatExpiration(quote.estimatedTime.total)}</span>
               </div>
             )}
 
