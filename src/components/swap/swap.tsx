@@ -22,6 +22,7 @@ import { useSwapRates } from '@/hooks/use-rates'
 
 export const Swap = () => {
   const assetFrom = useAssetFrom()
+  const selectedAccount = useSelectedAccount()
   const { valueFrom } = useSwap()
   const { quote, isLoading, refetch } = useQuote()
   const { assets: memolessAssets } = useMemolessAssets()
