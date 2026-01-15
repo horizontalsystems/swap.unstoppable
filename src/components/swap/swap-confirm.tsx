@@ -16,6 +16,7 @@ import { InfoTooltip } from '@/components/tooltip'
 import { SwapProvider } from '@/components/swap/swap-provider'
 import { PriceImpact } from '@/components/swap/price-impact'
 import { DecimalText } from '@/components/decimal/decimal-text'
+import { useIsLimitSwap, useLimitSwapBuyAmount } from '@/store/limit-swap-store'
 
 interface SwapConfirmProps {
   quote: QuoteResponseRoute & {
@@ -27,6 +28,8 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const slippage = useSlippage()
+  const isLimitSwap = useIsLimitSwap()
+  const limitSwapBuyAmount = useLimitSwapBuyAmount()
 
   if (!assetFrom || !assetTo) return null
 
@@ -41,12 +44,28 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
 
   const { inbound } = resolveFees(quote, rates)
 
+  const limitBuyAmount = useMemo(() => {
+    if (!limitSwapBuyAmount) return null
+    return USwapNumber.fromBigInt(BigInt(limitSwapBuyAmount), 8)
+  }, [limitSwapBuyAmount])
+
+  const limitPricePerUnit = useMemo(() => {
+    if (!limitBuyAmount || sellAmount.eq(0)) return null
+    return limitBuyAmount.div(sellAmount)
+  }, [limitBuyAmount, sellAmount])
+
+  const limitPriceDifferencePercent = useMemo(() => {
+    if (!limitBuyAmount || expectedBuyAmount.eq(0)) return null
+    return limitBuyAmount.sub(expectedBuyAmount).div(expectedBuyAmount).mul(100)
+  }, [limitBuyAmount, expectedBuyAmount])
+
   const priceImpact = resolvePriceImpact(quote, rateFrom, rateTo)
+  const displayBuyAmount = isLimitSwap && limitBuyAmount ? limitBuyAmount : expectedBuyAmount
 
   return (
     <>
       <CredenzaHeader>
-        <CredenzaTitle>Confirm Swap</CredenzaTitle>
+        <CredenzaTitle>{isLimitSwap ? 'Confirm Limit Order' : 'Confirm Swap'}</CredenzaTitle>
       </CredenzaHeader>
 
       <ScrollArea className="relative flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
@@ -80,10 +99,10 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
               </div>
               <div className="flex flex-col items-end">
                 <span className="text-leah text-base font-semibold">
-                  <DecimalText amount={expectedBuyAmount.toSignificant()} />
+                  <DecimalText amount={displayBuyAmount.toSignificant()} />
                 </span>
                 <span className="text-thor-gray text-sm">
-                  {rateTo ? expectedBuyAmount.mul(rateTo).toCurrency() : 'n/a'}
+                  {rateTo ? displayBuyAmount.mul(rateTo).toCurrency() : 'n/a'}
                 </span>
               </div>
             </div>
@@ -94,36 +113,81 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
           </div>
 
           <div className="space-y-4 border-t p-4">
-            <div className="text-thor-gray flex justify-between text-sm">
-              <div className="flex items-center gap-1">
-                Min. Payout{' '}
-                {slippage && (
-                  <span
-                    className={cn({
-                      'text-jacob': slippage > 3
-                    })}
-                  >
-                    ({slippage}%)
-                  </span>
-                )}
-                <InfoTooltip>
-                  Minimum guaranteed amount based on your slippage tolerance. If market conditions would give you less,
-                  the transaction will be canceled automatically.
-                </InfoTooltip>
-              </div>
-              {slippage && expectedBuyAmountMaxSlippage ? (
-                <div className="flex gap-2">
-                  <span className="text-leah font-semibold">
-                    <DecimalText amount={expectedBuyAmountMaxSlippage.toSignificant()} symbol={assetTo.ticker} />
-                  </span>
-                  {rateTo && (
-                    <span className="font-medium">({expectedBuyAmountMaxSlippage.mul(rateTo).toCurrency()})</span>
-                  )}
+            {isLimitSwap && limitPricePerUnit ? (
+              <>
+                <div className="text-thor-gray flex justify-between text-sm">
+                  <div className="flex items-center gap-1">
+                    Limit Price
+                    <InfoTooltip>
+                      The price per unit at which your limit order will execute. The order will only fill when the
+                      market reaches this price.
+                    </InfoTooltip>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-leah font-semibold">
+                      <DecimalText amount={limitPricePerUnit.toSignificant()} /> {assetTo.ticker}/{assetFrom.ticker}
+                    </span>
+                    {limitPriceDifferencePercent && (
+                      <span
+                        className={cn('font-medium', {
+                          'text-remus': limitPriceDifferencePercent.gt(0),
+                          'text-lucian': limitPriceDifferencePercent.lt(0)
+                        })}
+                      >
+                        ({limitPriceDifferencePercent.gte(0) ? '+' : ''}
+                        {limitPriceDifferencePercent.toFixed(1)}%)
+                      </span>
+                    )}
+                  </div>
                 </div>
-              ) : (
-                <span className="text-lucian font-semibold">Not Protected</span>
-              )}
-            </div>
+
+                <div className="text-thor-gray flex justify-between text-sm">
+                  <div className="flex items-center gap-1">
+                    Target Amount
+                    <InfoTooltip>
+                      The exact amount you will receive when your limit order executes at your specified price.
+                    </InfoTooltip>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-leah font-semibold">
+                      <DecimalText amount={displayBuyAmount.toSignificant()} symbol={assetTo.ticker} />
+                    </span>
+                    {rateTo && <span className="font-medium">({displayBuyAmount.mul(rateTo).toCurrency()})</span>}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-thor-gray flex justify-between text-sm">
+                <div className="flex items-center gap-1">
+                  Min. Payout{' '}
+                  {slippage && (
+                    <span
+                      className={cn({
+                        'text-jacob': slippage > 3
+                      })}
+                    >
+                      ({slippage}%)
+                    </span>
+                  )}
+                  <InfoTooltip>
+                    Minimum guaranteed amount based on your slippage tolerance. If market conditions would give you
+                    less, the transaction will be canceled automatically.
+                  </InfoTooltip>
+                </div>
+                {slippage && expectedBuyAmountMaxSlippage ? (
+                  <div className="flex gap-2">
+                    <span className="text-leah font-semibold">
+                      <DecimalText amount={expectedBuyAmountMaxSlippage.toSignificant()} symbol={assetTo.ticker} />
+                    </span>
+                    {rateTo && (
+                      <span className="font-medium">({expectedBuyAmountMaxSlippage.mul(rateTo).toCurrency()})</span>
+                    )}
+                  </div>
+                ) : (
+                  <span className="text-lucian font-semibold">Not Protected</span>
+                )}
+              </div>
+            )}
 
             {quote.sourceAddress && quote.sourceAddress !== '{sourceAddress}' && (
               <div className="text-thor-gray flex justify-between text-sm">
@@ -155,7 +219,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
               </div>
             )}
 
-            {priceImpact && (
+            {!isLimitSwap && priceImpact && (
               <div className="text-thor-gray flex justify-between text-sm">
                 <div className="flex items-center gap-1">
                   Price Impact

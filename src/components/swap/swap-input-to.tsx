@@ -11,6 +11,7 @@ import { chainLabel } from '@/components/connect-wallet/config'
 import { USwapNumber } from '@uswap/core'
 import { Tooltip } from '@/components/tooltip'
 import { PriceImpact } from '@/components/swap/price-impact'
+import { useIsLimitSwap, useLimitSwapBuyAmount } from '@/store/limit-swap-store'
 
 export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
   const assetTo = useAssetTo()
@@ -18,8 +19,14 @@ export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
   const { quote } = useQuote()
   const { openDialog } = useDialog()
   const { rateTo } = useSwapRates()
+  const isLimitSwap = useIsLimitSwap()
+  const limitSwapBuyAmount = useLimitSwapBuyAmount()
 
-  const value = quote && new USwapNumber(quote.expectedBuyAmount)
+  const value =
+    isLimitSwap && limitSwapBuyAmount
+      ? USwapNumber.fromBigInt(BigInt(limitSwapBuyAmount), 8)
+      : quote && new USwapNumber(quote.expectedBuyAmount)
+
   const fiatValueTo = (rateTo && value && value.mul(rateTo)) || new USwapNumber(0)
 
   const onClick = () =>

@@ -1,13 +1,13 @@
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Asset } from '@/components/swap/asset'
 import { cn } from '@/lib/utils'
 
-export function AssetIcon({ asset }: { asset: Asset | undefined }) {
+export function AssetIcon({ asset, className }: { asset: Asset | undefined; className?: string }) {
   const [loaded, setLoaded] = useState(false)
 
   return (
-    <div className="bg-blade relative flex h-8 w-8 rounded-full">
+    <div className={cn('bg-blade relative flex h-8 w-8 rounded-full', className)}>
       {asset && (
         <>
           {!isNativeAsset(asset) && (

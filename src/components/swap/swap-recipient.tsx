@@ -9,6 +9,7 @@ import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { cn, truncate } from '@/lib/utils'
 import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
+import { useIsLimitSwap, useLimitSwapBuyAmount, useLimitSwapExpiry } from '@/store/limit-swap-store'
 import { getAddressValidator } from '@uswap/toolboxes'
 import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
 import { getQuotes } from '@/lib/api'
@@ -19,6 +20,7 @@ import { Asset } from '@/components/swap/asset'
 import { Textarea } from '@/components/ui/textarea'
 import { WalletAccount } from '@/store/wallets-store'
 import { Tooltip } from '@/components/tooltip'
+import { prepareQuoteForLimitSwap } from '@/lib/limit-swap'
 
 interface SwapRecipientProps {
   provider: ProviderName
@@ -33,6 +35,9 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const slippage = useSlippage()
   const accounts = useAccounts()
   const selectedAccount = useSelectedAccount()
+  const isLimitSwap = useIsLimitSwap()
+  const limitSwapBuyAmount = useLimitSwapBuyAmount()
+  const limitSwapExpiry = useLimitSwapExpiry()
 
   const [quoting, setQuoting] = useState(false)
   const [quoteError, setQuoteError] = useState<Error | undefined>()
@@ -76,11 +81,18 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
       destinationAddress: destinationAddress,
       refundAddress: refundRequired ? refundAddress : provider === 'MAYACHAIN' ? undefined : selectedAccount?.address,
       dry: !(refundRequired || selectedAccount),
-      slippage: slippage ?? 99,
+      slippage: isLimitSwap ? 0 : (slippage ?? 99),
       providers: [provider]
     })
       .then(quotes => {
-        onFetchQuote(quotes[0])
+        let quote = quotes[0]
+
+        // For THORChain limit orders, modify the memo to use limit order format
+        if (isLimitSwap && (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING')) {
+          quote = prepareQuoteForLimitSwap(quote, limitSwapBuyAmount, limitSwapExpiry)
+        }
+
+        onFetchQuote(quote)
       })
       .catch(error => {
         let newError = error

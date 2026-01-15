@@ -14,6 +14,7 @@ import { chainLabel } from '@/components/connect-wallet/config'
 import { SwapDialog } from '@/components/swap/swap-dialog'
 import { InstantSwapDialog } from '@/components/swap/instant-swap-dialog'
 import { QuoteResponseRoute } from '@uswap/helpers/api'
+import { useIsLimitSwap } from '@/store/limit-swap-store'
 
 interface SwapButtonProps {
   instantSwapSupported: boolean
@@ -32,6 +33,7 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
   const assetTo = useAssetTo()
   const uSwap = getUSwap()
   const selectedAccount = useSelectedAccount()
+  const isLimitSwap = useIsLimitSwap()
   const { valueFrom } = useSwap()
   const { quote, isLoading: isQuoting, refetch: refetchQuote } = useQuote()
   const { isLoading: isSimulating, approveData } = useSimulation()
@@ -107,7 +109,12 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
       }
     }
 
-    return { text: 'Swap', spinner: false, accent: true, onClick: () => onSwap(quote) }
+    return {
+      text: isLimitSwap ? 'Place Limit Order' : 'Swap',
+      spinner: false,
+      accent: true,
+      onClick: () => onSwap(quote)
+    }
   }
 
   const state = getState()
