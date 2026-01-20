@@ -1,4 +1,4 @@
-export function HeaderUnstoppable() {
+export function HeaderLogoText() {
   return (
     <svg
       width="97"
