@@ -149,7 +149,11 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                           })}
                         >
                           {showRemainingTime ? (
-                            <RemainingTime startTime={txDate.getTime()} estimatedTime={tx.estimatedTime!} />
+                            <RemainingTime
+                              startTime={txDate.getTime()}
+                              estimatedTime={tx.estimatedTime!}
+                              fallback={statusTitle}
+                            />
                           ) : (
                             statusTitle
                           )}
@@ -244,7 +248,15 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
   )
 }
 
-function RemainingTime({ startTime, estimatedTime }: { startTime: number; estimatedTime: number }) {
+function RemainingTime({
+  startTime,
+  estimatedTime,
+  fallback
+}: {
+  startTime: number
+  estimatedTime: number
+  fallback: string
+}) {
   const [now, setNow] = useState(Date.now())
 
   useEffect(() => {
@@ -255,7 +267,7 @@ function RemainingTime({ startTime, estimatedTime }: { startTime: number; estima
   const elapsedSeconds = Math.floor((now - startTime) / 1000)
   const remainingSeconds = estimatedTime - elapsedSeconds
 
-  if (remainingSeconds <= 0) return null
+  if (remainingSeconds <= 0) return <span className="capitalize">{fallback}</span>
 
   return <>{formatExpiration(remainingSeconds)} remaining</>
 }
