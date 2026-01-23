@@ -48,6 +48,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
           chainId: getChainConfig(assetFrom.chain).chainId,
           hash: hash,
           timestamp: new Date(),
+          estimatedTime: quote.estimatedTime?.total,
           assetFrom: assetFrom,
           assetTo: assetTo,
           amountFrom: valueFrom.toSignificant(),

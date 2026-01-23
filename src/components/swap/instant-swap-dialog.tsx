@@ -58,6 +58,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
       provider,
       chainId: getChainConfig(assetFrom.chain).chainId,
       timestamp: new Date(),
+      estimatedTime: quote.estimatedTime?.total,
       assetFrom,
       assetTo,
       amountFrom: value,
@@ -66,7 +67,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
       addressDeposit: address,
       status: 'not_started',
       qrCodeData,
-      expiration
+      expiration,
     })
   }
 

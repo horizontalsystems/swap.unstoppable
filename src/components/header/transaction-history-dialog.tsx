@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { format, formatDuration, intervalToDuration, isSameDay, isToday, isYesterday } from 'date-fns'
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -20,6 +20,7 @@ import { InstantSwapChannelDialog } from '@/components/swap/instant-swap-channel
 import { DecimalText } from '@/components/decimal/decimal-text'
 import { DepositChannel } from '@/components/swap/instant-swap-dialog'
 import { useSyncTransactions } from '@/hooks/use-sync-transactions'
+import { formatExpiration } from '@/components/swap/swap-helpers'
 
 interface HistoryDialogProps {
   isOpen: boolean
@@ -41,6 +42,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
 
   let lastDate: Date | null = null
 
+  const now = new Date()
   const formatDate = (date: Date): string => {
     if (isToday(date)) {
       return 'Today'
@@ -79,11 +81,11 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
               const isExpanded = expandTx === tx.uid
 
               let statusTitle = status.replace('_', ' ')
-
               if (status === 'not_started') {
                 statusTitle = 'Deposit Pending'
               }
 
+              const showRemainingTime = statusTitle === 'pending' && tx.estimatedTime
               const showQrCode = () => {
                 if (!tx.qrCodeData || !tx.addressDeposit) return
 
@@ -141,11 +143,16 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                           )}
                         </span>
                         <span
-                          className={cn('text-thor-gray text-[10px] font-semibold capitalize', {
-                            'text-lucian': status === 'expired'
+                          className={cn('text-thor-gray text-[10px] font-semibold', {
+                            'text-lucian': status === 'expired',
+                            capitalize: !showRemainingTime
                           })}
                         >
-                          {statusTitle}
+                          {showRemainingTime ? (
+                            <RemainingTime startTime={txDate.getTime()} estimatedTime={tx.estimatedTime!} />
+                          ) : (
+                            statusTitle
+                          )}
                         </span>
                       </div>
                       <div className="flex flex-1 items-center justify-end gap-3">
@@ -171,7 +178,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                               Expires in &nbsp;
                               {formatDuration(
                                 intervalToDuration({
-                                  start: new Date().getTime(),
+                                  start: now.getTime(),
                                   end: tx.expiration * 1000
                                 }),
                                 { format: ['hours', 'minutes', 'seconds'], zero: false }
@@ -235,6 +242,22 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
       </CredenzaContent>
     </Credenza>
   )
+}
+
+function RemainingTime({ startTime, estimatedTime }: { startTime: number; estimatedTime: number }) {
+  const [now, setNow] = useState(Date.now())
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const elapsedSeconds = Math.floor((now - startTime) / 1000)
+  const remainingSeconds = estimatedTime - elapsedSeconds
+
+  if (remainingSeconds <= 0) return null
+
+  return <>{formatExpiration(remainingSeconds)} remaining</>
 }
 
 function renderLeg(tx: any, legTx: any) {

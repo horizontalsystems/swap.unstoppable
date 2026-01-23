@@ -20,6 +20,7 @@ interface Transaction {
   chainId: string
   hash?: string
   timestamp: Date
+  estimatedTime?: number
   assetFrom: Asset
   assetTo: Asset
   amountFrom: string
