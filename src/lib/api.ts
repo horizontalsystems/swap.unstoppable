@@ -9,6 +9,7 @@ const uSwap = axios.create({
   }
 })
 
+const thornode = axios.create({ baseURL: 'https://thornode.ninerealms.com' })
 const coingecko = axios.create({ baseURL: 'https://api.coingecko.com/api/v3' })
 
 export const getAssetRates = async (ids: string) => {
@@ -36,4 +37,8 @@ export const getQuotes = async (json: QuoteRequest, abortController?: AbortContr
 
 export const getTrack = async (data: Record<string, any>) => {
   return uSwap.post('/track', data).then(res => res.data)
+}
+
+export const getMimir = async (): Promise<Record<string, number>> => {
+  return thornode.get('/thorchain/mimir').then(res => res.data)
 }

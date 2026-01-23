@@ -11,6 +11,7 @@ import { AssetIcon } from '@/components/asset-icon'
 import { Chain } from '@uswap/core'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { useAssets } from '@/hooks/use-assets'
+import { useMimir } from '@/hooks/use-mimir'
 import { useVirtualizer } from '@tanstack/react-virtual'
 
 const FEATURED_ASSETS = [
@@ -55,6 +56,11 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
   const [searchQuery, setSearchQuery] = useState('')
 
   const { assets } = useAssets()
+  const { mimir } = useMimir()
+
+  const isAssetHalted = (asset: Asset) => {
+    return mimir[`HALT${asset.ticker}TRADING`] === 1 || mimir['HALTTRADING'] === 1
+  }
 
   const chainMap: Map<FilterChain, Asset[]> = useMemo(() => {
     if (!assets?.length) return new Map()
@@ -148,6 +154,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
   }
 
   const handleAssetSelect = (asset: Asset) => {
+    if (isAssetHalted(asset)) return
     onSelectAsset(asset)
     onOpenChange(false)
   }
@@ -253,23 +260,32 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
                       >
                         <div
                           onClick={() => handleAssetSelect(asset)}
-                          className="hover:bg-blade/50 mx-4 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3 md:mr-8 md:ml-0"
+                          className={cn(
+                            'mx-4 flex items-center justify-between gap-3 rounded-lg border border-transparent px-4 py-3 md:mr-8 md:ml-0',
+                            isAssetHalted(asset) ? 'cursor-not-allowed' : 'hover:bg-blade/50 cursor-pointer'
+                          )}
                         >
-                          <div className="flex items-center gap-3">
+                          <div className={cn('flex items-center gap-3', isAssetHalted(asset) && 'opacity-50')}>
                             <AssetIcon key={asset.identifier} asset={asset} />
                             <div className="text-left">
                               <div className="text-leah max-w-30 truncate font-semibold">{asset.ticker}</div>
                               <div className="text-thor-gray text-sm">{chainLabel(asset.chain)}</div>
                             </div>
                           </div>
-                          {asset.identifier === selected?.identifier && (
-                            <div
-                              className={cn(
-                                'border-gray text-thor-gray rounded-full border px-1.5 py-0.5 text-xs font-medium'
-                              )}
-                            >
-                              Selected
+                          {isAssetHalted(asset) ? (
+                            <div className="border-jacob text-jacob rounded-full border px-1.5 text-[10px] font-semibold">
+                              Currently unavailable
                             </div>
+                          ) : (
+                            asset.identifier === selected?.identifier && (
+                              <div
+                                className={cn(
+                                  'border-gray text-thor-gray rounded-full border px-1.5 py-0.5 text-xs font-medium'
+                                )}
+                              >
+                                Selected
+                              </div>
+                            )
                           )}
                         </div>
                       </div>
