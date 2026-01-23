@@ -1,6 +1,7 @@
 import { useQueries } from '@tanstack/react-query'
 import {
   isTxPending,
+  isTxTerminal,
   usePendingTransactions,
   useSetTransactionDetails,
   useSetTransactionStatus
@@ -17,7 +18,7 @@ export const useSyncTransactions = () => {
   const queries = pendingTransactions.map(tx => {
     return {
       queryKey: ['transaction', tx.uid],
-      enabled: tx.status != 'unknown' && (!tx.details || isTxPending(tx.status)),
+      enabled: isTxPending(tx.status) || (!tx.details && !isTxTerminal(tx.status)),
       refetchInterval: 5_000,
       refetchIntervalInBackground: false,
       queryFn: () => {

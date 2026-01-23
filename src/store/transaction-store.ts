@@ -119,5 +119,12 @@ export const useTransactions = () => transactionStore(sortedTransactions)
 export const useHasTransactions = () => transactionStore(state => state.transactions.length > 0)
 
 export const isTxPending = (status: string) => status === 'not_started' || status === 'swapping' || status === 'pending'
+export const isTxTerminal = (status: string) =>
+  status === 'completed' || status === 'failed' || status === 'expired' || status === 'refunded'
+
 export const usePendingTransactions = () =>
-  transactionStore(useShallow(state => state.transactions.filter(t => !t.details || isTxPending(t.status))))
+  transactionStore(
+    useShallow(state =>
+      state.transactions.filter(t => isTxPending(t.status) || (!t.details && !isTxTerminal(t.status)))
+    )
+  )
