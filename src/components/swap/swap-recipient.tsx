@@ -17,6 +17,7 @@ import { SwapError } from '@/components/swap/swap-error'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { ProviderName, USwapError } from '@uswap/helpers'
 import { Asset } from '@/components/swap/asset'
+import { SwapAddressWarning } from '@/components/swap/swap-address-warning'
 import { Textarea } from '@/components/ui/textarea'
 import { WalletAccount } from '@/store/wallets-store'
 import { Tooltip } from '@/components/tooltip'
@@ -31,7 +32,6 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const isMobile = useIsMobile()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
-  const { valueFrom } = useSwap()
   const slippage = useSlippage()
   const accounts = useAccounts()
   const selectedAccount = useSelectedAccount()
@@ -39,6 +39,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const limitSwapBuyAmount = useLimitSwapBuyAmount()
   const limitSwapExpiry = useLimitSwapExpiry()
 
+  const { valueFrom } = useSwap()
   const [quoting, setQuoting] = useState(false)
   const [quoteError, setQuoteError] = useState<Error | undefined>()
 
@@ -46,6 +47,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const [refundAddress, setRefundAddress] = useState<string>('')
   const [isValidDestination, setIsValidDestination] = useState(true)
   const [isValidRefund, setIsValidRefund] = useState(true)
+  const [warningChecked, setWarningChecked] = useState(false)
 
   if (!assetFrom || !assetTo) return null
 
@@ -220,13 +222,12 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
               </div>
             </div>
 
-            <div className="border-jacob flex flex-col gap-3 rounded-xl border p-4 text-sm">
-              <div className="flex gap-3">
-                <Icon name="warning" className="text-jacob size-6 shrink-0" />
-                <div className="text-leah font-semibold">Use only personal wallet address</div>
-              </div>
-              <div className="text-thor-gray">DO NOT use contract or exchange addresses — funds will be lost.</div>
-            </div>
+            <SwapAddressWarning
+              checked={warningChecked}
+              onCheckedChange={setWarningChecked}
+              text="I understand that using contracts or exchanges will result in"
+              textAccent="loss of funds."
+            />
           </div>
 
           {quoteError && <SwapError error={quoteError} />}
@@ -236,7 +237,12 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
       </ScrollArea>
 
       <div className="p-4 pt-2 md:p-8 md:pt-2">
-        <ThemeButton variant="primaryMedium" className="w-full" onClick={() => fetchQuote()} disabled={!buttonEnabled}>
+        <ThemeButton
+          variant="primaryMedium"
+          className="w-full"
+          onClick={fetchQuote}
+          disabled={!buttonEnabled || !warningChecked}
+        >
           {quoting && <LoaderCircle size={20} className="animate-spin" />}
           <span>{quoting ? 'Preparing Swap' : 'Next'}</span>
         </ThemeButton>
