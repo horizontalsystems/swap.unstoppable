@@ -14,6 +14,9 @@ export const useSetAssetTo = () => useSwapStore(state => state.setAssetTo)
 export const useSlippage = () => useSwapStore(state => state.slippage)
 export const useSetSlippage = () => useSwapStore(state => state.setSlippage)
 
+export const useStreamingInterval = () => useSwapStore(state => state.streamingInterval)
+export const useSetStreamingInterval = () => useSwapStore(state => state.setStreamingInterval)
+
 export const useSwapAssets = () => useSwapStore(state => state.swapAssets)
 
 // Hooks

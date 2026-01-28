@@ -8,7 +8,7 @@ import { LoaderCircle } from 'lucide-react'
 import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { cn, truncate } from '@/lib/utils'
-import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
+import { useAssetFrom, useAssetTo, useSlippage, useStreamingInterval, useSwap } from '@/hooks/use-swap'
 import { useIsLimitSwap, useLimitSwapBuyAmount, useLimitSwapExpiry } from '@/store/limit-swap-store'
 import { getAddressValidator } from '@uswap/toolboxes'
 import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
@@ -21,7 +21,7 @@ import { SwapAddressWarning } from '@/components/swap/swap-address-warning'
 import { Textarea } from '@/components/ui/textarea'
 import { WalletAccount } from '@/store/wallets-store'
 import { Tooltip } from '@/components/tooltip'
-import { prepareQuoteForLimitSwap } from '@/lib/limit-swap'
+import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/limit-swap'
 
 interface SwapRecipientProps {
   provider: ProviderName
@@ -33,6 +33,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const slippage = useSlippage()
+  const streamingInterval = useStreamingInterval()
   const accounts = useAccounts()
   const selectedAccount = useSelectedAccount()
   const isLimitSwap = useIsLimitSwap()
@@ -92,6 +93,8 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
         // For THORChain limit orders, modify the memo to use limit order format
         if (isLimitSwap && (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING')) {
           quote = prepareQuoteForLimitSwap(quote, limitSwapBuyAmount, limitSwapExpiry)
+        } else if (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING') {
+          quote = prepareQuoteForStreaming(quote, streamingInterval)
         }
 
         onFetchQuote(quote)
