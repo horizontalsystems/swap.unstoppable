@@ -3,13 +3,13 @@ import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
 import { useLimitSwapExpiry, useSetLimitSwapBuyAmount, useSetLimitSwapExpiry } from '@/store/limit-swap-store'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { USwapNumber } from '@uswap/core'
+import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { ThemeButton } from '@/components/theme-button'
 import { DecimalInput } from '@/components/decimal/decimal-input'
 import { Separator } from '@/components/ui/separator'
 import { AssetIcon } from '@/components/asset-icon'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 
 type PresetType = 5 | 10 | 'custom' | 'market'
 type SwapLimitProps = { quote?: QuoteResponseRoute }
@@ -31,7 +31,7 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
 
   const sellAmount = useMemo(() => (quote ? new USwapNumber(quote.sellAmount) : null), [quote])
 
-  const marketPricePerUnit = useMemo(() => {
+  const expectedBuyAmountPerUnit = useMemo(() => {
     if (!quote || !sellAmount || sellAmount.eq(0)) return null
     return new USwapNumber(quote.expectedBuyAmount).div(sellAmount)
   }, [quote, sellAmount])
@@ -43,10 +43,11 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
   }, [assetFrom?.identifier, assetTo?.identifier, setLimitSwapBuyAmount, setLimitSwapExpiry])
 
   useEffect(() => {
-    if (marketPricePerUnit && !pricePerUnit) {
-      setPricePerUnit(marketPricePerUnit)
+    if (!expectedBuyAmountPerUnit) return
+    if (!pricePerUnit || pricePerUnit.eq(0)) {
+      setPricePerUnit(expectedBuyAmountPerUnit)
     }
-  }, [marketPricePerUnit, pricePerUnit])
+  }, [expectedBuyAmountPerUnit, pricePerUnit])
 
   useEffect(() => {
     if (!pricePerUnit || !sellAmount) {
@@ -54,14 +55,15 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
     }
     const price = new USwapNumber(pricePerUnit)
     const totalBuyAmount = price.mul(sellAmount)
-    setLimitSwapBuyAmount(totalBuyAmount.getBaseValue('string', 8))
+    const baseValue = totalBuyAmount.getBaseValue('string', 8)
+    setLimitSwapBuyAmount(baseValue)
   }, [pricePerUnit, sellAmount, setLimitSwapBuyAmount])
 
   const differencePercent = useMemo(() => {
-    if (!marketPricePerUnit || !pricePerUnit) return null
-    if (pricePerUnit.eq(0) || marketPricePerUnit.eq(0)) return null
-    return pricePerUnit.sub(marketPricePerUnit).div(marketPricePerUnit).mul(100)
-  }, [marketPricePerUnit, pricePerUnit])
+    if (!expectedBuyAmountPerUnit || !pricePerUnit) return null
+    if (pricePerUnit.eq(0) || expectedBuyAmountPerUnit.eq(0)) return null
+    return pricePerUnit.sub(expectedBuyAmountPerUnit).div(expectedBuyAmountPerUnit).mul(100)
+  }, [expectedBuyAmountPerUnit, pricePerUnit])
 
   const activePreset = useMemo((): PresetType => {
     if (!differencePercent) return 'market'
@@ -77,18 +79,13 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
   }, [differencePercent])
 
   const applyPreset = (percent: number) => {
-    if (!marketPricePerUnit) return
+    if (!expectedBuyAmountPerUnit) return
     if (percent === 0) {
-      setPricePerUnit(marketPricePerUnit)
+      setPricePerUnit(expectedBuyAmountPerUnit)
     } else {
-      const newPrice = marketPricePerUnit.mul(1 + percent / 100)
+      const newPrice = expectedBuyAmountPerUnit.mul(1 + percent / 100)
       setPricePerUnit(newPrice)
     }
-  }
-
-  const resetToMarket = () => {
-    if (!marketPricePerUnit) return
-    setPricePerUnit(marketPricePerUnit)
   }
 
   const activeExpiryPreset = useMemo((): ExpiryPreset => {
@@ -107,8 +104,6 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
         return setLimitSwapExpiry(BLOCKS_PER_DAY)
       case '1w':
         return setLimitSwapExpiry(BLOCKS_PER_WEEK)
-      default:
-        return setLimitSwapExpiry(undefined)
     }
   }
 
@@ -140,7 +135,7 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
 
       <DecimalInput
         className="text-leah my-3 w-full bg-transparent text-2xl font-medium outline-none"
-        amount={(pricePerUnit ?? marketPricePerUnit)?.toSignificant() ?? ''}
+        amount={(pricePerUnit ?? expectedBuyAmountPerUnit)?.toSignificant() ?? ''}
         onAmountChange={v => setPricePerUnit(new USwapNumber(v))}
         autoComplete="off"
       />
@@ -158,7 +153,7 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
             <ThemeButton
               className="bg-liquidity-green/20 h-6 rounded-l-none px-1"
               variant="secondarySmall"
-              onClick={resetToMarket}
+              onClick={() => expectedBuyAmountPerUnit && setPricePerUnit(expectedBuyAmountPerUnit)}
             >
               <X className="size-4" />
             </ThemeButton>

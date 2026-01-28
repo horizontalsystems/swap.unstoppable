@@ -3,17 +3,17 @@ import { create } from 'zustand'
 interface LimitSwapState {
   isLimitSwap: boolean
   limitSwapBuyAmount?: string
-  limitSwapExpiry?: number
+  limitSwapExpiry: number
 
   setIsLimitSwap: (isLimit: boolean) => void
   setLimitSwapBuyAmount: (amount?: string) => void
-  setLimitSwapExpiry: (expiry?: number) => void
+  setLimitSwapExpiry: (expiry: number) => void
 }
 
 export const useLimitSwapStore = create<LimitSwapState>()(set => ({
   isLimitSwap: false,
   limitSwapBuyAmount: undefined,
-  limitSwapExpiry: undefined,
+  limitSwapExpiry: 0,
 
   setIsLimitSwap: isLimit => set({ isLimitSwap: isLimit }),
   setLimitSwapBuyAmount: amount => set({ limitSwapBuyAmount: amount }),
