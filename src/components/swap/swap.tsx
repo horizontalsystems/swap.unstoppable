@@ -18,6 +18,7 @@ import { type MemolessAsset } from '@uswap/helpers/api'
 import { SwapAddressFrom } from '@/components/swap/swap-address-from'
 import { SwapQuoteTimer } from '@/components/swap/swap-quote-timer'
 import { resolvePriceImpact } from '@/components/swap/swap-helpers'
+import { useUrlParams } from '@/hooks/use-url-params'
 import { useSwapRates } from '@/hooks/use-rates'
 
 export const Swap = () => {
@@ -28,6 +29,7 @@ export const Swap = () => {
   const { assets: memolessAssets } = useMemolessAssets()
   const { rateFrom, rateTo } = useSwapRates()
 
+  useUrlParams()
   useResolveSource()
 
   useEffect(() => {

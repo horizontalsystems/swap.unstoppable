@@ -2,8 +2,6 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Asset } from '@/components/swap/asset'
 
-const INITIAL_ASSET_FROM = 'BTC.BTC'
-const INITIAL_ASSET_TO = 'ETH.ETH'
 const INITIAL_AMOUNT_FROM = 0.5
 
 export const INITIAL_SLIPPAGE = 1
@@ -24,7 +22,6 @@ interface SwapState {
   setAssetFrom: (asset: Asset) => void
   setAssetTo: (asset: Asset) => void
   swapAssets: (amount?: string) => void
-  setInitialAssets: (assets: Asset[]) => void
   setHasHydrated: (state: boolean) => void
 }
 
@@ -66,18 +63,6 @@ export const useSwapStore = create<SwapState>()(
           assetFrom: assetTo,
           assetTo: assetFrom,
           amountFrom: amount || ''
-        })
-      },
-
-      setInitialAssets: (assets: Asset[]) => {
-        const state = get()
-        if (state.assetFrom && state.assetTo) {
-          return
-        }
-
-        set({
-          assetFrom: assets.find(a => a.identifier === INITIAL_ASSET_FROM),
-          assetTo: assets.find(a => a.identifier === INITIAL_ASSET_TO)
         })
       },
 

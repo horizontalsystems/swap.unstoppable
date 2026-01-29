@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from 'react'
-import { useAssets } from '@/hooks/use-assets'
+import { useMemo } from 'react'
 import { useSwapStore } from '@/store/swap-store'
 import { NumberPrimitives, USwapNumber } from '@uswap/core'
 
@@ -22,13 +21,7 @@ export const useSwapAssets = () => useSwapStore(state => state.swapAssets)
 // Hooks
 
 export const useSwap = () => {
-  const { assets } = useAssets()
-  const { amountFrom, hasHydrated, setAmountFrom, setAssetTo, feeWarning, setInitialAssets } = useSwapStore()
-
-  useEffect(() => {
-    if (!assets?.length) return
-    setInitialAssets(assets)
-  }, [assets, setInitialAssets])
+  const { amountFrom, hasHydrated, setAmountFrom, setAssetTo, feeWarning } = useSwapStore()
 
   const amount = hasHydrated ? amountFrom : ''
 
