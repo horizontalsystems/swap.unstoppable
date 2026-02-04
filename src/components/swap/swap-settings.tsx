@@ -10,7 +10,7 @@ import { INITIAL_SLIPPAGE, INITIAL_STREAMING_INTERVAL } from '@/store/swap-store
 import { Separator } from '@/components/ui/separator'
 
 const slippageValues = [0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10]
-const streamingIntervalValues = [0, 1, 3, 5, 10]
+const streamingIntervalValues = [0, 3, 10]
 
 export const SwapSettings = () => {
   const slippage = useSlippage()
@@ -100,7 +100,7 @@ export const SwapSettings = () => {
           <div className="flex flex-col gap-3">
             <div className="flex justify-between text-sm font-semibold">
               <div className="flex items-center gap-1">
-                <span>Streaming Interval</span>
+                <span>TWAP</span>
                 <InfoTooltip>
                   Swap interval in blocks: 0 = rapid streaming (multiple sub-swaps per block), ≥1 = traditional
                   streaming (one sub-swap per X blocks)
@@ -108,9 +108,7 @@ export const SwapSettings = () => {
               </div>
               <span>{currentStreamingInterval} blocks</span>
             </div>
-            <span className="text-thor-gray text-xs">
-              If your protocol supports streaming swaps, you can adjust the interval here.
-            </span>
+            <span className="text-thor-gray text-xs">Time Weighted Average Price</span>
           </div>
           <div className="w-full">
             <Slider
@@ -120,9 +118,9 @@ export const SwapSettings = () => {
               classNameRange="bg-liquidity-green"
             />
             <div className="text-thor-gray mt-3 flex items-center justify-between text-[10px] font-semibold">
-              <span>Fastest</span>
-              <span>Optimal</span>
-              <span>Slowest</span>
+              <span>Best Price</span>
+              <span>Balanced</span>
+              <span>Best Time</span>
             </div>
           </div>
 

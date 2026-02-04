@@ -5,7 +5,7 @@ import { Asset } from '@/components/swap/asset'
 const INITIAL_AMOUNT_FROM = 0.5
 
 export const INITIAL_SLIPPAGE = 1
-export const INITIAL_STREAMING_INTERVAL = 0
+export const INITIAL_STREAMING_INTERVAL = 3
 
 interface SwapState {
   assetFrom?: Asset
@@ -70,7 +70,7 @@ export const useSwapStore = create<SwapState>()(
     }),
     {
       name: 'swap-store',
-      version: 4,
+      version: 5,
       onRehydrateStorage: () => state => {
         state?.setHasHydrated(true)
       },
