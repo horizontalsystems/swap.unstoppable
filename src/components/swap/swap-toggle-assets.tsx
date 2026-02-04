@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { useSwapAssets } from '@/hooks/use-swap'
 import { Icon } from '@/components/icons'
@@ -6,15 +7,24 @@ import { USwapNumber } from '@uswap/core'
 
 export const SwapToggleAssets = () => {
   const swapAssets = useSwapAssets()
+  const [isFlipped, setIsFlipped] = useState(false)
   const { quote } = useQuote()
 
-  const amount = quote && new USwapNumber(quote.expectedBuyAmount).toSignificant()
+  const handleToggle = () => {
+    setIsFlipped(prev => !prev)
+    const amount = quote && new USwapNumber(quote.expectedBuyAmount).toSignificant()
+    swapAssets(amount)
+  }
 
   return (
     <div className="relative flex cursor-pointer items-center justify-center overflow-hidden">
       <Separator />
       <div className="bg-blade rounded-full p-1.5">
-        <Icon name="arrow-m-down" className="text-thor-gray size-5" onClick={() => swapAssets(amount)} />
+        <Icon
+          name={isFlipped ? 'arrow-m-up' : 'arrow-m-down'}
+          className="text-thor-gray size-5"
+          onClick={handleToggle}
+        />
       </div>
       <Separator />
     </div>

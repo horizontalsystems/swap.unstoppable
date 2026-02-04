@@ -131,6 +131,15 @@ const ArrowSUpIcon = memo<IconProps>(props => (
   </SVG>
 ))
 
+const ArrowMUpIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path
+      d="M11 7.8281L6.91406 11.9141L5.5 10.5L12 4L18.5 10.5L17.0859 11.9141L13 7.8281V20H11V7.8281Z"
+      fill="currentColor"
+    />
+  </SVG>
+))
+
 const ArrowMDownIcon = memo<IconProps>(props => (
   <SVG {...props}>
     <path
@@ -311,6 +320,7 @@ const ListIcon = memo<IconProps>(props => (
 
 // Icon name mapping
 const iconMap = {
+  'arrow-m-up': ArrowMUpIcon,
   'arrow-m-down': ArrowMDownIcon,
   'arrow-m-left': ArrowMLeftIcon,
   'arrow-m-right': ArrowMRightIcon,
