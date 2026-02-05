@@ -5,19 +5,27 @@ import { Asset } from '@/components/swap/asset'
 const INITIAL_AMOUNT_FROM = 0.5
 
 export const INITIAL_SLIPPAGE = 1
-export const INITIAL_STREAMING_INTERVAL = 3
+export const INITIAL_TWAP_MODE = 'bestPrice' as TwapMode
+export const INITIAL_CUSTOM_INTERVAL = 10
+export const INITIAL_CUSTOM_QUANTITY = 10
+
+export type TwapMode = 'bestPrice' | 'bestTime' | 'custom'
 
 interface SwapState {
   assetFrom?: Asset
   assetTo?: Asset
   amountFrom: string
   slippage?: number
-  streamingInterval: number
+  twapMode: TwapMode
+  customInterval: number
+  customQuantity: number
   feeWarning: string
   hasHydrated: boolean
 
   setSlippage: (limit?: number) => void
-  setStreamingInterval: (interval: number) => void
+  setTwapMode: (mode: TwapMode) => void
+  setCustomInterval: (interval: number) => void
+  setCustomQuantity: (quantity: number) => void
   setAmountFrom: (amount: string) => void
   setAssetFrom: (asset: Asset) => void
   setAssetTo: (asset: Asset) => void
@@ -29,13 +37,17 @@ export const useSwapStore = create<SwapState>()(
   persist(
     (set, get) => ({
       slippage: INITIAL_SLIPPAGE,
-      streamingInterval: INITIAL_STREAMING_INTERVAL,
+      twapMode: INITIAL_TWAP_MODE,
+      customInterval: INITIAL_CUSTOM_INTERVAL,
+      customQuantity: INITIAL_CUSTOM_QUANTITY,
       amountFrom: INITIAL_AMOUNT_FROM.toString(),
       feeWarning: '500',
       hasHydrated: false,
 
       setSlippage: slippage => set({ slippage: slippage }),
-      setStreamingInterval: streamingInterval => set({ streamingInterval }),
+      setTwapMode: twapMode => set({ twapMode }),
+      setCustomInterval: customInterval => set({ customInterval }),
+      setCustomQuantity: customQuantity => set({ customQuantity }),
       setAmountFrom: fromAmount => set({ amountFrom: fromAmount }),
 
       setAssetFrom: asset => {
@@ -70,13 +82,12 @@ export const useSwapStore = create<SwapState>()(
     }),
     {
       name: 'swap-store',
-      version: 5,
+      version: 6,
       onRehydrateStorage: () => state => {
         state?.setHasHydrated(true)
       },
       partialize: state => ({
         slippage: state.slippage,
-        streamingInterval: state.streamingInterval,
         amountFrom: state.amountFrom,
         feeWarning: state.feeWarning,
         assetFrom: state.assetFrom,

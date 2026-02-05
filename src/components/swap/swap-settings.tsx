@@ -1,30 +1,64 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import { useSetSlippage, useSetStreamingInterval, useSlippage, useStreamingInterval } from '@/hooks/use-swap'
+import {
+  useCustomInterval,
+  useCustomQuantity,
+  useSetCustomInterval,
+  useSetCustomQuantity,
+  useSetSlippage,
+  useSetTwapMode,
+  useSlippage,
+  useTwapMode
+} from '@/hooks/use-swap'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ThemeButton } from '@/components/theme-button'
 import { Slider } from '@/components/ui/slider'
 import { InfoTooltip } from '@/components/tooltip'
 import { Icon } from '@/components/icons'
-import { INITIAL_SLIPPAGE, INITIAL_STREAMING_INTERVAL } from '@/store/swap-store'
+import {
+  INITIAL_CUSTOM_INTERVAL,
+  INITIAL_CUSTOM_QUANTITY,
+  INITIAL_SLIPPAGE,
+  INITIAL_TWAP_MODE,
+  TwapMode
+} from '@/store/swap-store'
 import { Separator } from '@/components/ui/separator'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const slippageValues = [0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10]
-const streamingIntervalValues = [0, 3, 10]
+const numberOfTradesValues = [1, 5, 10, 15, 20, 25, 30, 50, 100]
+const timeBetweenTradesOptions = [
+  { blocks: 10, label: '1 min' },
+  { blocks: 50, label: '5 min' },
+  { blocks: 100, label: '10 min' },
+  { blocks: 300, label: '30 min' },
+  { blocks: 600, label: '1 hour' }
+]
+
+function quantityToSliderIndex(quantity: number): number {
+  const index = numberOfTradesValues.indexOf(quantity)
+  return index !== -1 ? index : 1
+}
 
 export const SwapSettings = () => {
   const slippage = useSlippage()
   const setSlippage = useSetSlippage()
-  const streamingInterval = useStreamingInterval()
-  const setStreamingInterval = useSetStreamingInterval()
+  const twapMode = useTwapMode()
+  const setTwapMode = useSetTwapMode()
+  const customInterval = useCustomInterval()
+  const setCustomInterval = useSetCustomInterval()
+  const customQuantity = useCustomQuantity()
+  const setCustomQuantity = useSetCustomQuantity()
+
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState([toSliderValue(slippage)])
-  const [streamingSliderValue, setStreamingSliderValue] = useState([streamingInterval])
+  const [localTwapMode, setLocalTwapMode] = useState<TwapMode>(twapMode)
+  const [localCustomInterval, setLocalCustomInterval] = useState(customInterval)
+  const [localCustomQuantity, setLocalCustomQuantity] = useState(customQuantity)
 
   const enabledSteps = [...Array(22).keys(), 25]
   const ramExpansions = [slippageValues[0], 'No Protection']
   const currentSlippage = slippageValues[sliderValue[0]]
-  const currentStreamingInterval = streamingIntervalValues[streamingSliderValue[0]]
 
   const handleValueChange = (newValue: [number]) => {
     const targetValue = newValue[0]
@@ -49,7 +83,9 @@ export const SwapSettings = () => {
       onOpenChange={open => {
         if (open) {
           setSliderValue([toSliderValue(slippage)])
-          setStreamingSliderValue([toStreamingSliderValue(streamingInterval)])
+          setLocalTwapMode(twapMode)
+          setLocalCustomInterval(customInterval)
+          setLocalCustomQuantity(customQuantity)
         }
 
         setDropdownOpen(open)
@@ -62,7 +98,7 @@ export const SwapSettings = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-sm p-8">
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <div className="flex justify-between text-sm font-semibold">
               <div className="flex items-center gap-1">
                 <span>Slippage Tolerance</span>
@@ -97,32 +133,82 @@ export const SwapSettings = () => {
 
           <Separator />
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <div className="flex justify-between text-sm font-semibold">
               <div className="flex items-center gap-1">
                 <span>TWAP</span>
                 <InfoTooltip>
-                  Swap interval in blocks: 0 = rapid streaming (multiple sub-swaps per block), ≥1 = traditional
-                  streaming (one sub-swap per X blocks)
+                  Time Weighted Average Price. Best Price executes slowly for optimal pricing. Best Time executes
+                  quickly. Custom lets you configure the number of trades and time between trades.
                 </InfoTooltip>
               </div>
-              <span>{currentStreamingInterval} blocks</span>
             </div>
             <span className="text-thor-gray text-xs">Time Weighted Average Price</span>
           </div>
-          <div className="w-full">
-            <Slider
-              max={streamingIntervalValues.length - 1}
-              value={streamingSliderValue}
-              onValueChange={setStreamingSliderValue}
-              classNameRange="bg-liquidity-green"
-            />
-            <div className="text-thor-gray mt-3 flex items-center justify-between text-[10px] font-semibold">
-              <span>Best Price</span>
-              <span>Balanced</span>
-              <span>Best Time</span>
+          <div className="flex flex-col gap-4">
+            <div className="bg-blade flex rounded-full">
+              {(['bestPrice', 'bestTime', 'custom'] as const).map(mode => (
+                <ThemeButton
+                  key={mode}
+                  variant={localTwapMode === mode ? 'primarySmall' : 'secondarySmall'}
+                  className="flex-1"
+                  onClick={() => setLocalTwapMode(mode)}
+                >
+                  {mode === 'bestPrice' && 'Best Price'}
+                  {mode === 'bestTime' && 'Best Time'}
+                  {mode === 'custom' && 'Custom'}
+                </ThemeButton>
+              ))}
             </div>
+            {localTwapMode === 'custom' && (
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold">Number of Trades</span>
+                    <span className="text-xs font-semibold">{localCustomQuantity}</span>
+                  </div>
+                  <span className="text-thor-gray text-xs">
+                    How many sub-swaps to split your trade into. More trades = better price, longer execution.
+                  </span>
+                </div>
+                <div className="w-full">
+                  <Slider
+                    max={numberOfTradesValues.length - 1}
+                    value={[quantityToSliderIndex(localCustomQuantity)]}
+                    onValueChange={([index]) => setLocalCustomQuantity(numberOfTradesValues[index])}
+                    classNameRange="bg-liquidity-green"
+                  />
+                  <div className="text-thor-gray mt-3 flex items-center justify-between text-[10px] font-semibold">
+                    <span>{numberOfTradesValues[0]}</span>
+                    <span>{numberOfTradesValues[numberOfTradesValues.length - 1]}</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm font-semibold">Time Between Trades</span>
+                  <span className="text-thor-gray text-xs">
+                    Delay between each sub-swap. Longer intervals allow pools to rebalance for better pricing.
+                  </span>
+                  <Select
+                    value={localCustomInterval.toString()}
+                    onValueChange={value => setLocalCustomInterval(Number(value))}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timeBetweenTradesOptions.map(opt => (
+                        <SelectItem key={opt.blocks} value={opt.blocks.toString()}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
           </div>
+
+          <Separator />
 
           <div className="flex gap-6">
             <ThemeButton
@@ -130,10 +216,17 @@ export const SwapSettings = () => {
               className="flex-1"
               onClick={() => {
                 setSlippage(INITIAL_SLIPPAGE)
-                setStreamingInterval(INITIAL_STREAMING_INTERVAL)
+                setTwapMode(INITIAL_TWAP_MODE)
+                setCustomInterval(INITIAL_CUSTOM_INTERVAL)
+                setCustomQuantity(INITIAL_CUSTOM_QUANTITY)
                 setDropdownOpen(false)
               }}
-              disabled={slippage === INITIAL_SLIPPAGE && streamingInterval === INITIAL_STREAMING_INTERVAL}
+              disabled={
+                slippage === INITIAL_SLIPPAGE &&
+                twapMode === INITIAL_TWAP_MODE &&
+                customInterval === INITIAL_CUSTOM_INTERVAL &&
+                customQuantity === INITIAL_CUSTOM_QUANTITY
+              }
             >
               Reset
             </ThemeButton>
@@ -143,10 +236,17 @@ export const SwapSettings = () => {
               className="flex-1"
               onClick={() => {
                 setSlippage(currentSlippage)
-                setStreamingInterval(currentStreamingInterval)
+                setTwapMode(localTwapMode)
+                setCustomInterval(localCustomInterval)
+                setCustomQuantity(localCustomQuantity)
                 setDropdownOpen(false)
               }}
-              disabled={currentSlippage === slippage && currentStreamingInterval === streamingInterval}
+              disabled={
+                currentSlippage === slippage &&
+                localTwapMode === twapMode &&
+                localCustomInterval === customInterval &&
+                localCustomQuantity === customQuantity
+              }
             >
               Save
             </ThemeButton>
@@ -164,9 +264,4 @@ function toSliderValue(slippage?: number) {
   }
 
   return 25
-}
-
-function toStreamingSliderValue(interval: number) {
-  const index = streamingIntervalValues.indexOf(interval)
-  return index !== -1 ? index : 0
 }

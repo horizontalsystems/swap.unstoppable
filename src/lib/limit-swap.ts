@@ -1,4 +1,5 @@
 import { QuoteResponseRoute } from '@uswap/helpers/api'
+import { TwapMode } from '@/store/swap-store'
 
 export function modifyMemoForLimitSwap(memo: string, priceAtomic: string, expiryBlocks?: number): string {
   if (!memo.startsWith('=:')) return memo
@@ -34,7 +35,7 @@ export function prepareQuoteForLimitSwap(
   }
 }
 
-export function modifyMemoForStreaming(memo: string, interval: number): string {
+export function modifyMemoForStreaming(memo: string, interval: number, quantity: number): string {
   if (!memo.startsWith('=:')) return memo
 
   const parts = memo.split(':')
@@ -56,9 +57,8 @@ export function modifyMemoForStreaming(memo: string, interval: number): string {
 
   const paramParts = swapParams.split('/')
   const limit = paramParts[0] || '0'
-  const qty = 0
 
-  let result = `=:${asset}:${destination}:${limit}/${interval}/${qty}`
+  let result = `=:${asset}:${destination}:${limit}/${interval}/${quantity}`
   if (affiliate) {
     result += `:${affiliate}`
     if (bps) {
@@ -69,11 +69,63 @@ export function modifyMemoForStreaming(memo: string, interval: number): string {
   return result
 }
 
-export function prepareQuoteForStreaming(quote: QuoteResponseRoute, interval: number): QuoteResponseRoute {
+export function stripStreamingParams(memo: string): string {
+  if (!memo.startsWith('=:')) return memo
+
+  const parts = memo.split(':')
+  // parts:
+  // [0] "="
+  // [1] ASSET (eg ETH.USDT)
+  // [2] destination address
+  // [3] limit/interval/qty
+  // [4] affiliate
+  // [5] bps
+
+  if (parts.length < 3) return memo
+
+  const asset = parts[1]
+  const destination = parts[2]
+  const swapParams = parts[3] || ''
+  const affiliate = parts[4]
+  const bps = parts[5]
+
+  const paramParts = swapParams.split('/')
+  const limit = paramParts[0] || '0'
+
+  // Only include limit, no interval/quantity
+  let result = `=:${asset}:${destination}:${limit}`
+  if (affiliate) {
+    result += `:${affiliate}`
+    if (bps) {
+      result += `:${bps}`
+    }
+  }
+
+  return result
+}
+
+export function prepareQuoteForStreaming(
+  quote: QuoteResponseRoute,
+  twapMode: TwapMode,
+  customInterval: number,
+  customQuantity: number
+): QuoteResponseRoute {
   if (!quote.memo) return quote
 
+  if (twapMode === 'bestPrice') {
+    return quote
+  }
+
+  if (twapMode === 'bestTime') {
+    return {
+      ...quote,
+      memo: stripStreamingParams(quote.memo)
+    }
+  }
+
+  // Custom: use user-specified values
   return {
     ...quote,
-    memo: modifyMemoForStreaming(quote.memo, interval)
+    memo: modifyMemoForStreaming(quote.memo, customInterval, customQuantity)
   }
 }
