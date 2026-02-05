@@ -41,7 +41,7 @@ export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannel
           <SwapAddressWarning
             checked={warningChecked}
             onCheckedChange={setWarningChecked}
-            text="I understand that I must send exactly the specified amount from a self-custody wallet. Sending from contracts or exchanges will result in"
+            text="I understand that I must send exactly the specified amount from a self-custody wallet. I understand that sending from a smart contract wallet, exchange address, delegated address, or an EIP 7702 wallet, will result in"
             textAccent="loss of funds."
           />
 

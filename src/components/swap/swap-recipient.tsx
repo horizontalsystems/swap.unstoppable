@@ -230,7 +230,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
             <SwapAddressWarning
               checked={warningChecked}
               onCheckedChange={setWarningChecked}
-              text="I understand that using contracts or exchanges will result in"
+              text="I understand that I must use a self-custody wallet. I understand that using a smart contract wallet, exchange address, delegated address, or an EIP 7702 wallet, will result in"
               textAccent="loss of funds."
             />
 
