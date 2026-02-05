@@ -136,10 +136,11 @@ export const SwapSettings = () => {
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-sm font-semibold">
               <div className="flex items-center gap-1">
-                <span>TWAP</span>
+                <span>TWAP (Time Weighted Average Price)</span>
                 <InfoTooltip>
-                  Time Weighted Average Price. Best Price executes slowly for optimal pricing. Best Time executes
-                  quickly. Custom lets you configure the number of trades and time between trades.
+                  Relevant for large volume swaps only. Best Price offers optimum price for the order. Best Time
+                  prioritizes swap execution time (whenever possible). Custom lets you configure the number of
+                  mini-swaps the swap should be broken into and time between each mini-swapt.
                 </InfoTooltip>
               </div>
             </div>
@@ -164,7 +165,7 @@ export const SwapSettings = () => {
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold">Number of Trades</span>
+                    <span className="text-sm font-semibold">Number of sub-swaps</span>
                     <span className="text-xs font-semibold">{localCustomQuantity}</span>
                   </div>
                   <span className="text-thor-gray text-xs">
@@ -184,7 +185,7 @@ export const SwapSettings = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <span className="text-sm font-semibold">Time Between Trades</span>
+                  <span className="text-sm font-semibold">Time between sub-swaps</span>
                   <span className="text-thor-gray text-xs">
                     Delay between each sub-swap. Longer intervals allow pools to rebalance for better pricing.
                   </span>
