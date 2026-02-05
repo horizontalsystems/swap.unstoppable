@@ -49,6 +49,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const [isValidDestination, setIsValidDestination] = useState(true)
   const [isValidRefund, setIsValidRefund] = useState(true)
   const [warningChecked, setWarningChecked] = useState(false)
+  const [warningCheckedLTC, setWarningCheckedLTC] = useState(false)
 
   if (!assetFrom || !assetTo) return null
 
@@ -116,6 +117,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
       .finally(() => setQuoting(false))
   }
 
+  const isLTC = assetTo.ticker === 'LTC'
   const buttonEnabled =
     isValidDestination &&
     destinationAddress.length &&
@@ -228,13 +230,18 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
             <SwapAddressWarning
               checked={warningChecked}
               onCheckedChange={setWarningChecked}
-              text={
-                assetTo.ticker === 'LTC'
-                  ? 'I understand that using an LTC MWEB address will result in'
-                  : 'I understand that using contracts or exchanges will result in'
-              }
+              text="I understand that using contracts or exchanges will result in"
               textAccent="loss of funds."
             />
+
+            {isLTC && (
+              <SwapAddressWarning
+                checked={warningCheckedLTC}
+                onCheckedChange={setWarningCheckedLTC}
+                text="I understand that using an LTC MWEB address will result in"
+                textAccent="loss of funds."
+              />
+            )}
           </div>
 
           {quoteError && <SwapError error={quoteError} />}
@@ -248,7 +255,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
           variant="primaryMedium"
           className="w-full"
           onClick={fetchQuote}
-          disabled={!buttonEnabled || !warningChecked}
+          disabled={!buttonEnabled || !warningChecked || (isLTC && !warningCheckedLTC)}
         >
           {quoting && <LoaderCircle size={20} className="animate-spin" />}
           <span>{quoting ? 'Preparing Swap' : 'Next'}</span>
