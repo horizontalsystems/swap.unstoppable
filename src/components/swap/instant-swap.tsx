@@ -11,25 +11,26 @@ import { chainLabel } from '@/components/connect-wallet/config'
 import { cn } from '@/lib/utils'
 
 interface SwapMemolessChannelProps {
-  asset: Asset
+  assetFrom: Asset
+  assetTo: Asset
   channel: DepositChannel
 }
 
-export const InstantSwap = ({ asset, channel }: SwapMemolessChannelProps) => {
+export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannelProps) => {
   const [warningChecked, setWarningChecked] = useState(false)
   const [warningCheckedLTC, setWarningCheckedLTC] = useState(false)
 
-  const isLTC = asset.ticker === 'LTC'
+  const isLTC = assetTo.ticker === 'LTC'
   const isBlurred = !warningChecked || (isLTC && !warningCheckedLTC)
 
   return (
     <>
       <CredenzaHeader>
-        <CredenzaTitle>Send {asset.name || asset.ticker}</CredenzaTitle>
+        <CredenzaTitle>Send {assetFrom.name || assetFrom.ticker}</CredenzaTitle>
         <CredenzaDescription>
           Send exactly{' '}
           <b>
-            {channel.value} {asset.ticker}
+            {channel.value} {assetFrom.ticker}
           </b>{' '}
           to the address below from a self custody wallet.
         </CredenzaDescription>
@@ -55,7 +56,7 @@ export const InstantSwap = ({ asset, channel }: SwapMemolessChannelProps) => {
           <div className="flex flex-col items-center space-y-4 rounded-xl border p-4 md:p-6">
             <div className="flex items-center gap-2">
               <span className="text-leah text-xl font-semibold">
-                {channel.value} {asset.ticker}
+                {channel.value} {assetFrom.ticker}
               </span>
               <CopyButton text={channel.value} />
             </div>
@@ -69,7 +70,7 @@ export const InstantSwap = ({ asset, channel }: SwapMemolessChannelProps) => {
               </div>
 
               <div className="text-gray border-gray rounded-full border px-1.5 text-[10px] font-semibold">
-                {chainLabel(asset.chain)}
+                {chainLabel(assetFrom.chain)}
               </div>
             </div>
 

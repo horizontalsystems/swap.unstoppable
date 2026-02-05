@@ -154,7 +154,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="flex h-auto max-h-5/6 flex-col md:max-w-xl">
         {channel ? (
-          <InstantSwap asset={assetFrom} channel={channel} />
+          <InstantSwap assetFrom={assetFrom} assetTo={assetTo} channel={channel} />
         ) : quote ? (
           <>
             <SwapConfirm quote={quote} />
