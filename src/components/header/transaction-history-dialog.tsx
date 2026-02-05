@@ -96,7 +96,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                   expiration: tx.expiration
                 }
 
-                openDialog(InstantSwapChannelDialog, { assetFrom: tx.assetFrom, channel: channel })
+                openDialog(InstantSwapChannelDialog, { assetFrom: tx.assetFrom, assetTo: tx.assetTo, channel: channel })
               }
 
               return (
