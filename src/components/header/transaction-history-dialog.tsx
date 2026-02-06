@@ -5,7 +5,8 @@ import { format, formatDuration, intervalToDuration, isSameDay, isToday, isYeste
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CopyButton } from '@/components/button-copy'
-import { useTransactions } from '@/store/transaction-store'
+import { isTxPending, useTransactions } from '@/store/transaction-store'
+import { toast } from 'sonner'
 import { useRates } from '@/hooks/use-rates'
 import { cn, truncate } from '@/lib/utils'
 import { AssetIcon } from '@/components/asset-icon'
@@ -21,6 +22,8 @@ import { DecimalText } from '@/components/decimal/decimal-text'
 import { DepositChannel } from '@/components/swap/instant-swap-dialog'
 import { useSyncTransactions } from '@/hooks/use-sync-transactions'
 import { formatExpiration } from '@/components/swap/swap-helpers'
+import { SwapLimitCancel } from '@/components/swap/swap-limit-cancel'
+import { useSelectedAccount } from '@/hooks/use-wallets'
 
 interface HistoryDialogProps {
   isOpen: boolean
@@ -28,9 +31,11 @@ interface HistoryDialogProps {
 }
 
 export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialogProps) => {
-  const [expandTx, setExpandTx] = useState<string | null>(null)
   const transactions = useTransactions()
+  const selectedAccount = useSelectedAccount()
+  const [expandTx, setExpandTx] = useState<string | null>(null)
   const { openDialog } = useDialog()
+
   const identifiers = useMemo(
     () => transactions.flatMap(t => [t.assetFrom.identifier, t.assetTo.identifier]),
     [transactions]
@@ -192,6 +197,36 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         </div>
                         <ThemeButton variant="primarySmallTransparent" onClick={showQrCode}>
                           <span className="">Show QR</span>
+                        </ThemeButton>
+                      </div>
+                    )}
+
+                    {selectedAccount && tx.limitSwapMemo && tx.hash && isTxPending(status) && (
+                      <div className="flex items-center justify-end border-t px-4 py-2">
+                        <ThemeButton
+                          variant="secondarySmall"
+                          onClick={e => {
+                            e.stopPropagation()
+
+                            if (selectedAccount?.network !== tx.assetFrom.chain) {
+                              toast.error('Only the original swap creator can modify')
+                              return
+                            }
+
+                            openDialog(SwapLimitCancel, {
+                              transaction: {
+                                hash: tx.hash,
+                                assetFrom: tx.assetFrom,
+                                assetTo: tx.assetTo,
+                                amountFrom: tx.amountFrom,
+                                amountTo: tx.amountTo,
+                                addressFrom: tx.addressFrom,
+                                limitSwapMemo: tx.limitSwapMemo
+                              }
+                            })
+                          }}
+                        >
+                          Cancel Order
                         </ThemeButton>
                       </div>
                     )}

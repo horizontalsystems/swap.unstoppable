@@ -13,6 +13,7 @@ import { useBalance } from '@/hooks/use-balance'
 import { useSetTransaction } from '@/store/transaction-store'
 import { ProviderName } from '@uswap/helpers'
 import { generateId } from '@/components/swap/swap-helpers'
+import { useIsLimitSwap } from '@/store/limit-swap-store'
 
 interface SwapDialogProps {
   provider: ProviderName
@@ -28,6 +29,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
   const { refetch: refetchBalance } = useBalance()
   const [submitting, setSubmitting] = useState(false)
   const setTransaction = useSetTransaction()
+  const isLimitSwap = useIsLimitSwap()
 
   const [quote, setQuote] = useState<QuoteResponseRoute | undefined>(undefined)
 
@@ -56,7 +58,8 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
           addressFrom: quote.sourceAddress,
           addressTo: quote.destinationAddress || '',
           addressDeposit: quote.inboundAddress,
-          status: 'pending'
+          status: 'pending',
+          limitSwapMemo: isLimitSwap ? quote.memo : undefined
         })
 
         setAmountFrom('')

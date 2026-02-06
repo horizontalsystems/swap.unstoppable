@@ -4,14 +4,17 @@ import { useEffect, useMemo } from 'react'
 import { SwapSettings } from '@/components/swap/swap-settings'
 import { SwapInputFrom } from '@/components/swap/swap-input-from'
 import { SwapInputTo } from '@/components/swap/swap-input-to'
+import { SwapLimit } from '@/components/swap/swap-limit'
 import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
 import { SwapDetails } from '@/components/swap/swap-details'
 import { SwapButton } from '@/components/swap/swap-button'
+import { ThemeButton } from '@/components/theme-button'
 import { useQuote } from '@/hooks/use-quote'
 import { useResolveSource } from '@/hooks/use-resolve-source'
 import { useSelectedAccount } from '@/hooks/use-wallets'
 import { useMemolessAssets } from '@/hooks/use-memoless-assets'
 import { useAssetFrom, useSwap } from '@/hooks/use-swap'
+import { useIsLimitSwap, useSetIsLimitSwap } from '@/store/limit-swap-store'
 import { SwapError } from '@/components/swap/swap-error'
 import { AssetValue, USwapNumber } from '@uswap/core'
 import { type MemolessAsset } from '@uswap/helpers/api'
@@ -24,6 +27,8 @@ import { useSwapRates } from '@/hooks/use-rates'
 export const Swap = () => {
   const assetFrom = useAssetFrom()
   const selectedAccount = useSelectedAccount()
+  const isLimitSwap = useIsLimitSwap()
+  const setIsLimitSwap = useSetIsLimitSwap()
   const { valueFrom } = useSwap()
   const { quote, isLoading, refetch } = useQuote()
   const { assets: memolessAssets } = useMemolessAssets()
@@ -67,7 +72,17 @@ export const Swap = () => {
     <div className="flex flex-col items-center justify-center px-4 pt-4 pb-4 md:pb-20">
       <div className="w-full max-w-md">
         <div className="mb-3 flex items-center justify-between">
-          <h1 className="text-leah text-xl font-medium">Swap</h1>
+          <div className="bg-blade rounded-full">
+            <ThemeButton
+              variant={isLimitSwap ? 'secondarySmall' : 'primarySmall'}
+              onClick={() => setIsLimitSwap(false)}
+            >
+              Market
+            </ThemeButton>
+            <ThemeButton variant={isLimitSwap ? 'primarySmall' : 'secondarySmall'} onClick={() => setIsLimitSwap(true)}>
+              Limit Order
+            </ThemeButton>
+          </div>
           <div className="flex items-center gap-4">
             <SwapQuoteTimer quote={quote} isLoading={isLoading} refetch={refetch} />
             <SwapAddressFrom />
@@ -79,6 +94,7 @@ export const Swap = () => {
           <SwapInputFrom />
           <SwapToggleAssets />
           <SwapInputTo priceImpact={priceImpact} />
+          {isLimitSwap && <SwapLimit quote={quote} />}
         </div>
 
         {memolessError && (

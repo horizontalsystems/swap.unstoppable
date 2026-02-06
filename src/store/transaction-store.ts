@@ -32,6 +32,7 @@ interface Transaction {
   details?: any
   qrCodeData?: string
   expiration?: number
+  limitSwapMemo?: string
 }
 
 interface TransactionStore {
@@ -104,7 +105,7 @@ export const transactionStore = create<TransactionStore>()(
     }),
     {
       name: 'transactions',
-      version: 3
+      version: 4
     }
   )
 )

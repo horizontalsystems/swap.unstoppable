@@ -42,3 +42,7 @@ export const getTrack = async (data: Record<string, any>) => {
 export const getMimir = async (): Promise<Record<string, number>> => {
   return thornode.get('/thorchain/mimir').then(res => res.data)
 }
+
+export const getInboundAddresses = () => {
+  return USwapApi.thornode.getInboundAddresses()
+}
