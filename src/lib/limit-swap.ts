@@ -8,23 +8,33 @@ function toBaseAmount(amount: string, decimals: number = 8): bigint {
   return BigInt(whole + paddedFrac)
 }
 
+export function createModifyLimitSwapMemo(
+  limitSwapMemo: string,
+  amountFrom: string,
+  sourceAsset: Asset,
+  targetAsset: Asset,
+  newAmount: string
+): string {
+  const parts = limitSwapMemo.split(':')
+  const targetAssetFromMemo = parts[1]
+  const tradeTarget = (parts[3] || '').split('/')[0]
+
+  if (!targetAssetFromMemo || !tradeTarget) {
+    throw new Error('Invalid limit swap memo')
+  }
+
+  const sourceAmount = toBaseAmount(amountFrom)
+
+  return `m=<:${sourceAmount}${sourceAsset.identifier}:${tradeTarget}${targetAsset.identifier}:${newAmount}`
+}
+
 export function createCancelLimitSwapMemo(
   limitSwapMemo: string,
   amountFrom: string,
   sourceAsset: Asset,
   sourceTo: Asset
 ): string {
-  const parts = limitSwapMemo.split(':')
-  const targetAsset = parts[1]
-  const tradeTarget = (parts[3] || '').split('/')[0]
-
-  if (!targetAsset || !tradeTarget) {
-    throw new Error('Invalid limit swap memo')
-  }
-
-  const sourceAmount = toBaseAmount(amountFrom)
-
-  return `m=<:${sourceAmount}${sourceAsset.identifier}:${tradeTarget}${sourceTo.identifier}:0`
+  return createModifyLimitSwapMemo(limitSwapMemo, amountFrom, sourceAsset, sourceTo, '0')
 }
 
 export function modifyMemoForLimitSwap(memo: string, priceAtomic: string, expiryBlocks?: number): string {

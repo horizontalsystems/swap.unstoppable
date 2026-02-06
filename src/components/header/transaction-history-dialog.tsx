@@ -5,7 +5,7 @@ import { format, formatDuration, intervalToDuration, isSameDay, isToday, isYeste
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CopyButton } from '@/components/button-copy'
-import { isTxPending, useTransactions } from '@/store/transaction-store'
+import { isTxPending, Transaction, useTransactions } from '@/store/transaction-store'
 import { toast } from 'sonner'
 import { useRates } from '@/hooks/use-rates'
 import { cn, truncate } from '@/lib/utils'
@@ -58,6 +58,24 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
     return format(date, 'd MMMM')
   }
 
+  const onLimitModify = (mode: 'cancel' | 'modify', tx: Transaction) => {
+    if (selectedAccount?.network !== tx.assetFrom.chain) {
+      return toast.error('Only the original swap creator can modify')
+    }
+
+    openDialog(SwapLimitCancel, {
+      mode,
+      transaction: {
+        assetFrom: tx.assetFrom,
+        assetTo: tx.assetTo,
+        amountFrom: tx.amountFrom,
+        amountTo: tx.amountTo,
+        addressFrom: tx.addressFrom,
+        limitSwapMemo: tx.limitSwapMemo
+      }
+    })
+  }
+
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="flex h-auto max-h-5/6 flex-col md:max-w-xl">
@@ -103,6 +121,9 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
 
                 openDialog(InstantSwapChannelDialog, { assetFrom: tx.assetFrom, assetTo: tx.assetTo, channel: channel })
               }
+
+              const showRQ = !tx.hash && status !== 'expired'
+              const showLimitSwapActions = selectedAccount && tx.limitSwapMemo && isTxPending(status)
 
               return (
                 <Fragment key={i}>
@@ -179,55 +200,47 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                       </div>
                     </div>
 
-                    {!tx.hash && status !== 'expired' && (
-                      <div className="flex items-center justify-between border-t py-1 pl-4">
-                        <div className="text-thor-gray text-xs font-semibold">
-                          {tx.expiration && (
-                            <span>
-                              Expires in &nbsp;
-                              {formatDuration(
-                                intervalToDuration({
-                                  start: now.getTime(),
-                                  end: tx.expiration * 1000
-                                }),
-                                { format: ['hours', 'minutes', 'seconds'], zero: false }
+                    {(showLimitSwapActions || showRQ) && (
+                      <div className="flex items-center justify-end border-t py-1">
+                        {showRQ && (
+                          <div className="flex items-center justify-end py-1 pl-4">
+                            <div className="text-thor-gray text-xs font-semibold">
+                              {tx.expiration && (
+                                <span>
+                                  Expires in &nbsp;
+                                  {formatDuration(
+                                    intervalToDuration({
+                                      start: now.getTime(),
+                                      end: tx.expiration * 1000
+                                    }),
+                                    { format: ['hours', 'minutes'], zero: false }
+                                  )}
+                                </span>
                               )}
-                            </span>
-                          )}
-                        </div>
-                        <ThemeButton variant="primarySmallTransparent" onClick={showQrCode}>
-                          <span className="">Show QR</span>
-                        </ThemeButton>
-                      </div>
-                    )}
-
-                    {selectedAccount && tx.limitSwapMemo && tx.hash && isTxPending(status) && (
-                      <div className="flex items-center justify-end border-t px-4 py-2">
-                        <ThemeButton
-                          variant="secondarySmall"
-                          onClick={e => {
-                            e.stopPropagation()
-
-                            if (selectedAccount?.network !== tx.assetFrom.chain) {
-                              toast.error('Only the original swap creator can modify')
-                              return
-                            }
-
-                            openDialog(SwapLimitCancel, {
-                              transaction: {
-                                hash: tx.hash,
-                                assetFrom: tx.assetFrom,
-                                assetTo: tx.assetTo,
-                                amountFrom: tx.amountFrom,
-                                amountTo: tx.amountTo,
-                                addressFrom: tx.addressFrom,
-                                limitSwapMemo: tx.limitSwapMemo
-                              }
-                            })
-                          }}
-                        >
-                          Cancel Order
-                        </ThemeButton>
+                            </div>
+                            <ThemeButton variant="primarySmallTransparent" onClick={showQrCode}>
+                              Show QR
+                            </ThemeButton>
+                          </div>
+                        )}
+                        {showLimitSwapActions && (
+                          <ThemeButton
+                            className="rounded-none"
+                            variant="primarySmallTransparent"
+                            onClick={() => onLimitModify('modify', tx)}
+                          >
+                            Modify
+                          </ThemeButton>
+                        )}
+                        {showLimitSwapActions && (
+                          <ThemeButton
+                            className="rounded-none"
+                            variant="primarySmallTransparent"
+                            onClick={() => onLimitModify('cancel', tx)}
+                          >
+                            Cancel Order
+                          </ThemeButton>
+                        )}
                       </div>
                     )}
 

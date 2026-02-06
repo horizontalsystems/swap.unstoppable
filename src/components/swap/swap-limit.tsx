@@ -9,7 +9,6 @@ import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { ThemeButton } from '@/components/theme-button'
 import { DecimalInput } from '@/components/decimal/decimal-input'
 import { Separator } from '@/components/ui/separator'
-import { AssetIcon } from '@/components/asset-icon'
 
 type PresetType = 5 | 10 | 'custom' | 'market'
 type SwapLimitProps = { quote?: QuoteResponseRoute }
@@ -113,7 +112,9 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
 
       <div className="flex items-center justify-between pt-4">
         <div className="text-thor-gray flex items-center text-sm font-medium">
-          When 1 <AssetIcon asset={assetFrom} className="mx-1 h-4 w-4 bg-transparent" /> {assetFrom?.ticker} is worth
+          <span>When 1</span>
+          {assetFrom && <img className="mx-1 h-4 w-4" src={assetFrom.logoURI} alt={assetFrom.ticker} />}
+          <span>{assetFrom?.ticker} is worth</span>
         </div>
 
         <div className="text-thor-gray flex items-center text-sm font-medium">

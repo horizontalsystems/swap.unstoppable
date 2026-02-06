@@ -14,7 +14,7 @@ export type TxStatus =
   | 'refunded'
   | 'unknown'
 
-interface Transaction {
+export interface Transaction {
   uid: string
   provider: ProviderName
   chainId: string
