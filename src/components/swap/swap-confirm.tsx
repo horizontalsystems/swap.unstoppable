@@ -159,7 +159,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
             ) : (
               <div className="text-thor-gray flex justify-between text-sm">
                 <div className="flex items-center gap-1">
-                  Min. Payout{' '}
+                  <span>Minimum Payout</span>
                   {slippage && (
                     <span
                       className={cn({
@@ -170,8 +170,8 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                     </span>
                   )}
                   <InfoTooltip>
-                    Minimum guaranteed amount based on your slippage tolerance. If market conditions would give you
-                    less, the transaction will be canceled automatically.
+                    Minimum guaranteed amount based on your {slippage && `${slippage}%`} slippage tolerance. If market
+                    conditions would give you less, the transaction will be canceled automatically.
                   </InfoTooltip>
                 </div>
                 {slippage && expectedBuyAmountMaxSlippage ? (
