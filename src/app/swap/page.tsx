@@ -1,9 +1,9 @@
 import Script from 'next/script'
 import { Suspense } from 'react'
+import { Footer } from '@/components/footer/footer'
+import { GlobalDialog } from '@/components/global-dialog'
 import { Header } from '@/components/header/header'
 import { Swap } from '@/components/swap/swap'
-import { GlobalDialog } from '@/components/global-dialog'
-import { Footer } from '@/components/footer/footer'
 import { AppConfig } from '@/config'
 
 export default async function SwapPage() {
@@ -16,11 +16,7 @@ export default async function SwapPage() {
       <GlobalDialog />
       <Footer />
       {AppConfig.pixelEvent && (
-        <Script
-          id="twitter-events"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `twq('event', '${AppConfig.pixelEvent}', {})` }}
-        />
+        <Script id="twitter-events" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `twq('event', '${AppConfig.pixelEvent}', {})` }} />
       )}
     </main>
   )

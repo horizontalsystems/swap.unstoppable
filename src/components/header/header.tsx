@@ -1,16 +1,16 @@
 'use client'
 
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
-import { useConnectedWallets, useDisconnect } from '@/hooks/use-wallets'
 import { useDialog } from '@/components/global-dialog'
-import { TransactionHistoryButton } from '@/components/header/transaction-history-button'
-import { ThemeButton } from '@/components/theme-button'
 import { ThemeSwitchButton } from '@/components/header/theme-switch-button'
-import { AppConfig } from '@/config'
+import { TransactionHistoryButton } from '@/components/header/transaction-history-button'
 import { Icon } from '@/components/icons'
-import { useEffect, useState } from 'react'
+import { ThemeButton } from '@/components/theme-button'
+import { AppConfig } from '@/config'
+import { useConnectedWallets, useDisconnect } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 
 export function Header() {
@@ -50,11 +50,7 @@ export function Header() {
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
           <ThemeSwitchButton />
           <TransactionHistoryButton />
-          <ThemeButton
-            variant="secondarySmall"
-            className="hidden md:flex"
-            onClick={() => openDialog(ConnectWallet, {})}
-          >
+          <ThemeButton variant="secondarySmall" className="hidden md:flex" onClick={() => openDialog(ConnectWallet, {})}>
             Connect Wallet
           </ThemeButton>
           <ThemeButton
@@ -74,10 +70,7 @@ export function Header() {
                 </ThemeButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem
-                  className="text-thor-gray flex cursor-pointer gap-4 p-4"
-                  onClick={() => disconnectProvider(provider)}
-                >
+                <DropdownMenuItem className="text-thor-gray flex cursor-pointer gap-4 p-4" onClick={() => disconnectProvider(provider)}>
                   <Icon name="disconnect" className="size-6" />
                   <span className="text-sm">Disconnect</span>
                 </DropdownMenuItem>

@@ -1,14 +1,14 @@
-import { ThemeButton } from '@/components/theme-button'
-import { ALL_CHAINS } from '@/components/connect-wallet/config'
 import { useMemo, useState } from 'react'
-import { Icon } from '@/components/icons'
-import { useWallets } from '@/hooks/use-wallets'
 import { WalletOption } from '@uswap/core'
 import { encryptToKeyStore, generatePhrase } from '@uswap/wallets/keystore'
 import { LoaderCircle } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { ALL_CHAINS } from '@/components/connect-wallet/config'
+import { Icon } from '@/components/icons'
+import { ThemeButton } from '@/components/theme-button'
+import { useWallets } from '@/hooks/use-wallets'
+import { cn } from '@/lib/utils'
 
 export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConnect: () => void }) {
   const [showPassword, setShowPassword] = useState(false)
@@ -64,8 +64,7 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
             <div className="text-leah mb-3 text-base font-semibold">Create New Wallet</div>
 
             <p className="text-thor-gray mb-5 text-sm">
-              Write these 12 words down and store them securely offline. This 12 word phrase is used to recover your
-              wallet private keys.
+              Write these 12 words down and store them securely offline. This 12 word phrase is used to recover your wallet private keys.
             </p>
 
             <div className="mb-2 flex flex-col items-center gap-6 rounded-xl bg-black p-4 pb-4">
@@ -90,9 +89,7 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
                 <div className="bg-blade size-6 shrink-0 rounded-full" />
               )}
 
-              <span className="text-thor-gray text-sm">
-                I confirm I have securely saved the passphrase to recover my account in the future.
-              </span>
+              <span className="text-thor-gray text-sm">I confirm I have securely saved the passphrase to recover my account in the future.</span>
             </div>
           </div>
         </ScrollArea>
@@ -104,12 +101,7 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
         <ThemeButton variant="secondaryMedium" onClick={onBack}>
           Back
         </ThemeButton>
-        <ThemeButton
-          variant="primaryMedium"
-          className="flex-1 md:flex-0"
-          disabled={connecting || !accepted}
-          onClick={() => setShowPassword(true)}
-        >
+        <ThemeButton variant="primaryMedium" className="flex-1 md:flex-0" disabled={connecting || !accepted} onClick={() => setShowPassword(true)}>
           {connecting && <LoaderCircle size={20} className="animate-spin" />} Next
         </ThemeButton>
       </div>
@@ -117,15 +109,7 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
   )
 }
 
-export function SetupPassword({
-  onBack,
-  onSetup,
-  connecting
-}: {
-  onBack: () => void
-  onSetup: (p: string) => void
-  connecting: boolean
-}) {
+export function SetupPassword({ onBack, onSetup, connecting }: { onBack: () => void; onSetup: (p: string) => void; connecting: boolean }) {
   const [password1, setPassword1] = useState('')
   const [password2, setPassword2] = useState('')
 
@@ -150,9 +134,7 @@ export function SetupPassword({
                     'border-lucian focus-visible:border-lucian': password2 && password1 !== password2
                   })}
                 />
-                {password2 && password1 !== password2 && (
-                  <span className="text-lucian text-xs">Password must match</span>
-                )}
+                {password2 && password1 !== password2 && <span className="text-lucian text-xs">Password must match</span>}
               </div>
             </div>
           </div>

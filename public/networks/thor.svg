@@ -1,7 +1,8 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_213_10656)">
         <rect width="32" height="32" fill="url(#paint0_linear_213_10656)"/>
-        <path d="M6.6665 26.7445L21.6147 20.4493L16.8858 15.6518L6.6665 26.7445ZM12.1568 10.8609L16.8858 15.6518L25.3332 5.33301L12.1568 10.8609Z" fill="white"/>
+        <path d="M6.6665 26.7445L21.6147 20.4493L16.8858 15.6518L6.6665 26.7445ZM12.1568 10.8609L16.8858 15.6518L25.3332 5.33301L12.1568 10.8609Z"
+              fill="white"/>
     </g>
     <defs>
         <linearGradient id="paint0_linear_213_10656" x1="26.5" y1="4" x2="5.5" y2="28" gradientUnits="userSpaceOnUse">

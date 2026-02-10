@@ -1,7 +1,7 @@
-import { intervalToDuration } from 'date-fns'
 import { assetFromString, USwapNumber } from '@uswap/core'
-import { AssetRateMap } from '@/hooks/use-rates'
 import { QuoteResponseRoute } from '@uswap/helpers/api'
+import { intervalToDuration } from 'date-fns'
+import { AssetRateMap } from '@/hooks/use-rates'
 
 export type FeeData = {
   amount: USwapNumber
@@ -39,9 +39,7 @@ export const resolveFees = (quote: QuoteResponseRoute, rates: AssetRateMap) => {
     ticker: affiliate?.ticker || service?.ticker || ''
   }
 
-  const included = (outbound?.usd || new USwapNumber(0))
-    .add(liquidity?.usd || new USwapNumber(0))
-    .add(platform?.usd || new USwapNumber(0))
+  const included = (outbound?.usd || new USwapNumber(0)).add(liquidity?.usd || new USwapNumber(0)).add(platform?.usd || new USwapNumber(0))
 
   return {
     inbound,

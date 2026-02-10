@@ -1,6 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { useAssetFrom } from '@/hooks/use-swap'
-import { useWallets } from '@/hooks/use-wallets'
 import {
   AssetValue,
   Chain,
@@ -14,9 +12,11 @@ import {
   UTXOChain,
   UTXOChains
 } from '@uswap/core'
+import { estimateTransactionFee } from '@uswap/toolboxes/cosmos'
+import { useAssetFrom } from '@/hooks/use-swap'
+import { useWallets } from '@/hooks/use-wallets'
 import { getAssetBalance } from '@/lib/api'
 import { getUSwap } from '@/lib/wallets'
-import { estimateTransactionFee } from '@uswap/toolboxes/cosmos'
 
 type UseBalance = {
   balance?: {
@@ -54,8 +54,7 @@ export const useBalance = (): UseBalance => {
       let value = AssetValue.from({ chain: assetFrom.chain, value: 0 })
 
       const finder = (b: AssetValue) =>
-        `${b.chain}.${b.isSynthetic || b.isTradeAsset ? b.ticker : b.symbol}`.toLowerCase() ===
-        assetFrom.identifier.toLowerCase()
+        `${b.chain}.${b.isSynthetic || b.isTradeAsset ? b.ticker : b.symbol}`.toLowerCase() === assetFrom.identifier.toLowerCase()
 
       if (assetFrom.chain === Chain.Near) {
         const balances = await getAssetBalance(assetFrom.chain, wallet.address, assetFrom.identifier)
@@ -110,10 +109,7 @@ export const useBalance = (): UseBalance => {
         return new USwapNumber(0)
       }
 
-      const fee =
-        isGasAsset({ chain: assetFrom.chain, symbol: assetFrom.ticker }) && value.gt(0)
-          ? await estimateFee()
-          : new USwapNumber(0)
+      const fee = isGasAsset({ chain: assetFrom.chain, symbol: assetFrom.ticker }) && value.gt(0) ? await estimateFee() : new USwapNumber(0)
 
       return {
         total: value,

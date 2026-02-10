@@ -10,10 +10,7 @@ export const useResolveSource = () => {
 
   useEffect(() => {
     const fromPrevious = accounts.find(
-      s =>
-        s.provider === selectedAccount?.provider &&
-        s.address === selectedAccount?.address &&
-        s.network === assetFrom?.chain
+      s => s.provider === selectedAccount?.provider && s.address === selectedAccount?.address && s.network === assetFrom?.chain
     )
 
     selectAccount(fromPrevious ?? accounts.find(a => a.network === assetFrom?.chain))

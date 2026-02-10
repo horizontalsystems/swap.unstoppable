@@ -1,27 +1,27 @@
 import Image from 'next/image'
-import { ThemeButton } from '@/components/theme-button'
-import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { useEffect, useState } from 'react'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Icon } from '@/components/icons'
-import { LoaderCircle } from 'lucide-react'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
-import { chainLabel } from '@/components/connect-wallet/config'
-import { cn, truncate } from '@/lib/utils'
-import { useAssetFrom, useAssetTo, useSlippage, useTwapMode, useCustomInterval, useCustomQuantity, useSwap } from '@/hooks/use-swap'
-import { useIsLimitSwap, useLimitSwapBuyAmount, useLimitSwapExpiry } from '@/store/limit-swap-store'
-import { getAddressValidator } from '@uswap/toolboxes'
-import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
-import { getQuotes } from '@/lib/api'
-import { SwapError } from '@/components/swap/swap-error'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { ProviderName, USwapError } from '@uswap/helpers'
+import { QuoteResponseRoute } from '@uswap/helpers/api'
+import { getAddressValidator } from '@uswap/toolboxes'
+import { LoaderCircle } from 'lucide-react'
+import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Textarea } from '@/components/ui/textarea'
+import { chainLabel } from '@/components/connect-wallet/config'
+import { Icon } from '@/components/icons'
 import { Asset } from '@/components/swap/asset'
 import { SwapAddressWarning } from '@/components/swap/swap-address-warning'
-import { Textarea } from '@/components/ui/textarea'
-import { WalletAccount } from '@/store/wallets-store'
+import { SwapError } from '@/components/swap/swap-error'
+import { ThemeButton } from '@/components/theme-button'
 import { Tooltip } from '@/components/tooltip'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSlippage, useSwap, useTwapMode } from '@/hooks/use-swap'
+import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
+import { getQuotes } from '@/lib/api'
 import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/memo-helpers'
+import { cn, truncate } from '@/lib/utils'
+import { useIsLimitSwap, useLimitSwapBuyAmount, useLimitSwapExpiry } from '@/store/limit-swap-store'
+import { WalletAccount } from '@/store/wallets-store'
 
 interface SwapRecipientProps {
   provider: ProviderName
@@ -62,9 +62,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
     if (destinationAddress.length === 0) return setIsValidDestination(true)
 
     getAddressValidator()
-      .then(validateAddress =>
-        setIsValidDestination(validateAddress({ address: destinationAddress, chain: assetTo.chain }))
-      )
+      .then(validateAddress => setIsValidDestination(validateAddress({ address: destinationAddress, chain: assetTo.chain })))
       .catch(() => setIsValidDestination(false))
   }, [destinationAddress])
 
@@ -120,19 +118,9 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   }
 
   const isLTC = assetTo.ticker === 'LTC'
-  const buttonEnabled =
-    isValidDestination &&
-    destinationAddress.length &&
-    !quoting &&
-    (refundRequired ? isValidRefund && refundAddress.length : true)
+  const buttonEnabled = isValidDestination && destinationAddress.length && !quoting && (refundRequired ? isValidRefund && refundAddress.length : true)
 
-  const addressInput = (
-    asset: Asset,
-    address: string,
-    setAddress: (address: string) => void,
-    isValid: boolean,
-    options: WalletAccount[] = []
-  ) => {
+  const addressInput = (asset: Asset, address: string, setAddress: (address: string) => void, isValid: boolean, options: WalletAccount[] = []) => {
     const currentOption = options.find(a => a.address.toLowerCase() === address.toLowerCase())
 
     return (
@@ -171,17 +159,8 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
             <div className="absolute end-4 top-1/2 flex -translate-y-1/2 gap-2">
               {[...options].map((account, index) => (
                 <Tooltip key={index} content={truncate(account.address)}>
-                  <ThemeButton
-                    variant="circleSmall"
-                    className="rounded-xl"
-                    onClick={() => setDestinationAddress(account.address)}
-                  >
-                    <Image
-                      src={`/wallets/${account.provider.toLowerCase()}.svg`}
-                      alt={account.provider}
-                      width="24"
-                      height="24"
-                    />
+                  <ThemeButton variant="circleSmall" className="rounded-xl" onClick={() => setDestinationAddress(account.address)}>
+                    <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt={account.provider} width="24" height="24" />
                   </ThemeButton>
                 </Tooltip>
               ))}

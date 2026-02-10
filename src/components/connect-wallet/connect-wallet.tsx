@@ -1,23 +1,15 @@
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
+import { Chain, WalletOption } from '@uswap/core'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useWallets } from '@/hooks/use-wallets'
-import { cn } from '@/lib/utils'
-import {
-  ALL_CHAINS,
-  chainLabel,
-  COMING_SOON_CHAINS,
-  isWalletAvailable,
-  WalletParams,
-  WALLETS,
-  WalletType
-} from '@/components/connect-wallet/config'
 import { BrowserWallet } from '@/components/connect-wallet/browser-wallet'
+import { ALL_CHAINS, chainLabel, COMING_SOON_CHAINS, isWalletAvailable, WalletParams, WALLETS, WalletType } from '@/components/connect-wallet/config'
 import { Keystore } from '@/components/connect-wallet/keystore/keystore'
 import { Ledger } from '@/components/connect-wallet/ledger'
 import { Icon } from '@/components/icons'
-import { Chain, WalletOption } from '@uswap/core'
+import { useWallets } from '@/hooks/use-wallets'
+import { cn } from '@/lib/utils'
 
 interface ConnectWalletProps {
   isOpen: boolean
@@ -155,10 +147,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
           </ScrollArea>
 
           {selectedWallet && (
-            <div
-              className="mb-2 flex cursor-pointer items-center gap-4 px-4 pb-4 md:hidden"
-              onClick={() => setSelectedWallet(undefined)}
-            >
+            <div className="mb-2 flex cursor-pointer items-center gap-4 px-4 pb-4 md:hidden" onClick={() => setSelectedWallet(undefined)}>
               <Icon name="arrow-m-left" className="text-thor-gray size-6" />
               <div className="flex gap-2">
                 <Image src={`/wallets/${selectedWallet.key}.svg`} alt="" width="20" height="20" />
@@ -197,11 +186,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
                         >
                           <Image src={`/networks/${chain.toLowerCase()}.svg`} alt={chain} width="24" height="24" />
                           <div className="text-sm">{chainLabel(chain)}</div>
-                          {isComingSoon && (
-                            <div className="text-gray border-gray rounded-full border px-1.5 text-[10px] font-semibold">
-                              Soon
-                            </div>
-                          )}
+                          {isComingSoon && <div className="text-gray border-gray rounded-full border px-1.5 text-[10px] font-semibold">Soon</div>}
                         </div>
                       )
                     })}

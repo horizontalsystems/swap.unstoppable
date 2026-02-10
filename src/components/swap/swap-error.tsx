@@ -1,5 +1,5 @@
-import { translateError } from '@/lib/errors'
 import { Icon } from '@/components/icons'
+import { translateError } from '@/lib/errors'
 
 export const SwapError = ({ error }: { error: Error }) => {
   return (

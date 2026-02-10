@@ -1,29 +1,29 @@
 'use client'
 
 import { Fragment, useEffect, useMemo, useState } from 'react'
+import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, USwapNumber } from '@uswap/core'
+import { ProviderName } from '@uswap/helpers'
 import { format, formatDuration, intervalToDuration, isSameDay, isToday, isYesterday } from 'date-fns'
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { CopyButton } from '@/components/button-copy'
-import { isTxPending, Transaction, useTransactions } from '@/store/transaction-store'
 import { toast } from 'sonner'
-import { useRates } from '@/hooks/use-rates'
-import { cn, truncate } from '@/lib/utils'
-import { AssetIcon } from '@/components/asset-icon'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
-import { Icon } from '@/components/icons'
-import { ProviderName } from '@uswap/helpers'
-import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, USwapNumber } from '@uswap/core'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { AssetIcon } from '@/components/asset-icon'
+import { CopyButton } from '@/components/button-copy'
 import { chainLabel } from '@/components/connect-wallet/config'
-import { ThemeButton } from '@/components/theme-button'
-import { useDialog } from '@/components/global-dialog'
-import { InstantSwapChannelDialog } from '@/components/swap/instant-swap-channel-dialog'
 import { DecimalText } from '@/components/decimal/decimal-text'
+import { useDialog } from '@/components/global-dialog'
+import { Icon } from '@/components/icons'
+import { InstantSwapChannelDialog } from '@/components/swap/instant-swap-channel-dialog'
 import { DepositChannel } from '@/components/swap/instant-swap-dialog'
-import { useSyncTransactions } from '@/hooks/use-sync-transactions'
-import { formatExpiration } from '@/lib/swap-helpers'
 import { SwapLimitCancel } from '@/components/swap/swap-limit-cancel'
+import { ThemeButton } from '@/components/theme-button'
+import { useRates } from '@/hooks/use-rates'
+import { useSyncTransactions } from '@/hooks/use-sync-transactions'
 import { useSelectedAccount } from '@/hooks/use-wallets'
+import { formatExpiration } from '@/lib/swap-helpers'
+import { cn, truncate } from '@/lib/utils'
+import { isTxPending, Transaction, useTransactions } from '@/store/transaction-store'
 
 interface HistoryDialogProps {
   isOpen: boolean
@@ -36,10 +36,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
   const [expandTx, setExpandTx] = useState<string | null>(null)
   const { openDialog } = useDialog()
 
-  const identifiers = useMemo(
-    () => transactions.flatMap(t => [t.assetFrom.identifier, t.assetTo.identifier]),
-    [transactions]
-  )
+  const identifiers = useMemo(() => transactions.flatMap(t => [t.assetFrom.identifier, t.assetTo.identifier]), [transactions])
 
   const { rates } = useRates(identifiers)
 
@@ -128,24 +125,15 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
               return (
                 <Fragment key={i}>
                   {shouldRenderHeader && (
-                    <div className={cn('text-andy px-4 pb-3 text-sm font-semibold', { 'pt-3': i !== 0 })}>
-                      {formatDate(txDate)}
-                    </div>
+                    <div className={cn('text-andy px-4 pb-3 text-sm font-semibold', { 'pt-3': i !== 0 })}>{formatDate(txDate)}</div>
                   )}
                   <div className="bg-blade/25 mb-3 rounded-xl border">
-                    <div
-                      className="flex cursor-pointer px-4 py-3"
-                      onClick={() => setExpandTx(isExpanded ? null : tx.uid)}
-                    >
+                    <div className="flex cursor-pointer px-4 py-3" onClick={() => setExpandTx(isExpanded ? null : tx.uid)}>
                       <div className="flex flex-1 items-center gap-3">
                         {tx.assetFrom && <AssetIcon asset={tx.assetFrom} />}
                         <div className="flex flex-col gap-1">
                           <span className="text-leah text-sm font-semibold">
-                            <DecimalText
-                              className="break-all"
-                              amount={amountFrom.toSignificant()}
-                              symbol={tx.assetFrom?.ticker}
-                            />
+                            <DecimalText className="break-all" amount={amountFrom.toSignificant()} symbol={tx.assetFrom?.ticker} />
                           </span>
                           <span className="text-thor-gray text-xs font-medium">{fiatFrom?.toCurrency()}</span>
                         </div>
@@ -175,11 +163,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                           })}
                         >
                           {showRemainingTime ? (
-                            <RemainingTime
-                              startTime={txDate.getTime()}
-                              estimatedTime={tx.estimatedTime!}
-                              fallback={statusTitle}
-                            />
+                            <RemainingTime startTime={txDate.getTime()} estimatedTime={tx.estimatedTime!} fallback={statusTitle} />
                           ) : (
                             statusTitle
                           )}
@@ -188,11 +172,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                       <div className="flex flex-1 items-center justify-end gap-3">
                         <div className="flex flex-col gap-1 text-right">
                           <span className="text-leah text-sm font-semibold">
-                            <DecimalText
-                              className="break-all"
-                              amount={amountTo.toSignificant()}
-                              symbol={tx.assetTo?.ticker}
-                            />
+                            <DecimalText className="break-all" amount={amountTo.toSignificant()} symbol={tx.assetTo?.ticker} />
                           </span>
                           <span className="text-thor-gray text-xs font-medium">{fiatTo?.toCurrency()}</span>
                         </div>
@@ -224,20 +204,12 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                           </div>
                         )}
                         {showLimitSwapActions && (
-                          <ThemeButton
-                            className="rounded-none"
-                            variant="primarySmallTransparent"
-                            onClick={() => onLimitModify('modify', tx)}
-                          >
+                          <ThemeButton className="rounded-none" variant="primarySmallTransparent" onClick={() => onLimitModify('modify', tx)}>
                             Modify
                           </ThemeButton>
                         )}
                         {showLimitSwapActions && (
-                          <ThemeButton
-                            className="rounded-none"
-                            variant="primarySmallTransparent"
-                            onClick={() => onLimitModify('cancel', tx)}
-                          >
+                          <ThemeButton className="rounded-none" variant="primarySmallTransparent" onClick={() => onLimitModify('cancel', tx)}>
                             Cancel Order
                           </ThemeButton>
                         )}
@@ -296,15 +268,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
   )
 }
 
-function RemainingTime({
-  startTime,
-  estimatedTime,
-  fallback
-}: {
-  startTime: number
-  estimatedTime: number
-  fallback: string
-}) {
+function RemainingTime({ startTime, estimatedTime, fallback }: { startTime: number; estimatedTime: number; fallback: string }) {
   const [now, setNow] = useState(Date.now())
 
   useEffect(() => {
@@ -349,9 +313,7 @@ function renderLeg(tx: any, legTx: any) {
       <div className="flex items-center gap-2">
         <span>{chainLabel(chain)}</span>
 
-        {explorerUrl && (
-          <Icon name="globe" className="size-5 cursor-pointer" onClick={() => window.open(explorerUrl, '_blank')} />
-        )}
+        {explorerUrl && <Icon name="globe" className="size-5 cursor-pointer" onClick={() => window.open(explorerUrl, '_blank')} />}
       </div>
     </div>
   )

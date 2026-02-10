@@ -1,17 +1,17 @@
 import { useState } from 'react'
-import { LoaderCircle } from 'lucide-react'
-import { Credenza, CredenzaContent } from '@/components/ui/credenza'
-import { SwapRecipient } from '@/components/swap/swap-recipient'
+import { getChainConfig, USwapNumber } from '@uswap/core'
 import { ProviderName, USwapError } from '@uswap/helpers'
 import { QuoteResponseRoute, USwapApi } from '@uswap/helpers/api'
-import { getChainConfig, USwapNumber } from '@uswap/core'
+import { LoaderCircle } from 'lucide-react'
+import { Credenza, CredenzaContent } from '@/components/ui/credenza'
+import { InstantSwap } from '@/components/swap/instant-swap'
 import { SwapConfirm } from '@/components/swap/swap-confirm'
+import { SwapError } from '@/components/swap/swap-error'
+import { SwapRecipient } from '@/components/swap/swap-recipient'
 import { ThemeButton } from '@/components/theme-button'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
-import { InstantSwap } from '@/components/swap/instant-swap'
-import { SwapError } from '@/components/swap/swap-error'
-import { useSetTransaction } from '@/store/transaction-store'
 import { generateId } from '@/lib/utils'
+import { useSetTransaction } from '@/store/transaction-store'
 
 interface InstantSwapDialogProps {
   provider: ProviderName
@@ -39,13 +39,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
 
   if (!assetFrom || !assetTo) return null
 
-  const createChannel = (
-    quote: QuoteResponseRoute,
-    qrCodeData: string,
-    address: string,
-    value: string,
-    expiration?: number
-  ) => {
+  const createChannel = (quote: QuoteResponseRoute, qrCodeData: string, address: string, value: string, expiration?: number) => {
     setChannel({
       qrCodeData,
       address,
@@ -67,7 +61,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
       addressDeposit: address,
       status: 'not_started',
       qrCodeData,
-      expiration,
+      expiration
     })
   }
 
@@ -77,13 +71,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
     if (provider === 'NEAR') {
       if (!quote.inboundAddress || !quote.qrCodeDataURL) return
 
-      createChannel(
-        quote,
-        quote.qrCodeDataURL,
-        quote.inboundAddress,
-        quote.sellAmount,
-        quote.expiration ? Number(quote.expiration) : undefined
-      )
+      createChannel(quote, quote.qrCodeDataURL, quote.inboundAddress, quote.sellAmount, quote.expiration ? Number(quote.expiration) : undefined)
 
       return
     }

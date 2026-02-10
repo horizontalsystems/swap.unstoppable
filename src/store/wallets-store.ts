@@ -1,8 +1,8 @@
+import { Chain, WalletOption } from '@uswap/core'
+import { toast } from 'sonner'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { Chain, WalletOption } from '@uswap/core'
 import { getAccounts, getUSwap, supportedChains } from '@/lib/wallets'
-import { toast } from 'sonner'
 
 export interface WalletAccount {
   address: string
@@ -89,10 +89,7 @@ export const useWalletStore = create<WalletState>()(
           })
         )
           .then(res => {
-            const accounts = res.reduce(
-              (a: WalletAccount[], v) => (v.status === 'fulfilled' ? [...v.value, ...a] : a),
-              []
-            )
+            const accounts = res.reduce((a: WalletAccount[], v) => (v.status === 'fulfilled' ? [...v.value, ...a] : a), [])
 
             useWalletStore.setState({
               accounts,

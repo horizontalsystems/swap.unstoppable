@@ -1,18 +1,18 @@
 import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Search } from 'lucide-react'
-import { Asset } from '@/components/swap/asset'
-import { Input } from '@/components/ui/input'
-import { useIsMobile } from '@/hooks/use-mobile'
-import { cn } from '@/lib/utils'
-import { AssetIcon } from '@/components/asset-icon'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { Chain } from '@uswap/core'
+import { Search } from 'lucide-react'
+import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
+import { Input } from '@/components/ui/input'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { AssetIcon } from '@/components/asset-icon'
 import { chainLabel } from '@/components/connect-wallet/config'
+import { Asset } from '@/components/swap/asset'
 import { useAssets } from '@/hooks/use-assets'
 import { useMimir } from '@/hooks/use-mimir'
-import { useVirtualizer } from '@tanstack/react-virtual'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { cn } from '@/lib/utils'
 
 const FEATURED_ASSETS = [
   'AVAX.AVAX',
@@ -208,12 +208,7 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
                   )}
                 >
                   <div className="flex h-6 w-6 items-center justify-center rounded-full">
-                    <Image
-                      src={chain === Filter.All ? '/icons/windows.svg' : `/networks/${chain.toLowerCase()}.svg`}
-                      alt=""
-                      width="24"
-                      height="24"
-                    />
+                    <Image src={chain === Filter.All ? '/icons/windows.svg' : `/networks/${chain.toLowerCase()}.svg`} alt="" width="24" height="24" />
                   </div>
                   <span className="text-leah text-sm">{chain === Filter.All ? 'All Chains' : chainLabel(chain)}</span>
                 </div>
@@ -273,18 +268,10 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
                             </div>
                           </div>
                           {isAssetHalted(asset) ? (
-                            <div className="border-jacob text-jacob rounded-full border px-1.5 text-[10px] font-semibold">
-                              Currently unavailable
-                            </div>
+                            <div className="border-jacob text-jacob rounded-full border px-1.5 text-[10px] font-semibold">Currently unavailable</div>
                           ) : (
                             asset.identifier === selected?.identifier && (
-                              <div
-                                className={cn(
-                                  'border-gray text-thor-gray rounded-full border px-1.5 py-0.5 text-xs font-medium'
-                                )}
-                              >
-                                Selected
-                              </div>
+                              <div className={cn('border-gray text-thor-gray rounded-full border px-1.5 py-0.5 text-xs font-medium')}>Selected</div>
                             )
                           )}
                         </div>

@@ -1,14 +1,14 @@
-import { ThemeButton } from '@/components/theme-button'
-import { ALL_CHAINS } from '@/components/connect-wallet/config'
 import { DragEvent, useRef, useState } from 'react'
-import { Icon } from '@/components/icons'
-import { useWallets } from '@/hooks/use-wallets'
 import { WalletOption } from '@uswap/core'
 import { LoaderCircle } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
-import { SwapError } from '@/components/swap/swap-error'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { ALL_CHAINS } from '@/components/connect-wallet/config'
+import { Icon } from '@/components/icons'
+import { SwapError } from '@/components/swap/swap-error'
+import { ThemeButton } from '@/components/theme-button'
+import { useWallets } from '@/hooks/use-wallets'
+import { cn } from '@/lib/utils'
 
 export function ImportKeystore({ onBack, onConnect }: { onBack: () => void; onConnect: () => void }) {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -41,8 +41,7 @@ export function ImportKeystore({ onBack, onConnect }: { onBack: () => void; onCo
   const handleFile = (file: File) => {
     console.log(file.type)
 
-    if (!['application/json', 'text/plain'].includes(file.type))
-      return setError(new Error('Invalid file type. Please upload a JSON or TXT file.'))
+    if (!['application/json', 'text/plain'].includes(file.type)) return setError(new Error('Invalid file type. Please upload a JSON or TXT file.'))
 
     setError(undefined)
     setFile(file)
@@ -135,21 +134,14 @@ export function ImportKeystore({ onBack, onConnect }: { onBack: () => void; onCo
               ) : (
                 <>
                   <Icon name="cloud-in" className="text-thor-gray size-12 shrink-0" />
-                  <span className="text-leah text-sm font-semibold">
-                    Select or drag your keystore file to upload it
-                  </span>
+                  <span className="text-leah text-sm font-semibold">Select or drag your keystore file to upload it</span>
                 </>
               )}
             </div>
 
             <div className="mt-5 flex flex-col gap-2">
               <div className="text-thor-gray text-base font-semibold">Decryption Password</div>
-              <Input
-                type="password"
-                placeholder="Password"
-                onChange={e => setPassword(e.target.value)}
-                disabled={connecting}
-              />
+              <Input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} disabled={connecting} />
             </div>
 
             {error && (
@@ -168,12 +160,7 @@ export function ImportKeystore({ onBack, onConnect }: { onBack: () => void; onCo
           Back
         </ThemeButton>
 
-        <ThemeButton
-          variant="primaryMedium"
-          className="flex-1 md:flex-0"
-          onClick={onImport}
-          disabled={connecting || !file || !password}
-        >
+        <ThemeButton variant="primaryMedium" className="flex-1 md:flex-0" onClick={onImport} disabled={connecting || !file || !password}>
           {connecting && <LoaderCircle size={20} className="animate-spin" />} Import
         </ThemeButton>
       </div>

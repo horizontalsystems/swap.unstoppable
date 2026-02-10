@@ -1,9 +1,9 @@
 'use client'
 
-import { ThemeButton } from '@/components/theme-button'
-import { Icon } from '@/components/icons'
-import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { useTheme } from 'next-themes'
+import { Icon } from '@/components/icons'
+import { ThemeButton } from '@/components/theme-button'
 
 export const ThemeSwitchButton = () => {
   const [mounted, setMounted] = useState(false)

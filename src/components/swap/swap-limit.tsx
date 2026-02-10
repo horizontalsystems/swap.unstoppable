@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
-import { X } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
-import { useLimitSwapExpiry, useSetLimitSwapBuyAmount, useSetLimitSwapExpiry } from '@/store/limit-swap-store'
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { USwapNumber } from '@uswap/core'
 import { QuoteResponseRoute } from '@uswap/helpers/api'
-import { ThemeButton } from '@/components/theme-button'
-import { DecimalInput } from '@/components/decimal/decimal-input'
+import { X } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
+import { DecimalInput } from '@/components/decimal/decimal-input'
+import { ThemeButton } from '@/components/theme-button'
+import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
+import { cn } from '@/lib/utils'
+import { useLimitSwapExpiry, useSetLimitSwapBuyAmount, useSetLimitSwapExpiry } from '@/store/limit-swap-store'
 
 type PresetType = 5 | 10 | 'custom' | 'market'
 type SwapLimitProps = { quote?: QuoteResponseRoute }
@@ -144,10 +144,7 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
       <div className="flex items-center space-x-1">
         {activePreset === 'custom' && differencePercent ? (
           <div className="flex items-center">
-            <ThemeButton
-              className="border-abraham bg-liquidity-green/20 h-6 rounded-r-none border-r px-2 text-xs"
-              variant="secondarySmall"
-            >
+            <ThemeButton className="border-abraham bg-liquidity-green/20 h-6 rounded-r-none border-r px-2 text-xs" variant="secondarySmall">
               {differencePercent.gte(0) ? '+' : ''}
               {differencePercent.toFixed(1)}%
             </ThemeButton>
@@ -169,19 +166,11 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
           </ThemeButton>
         )}
 
-        <ThemeButton
-          className={cn('h-6', activePreset === 5 && 'bg-liquidity-green/20')}
-          variant="secondarySmall"
-          onClick={() => applyPreset(5)}
-        >
+        <ThemeButton className={cn('h-6', activePreset === 5 && 'bg-liquidity-green/20')} variant="secondarySmall" onClick={() => applyPreset(5)}>
           +5%
         </ThemeButton>
 
-        <ThemeButton
-          className={cn('h-6', activePreset === 10 && 'bg-liquidity-green/20')}
-          variant="secondarySmall"
-          onClick={() => applyPreset(10)}
-        >
+        <ThemeButton className={cn('h-6', activePreset === 10 && 'bg-liquidity-green/20')} variant="secondarySmall" onClick={() => applyPreset(10)}>
           +10%
         </ThemeButton>
       </div>

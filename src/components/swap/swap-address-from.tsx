@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { wallet } from '@/components/connect-wallet/config'
+import { Icon } from '@/components/icons'
+import { ThemeButton } from '@/components/theme-button'
+import { useAssetFrom } from '@/hooks/use-swap'
 import { useAccounts, useSelectAccount, useSelectedAccount } from '@/hooks/use-wallets'
 import { cn, truncate } from '@/lib/utils'
-import { useAssetFrom } from '@/hooks/use-swap'
-import { Icon } from '@/components/icons'
-import { wallet } from '@/components/connect-wallet/config'
-import { ThemeButton } from '@/components/theme-button'
 
 export const SwapAddressFrom = () => {
   const accounts = useAccounts()
@@ -21,8 +21,7 @@ export const SwapAddressFrom = () => {
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <ThemeButton variant="secondarySmall" className="gap-2 pr-2">
-          <Image src={`/wallets/${selectedAccount.provider.toLowerCase()}.svg`} alt="" width="16" height="16" />{' '}
-          {truncate(selectedAccount.address)}
+          <Image src={`/wallets/${selectedAccount.provider.toLowerCase()}.svg`} alt="" width="16" height="16" /> {truncate(selectedAccount.address)}
           <Icon name="arrow-s-down" className="size-4" />
         </ThemeButton>
       </DropdownMenuTrigger>
@@ -40,8 +39,7 @@ export const SwapAddressFrom = () => {
               </div>
               <span
                 className={cn('ms-5 text-xs font-semibold', {
-                  'text-brand-second':
-                    account.provider === selectedAccount?.provider && account.address === selectedAccount?.address
+                  'text-brand-second': account.provider === selectedAccount?.provider && account.address === selectedAccount?.address
                 })}
               >
                 {truncate(account.address)}

@@ -1,6 +1,6 @@
 import { Credenza, CredenzaContent } from '@/components/ui/credenza'
-import { InstantSwap } from '@/components/swap/instant-swap'
 import { Asset } from '@/components/swap/asset'
+import { InstantSwap } from '@/components/swap/instant-swap'
 import { DepositChannel } from '@/components/swap/instant-swap-dialog'
 
 interface InstantSwapDialogProps {

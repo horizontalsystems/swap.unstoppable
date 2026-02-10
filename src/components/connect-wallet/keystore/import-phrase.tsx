@@ -1,13 +1,13 @@
-import { ThemeButton } from '@/components/theme-button'
-import { ALL_CHAINS } from '@/components/connect-wallet/config'
 import { useState } from 'react'
-import { useWallets } from '@/hooks/use-wallets'
+import { mnemonicToSeedSync } from '@scure/bip39'
 import { WalletOption } from '@uswap/core'
 import { LoaderCircle } from 'lucide-react'
-import { Textarea } from '@/components/ui/textarea'
-import { mnemonicToSeedSync } from '@scure/bip39'
-import { SwapError } from '@/components/swap/swap-error'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Textarea } from '@/components/ui/textarea'
+import { ALL_CHAINS } from '@/components/connect-wallet/config'
+import { SwapError } from '@/components/swap/swap-error'
+import { ThemeButton } from '@/components/theme-button'
+import { useWallets } from '@/hooks/use-wallets'
 
 export function ImportPhrase({ onBack, onConnect }: { onBack: () => void; onConnect: () => void }) {
   const [phrase, setPhrase] = useState<string | undefined>()
@@ -65,12 +65,7 @@ export function ImportPhrase({ onBack, onConnect }: { onBack: () => void; onConn
           Back
         </ThemeButton>
 
-        <ThemeButton
-          variant="primaryMedium"
-          className="flex-1 md:flex-0"
-          onClick={onImport}
-          disabled={connecting || !phrase}
-        >
+        <ThemeButton variant="primaryMedium" className="flex-1 md:flex-0" onClick={onImport} disabled={connecting || !phrase}>
           {connecting && <LoaderCircle size={20} className="animate-spin" />} Import
         </ThemeButton>
       </div>

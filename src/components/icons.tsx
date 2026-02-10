@@ -1,6 +1,9 @@
 /* eslint-disable react/display-name */
+import { memo, ReactNode, SVGProps } from 'react';
 
-import { memo, ReactNode, SVGProps } from 'react'
+
+
+
 
 type IconProps = {
   children?: ReactNode
@@ -102,10 +105,7 @@ const WarningIcon = memo<IconProps>(props => (
 
 const WarningFilledIcon = memo<IconProps>(props => (
   <SVG {...props}>
-    <path
-      d="M22 7.625V16.375L16.375 22H7.625L2 16.375V7.625L7.625 2H16.375L22 7.625ZM11 18H13V16H11V18ZM11 14H13V7H11V14Z"
-      fill="currentColor"
-    />
+    <path d="M22 7.625V16.375L16.375 22H7.625L2 16.375V7.625L7.625 2H16.375L22 7.625ZM11 18H13V16H11V18ZM11 14H13V7H11V14Z" fill="currentColor" />
   </SVG>
 ))
 
@@ -133,37 +133,25 @@ const ArrowSUpIcon = memo<IconProps>(props => (
 
 const ArrowMUpIcon = memo<IconProps>(props => (
   <SVG {...props}>
-    <path
-      d="M11 7.8281L6.91406 11.9141L5.5 10.5L12 4L18.5 10.5L17.0859 11.9141L13 7.8281V20H11V7.8281Z"
-      fill="currentColor"
-    />
+    <path d="M11 7.8281L6.91406 11.9141L5.5 10.5L12 4L18.5 10.5L17.0859 11.9141L13 7.8281V20H11V7.8281Z" fill="currentColor" />
   </SVG>
 ))
 
 const ArrowMDownIcon = memo<IconProps>(props => (
   <SVG {...props}>
-    <path
-      d="M13 16.1719L17.0859 12.0859L18.5 13.5L12 20L5.5 13.5L6.91406 12.0859L11 16.1719V4H13V16.1719Z"
-      fill="currentColor"
-    />
+    <path d="M13 16.1719L17.0859 12.0859L18.5 13.5L12 20L5.5 13.5L6.91406 12.0859L11 16.1719V4H13V16.1719Z" fill="currentColor" />
   </SVG>
 ))
 
 const ArrowMLeftIcon = memo<IconProps>(props => (
   <SVG {...props}>
-    <path
-      d="M11.9141 6.91406L7.82812 11H20V13H7.82812L11.9141 17.0859L10.5 18.5L4 12L10.5 5.5L11.9141 6.91406Z"
-      fill="currentColor"
-    />
+    <path d="M11.9141 6.91406L7.82812 11H20V13H7.82812L11.9141 17.0859L10.5 18.5L4 12L10.5 5.5L11.9141 6.91406Z" fill="currentColor" />
   </SVG>
 ))
 
 const ArrowMRightIcon = memo<IconProps>(props => (
   <SVG {...props}>
-    <path
-      d="M20 12L13.5 18.5L12.0859 17.0859L16.1719 13H4V11H16.1719L12.0859 6.91406L13.5 5.5L20 12Z"
-      fill="currentColor"
-    />
+    <path d="M20 12L13.5 18.5L12.0859 17.0859L16.1719 13H4V11H16.1719L12.0859 6.91406L13.5 5.5L20 12Z" fill="currentColor" />
   </SVG>
 ))
 
@@ -200,10 +188,7 @@ const UnstoppableIcon = memo<IconProps>(props => (
       d="M16.7998 0.00195312C19.1719 0.00380117 20.4151 0.0324068 21.3789 0.523438C22.2821 0.98363 23.0164 1.71792 23.4766 2.62109C23.9997 3.64782 24 4.99172 24 7.67969V16.3203C24 19.0083 23.9997 20.3522 23.4766 21.3789C23.0164 22.2821 22.2821 23.0164 21.3789 23.4766C20.3522 23.9997 19.0083 24 16.3203 24H7.67969C4.99172 24 3.64782 23.9997 2.62109 23.4766C1.71792 23.0164 0.98363 22.2821 0.523438 21.3789C0.000334382 20.3522 7.85824e-10 19.0083 0 16.3203V7.67969C7.83777e-10 4.99172 0.000334024 3.64782 0.523438 2.62109C0.98363 1.71792 1.71792 0.98363 2.62109 0.523438C3.58487 0.0324065 4.8281 0.00380118 7.2002 0.00195312V12C7.2002 14.6509 9.34912 16.7997 12 16.7998C14.651 16.7998 16.7998 14.651 16.7998 12V0.00195312Z"
       fill="currentColor"
     />
-    <path
-      d="M12.7998 0V12C12.7998 12.4418 12.4418 12.7998 12 12.7998C11.5583 12.7997 11.2002 12.4418 11.2002 12V0H12.7998Z"
-      fill="currentColor"
-    />
+    <path d="M12.7998 0V12C12.7998 12.4418 12.4418 12.7998 12 12.7998C11.5583 12.7997 11.2002 12.4418 11.2002 12V0H12.7998Z" fill="currentColor" />
   </SVG>
 ))
 

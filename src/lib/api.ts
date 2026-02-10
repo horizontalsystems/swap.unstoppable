@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { AssetValue, Chain, getChainConfig } from '@uswap/core'
 import { BalanceResponse, QuoteRequest, USwapApi } from '@uswap/helpers/api'
+import axios from 'axios'
 
 const uSwap = axios.create({
   baseURL: process.env.NEXT_PUBLIC_USWAP_API_URL,

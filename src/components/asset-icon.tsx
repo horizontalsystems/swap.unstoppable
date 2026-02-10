@@ -37,8 +37,5 @@ export function AssetIcon({ asset, className }: { asset: Asset | undefined; clas
 }
 
 function isNativeAsset(asset: Asset): boolean {
-  return (
-    ['THOR.RUNE', 'BSC.BNB', 'GAIA.ATOM'].includes(asset.identifier) ||
-    asset.chain.toLowerCase() === asset.ticker.toLowerCase()
-  )
+  return ['THOR.RUNE', 'BSC.BNB', 'GAIA.ATOM'].includes(asset.identifier) || asset.chain.toLowerCase() === asset.ticker.toLowerCase()
 }

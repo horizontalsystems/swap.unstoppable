@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { useSwapStore } from '@/store/swap-store'
 import { NumberPrimitives, USwapNumber } from '@uswap/core'
+import { useSwapStore } from '@/store/swap-store'
 
 // Selectors
 

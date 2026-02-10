@@ -1,8 +1,8 @@
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
-import { FeeData } from '@/lib/swap-helpers'
+import { DecimalText } from '@/components/decimal/decimal-text'
 import { InfoTooltip } from '@/components/tooltip'
 import { AppConfig } from '@/config'
-import { DecimalText } from '@/components/decimal/decimal-text'
+import { FeeData } from '@/lib/swap-helpers'
 
 interface SwapFeeDialogProps {
   outbound?: FeeData
@@ -48,9 +48,7 @@ export const SwapFeeDialog = ({ outbound, liquidity, platform, isOpen, onOpenCha
         </CredenzaHeader>
 
         <div className="flex flex-col gap-6 p-8 pt-0">
-          <div className="text-thor-gray text-xs">
-            These fees are already included in the rate — you don’t pay them separately.
-          </div>
+          <div className="text-thor-gray text-xs">These fees are already included in the rate — you don’t pay them separately.</div>
 
           <div className="flex flex-col space-y-4 text-xs font-semibold">
             {feeSection('Liquidity Fee', 'Fee for liquidity providers on the route', liquidity)}

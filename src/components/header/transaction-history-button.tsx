@@ -1,10 +1,10 @@
 'use client'
 
-import { useHasTransactions, usePendingTransactions } from '@/store/transaction-store'
-import { TransactionHistoryDialog } from '@/components/header/transaction-history-dialog'
 import { useDialog } from '@/components/global-dialog'
-import { ThemeButton } from '@/components/theme-button'
+import { TransactionHistoryDialog } from '@/components/header/transaction-history-dialog'
 import { Icon } from '@/components/icons'
+import { ThemeButton } from '@/components/theme-button'
+import { useHasTransactions, usePendingTransactions } from '@/store/transaction-store'
 
 export const TransactionHistoryButton = () => {
   const { openDialog } = useDialog()
@@ -29,9 +29,7 @@ export const TransactionHistoryButton = () => {
         <Icon name="clock" />
       </ThemeButton>
 
-      {pendingTransactions.length > 0 && (
-        <div className="bg-brand-first absolute top-0 right-0 -mr-1 size-3 rounded-full" />
-      )}
+      {pendingTransactions.length > 0 && <div className="bg-brand-first absolute top-0 right-0 -mr-1 size-3 rounded-full" />}
     </div>
   )
 }

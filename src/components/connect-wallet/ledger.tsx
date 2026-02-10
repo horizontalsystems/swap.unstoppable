@@ -1,14 +1,14 @@
 import Image from 'next/image'
-import { ThemeButton } from '@/components/theme-button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
 import { useEffect, useMemo, useState } from 'react'
-import { LoaderCircle } from 'lucide-react'
-import { useWallets } from '@/hooks/use-wallets'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { cn } from '@/lib/utils'
-import { chainLabel, WalletParams } from '@/components/connect-wallet/config'
 import { Chain, WalletOption } from '@uswap/core'
+import { LoaderCircle } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { chainLabel, WalletParams } from '@/components/connect-wallet/config'
+import { ThemeButton } from '@/components/theme-button'
+import { useWallets } from '@/hooks/use-wallets'
+import { cn } from '@/lib/utils'
 
 const DERIVATION_PATHS = {
   native_segwit: {
@@ -106,12 +106,9 @@ export const Ledger = ({ wallet, onConnect }: { wallet: WalletParams; onConnect:
               return (
                 <div
                   key={chain}
-                  className={cn(
-                    'hover:bg-blade/50 flex cursor-pointer items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3',
-                    {
-                      'border-brand-second': isSelected
-                    }
-                  )}
+                  className={cn('hover:bg-blade/50 flex cursor-pointer items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3', {
+                    'border-brand-second': isSelected
+                  })}
                   onClick={() => {
                     setSelectedChain(chain)
                   }}
@@ -179,12 +176,7 @@ export const Ledger = ({ wallet, onConnect }: { wallet: WalletParams; onConnect:
       )}
 
       <div className="flex p-4 md:justify-end md:px-8 md:pt-0 md:pb-8">
-        <ThemeButton
-          variant="primaryMedium"
-          className="w-full md:w-auto"
-          disabled={connecting}
-          onClick={() => handleConnect()}
-        >
+        <ThemeButton variant="primaryMedium" className="w-full md:w-auto" disabled={connecting} onClick={() => handleConnect()}>
           {connecting && <LoaderCircle size={20} className="animate-spin" />}
           Connect {wallet.label}
         </ThemeButton>

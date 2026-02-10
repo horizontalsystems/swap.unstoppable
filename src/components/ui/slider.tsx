@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import * as SliderPrimitive from '@radix-ui/react-slider'
-
 import { cn } from '@/lib/utils'
 
 function Slider({
@@ -40,10 +39,7 @@ function Slider({
       >
         <SliderPrimitive.Range
           data-slot="slider-range"
-          className={cn(
-            'absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
-            classNameRange
-          )}
+          className={cn('absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full', classNameRange)}
         />
       </SliderPrimitive.Track>
       {Array.from({ length: _values.length }, (_, index) => (

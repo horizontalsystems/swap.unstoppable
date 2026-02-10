@@ -1,19 +1,19 @@
-import { Credenza, CredenzaContent } from '@/components/ui/credenza'
-import { SwapRecipient } from '@/components/swap/swap-recipient'
 import { useState } from 'react'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
-import { SwapConfirm } from '@/components/swap/swap-confirm'
-import { ThemeButton } from '@/components/theme-button'
-import { LoaderCircle } from 'lucide-react'
 import { FeeOption, getChainConfig, USwapNumber } from '@uswap/core'
-import { toast } from 'sonner'
-import { getUSwap } from '@/lib/wallets'
-import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
-import { useBalance } from '@/hooks/use-balance'
-import { useSetTransaction } from '@/store/transaction-store'
 import { ProviderName } from '@uswap/helpers'
+import { QuoteResponseRoute } from '@uswap/helpers/api'
+import { LoaderCircle } from 'lucide-react'
+import { toast } from 'sonner'
+import { Credenza, CredenzaContent } from '@/components/ui/credenza'
+import { SwapConfirm } from '@/components/swap/swap-confirm'
+import { SwapRecipient } from '@/components/swap/swap-recipient'
+import { ThemeButton } from '@/components/theme-button'
+import { useBalance } from '@/hooks/use-balance'
+import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { generateId } from '@/lib/utils'
+import { getUSwap } from '@/lib/wallets'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
+import { useSetTransaction } from '@/store/transaction-store'
 
 interface SwapDialogProps {
   provider: ProviderName
@@ -91,12 +91,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
             <SwapConfirm quote={quote} />
 
             <div className="p-4 pt-2 md:p-8 md:pt-2">
-              <ThemeButton
-                variant="primaryMedium"
-                className="w-full"
-                onClick={() => onConfirm()}
-                disabled={!quote || submitting}
-              >
+              <ThemeButton variant="primaryMedium" className="w-full" onClick={() => onConfirm()} disabled={!quote || submitting}>
                 {submitting ? <LoaderCircle size={20} className="animate-spin" /> : <span>Confirm</span>}
               </ThemeButton>
             </div>

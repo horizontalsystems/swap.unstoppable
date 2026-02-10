@@ -1,9 +1,9 @@
 'use client'
 
-import { useCallback, useEffect, useRef } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useSwapStore } from '@/store/swap-store'
+import { useCallback, useEffect, useRef } from 'react'
 import { useAssets } from '@/hooks/use-assets'
+import { useSwapStore } from '@/store/swap-store'
 
 const DEFAULT_SELL_ASSET = 'BTC.BTC'
 const DEFAULT_BUY_ASSET = 'ETH.ETH'
@@ -43,12 +43,10 @@ export const useUrlParams = () => {
     const buyAssetParam = searchParams.get('buyAsset') || DEFAULT_BUY_ASSET
 
     const sellAsset =
-      assets.find(a => a.identifier.toLowerCase() === sellAssetParam.toLowerCase()) ??
-      assets.find(a => a.identifier === DEFAULT_SELL_ASSET)
+      assets.find(a => a.identifier.toLowerCase() === sellAssetParam.toLowerCase()) ?? assets.find(a => a.identifier === DEFAULT_SELL_ASSET)
 
     const buyAsset =
-      assets.find(a => a.identifier.toLowerCase() === buyAssetParam.toLowerCase()) ??
-      assets.find(a => a.identifier === DEFAULT_BUY_ASSET)
+      assets.find(a => a.identifier.toLowerCase() === buyAssetParam.toLowerCase()) ?? assets.find(a => a.identifier === DEFAULT_BUY_ASSET)
 
     // Ensure we don't set the same asset for both
     if (sellAsset && buyAsset && sellAsset.identifier === buyAsset.identifier) {

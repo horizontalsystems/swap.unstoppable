@@ -1,14 +1,8 @@
 import { useQueries } from '@tanstack/react-query'
-import {
-  isTxPending,
-  isTxTerminal,
-  usePendingTransactions,
-  useSetTransactionDetails,
-  useSetTransactionStatus
-} from '@/store/transaction-store'
-import { getTrack } from '@/lib/api'
 import { getChainConfig } from '@uswap/core'
 import { AxiosError } from 'axios'
+import { getTrack } from '@/lib/api'
+import { isTxPending, isTxTerminal, usePendingTransactions, useSetTransactionDetails, useSetTransactionStatus } from '@/store/transaction-store'
 
 export const useSyncTransactions = () => {
   const pendingTransactions = usePendingTransactions()
@@ -22,11 +16,7 @@ export const useSyncTransactions = () => {
       refetchInterval: 5_000,
       refetchIntervalInBackground: false,
       queryFn: () => {
-        if (
-          !tx.hash &&
-          tx.status === 'not_started' &&
-          (!tx.expiration || tx.expiration < new Date().getTime() / 1000)
-        ) {
+        if (!tx.hash && tx.status === 'not_started' && (!tx.expiration || tx.expiration < new Date().getTime() / 1000)) {
           setTransactionStatus(tx.uid, 'expired')
           return null
         }

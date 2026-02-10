@@ -1,7 +1,7 @@
 'use client'
 
-import { create } from 'zustand'
 import { ComponentType } from 'react'
+import { create } from 'zustand'
 import { generateId } from '@/lib/utils'
 
 interface DialogProps {

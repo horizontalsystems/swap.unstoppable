@@ -1,11 +1,11 @@
 'use client'
 
-import { ThemeButton } from '@/components/theme-button'
-import { WalletParams } from '@/components/connect-wallet/config'
 import { useState } from 'react'
+import { WalletParams } from '@/components/connect-wallet/config'
 import { CreateWallet } from '@/components/connect-wallet/keystore/create-wallet'
 import { ImportKeystore } from '@/components/connect-wallet/keystore/import-keystore'
 import { ImportPhrase } from '@/components/connect-wallet/keystore/import-phrase'
+import { ThemeButton } from '@/components/theme-button'
 
 export const Keystore = ({ onConnect }: { wallet: WalletParams; onConnect: () => void }) => {
   const [walletType, setWalletType] = useState<'create' | 'import_keystore' | 'import_phrase' | null>(null)

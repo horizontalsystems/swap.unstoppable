@@ -1,6 +1,6 @@
-import { supportedChains } from '@/lib/wallets'
 import { Chain, okxMobileEnabled, WalletOption } from '@uswap/core'
 import { getChainConfig } from '@uswap/helpers'
+import { supportedChains } from '@/lib/wallets'
 
 export enum WalletType {
   browser,

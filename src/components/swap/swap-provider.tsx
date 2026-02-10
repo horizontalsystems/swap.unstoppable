@@ -1,5 +1,5 @@
-import { ProviderName } from '@uswap/helpers'
 import Image from 'next/image'
+import { ProviderName } from '@uswap/helpers'
 
 export const SwapProvider = ({ provider }: { provider: ProviderName }) => {
   let title = 'Unknown'

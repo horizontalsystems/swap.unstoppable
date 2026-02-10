@@ -1,18 +1,18 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { Separator } from '@/components/ui/separator'
-import { useQuote } from '@/hooks/use-quote'
-import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
-import { Icon } from '@/components/icons'
-import { cn } from '@/lib/utils'
-import { USwapNumber } from '@uswap/core'
-import { formatExpiration, resolveFees } from '@/lib/swap-helpers'
-import { useRates } from '@/hooks/use-rates'
-import { InfoTooltip } from '@/components/tooltip'
 import { animated, useSpring } from '@react-spring/web'
-import { SwapProvider } from '@/components/swap/swap-provider'
-import { PriceImpact } from '@/components/swap/price-impact'
+import { USwapNumber } from '@uswap/core'
+import { Separator } from '@/components/ui/separator'
 import { useDialog } from '@/components/global-dialog'
+import { Icon } from '@/components/icons'
+import { PriceImpact } from '@/components/swap/price-impact'
 import { SwapFeeDialog } from '@/components/swap/swap-fee-dialog'
+import { SwapProvider } from '@/components/swap/swap-provider'
+import { InfoTooltip } from '@/components/tooltip'
+import { useQuote } from '@/hooks/use-quote'
+import { useRates } from '@/hooks/use-rates'
+import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
+import { formatExpiration, resolveFees } from '@/lib/swap-helpers'
+import { cn } from '@/lib/utils'
 
 export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
   const assetFrom = useAssetFrom()
@@ -68,8 +68,7 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
               setPriceInverted(!priceInverted)
             }}
           >
-            1 {priceDirect ? assetFrom.ticker : assetTo.ticker} = {price.toSignificant()}{' '}
-            {priceDirect ? assetTo.ticker : assetFrom.ticker}
+            1 {priceDirect ? assetFrom.ticker : assetTo.ticker} = {price.toSignificant()} {priceDirect ? assetTo.ticker : assetFrom.ticker}
           </span>
 
           <div className="flex items-center">
@@ -113,8 +112,8 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
               <div className="flex items-center gap-1">
                 <span>Price Impact</span>{' '}
                 <InfoTooltip>
-                  The difference between the market price and your actual swap rate due to trade size. Larger trades
-                  typically have higher price impact.
+                  The difference between the market price and your actual swap rate due to trade size. Larger trades typically have higher price
+                  impact.
                 </InfoTooltip>
               </div>
               <PriceImpact priceImpact={priceImpact} />
@@ -124,13 +123,10 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
           {included.gt(0) && (
             <div
               className="flex cursor-pointer items-center justify-between py-2"
-              onClick={() =>
-                openDialog(SwapFeeDialog, { outbound: outbound, liquidity: liquidity, platform: platform })
-              }
+              onClick={() => openDialog(SwapFeeDialog, { outbound: outbound, liquidity: liquidity, platform: platform })}
             >
               <div className="flex items-center gap-1">
-                <span>Included Fees</span>{' '}
-                <InfoTooltip>These fees are already included in the rate — you don’t pay them separately.</InfoTooltip>
+                <span>Included Fees</span> <InfoTooltip>These fees are already included in the rate — you don’t pay them separately.</InfoTooltip>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-leah">{included.toCurrency()}</span>

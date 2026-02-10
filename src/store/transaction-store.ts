@@ -1,18 +1,10 @@
+import { ProviderName } from '@uswap/helpers'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useShallow } from 'zustand/react/shallow'
 import { Asset } from '@/components/swap/asset'
-import { ProviderName } from '@uswap/helpers'
 
-export type TxStatus =
-  | 'not_started'
-  | 'pending'
-  | 'swapping'
-  | 'completed'
-  | 'failed'
-  | 'expired'
-  | 'refunded'
-  | 'unknown'
+export type TxStatus = 'not_started' | 'pending' | 'swapping' | 'completed' | 'failed' | 'expired' | 'refunded' | 'unknown'
 
 export interface Transaction {
   uid: string
@@ -120,12 +112,7 @@ export const useTransactions = () => transactionStore(sortedTransactions)
 export const useHasTransactions = () => transactionStore(state => state.transactions.length > 0)
 
 export const isTxPending = (status: string) => status === 'not_started' || status === 'swapping' || status === 'pending'
-export const isTxTerminal = (status: string) =>
-  status === 'completed' || status === 'failed' || status === 'expired' || status === 'refunded'
+export const isTxTerminal = (status: string) => status === 'completed' || status === 'failed' || status === 'expired' || status === 'refunded'
 
 export const usePendingTransactions = () =>
-  transactionStore(
-    useShallow(state =>
-      state.transactions.filter(t => isTxPending(t.status) || (!t.details && !isTxTerminal(t.status)))
-    )
-  )
+  transactionStore(useShallow(state => state.transactions.filter(t => isTxPending(t.status) || (!t.details && !isTxTerminal(t.status)))))

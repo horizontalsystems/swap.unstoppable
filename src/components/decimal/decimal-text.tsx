@@ -8,9 +8,7 @@ export const DecimalText: FC<
     symbol?: string
   }
 > = ({ amount, symbol, ...rest }) => {
-  const decimal = (
-    <DecimalInput displayType="text" amount={amount} onAmountChange={() => null} autoComplete="off" {...rest} />
-  )
+  const decimal = <DecimalInput displayType="text" amount={amount} onAmountChange={() => null} autoComplete="off" {...rest} />
 
   if (!symbol) return decimal
 

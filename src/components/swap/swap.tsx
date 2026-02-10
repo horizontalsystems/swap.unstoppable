@@ -1,28 +1,28 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
-import { SwapSettings } from '@/components/swap/swap-settings'
-import { SwapInputFrom } from '@/components/swap/swap-input-from'
-import { SwapInputTo } from '@/components/swap/swap-input-to'
-import { SwapLimit } from '@/components/swap/swap-limit'
-import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
-import { SwapDetails } from '@/components/swap/swap-details'
-import { SwapButton } from '@/components/swap/swap-button'
-import { ThemeButton } from '@/components/theme-button'
-import { useQuote } from '@/hooks/use-quote'
-import { useResolveSource } from '@/hooks/use-resolve-source'
-import { useSelectedAccount } from '@/hooks/use-wallets'
-import { useMemolessAssets } from '@/hooks/use-memoless-assets'
-import { useAssetFrom, useSwap } from '@/hooks/use-swap'
-import { useIsLimitSwap, useSetIsLimitSwap } from '@/store/limit-swap-store'
-import { SwapError } from '@/components/swap/swap-error'
 import { AssetValue, USwapNumber } from '@uswap/core'
 import { type MemolessAsset } from '@uswap/helpers/api'
 import { SwapAddressFrom } from '@/components/swap/swap-address-from'
+import { SwapButton } from '@/components/swap/swap-button'
+import { SwapDetails } from '@/components/swap/swap-details'
+import { SwapError } from '@/components/swap/swap-error'
+import { SwapInputFrom } from '@/components/swap/swap-input-from'
+import { SwapInputTo } from '@/components/swap/swap-input-to'
+import { SwapLimit } from '@/components/swap/swap-limit'
 import { SwapQuoteTimer } from '@/components/swap/swap-quote-timer'
-import { resolvePriceImpact } from '@/lib/swap-helpers'
-import { useUrlParams } from '@/hooks/use-url-params'
+import { SwapSettings } from '@/components/swap/swap-settings'
+import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
+import { ThemeButton } from '@/components/theme-button'
+import { useMemolessAssets } from '@/hooks/use-memoless-assets'
+import { useQuote } from '@/hooks/use-quote'
 import { useSwapRates } from '@/hooks/use-rates'
+import { useResolveSource } from '@/hooks/use-resolve-source'
+import { useAssetFrom, useSwap } from '@/hooks/use-swap'
+import { useUrlParams } from '@/hooks/use-url-params'
+import { useSelectedAccount } from '@/hooks/use-wallets'
+import { resolvePriceImpact } from '@/lib/swap-helpers'
+import { useIsLimitSwap, useSetIsLimitSwap } from '@/store/limit-swap-store'
 
 export const Swap = () => {
   const assetFrom = useAssetFrom()
@@ -42,13 +42,7 @@ export const Swap = () => {
   }, [])
 
   const memolessAsset: MemolessAsset | undefined = useMemo(() => {
-    if (
-      !memolessAssets ||
-      !assetFrom ||
-      !quote ||
-      !(quote.providers[0] === 'THORCHAIN' || quote.providers[0] === 'THORCHAIN_STREAMING')
-    )
-      return
+    if (!memolessAssets || !assetFrom || !quote || !(quote.providers[0] === 'THORCHAIN' || quote.providers[0] === 'THORCHAIN_STREAMING')) return
 
     return memolessAssets.find(a => a.asset === assetFrom.identifier)
   }, [assetFrom, memolessAssets, quote])
@@ -57,9 +51,7 @@ export const Swap = () => {
     if (selectedAccount || !memolessAsset || !assetFrom) return
     const minAmount = new USwapNumber(10 ** -(memolessAsset.decimals - 5))
     if (valueFrom.lt(minAmount))
-      return new Error(
-        `Minimum swap amount without a connected wallet is ${minAmount.toSignificant()} ${assetFrom.ticker}`
-      )
+      return new Error(`Minimum swap amount without a connected wallet is ${minAmount.toSignificant()} ${assetFrom.ticker}`)
   }, [memolessAsset, selectedAccount, valueFrom])
 
   const instantSwapSupported = !!memolessAsset || quote?.providers[0] === 'NEAR'
@@ -73,10 +65,7 @@ export const Swap = () => {
       <div className="w-full max-w-md">
         <div className="mb-3 flex items-center justify-between">
           <div className="bg-blade rounded-full">
-            <ThemeButton
-              variant={isLimitSwap ? 'secondarySmall' : 'primarySmall'}
-              onClick={() => setIsLimitSwap(false)}
-            >
+            <ThemeButton variant={isLimitSwap ? 'secondarySmall' : 'primarySmall'} onClick={() => setIsLimitSwap(false)}>
               Market
             </ThemeButton>
             <ThemeButton variant={isLimitSwap ? 'primarySmall' : 'secondarySmall'} onClick={() => setIsLimitSwap(true)}>

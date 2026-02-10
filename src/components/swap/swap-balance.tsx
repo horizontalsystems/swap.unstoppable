@@ -1,7 +1,7 @@
 import { Loader } from 'lucide-react'
-import { useAssetFrom } from '@/hooks/use-swap'
-import { useBalance } from '@/hooks/use-balance'
 import { DecimalText } from '@/components/decimal/decimal-text'
+import { useBalance } from '@/hooks/use-balance'
+import { useAssetFrom } from '@/hooks/use-swap'
 
 export const SwapBalance = () => {
   const assetFrom = useAssetFrom()

@@ -1,16 +1,16 @@
-import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
-import { useAssetFrom, useSetAssetFrom, useSwap } from '@/hooks/use-swap'
-import { AssetIcon } from '@/components/asset-icon'
+import { USwapNumber } from '@uswap/core'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useDialog } from '@/components/global-dialog'
-import { useBalance } from '@/hooks/use-balance'
-import { useSwapRates } from '@/hooks/use-rates'
-import { SwapBalance } from '@/components/swap/swap-balance'
-import { ThemeButton } from '@/components/theme-button'
-import { Icon } from '@/components/icons'
+import { AssetIcon } from '@/components/asset-icon'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { DecimalInput } from '@/components/decimal/decimal-input'
-import { USwapNumber } from '@uswap/core'
+import { useDialog } from '@/components/global-dialog'
+import { Icon } from '@/components/icons'
+import { SwapBalance } from '@/components/swap/swap-balance'
+import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
+import { ThemeButton } from '@/components/theme-button'
+import { useBalance } from '@/hooks/use-balance'
+import { useSwapRates } from '@/hooks/use-rates'
+import { useAssetFrom, useSetAssetFrom, useSwap } from '@/hooks/use-swap'
 
 export const SwapInputFrom = () => {
   const assetFrom = useAssetFrom()
@@ -70,18 +70,10 @@ export const SwapInputFrom = () => {
           <ThemeButton variant="secondarySmall" onClick={() => setAmountFrom('')} disabled={amountFrom === ''}>
             Clear
           </ThemeButton>
-          <ThemeButton
-            variant="secondarySmall"
-            onClick={() => handleSetPercent(50)}
-            disabled={!balance || balance.spendable.eqValue(0)}
-          >
+          <ThemeButton variant="secondarySmall" onClick={() => handleSetPercent(50)} disabled={!balance || balance.spendable.eqValue(0)}>
             50%
           </ThemeButton>
-          <ThemeButton
-            variant="secondarySmall"
-            onClick={() => handleSetPercent(100)}
-            disabled={!balance || balance.spendable.eqValue(0)}
-          >
+          <ThemeButton variant="secondarySmall" onClick={() => handleSetPercent(100)} disabled={!balance || balance.spendable.eqValue(0)}>
             100%
           </ThemeButton>
         </div>

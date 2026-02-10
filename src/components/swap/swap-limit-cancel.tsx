@@ -1,23 +1,23 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { AssetValue, FeeOption, USwapNumber } from '@uswap/core'
+import type { InboundAddressesItem } from '@uswap/helpers/api'
 import { AlertTriangle, LoaderCircle } from 'lucide-react'
+import { toast } from 'sonner'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
-import { ThemeButton } from '@/components/theme-button'
-import { Asset } from '@/components/swap/asset'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { AssetIcon } from '@/components/asset-icon'
-import { DecimalText } from '@/components/decimal/decimal-text'
-import { DecimalInput } from '@/components/decimal/decimal-input'
 import { chainLabel } from '@/components/connect-wallet/config'
-import { getUSwap } from '@/lib/wallets'
+import { DecimalInput } from '@/components/decimal/decimal-input'
+import { DecimalText } from '@/components/decimal/decimal-text'
+import { Asset } from '@/components/swap/asset'
+import { SwapError } from '@/components/swap/swap-error'
+import { ThemeButton } from '@/components/theme-button'
+import { useSelectedAccount } from '@/hooks/use-wallets'
 import { getInboundAddresses } from '@/lib/api'
 import { createCancelLimitSwapMemo, createModifyLimitSwapMemo } from '@/lib/memo-helpers'
-import { toast } from 'sonner'
-import { AssetValue, FeeOption, USwapNumber } from '@uswap/core'
-import { useSelectedAccount } from '@/hooks/use-wallets'
-import { SwapError } from '@/components/swap/swap-error'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import type { InboundAddressesItem } from '@uswap/helpers/api'
+import { getUSwap } from '@/lib/wallets'
 
 interface SwapLimitCancelProps {
   isOpen: boolean
@@ -77,8 +77,7 @@ export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: Swa
 
   const inboundAddress = inboundAddresses.find(addr => addr.chain === assetFrom.chain)
 
-  const addressMatch =
-    !addressFrom || !selectedAccount || selectedAccount.address.toLowerCase() === addressFrom.toLowerCase()
+  const addressMatch = !addressFrom || !selectedAccount || selectedAccount.address.toLowerCase() === addressFrom.toLowerCase()
 
   const differencePercent = useMemo(() => {
     if (!currentPricePerUnit || !pricePerUnit) return null
@@ -187,15 +186,7 @@ export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: Swa
 
   const isModify = mode === 'modify'
   const title = isModify ? 'Modify Limit Order' : 'Cancel Limit Order'
-  const buttonLabel = submitting
-    ? isModify
-      ? 'Modifying...'
-      : 'Cancelling...'
-    : loading
-      ? 'Loading...'
-      : isModify
-        ? 'Modify Order'
-        : 'Cancel Order'
+  const buttonLabel = submitting ? (isModify ? 'Modifying...' : 'Cancelling...') : loading ? 'Loading...' : isModify ? 'Modify Order' : 'Cancel Order'
 
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
@@ -289,12 +280,7 @@ export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: Swa
         </ScrollArea>
 
         <div className="p-4 pt-2 md:p-8 md:pt-2">
-          <ThemeButton
-            variant="primaryMedium"
-            className="w-full"
-            onClick={onSubmit}
-            disabled={!canSubmit || submitting || loading}
-          >
+          <ThemeButton variant="primaryMedium" className="w-full" onClick={onSubmit} disabled={!canSubmit || submitting || loading}>
             {(submitting || loading) && <LoaderCircle size={20} className="animate-spin" />}
             <span>{buttonLabel}</span>
           </ThemeButton>

@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { cn } from '@/lib/utils'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import { Slider } from '@/components/ui/slider'
+import { Icon } from '@/components/icons'
+import { ThemeButton } from '@/components/theme-button'
+import { InfoTooltip } from '@/components/tooltip'
 import {
   useCustomInterval,
   useCustomQuantity,
@@ -10,20 +16,8 @@ import {
   useSlippage,
   useTwapMode
 } from '@/hooks/use-swap'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ThemeButton } from '@/components/theme-button'
-import { Slider } from '@/components/ui/slider'
-import { InfoTooltip } from '@/components/tooltip'
-import { Icon } from '@/components/icons'
-import {
-  INITIAL_CUSTOM_INTERVAL,
-  INITIAL_CUSTOM_QUANTITY,
-  INITIAL_SLIPPAGE,
-  INITIAL_TWAP_MODE,
-  TwapMode
-} from '@/store/swap-store'
-import { Separator } from '@/components/ui/separator'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { cn } from '@/lib/utils'
+import { INITIAL_CUSTOM_INTERVAL, INITIAL_CUSTOM_QUANTITY, INITIAL_SLIPPAGE, INITIAL_TWAP_MODE, TwapMode } from '@/store/swap-store'
 
 const slippageValues = [0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10]
 const numberOfTradesValues = [1, 5, 10, 15, 20, 25, 30, 50, 100]
@@ -103,8 +97,7 @@ export const SwapSettings = () => {
               <div className="flex items-center gap-1">
                 <span>Slippage Tolerance</span>
                 <InfoTooltip>
-                  Due to market volatility, prices may change before completion. This setting ensures you receive at
-                  least your minimum amount.
+                  Due to market volatility, prices may change before completion. This setting ensures you receive at least your minimum amount.
                 </InfoTooltip>
               </div>
               <span>{currentSlippage ? `${currentSlippage}%` : 'No Protection'}</span>
@@ -138,9 +131,9 @@ export const SwapSettings = () => {
               <div className="flex items-center gap-1">
                 <span>TWAP (Time Weighted Average Price)</span>
                 <InfoTooltip>
-                  Relevant for large volume swaps only. Best Price offers optimum price for the order. Best Time
-                  prioritizes swap execution time (whenever possible). Custom lets you configure the number of
-                  mini-swaps the swap should be broken into and time between each mini-swapt.
+                  Relevant for large volume swaps only. Best Price offers optimum price for the order. Best Time prioritizes swap execution time
+                  (whenever possible). Custom lets you configure the number of mini-swaps the swap should be broken into and time between each
+                  mini-swapt.
                 </InfoTooltip>
               </div>
             </div>
@@ -189,10 +182,7 @@ export const SwapSettings = () => {
                   <span className="text-thor-gray text-xs">
                     Delay between each sub-swap. Longer intervals allow pools to rebalance for better pricing.
                   </span>
-                  <Select
-                    value={localCustomInterval.toString()}
-                    onValueChange={value => setLocalCustomInterval(Number(value))}
-                  >
+                  <Select value={localCustomInterval.toString()} onValueChange={value => setLocalCustomInterval(Number(value))}>
                     <SelectTrigger className="w-full">
                       <SelectValue />
                     </SelectTrigger>

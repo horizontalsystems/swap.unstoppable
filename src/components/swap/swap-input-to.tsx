@@ -1,16 +1,16 @@
-import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
-import { DecimalInput } from '@/components/decimal/decimal-input'
-import { AssetIcon } from '@/components/asset-icon'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useQuote } from '@/hooks/use-quote'
-import { useAssetTo, useSetAssetTo } from '@/hooks/use-swap'
-import { useDialog } from '@/components/global-dialog'
-import { useSwapRates } from '@/hooks/use-rates'
-import { Icon } from '@/components/icons'
-import { chainLabel } from '@/components/connect-wallet/config'
 import { USwapNumber } from '@uswap/core'
-import { Tooltip } from '@/components/tooltip'
+import { Skeleton } from '@/components/ui/skeleton'
+import { AssetIcon } from '@/components/asset-icon'
+import { chainLabel } from '@/components/connect-wallet/config'
+import { DecimalInput } from '@/components/decimal/decimal-input'
+import { useDialog } from '@/components/global-dialog'
+import { Icon } from '@/components/icons'
 import { PriceImpact } from '@/components/swap/price-impact'
+import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
+import { Tooltip } from '@/components/tooltip'
+import { useQuote } from '@/hooks/use-quote'
+import { useSwapRates } from '@/hooks/use-rates'
+import { useAssetTo, useSetAssetTo } from '@/hooks/use-swap'
 import { useIsLimitSwap, useLimitSwapBuyAmount } from '@/store/limit-swap-store'
 
 export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
@@ -23,9 +23,7 @@ export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
   const limitSwapBuyAmount = useLimitSwapBuyAmount()
 
   const value =
-    isLimitSwap && limitSwapBuyAmount
-      ? USwapNumber.fromBigInt(BigInt(limitSwapBuyAmount), 8)
-      : quote && new USwapNumber(quote.expectedBuyAmount)
+    isLimitSwap && limitSwapBuyAmount ? USwapNumber.fromBigInt(BigInt(limitSwapBuyAmount), 8) : quote && new USwapNumber(quote.expectedBuyAmount)
 
   const fiatValueTo = (rateTo && value && value.mul(rateTo)) || new USwapNumber(0)
 

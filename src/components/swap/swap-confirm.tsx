@@ -1,21 +1,21 @@
-import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
-import { useAssetFrom, useAssetTo, useSlippage } from '@/hooks/use-swap'
+import { useMemo } from 'react'
+import { USwapNumber } from '@uswap/core'
 import { QuoteResponseRoute } from '@uswap/helpers/api'
-import { cn, truncate } from '@/lib/utils'
+import { formatDuration, intervalToDuration } from 'date-fns'
+import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { AssetIcon } from '@/components/asset-icon'
 import { CopyButton } from '@/components/button-copy'
-import { resolveFees, resolvePriceImpact } from '@/lib/swap-helpers'
-import { formatDuration, intervalToDuration } from 'date-fns'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Icon } from '@/components/icons'
-import { USwapNumber } from '@uswap/core'
 import { chainLabel } from '@/components/connect-wallet/config'
-import { useRates, useSwapRates } from '@/hooks/use-rates'
-import { useMemo } from 'react'
-import { InfoTooltip } from '@/components/tooltip'
-import { SwapProvider } from '@/components/swap/swap-provider'
-import { PriceImpact } from '@/components/swap/price-impact'
 import { DecimalText } from '@/components/decimal/decimal-text'
+import { Icon } from '@/components/icons'
+import { PriceImpact } from '@/components/swap/price-impact'
+import { SwapProvider } from '@/components/swap/swap-provider'
+import { InfoTooltip } from '@/components/tooltip'
+import { useRates, useSwapRates } from '@/hooks/use-rates'
+import { useAssetFrom, useAssetTo, useSlippage } from '@/hooks/use-swap'
+import { resolveFees, resolvePriceImpact } from '@/lib/swap-helpers'
+import { cn, truncate } from '@/lib/utils'
 import { useIsLimitSwap, useLimitSwapBuyAmount } from '@/store/limit-swap-store'
 
 interface SwapConfirmProps {
@@ -39,8 +39,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
 
   const sellAmount = new USwapNumber(quote.sellAmount)
   const expectedBuyAmount = new USwapNumber(quote.expectedBuyAmount)
-  const expectedBuyAmountMaxSlippage =
-    quote.expectedBuyAmountMaxSlippage && new USwapNumber(quote.expectedBuyAmountMaxSlippage)
+  const expectedBuyAmountMaxSlippage = quote.expectedBuyAmountMaxSlippage && new USwapNumber(quote.expectedBuyAmountMaxSlippage)
 
   const { inbound } = resolveFees(quote, rates)
 
@@ -83,9 +82,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                 <span className="text-leah text-base font-semibold">
                   <DecimalText amount={sellAmount.toSignificant()} />
                 </span>
-                <span className="text-thor-gray text-sm">
-                  {rateFrom ? sellAmount.mul(rateFrom).toCurrency() : 'n/a'}
-                </span>
+                <span className="text-thor-gray text-sm">{rateFrom ? sellAmount.mul(rateFrom).toCurrency() : 'n/a'}</span>
               </div>
             </div>
 
@@ -101,9 +98,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                 <span className="text-leah text-base font-semibold">
                   <DecimalText amount={displayBuyAmount.toSignificant()} />
                 </span>
-                <span className="text-thor-gray text-sm">
-                  {rateTo ? displayBuyAmount.mul(rateTo).toCurrency() : 'n/a'}
-                </span>
+                <span className="text-thor-gray text-sm">{rateTo ? displayBuyAmount.mul(rateTo).toCurrency() : 'n/a'}</span>
               </div>
             </div>
 
@@ -119,8 +114,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                   <div className="flex items-center gap-1">
                     Limit Price
                     <InfoTooltip>
-                      The price per unit at which your limit order will execute. The order will only fill when the
-                      market reaches this price.
+                      The price per unit at which your limit order will execute. The order will only fill when the market reaches this price.
                     </InfoTooltip>
                   </div>
                   <div className="flex items-center gap-2">
@@ -144,9 +138,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                 <div className="text-thor-gray flex justify-between text-sm">
                   <div className="flex items-center gap-1">
                     Target Amount
-                    <InfoTooltip>
-                      The exact amount you will receive when your limit order executes at your specified price.
-                    </InfoTooltip>
+                    <InfoTooltip>The exact amount you will receive when your limit order executes at your specified price.</InfoTooltip>
                   </div>
                   <div className="flex gap-2">
                     <span className="text-leah font-semibold">
@@ -170,8 +162,8 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                     </span>
                   )}
                   <InfoTooltip>
-                    Minimum guaranteed amount based on your {slippage && `${slippage}%`} slippage tolerance. If market
-                    conditions would give you less, the transaction will be canceled automatically.
+                    Minimum guaranteed amount based on your {slippage && `${slippage}%`} slippage tolerance. If market conditions would give you less,
+                    the transaction will be canceled automatically.
                   </InfoTooltip>
                 </div>
                 {slippage && expectedBuyAmountMaxSlippage ? (
@@ -179,9 +171,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                     <span className="text-leah font-semibold">
                       <DecimalText amount={expectedBuyAmountMaxSlippage.toSignificant()} symbol={assetTo.ticker} />
                     </span>
-                    {rateTo && (
-                      <span className="font-medium">({expectedBuyAmountMaxSlippage.mul(rateTo).toCurrency()})</span>
-                    )}
+                    {rateTo && <span className="font-medium">({expectedBuyAmountMaxSlippage.mul(rateTo).toCurrency()})</span>}
                   </div>
                 ) : (
                   <span className="text-lucian font-semibold">Not Protected</span>
@@ -224,8 +214,8 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                 <div className="flex items-center gap-1">
                   Price Impact
                   <InfoTooltip>
-                    The difference between the market price and your actual swap rate due to trade size. Larger trades
-                    typically have higher price impact.
+                    The difference between the market price and your actual swap rate due to trade size. Larger trades typically have higher price
+                    impact.
                   </InfoTooltip>
                 </div>
                 <PriceImpact priceImpact={priceImpact} className="font-semibold" />

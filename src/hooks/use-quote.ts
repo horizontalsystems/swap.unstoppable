@@ -1,10 +1,10 @@
 import { RefetchOptions, useQuery } from '@tanstack/react-query'
-import { getQuotes } from '@/lib/api'
-import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
-import { ProviderName, USwapError } from '@uswap/helpers'
-import { AppConfig } from '@/config'
 import { USwapNumber } from '@uswap/core'
+import { ProviderName, USwapError } from '@uswap/helpers'
+import { QuoteResponseRoute } from '@uswap/helpers/api'
+import { AppConfig } from '@/config'
+import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
+import { getQuotes } from '@/lib/api'
 
 type UseQuote = {
   isLoading: boolean
@@ -19,15 +19,7 @@ export const useQuote = (): UseQuote => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
 
-  const queryKey = [
-    'quote',
-    valueFrom.toSignificant(),
-    assetFrom?.identifier,
-    assetTo?.identifier,
-    assetFrom?.chain,
-    assetTo?.chain,
-    slippage
-  ]
+  const queryKey = ['quote', valueFrom.toSignificant(), assetFrom?.identifier, assetTo?.identifier, assetFrom?.chain, assetTo?.chain, slippage]
 
   const {
     data: quote,
@@ -53,8 +45,7 @@ export const useQuote = (): UseQuote => {
       ).then(quotes => {
         if (AppConfig.id === 'thorchain') {
           const thorchainQuote =
-            quotes.find(q => q.providers[0] === ProviderName.THORCHAIN_STREAMING) ||
-            quotes.find(q => q.providers[0] === ProviderName.THORCHAIN)
+            quotes.find(q => q.providers[0] === ProviderName.THORCHAIN_STREAMING) || quotes.find(q => q.providers[0] === ProviderName.THORCHAIN)
 
           if (thorchainQuote) {
             return thorchainQuote

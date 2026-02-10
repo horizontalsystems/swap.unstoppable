@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { useAssetFrom, useSwap } from '@/hooks/use-swap'
 import { AssetValue, EVMChains } from '@uswap/core'
 import { type EVMChain } from '@uswap/helpers'
-import { useQuote } from '@/hooks/use-quote'
-import { useWallets } from '@/hooks/use-wallets'
 import { useBalance } from '@/hooks/use-balance'
+import { useQuote } from '@/hooks/use-quote'
+import { useAssetFrom, useSwap } from '@/hooks/use-swap'
+import { useWallets } from '@/hooks/use-wallets'
 import { getUSwap } from '@/lib/wallets'
 
 type UseSimulation = {
@@ -66,14 +66,7 @@ export const useSimulation = (): UseSimulation => {
 
       return null
     },
-    enabled: !!(
-      selected &&
-      quote &&
-      assetFrom &&
-      !valueFrom.eqValue(0) &&
-      balance?.spendable &&
-      balance.spendable.gte(valueFrom)
-    ),
+    enabled: !!(selected && quote && assetFrom && !valueFrom.eqValue(0) && balance?.spendable && balance.spendable.gte(valueFrom)),
     retry: false,
     refetchOnMount: false
   })

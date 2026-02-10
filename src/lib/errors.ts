@@ -10,14 +10,9 @@ export const translateError = (message: string): string => {
   if (message.includes('prepare outbound tx not successful') && message.includes('not enough asset to pay for fees'))
     return 'Insufficient withdrawal to pay for outbound fee'
 
-  if (message.includes('failed to simulate swap: failed to simulate handler') && message.includes('insufficient funds'))
-    return 'Invalid swap'
+  if (message.includes('failed to simulate swap: failed to simulate handler') && message.includes('insufficient funds')) return 'Invalid swap'
 
-  if (
-    message.includes('spendable balance') &&
-    message.includes('is smaller than') &&
-    message.includes('insufficient funds')
-  ) {
+  if (message.includes('spendable balance') && message.includes('is smaller than') && message.includes('insufficient funds')) {
     return 'Insufficient funds'
   }
 

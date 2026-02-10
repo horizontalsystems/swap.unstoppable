@@ -1,6 +1,6 @@
 import { QuoteResponseRoute } from '@uswap/helpers/api'
-import { TwapMode } from '@/store/swap-store'
 import type { Asset } from '@/components/swap/asset'
+import { TwapMode } from '@/store/swap-store'
 
 function toBaseAmount(amount: string, decimals: number = 8): bigint {
   const [whole, frac = ''] = amount.split('.')
@@ -28,12 +28,7 @@ export function createModifyLimitSwapMemo(
   return `m=<:${sourceAmount}${sourceAsset.identifier}:${tradeTarget}${targetAsset.identifier}:${newAmount}`
 }
 
-export function createCancelLimitSwapMemo(
-  limitSwapMemo: string,
-  amountFrom: string,
-  sourceAsset: Asset,
-  sourceTo: Asset
-): string {
+export function createCancelLimitSwapMemo(limitSwapMemo: string, amountFrom: string, sourceAsset: Asset, sourceTo: Asset): string {
   return createModifyLimitSwapMemo(limitSwapMemo, amountFrom, sourceAsset, sourceTo, '0')
 }
 
@@ -58,11 +53,7 @@ export function modifyMemoForLimitSwap(memo: string, priceAtomic: string, expiry
   return `=<:${asset}:${affiliate}:${priceAtomic}/${interval}/${qty}`
 }
 
-export function prepareQuoteForLimitSwap(
-  quote: QuoteResponseRoute,
-  limitBuyAmount?: string,
-  expiryBlocks?: number
-): QuoteResponseRoute {
+export function prepareQuoteForLimitSwap(quote: QuoteResponseRoute, limitBuyAmount?: string, expiryBlocks?: number): QuoteResponseRoute {
   if (!quote.memo || !limitBuyAmount) return quote
 
   return {
