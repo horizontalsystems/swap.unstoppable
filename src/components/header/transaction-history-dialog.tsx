@@ -21,7 +21,7 @@ import { InstantSwapChannelDialog } from '@/components/swap/instant-swap-channel
 import { DecimalText } from '@/components/decimal/decimal-text'
 import { DepositChannel } from '@/components/swap/instant-swap-dialog'
 import { useSyncTransactions } from '@/hooks/use-sync-transactions'
-import { formatExpiration } from '@/components/swap/swap-helpers'
+import { formatExpiration } from '@/lib/swap-helpers'
 import { SwapLimitCancel } from '@/components/swap/swap-limit-cancel'
 import { useSelectedAccount } from '@/hooks/use-wallets'
 

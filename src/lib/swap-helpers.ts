@@ -61,10 +61,6 @@ export const resolvePriceImpact = (quote?: QuoteResponseRoute, rateFrom?: USwapN
   return toPriceRatio && toPriceRatio.lte(hundredPercent) ? hundredPercent.sub(toPriceRatio) : undefined
 }
 
-export const generateId = () => {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2)
-}
-
 export const formatExpiration = (seconds: number) => {
   const duration = intervalToDuration({ start: 0, end: seconds * 1000 })
   const parts = []

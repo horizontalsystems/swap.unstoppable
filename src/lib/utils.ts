@@ -21,3 +21,7 @@ export function truncate(text: string, maxLength: number = 15) {
 export const sleep = (ms: number): Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+export const generateId = () => {
+  return Date.now().toString(36) + Math.random().toString(36).substring(2)
+}

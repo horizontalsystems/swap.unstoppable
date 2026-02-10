@@ -21,7 +21,7 @@ import { SwapAddressWarning } from '@/components/swap/swap-address-warning'
 import { Textarea } from '@/components/ui/textarea'
 import { WalletAccount } from '@/store/wallets-store'
 import { Tooltip } from '@/components/tooltip'
-import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/limit-swap'
+import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/memo-helpers'
 
 interface SwapRecipientProps {
   provider: ProviderName

@@ -12,7 +12,7 @@ import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { useBalance } from '@/hooks/use-balance'
 import { useSetTransaction } from '@/store/transaction-store'
 import { ProviderName } from '@uswap/helpers'
-import { generateId } from '@/components/swap/swap-helpers'
+import { generateId } from '@/lib/utils'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
 
 interface SwapDialogProps {

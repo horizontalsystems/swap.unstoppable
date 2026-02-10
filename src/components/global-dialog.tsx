@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 import { ComponentType } from 'react'
-import { generateId } from '@/components/swap/swap-helpers'
+import { generateId } from '@/lib/utils'
 
 interface DialogProps {
   isOpen: boolean

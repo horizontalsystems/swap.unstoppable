@@ -1,5 +1,5 @@
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
-import { FeeData } from '@/components/swap/swap-helpers'
+import { FeeData } from '@/lib/swap-helpers'
 import { InfoTooltip } from '@/components/tooltip'
 import { AppConfig } from '@/config'
 import { DecimalText } from '@/components/decimal/decimal-text'

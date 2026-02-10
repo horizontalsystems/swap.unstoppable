@@ -11,7 +11,7 @@ import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { InstantSwap } from '@/components/swap/instant-swap'
 import { SwapError } from '@/components/swap/swap-error'
 import { useSetTransaction } from '@/store/transaction-store'
-import { generateId } from '@/components/swap/swap-helpers'
+import { generateId } from '@/lib/utils'
 
 interface InstantSwapDialogProps {
   provider: ProviderName
