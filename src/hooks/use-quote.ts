@@ -5,6 +5,7 @@ import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { AppConfig } from '@/config'
 import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
 import { getQuotes } from '@/lib/api'
+import { useIsLimitSwap } from '@/store/limit-swap-store'
 
 type UseQuote = {
   isLoading: boolean
@@ -18,8 +19,19 @@ export const useQuote = (): UseQuote => {
   const slippage = useSlippage()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
+  const isLimitSwap = useIsLimitSwap()
 
-  const queryKey = ['quote', valueFrom.toSignificant(), assetFrom?.identifier, assetTo?.identifier, assetFrom?.chain, assetTo?.chain, slippage]
+  const providers = isLimitSwap ? [ProviderName.THORCHAIN] : AppConfig.providers
+  const queryKey = [
+    'quote',
+    valueFrom.toSignificant(),
+    assetFrom?.identifier,
+    assetTo?.identifier,
+    assetFrom?.chain,
+    assetTo?.chain,
+    slippage,
+    isLimitSwap
+  ]
 
   const {
     data: quote,
@@ -39,19 +51,10 @@ export const useQuote = (): UseQuote => {
           sellAsset: assetFrom.identifier,
           sellAmount: valueFrom.toSignificant(),
           slippage: slippage ?? 99,
-          providers: AppConfig.providers
+          providers
         },
         createAbortController(signal)
       ).then(quotes => {
-        if (AppConfig.id === 'thorchain') {
-          const thorchainQuote =
-            quotes.find(q => q.providers[0] === ProviderName.THORCHAIN_STREAMING) || quotes.find(q => q.providers[0] === ProviderName.THORCHAIN)
-
-          if (thorchainQuote) {
-            return thorchainQuote
-          }
-        }
-
         return quotes.reduce((best, current) =>
           new USwapNumber(current.expectedBuyAmount).gt(new USwapNumber(best.expectedBuyAmount)) ? current : best
         )
