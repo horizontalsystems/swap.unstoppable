@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 import { USwapNumber } from '@uswap/core'
+import { ProviderName } from '@uswap/helpers'
 import { Separator } from '@/components/ui/separator'
 import { useDialog } from '@/components/global-dialog'
 import { Icon } from '@/components/icons'
@@ -10,7 +11,8 @@ import { SwapProvider } from '@/components/swap/swap-provider'
 import { InfoTooltip } from '@/components/tooltip'
 import { useQuote } from '@/hooks/use-quote'
 import { useRates } from '@/hooks/use-rates'
-import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
+import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSwap, useTwapMode } from '@/hooks/use-swap'
+import { recalculateEstimatedTime, THORCHAIN_BLOCK_TIME_SECONDS } from '@/lib/memo-helpers'
 import { formatExpiration, resolveFees } from '@/lib/swap-helpers'
 import { cn } from '@/lib/utils'
 
@@ -24,6 +26,9 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
   const [contentHeight, setContentHeight] = useState(0)
   const [priceInverted, setPriceInverted] = useState(false)
   const { openDialog } = useDialog()
+  const twapMode = useTwapMode()
+  const customInterval = useCustomInterval()
+  const customQuantity = useCustomQuantity()
 
   const identifiers = useMemo(() => quote?.fees.map(t => t.asset).sort() || [], [quote?.fees])
   const { rates } = useRates(identifiers)
@@ -49,6 +54,17 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
     setPriceInverted(false)
   }, [assetTo, assetFrom])
 
+  const isThorchain = quote?.providers[0] === ProviderName.THORCHAIN || quote?.providers[0] === ProviderName.THORCHAIN_STREAMING
+  const estimatedTime = useMemo(() => {
+    if (!quote?.estimatedTime || !isThorchain || twapMode === 'bestPrice') return quote?.estimatedTime
+    if (twapMode === 'bestTime') {
+      return recalculateEstimatedTime(quote.estimatedTime, 0)
+    }
+
+    const swapSeconds = customInterval * customQuantity * THORCHAIN_BLOCK_TIME_SECONDS
+    return recalculateEstimatedTime(quote.estimatedTime, swapSeconds)
+  }, [quote?.estimatedTime, isThorchain, twapMode, customInterval, customQuantity])
+
   if (!assetFrom || !assetTo || !quote) return null
 
   const valueTo = new USwapNumber(quote.expectedBuyAmount)
@@ -72,14 +88,14 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
           </span>
 
           <div className="flex items-center">
-            {quote.estimatedTime && quote.estimatedTime.total > 0 && (
+            {estimatedTime && estimatedTime.total > 0 && (
               <div
                 className={cn('text-leah flex h-8 items-center', {
-                  'bg-jacob/10 text-jacob rounded-full p-2': quote.estimatedTime.total > 3600
+                  'bg-jacob/10 text-jacob rounded-full p-2': estimatedTime.total > 3600
                 })}
               >
                 <Icon width={16} height={16} viewBox="0 0 16 16" name="clock-filled" />
-                <span className="ms-1 text-xs">{formatExpiration(quote.estimatedTime.total)}</span>
+                <span className="ms-1 text-xs">{formatExpiration(estimatedTime.total)}</span>
               </div>
             )}
 

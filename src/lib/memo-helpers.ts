@@ -1,6 +1,8 @@
-import { QuoteResponseRoute } from '@uswap/helpers/api'
+import { EstimatedTime, QuoteResponseRoute } from '@uswap/helpers/api'
 import type { Asset } from '@/components/swap/asset'
 import { TwapMode } from '@/store/swap-store'
+
+export const THORCHAIN_BLOCK_TIME_SECONDS = 6
 
 function toBaseAmount(amount: string, decimals: number = 8): bigint {
   const [whole, frac = ''] = amount.split('.')
@@ -131,6 +133,16 @@ export function stripStreamingParams(memo: string): string {
   return result
 }
 
+export function recalculateEstimatedTime(estimatedTime: EstimatedTime | undefined, swapSeconds: number): EstimatedTime | undefined {
+  if (!estimatedTime) return undefined
+
+  return {
+    ...estimatedTime,
+    swap: swapSeconds,
+    total: (estimatedTime.inbound || 0) + swapSeconds + (estimatedTime.outbound || 0)
+  }
+}
+
 export function prepareQuoteForStreaming(
   quote: QuoteResponseRoute,
   twapMode: TwapMode,
@@ -146,13 +158,16 @@ export function prepareQuoteForStreaming(
   if (twapMode === 'bestTime') {
     return {
       ...quote,
-      memo: stripStreamingParams(quote.memo)
+      memo: stripStreamingParams(quote.memo),
+      estimatedTime: recalculateEstimatedTime(quote.estimatedTime, 0)
     }
   }
 
   // Custom: use user-specified values
+  const swapSeconds = customInterval * customQuantity * THORCHAIN_BLOCK_TIME_SECONDS
   return {
     ...quote,
-    memo: modifyMemoForStreaming(quote.memo, customInterval, customQuantity)
+    memo: modifyMemoForStreaming(quote.memo, customInterval, customQuantity),
+    estimatedTime: recalculateEstimatedTime(quote.estimatedTime, swapSeconds)
   }
 }
