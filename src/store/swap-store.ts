@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Asset } from '@/components/swap/asset'
 
-const INITIAL_AMOUNT_FROM = 0.5
+const INITIAL_AMOUNT_FROM = 1
 
 export const INITIAL_SLIPPAGE = 1
 export const INITIAL_TWAP_MODE = 'bestPrice' as TwapMode
