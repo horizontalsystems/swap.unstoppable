@@ -33,6 +33,10 @@ export const getTokenList = async (provider: string) => {
   return uSwap.get(`/tokens?provider=${provider}`).then(res => res.data)
 }
 
+export const getAllTokens = async () => {
+  return uSwap.get('/tokens/all').then(res => res.data)
+}
+
 export const getQuotes = async (json: QuoteRequest, signal?: AbortSignal) => {
   return uSwap
     .post(`/quote`, json, { signal })

@@ -1,7 +1,6 @@
 import { RefetchOptions, useQuery } from '@tanstack/react-query'
 import { USwapNumber } from '@uswap/core'
 import { USwapError } from '@uswap/helpers'
-import { AppConfig } from '@/config'
 import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
 import { getQuotes } from '@/lib/api'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
@@ -21,7 +20,9 @@ export const useQuote = (): UseQuote => {
   const assetTo = useAssetTo()
   const isLimitSwap = useIsLimitSwap()
 
-  const providers = isLimitSwap ? [ProviderName.THORCHAIN] : AppConfig.providers
+  const supportedProviders = assetFrom?.providers.filter(p => assetTo?.providers.includes(p)) ?? []
+  const providers = isLimitSwap ? [ProviderName.THORCHAIN] : supportedProviders
+
   const queryKey = [
     'quote',
     valueFrom.toSignificant(),
@@ -30,7 +31,8 @@ export const useQuote = (): UseQuote => {
     assetFrom?.chain,
     assetTo?.chain,
     slippage,
-    isLimitSwap
+    isLimitSwap,
+    providers.join(',')
   ]
 
   const {

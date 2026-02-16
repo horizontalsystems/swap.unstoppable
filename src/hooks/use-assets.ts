@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getChainConfig } from '@uswap/helpers'
 import { Asset } from '@/components/swap/asset'
-import { AppConfig } from '@/config'
-import { getTokenList } from '@/lib/api'
+import { getAllTokens } from '@/lib/api'
 
 const EXTRA_CHAINS = new Set(['XMR', 'XLM'])
 
@@ -10,9 +9,7 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
   const { data, isLoading } = useQuery({
     queryKey: ['assets'],
     queryFn: async () => {
-      const lists = await Promise.all(AppConfig.providers.map(getTokenList))
-      const tokens = lists.flatMap(l => l.tokens)
-
+      const tokens = await getAllTokens()
       const assets = new Map<string, Asset>()
       const geckoMap = new Map<string, string>()
 
@@ -32,7 +29,8 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
           logoURI: token.logoURI,
           name: token.name,
           shortCode: token.shortCode,
-          ticker: token.ticker
+          ticker: token.ticker,
+          providers: token.providers ?? []
         })
 
         if (token.coingeckoId) {
