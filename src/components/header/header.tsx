@@ -3,8 +3,6 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
-import { useDialog } from '@/components/global-dialog'
 import { ThemeSwitchButton } from '@/components/header/theme-switch-button'
 import { TransactionHistoryButton } from '@/components/header/transaction-history-button'
 import { Icon } from '@/components/icons'
@@ -14,8 +12,6 @@ import { useConnectedWallets, useDisconnect } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 
 export function Header() {
-  const { openDialog } = useDialog()
-
   const connectedProviders = useConnectedWallets()
   const disconnectProvider = useDisconnect()
 
@@ -50,18 +46,6 @@ export function Header() {
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
           <ThemeSwitchButton />
           <TransactionHistoryButton />
-          <ThemeButton variant="secondarySmall" className="hidden md:flex" onClick={() => openDialog(ConnectWallet, {})}>
-            Connect Wallet
-          </ThemeButton>
-          <ThemeButton
-            variant="circleSmall"
-            className="flex md:hidden"
-            onClick={() => {
-              openDialog(ConnectWallet, {})
-            }}
-          >
-            <Icon name="plus" />
-          </ThemeButton>
           {connectedProviders.map((provider, i) => (
             <DropdownMenu key={i}>
               <DropdownMenuTrigger asChild>
