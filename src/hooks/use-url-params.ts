@@ -6,7 +6,7 @@ import { useAssets } from '@/hooks/use-assets'
 import { useSwapStore } from '@/store/swap-store'
 
 const DEFAULT_SELL_ASSET = 'BTC.BTC'
-const DEFAULT_BUY_ASSET = 'ETH.ETH'
+const DEFAULT_BUY_ASSET = 'XMR.XMR'
 
 export const useUrlParams = () => {
   const pathname = usePathname()
