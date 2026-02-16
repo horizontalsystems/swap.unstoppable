@@ -82,7 +82,7 @@ export const useSwapStore = create<SwapState>()(
     }),
     {
       name: 'swap-store',
-      version: 6,
+      version: 7,
       onRehydrateStorage: () => state => {
         state?.setHasHydrated(true)
       },

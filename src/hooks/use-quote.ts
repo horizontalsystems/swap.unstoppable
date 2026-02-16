@@ -25,7 +25,7 @@ export const useQuote = (): UseQuote => {
   const assetTo = useAssetTo()
   const isLimitSwap = useIsLimitSwap()
 
-  const supportedProviders = assetFrom?.providers.filter(p => assetTo?.providers.includes(p)) ?? []
+  const supportedProviders = assetFrom?.providers?.filter(p => assetTo?.providers?.includes(p)) ?? []
   const providers = isLimitSwap ? [ProviderName.THORCHAIN] : supportedProviders
 
   const queryKey = [
