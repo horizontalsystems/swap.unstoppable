@@ -11,7 +11,6 @@ import { SwapInputFrom } from '@/components/swap/swap-input-from'
 import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapLimit } from '@/components/swap/swap-limit'
 import { SwapQuoteTimer } from '@/components/swap/swap-quote-timer'
-import { SwapSettings } from '@/components/swap/swap-settings'
 import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
 import { useMemolessAssets } from '@/hooks/use-memoless-assets'
 import { useQuote } from '@/hooks/use-quote'
@@ -75,7 +74,7 @@ export const Swap = () => {
           <div className="flex items-center gap-4">
             <SwapQuoteTimer quote={quote} isLoading={isLoading} refetch={refetch} />
             <SwapAddressFrom />
-            <SwapSettings />
+            {/*<SwapSettings />*/}
           </div>
         </div>
 
