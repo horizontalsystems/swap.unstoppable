@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { ProviderName, USwapError } from '@uswap/helpers'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
+import { USwapError } from '@uswap/helpers'
 import { getAddressValidator } from '@uswap/toolboxes'
 import { LoaderCircle } from 'lucide-react'
 import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
@@ -22,6 +21,12 @@ import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/memo-h
 import { cn, truncate } from '@/lib/utils'
 import { useIsLimitSwap, useLimitSwapBuyAmount, useLimitSwapExpiry } from '@/store/limit-swap-store'
 import { WalletAccount } from '@/store/wallets-store'
+import { ProviderName, QuoteResponseRoute } from '@/types'
+
+const EXTRA_CHAIN_VALIDATORS: Record<string, (address: string) => boolean> = {
+  XMR: address => /^[48][1-9A-HJ-NP-Za-km-z]{94}$/.test(address) || /^[48][1-9A-HJ-NP-Za-km-z]{105}$/.test(address),
+  XLM: address => /^G[A-Z2-7]{55}$/.test(address)
+}
 
 interface SwapRecipientProps {
   provider: ProviderName
@@ -55,11 +60,17 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
   if (!assetFrom || !assetTo) return null
 
-  const refundRequired = !selectedAccount && provider === 'NEAR'
+  const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ']
+  const refundRequired = !selectedAccount && qrProviders.includes(provider)
   const options = accounts.filter(a => a.network === assetTo.chain)
 
   useEffect(() => {
     if (destinationAddress.length === 0) return setIsValidDestination(true)
+
+    const extraValidator = EXTRA_CHAIN_VALIDATORS[assetTo.chain]
+    if (extraValidator) {
+      return setIsValidDestination(extraValidator(destinationAddress))
+    }
 
     getAddressValidator()
       .then(validateAddress => setIsValidDestination(validateAddress({ address: destinationAddress, chain: assetTo.chain })))
@@ -68,6 +79,11 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
   useEffect(() => {
     if (refundAddress.length === 0) return setIsValidRefund(true)
+
+    const extraValidator = EXTRA_CHAIN_VALIDATORS[assetFrom.chain]
+    if (extraValidator) {
+      return setIsValidRefund(extraValidator(refundAddress))
+    }
 
     getAddressValidator()
       .then(validateAddress => setIsValidRefund(validateAddress({ address: refundAddress, chain: assetFrom.chain })))

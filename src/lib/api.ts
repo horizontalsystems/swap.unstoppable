@@ -1,6 +1,7 @@
 import { AssetValue, Chain, getChainConfig } from '@uswap/core'
 import { BalanceResponse, QuoteRequest, USwapApi } from '@uswap/helpers/api'
 import axios from 'axios'
+import { QuoteResponse } from '@/types'
 
 const uSwap = axios.create({
   baseURL: process.env.NEXT_PUBLIC_USWAP_API_URL,
@@ -28,11 +29,15 @@ export const getAssetBalance = async (chain: Chain, address: string, identifier:
     })
 }
 
-export const getQuotes = async (json: QuoteRequest, abortController?: AbortController) => {
-  return USwapApi.getSwapQuote(json, {
-    abortController,
-    retry: { maxRetries: 0 }
-  }).then(res => res.routes)
+export const getTokenList = async (provider: string) => {
+  return uSwap.get(`/tokens?provider=${provider}`).then(res => res.data)
+}
+
+export const getQuotes = async (json: QuoteRequest, signal?: AbortSignal) => {
+  return uSwap
+    .post(`/quote`, json, { signal })
+    .then(res => res.data)
+    .then((data: QuoteResponse) => data.routes)
 }
 
 export const getTrack = async (data: Record<string, any>) => {

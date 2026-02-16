@@ -1,4 +1,4 @@
-import { ProviderName } from '@uswap/helpers'
+import { ProviderName } from '@/types'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useShallow } from 'zustand/react/shallow'
@@ -9,6 +9,7 @@ export type TxStatus = 'not_started' | 'pending' | 'swapping' | 'completed' | 'f
 export interface Transaction {
   uid: string
   provider: ProviderName
+  providerSwapId?: string
   chainId: string
   hash?: string
   timestamp: Date

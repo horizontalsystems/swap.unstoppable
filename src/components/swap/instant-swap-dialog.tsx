@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { getChainConfig, USwapNumber } from '@uswap/core'
-import { ProviderName, USwapError } from '@uswap/helpers'
-import { QuoteResponseRoute, USwapApi } from '@uswap/helpers/api'
+import { USwapError } from '@uswap/helpers'
+import { USwapApi } from '@uswap/helpers/api'
 import { LoaderCircle } from 'lucide-react'
 import { Credenza, CredenzaContent } from '@/components/ui/credenza'
 import { InstantSwap } from '@/components/swap/instant-swap'
@@ -12,6 +12,7 @@ import { ThemeButton } from '@/components/theme-button'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { generateId } from '@/lib/utils'
 import { useSetTransaction } from '@/store/transaction-store'
+import { ProviderName, QuoteResponseRoute } from '@/types'
 
 interface InstantSwapDialogProps {
   provider: ProviderName
@@ -50,6 +51,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
     setTransaction({
       uid: generateId(),
       provider,
+      providerSwapId: quote.providerSwapId,
       chainId: getChainConfig(assetFrom.chain).chainId,
       timestamp: new Date(),
       estimatedTime: quote.estimatedTime?.total,
@@ -68,7 +70,8 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
   const onConfirm = () => {
     if (!quote || !assetFrom) return
 
-    if (provider === 'NEAR') {
+    const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ']
+    if (qrProviders.includes(provider)) {
       if (!quote.inboundAddress || !quote.qrCodeDataURL) return
 
       createChannel(quote, quote.qrCodeDataURL, quote.inboundAddress, quote.sellAmount, quote.expiration ? Number(quote.expiration) : undefined)

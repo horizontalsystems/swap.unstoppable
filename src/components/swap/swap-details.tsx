@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 import { USwapNumber } from '@uswap/core'
-import { ProviderName } from '@uswap/helpers'
 import { Separator } from '@/components/ui/separator'
 import { useDialog } from '@/components/global-dialog'
 import { Icon } from '@/components/icons'
@@ -15,6 +14,7 @@ import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSwap
 import { recalculateEstimatedTime, THORCHAIN_BLOCK_TIME_SECONDS } from '@/lib/memo-helpers'
 import { formatExpiration, resolveFees } from '@/lib/swap-helpers'
 import { cn } from '@/lib/utils'
+import { ProviderName } from '@/types'
 
 export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
   const assetFrom = useAssetFrom()

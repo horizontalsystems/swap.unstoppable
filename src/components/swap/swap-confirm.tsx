@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { USwapNumber } from '@uswap/core'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -17,6 +16,7 @@ import { useAssetFrom, useAssetTo, useSlippage } from '@/hooks/use-swap'
 import { resolveFees, resolvePriceImpact } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
 import { useIsLimitSwap, useLimitSwapBuyAmount } from '@/store/limit-swap-store'
+import { QuoteResponseRoute } from '@/types'
 
 interface SwapConfirmProps {
   quote: QuoteResponseRoute & {

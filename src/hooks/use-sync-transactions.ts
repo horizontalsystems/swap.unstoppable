@@ -23,10 +23,11 @@ export const useSyncTransactions = () => {
 
         return getTrack({
           provider: tx.provider,
+          providerSwapId: tx.providerSwapId,
           hash: tx.hash,
           chainId: getChainConfig(tx.assetFrom.chain).chainId,
           fromAsset: tx.assetFrom.identifier,
-          fromAddress: tx.addressFrom,
+          fromAddress: tx.addressFrom || '',
           fromAmount: tx.amountFrom,
           toAsset: tx.assetTo.identifier,
           toAddress: tx.addressTo,

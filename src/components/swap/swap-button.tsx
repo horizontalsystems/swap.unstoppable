@@ -1,5 +1,4 @@
 import { EVMChain } from '@uswap/core'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { LoaderCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { chainLabel } from '@/components/connect-wallet/config'
@@ -15,6 +14,7 @@ import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { useSelectedAccount } from '@/hooks/use-wallets'
 import { getUSwap } from '@/lib/wallets'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
+import { QuoteResponseRoute } from '@/types'
 
 interface SwapButtonProps {
   instantSwapSupported: boolean

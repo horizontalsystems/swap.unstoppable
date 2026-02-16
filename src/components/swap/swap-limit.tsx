@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { USwapNumber } from '@uswap/core'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { X } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
@@ -9,6 +8,7 @@ import { ThemeButton } from '@/components/theme-button'
 import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
 import { cn } from '@/lib/utils'
 import { useLimitSwapExpiry, useSetLimitSwapBuyAmount, useSetLimitSwapExpiry } from '@/store/limit-swap-store'
+import { QuoteResponseRoute } from '@/types'
 
 type PresetType = 5 | 10 | 'custom' | 'market'
 type SwapLimitProps = { quote?: QuoteResponseRoute }

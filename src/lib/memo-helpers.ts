@@ -1,6 +1,7 @@
-import { EstimatedTime, QuoteResponseRoute } from '@uswap/helpers/api'
+import { EstimatedTime } from '@uswap/helpers/api'
 import type { Asset } from '@/components/swap/asset'
 import { TwapMode } from '@/store/swap-store'
+import { QuoteResponseRoute } from '@/types'
 
 export const THORCHAIN_BLOCK_TIME_SECONDS = 6
 

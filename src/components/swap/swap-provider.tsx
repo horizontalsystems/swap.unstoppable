@@ -1,9 +1,9 @@
 import Image from 'next/image'
-import { ProviderName } from '@uswap/helpers'
+import { ProviderName } from '@/types'
 
 export const SwapProvider = ({ provider }: { provider: ProviderName }) => {
-  let title = 'Unknown'
-  let icon = ''
+  let title: string = provider
+  let icon = title
 
   if (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING') {
     title = 'THORChain'
@@ -17,6 +17,18 @@ export const SwapProvider = ({ provider }: { provider: ProviderName }) => {
   } else if (provider === 'ONEINCH') {
     title = '1inch'
     icon = 'oneinch'
+  } else if (provider === 'LETSEXCHANGE') {
+    title = 'LetsExchange'
+    icon = 'letsexchange'
+  } else if (provider === 'QUICKEX') {
+    title = 'QuickEx'
+    icon = 'quickex'
+  } else if (provider === 'STEALTHEX') {
+    title = 'StealthEX'
+    icon = 'stealthex'
+  } else if (provider === 'SWAPUZ') {
+    title = 'Swapuz'
+    icon = 'swapuz'
   }
 
   return (

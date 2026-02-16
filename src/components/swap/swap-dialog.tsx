@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { FeeOption, getChainConfig, USwapNumber } from '@uswap/core'
-import { ProviderName } from '@uswap/helpers'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { LoaderCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { Credenza, CredenzaContent } from '@/components/ui/credenza'
@@ -14,6 +12,7 @@ import { generateId } from '@/lib/utils'
 import { getUSwap } from '@/lib/wallets'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
 import { useSetTransaction } from '@/store/transaction-store'
+import { ProviderName, QuoteResponseRoute } from '@/types'
 
 interface SwapDialogProps {
   provider: ProviderName
@@ -47,6 +46,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
         setTransaction({
           uid: generateId(),
           provider: provider,
+          providerSwapId: quote.providerSwapId,
           chainId: getChainConfig(assetFrom.chain).chainId,
           hash: hash,
           timestamp: new Date(),

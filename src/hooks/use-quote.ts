@@ -1,11 +1,11 @@
 import { RefetchOptions, useQuery } from '@tanstack/react-query'
 import { USwapNumber } from '@uswap/core'
-import { ProviderName, USwapError } from '@uswap/helpers'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
+import { USwapError } from '@uswap/helpers'
 import { AppConfig } from '@/config'
 import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
 import { getQuotes } from '@/lib/api'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
+import { ProviderName, QuoteResponseRoute } from '@/types'
 
 type UseQuote = {
   isLoading: boolean
@@ -53,7 +53,7 @@ export const useQuote = (): UseQuote => {
           slippage: slippage ?? 99,
           providers
         },
-        createAbortController(signal)
+        signal
       ).then(quotes => {
         return quotes.reduce((best, current) =>
           new USwapNumber(current.expectedBuyAmount).gt(new USwapNumber(best.expectedBuyAmount)) ? current : best

@@ -1,7 +1,7 @@
 import { assetFromString, USwapNumber } from '@uswap/core'
-import { QuoteResponseRoute } from '@uswap/helpers/api'
 import { intervalToDuration } from 'date-fns'
 import { AssetRateMap } from '@/hooks/use-rates'
+import { QuoteResponseRoute } from '@/types'
 
 export type FeeData = {
   amount: USwapNumber

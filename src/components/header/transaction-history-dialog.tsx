@@ -2,7 +2,6 @@
 
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, USwapNumber } from '@uswap/core'
-import { ProviderName } from '@uswap/helpers'
 import { format, formatDuration, intervalToDuration, isSameDay, isToday, isYesterday } from 'date-fns'
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
 import { toast } from 'sonner'
@@ -24,6 +23,7 @@ import { useSelectedAccount } from '@/hooks/use-wallets'
 import { formatExpiration } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
 import { isTxPending, Transaction, useTransactions } from '@/store/transaction-store'
+import { ProviderName } from '@/types'
 
 interface HistoryDialogProps {
   isOpen: boolean
