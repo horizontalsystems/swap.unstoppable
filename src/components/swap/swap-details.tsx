@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 import { USwapNumber } from '@uswap/core'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
 import { useDialog } from '@/components/global-dialog'
 import { Icon } from '@/components/icons'
@@ -21,7 +22,7 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
   const assetTo = useAssetTo()
   const [showMore, setShowMore] = useState(false)
   const { valueFrom } = useSwap()
-  const { quote } = useQuote()
+  const { quote, quotes, selectedIndex, setSelectedIndex } = useQuote()
   const contentRef = useRef<HTMLDivElement>(null)
   const [contentHeight, setContentHeight] = useState(0)
   const [priceInverted, setPriceInverted] = useState(false)
@@ -120,7 +121,32 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
         <div ref={contentRef} className="text-thor-gray px-4 pb-5 text-[13px] font-semibold">
           <div className="flex items-center justify-between py-2">
             <span>Provider</span>
-            <SwapProvider provider={quote.providers[0]} />
+            {quotes.length > 1 ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex cursor-pointer items-center gap-1 outline-none">
+                  <SwapProvider provider={quote.providers[0]} />
+                  <Icon name="arrow-s-down" className="text-thor-gray size-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="space-y-1 p-2">
+                  {quotes.map((route, index) => (
+                    <DropdownMenuItem
+                      key={route.providers[0]}
+                      className={cn('flex cursor-pointer items-center justify-between gap-4 rounded-xl px-4 py-2.5', {
+                        'bg-accent': index === selectedIndex
+                      })}
+                      onClick={() => setSelectedIndex(index)}
+                    >
+                      <SwapProvider provider={route.providers[0]} />
+                      <span className="text-leah text-xs">
+                        {new USwapNumber(route.expectedBuyAmount).toSignificant()} {assetTo.ticker}
+                      </span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <SwapProvider provider={quote.providers[0]} />
+            )}
           </div>
 
           {priceImpact && (
