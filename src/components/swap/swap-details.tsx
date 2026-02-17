@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { animated, useSpring } from '@react-spring/web'
+import { useEffect, useMemo, useState } from 'react'
 import { USwapNumber } from '@uswap/core'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
@@ -23,8 +22,6 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
   const [showMore, setShowMore] = useState(false)
   const { valueFrom } = useSwap()
   const { quote, quotes, selectedIndex, setSelectedIndex } = useQuote()
-  const contentRef = useRef<HTMLDivElement>(null)
-  const [contentHeight, setContentHeight] = useState(0)
   const [priceInverted, setPriceInverted] = useState(false)
   const { openDialog } = useDialog()
   const twapMode = useTwapMode()
@@ -33,23 +30,6 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
 
   const identifiers = useMemo(() => quote?.fees.map(t => t.asset).sort() || [], [quote?.fees])
   const { rates } = useRates(identifiers)
-
-  useLayoutEffect(() => {
-    if (contentRef.current && quote) {
-      setContentHeight(contentRef.current.scrollHeight)
-    }
-  }, [quote, rates])
-
-  const arrowSpring = useSpring({
-    transform: showMore ? 'rotate(180deg)' : 'rotate(0deg)',
-    config: { tension: 250, friction: 20 }
-  })
-
-  const contentSpring = useSpring({
-    height: showMore ? contentHeight : 0,
-    opacity: showMore ? 1 : 0,
-    config: { tension: 400, friction: 30 }
-  })
 
   useEffect(() => {
     setPriceInverted(false)
@@ -75,11 +55,42 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
   const { inbound, outbound, liquidity, platform, included } = resolveFees(quote, rates)
 
   return (
-    <>
+    <div className="border-blade rounded-3xl border text-[13px] font-semibold">
+      <div className="flex items-center justify-between px-4 py-3">
+        {quotes.length > 1 ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex cursor-pointer items-center gap-1 outline-none">
+              <SwapProvider provider={quote.providers[0]} />
+              <Icon name="arrow-s-down" className="text-thor-gray size-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="space-y-1 p-2">
+              {quotes.map((route, index) => (
+                <DropdownMenuItem
+                  key={route.providers[0]}
+                  className={cn('flex cursor-pointer items-center justify-between gap-4 rounded-xl px-4 py-2.5', {
+                    'bg-accent': index === selectedIndex
+                  })}
+                  onClick={() => setSelectedIndex(index)}
+                >
+                  <SwapProvider provider={route.providers[0]} />
+                  <span className="text-leah text-xs">
+                    {new USwapNumber(route.expectedBuyAmount).toSignificant()} {assetTo.ticker}
+                  </span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <SwapProvider provider={quote.providers[0]} />
+        )}
+        {selectedIndex === 0 && <span className="text-remus border-remus rounded-3xl border px-1.5 text-[10px]">BEST PRICE</span>}
+      </div>
+
+      <Separator className="bg-blade" />
+
       <div className="cursor-pointer" onClick={() => setShowMore(!showMore)}>
-        <div className="text-leah flex justify-between text-[13px] font-semibold">
+        <div className="text-leah flex items-center justify-between px-4 py-3">
           <span
-            className="p-4"
             onClick={e => {
               e.stopPropagation()
               setPriceInverted(!priceInverted)
@@ -91,8 +102,8 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
           <div className="flex items-center">
             {estimatedTime && estimatedTime.total > 0 && (
               <div
-                className={cn('text-leah flex h-8 items-center', {
-                  'bg-jacob/10 text-jacob rounded-full p-2': estimatedTime.total > 3600
+                className={cn('text-leah flex items-center', {
+                  'bg-jacob/10 text-jacob -my-2 rounded-full p-2': estimatedTime.total > 3600
                 })}
               >
                 <Icon width={16} height={16} viewBox="0 0 16 16" name="clock-filled" />
@@ -101,54 +112,24 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
             )}
 
             {inbound && (
-              <div className="text-thor-gray flex items-center p-4 ps-2">
+              <div className="text-thor-gray flex items-center ps-2">
                 <Icon width={16} height={16} viewBox="0 0 16 16" name="list" />
                 <span className="text-leah ms-1 me-2">
                   {inbound.usd.lt(0.01) ? `< ${new USwapNumber(0.01).toCurrency()}` : inbound.usd.toCurrency()}
                 </span>
-                <animated.div style={arrowSpring}>
+                <div className={cn('transition-transform duration-300', showMore && 'rotate-180')}>
                   <Icon name="arrow-s-down" className="size-5" />
-                </animated.div>
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      <animated.div style={contentSpring} className="overflow-hidden">
+      <div className={cn('transition-all duration-300', showMore && 'hidden')}>
         <Separator className="bg-blade" />
 
-        <div ref={contentRef} className="text-thor-gray px-4 pb-5 text-[13px] font-semibold">
-          <div className="flex items-center justify-between py-2">
-            <span>Provider</span>
-            {quotes.length > 1 ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex cursor-pointer items-center gap-1 outline-none">
-                  <SwapProvider provider={quote.providers[0]} />
-                  <Icon name="arrow-s-down" className="text-thor-gray size-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="space-y-1 p-2">
-                  {quotes.map((route, index) => (
-                    <DropdownMenuItem
-                      key={route.providers[0]}
-                      className={cn('flex cursor-pointer items-center justify-between gap-4 rounded-xl px-4 py-2.5', {
-                        'bg-accent': index === selectedIndex
-                      })}
-                      onClick={() => setSelectedIndex(index)}
-                    >
-                      <SwapProvider provider={route.providers[0]} />
-                      <span className="text-leah text-xs">
-                        {new USwapNumber(route.expectedBuyAmount).toSignificant()} {assetTo.ticker}
-                      </span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <SwapProvider provider={quote.providers[0]} />
-            )}
-          </div>
-
+        <div className="text-thor-gray px-4 py-2">
           {priceImpact && (
             <div className="flex items-center justify-between py-2">
               <div className="flex items-center gap-1">
@@ -168,7 +149,7 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
               onClick={() => openDialog(SwapFeeDialog, { outbound: outbound, liquidity: liquidity, platform: platform })}
             >
               <div className="flex items-center gap-1">
-                <span>Included Fees</span> <InfoTooltip>These fees are already included in the rate — you don’t pay them separately.</InfoTooltip>
+                <span>Included Fees</span> <InfoTooltip>These fees are already included in the rate — you don't pay them separately.</InfoTooltip>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-leah">{included.toCurrency()}</span>
@@ -177,7 +158,7 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
             </div>
           )}
         </div>
-      </animated.div>
-    </>
+      </div>
+    </div>
   )
 }

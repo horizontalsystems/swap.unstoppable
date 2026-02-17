@@ -18,6 +18,7 @@
   --color-brand-first: var(--brand-first);
   --color-brand-second: var(--brand-second);
   --color-brand-third: var(--brand-third);
+  --color-remus: var(--remus);
   --color-thor-gray: var(--thor-gray);
 
   --color-background: var(--background);
@@ -88,6 +89,7 @@
     --jacob: var(--yellow-l);
     --lucian: var(--red-l);
     --liquidity-green: var(--lg-l);
+    --remus: #0AA177;
 
     --brand-first: var(--yellow-l);
     --brand-second: var(--yellow-l);
@@ -138,6 +140,7 @@
     --jacob: var(--yellow-d);
     --lucian: var(--red-d);
     --liquidity-green: var(--lg-d);
+    --remus: #0AC18E;
 
     --brand-first: var(--yellow-d);
     --brand-second: var(--yellow-d);

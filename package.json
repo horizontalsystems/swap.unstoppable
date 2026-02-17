@@ -27,7 +27,6 @@
     "@radix-ui/react-slider": "^1.3.6",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@react-spring/web": "^10.0.3",
     "@tanstack/react-query": "^5.90.5",
     "@tanstack/react-virtual": "^3.13.12",
     "@uswap/core": "^4.1.15",

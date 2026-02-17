@@ -122,7 +122,7 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
   return (
     <ThemeButton
       variant={state.accent ? 'primaryMedium' : 'secondaryMedium'}
-      className="mt-3 w-full"
+      className="my-3 w-full"
       onClick={state.onClick}
       disabled={!state.onClick}
     >
