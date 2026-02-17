@@ -126,7 +126,7 @@ export function SwapDetails({ priceImpact }: { priceImpact?: USwapNumber }) {
         </div>
       </div>
 
-      <div className={cn('transition-all duration-300', showMore && 'hidden')}>
+      <div className={cn('transition-all duration-300', showMore ? '' : 'hidden')}>
         <Separator className="bg-blade" />
 
         <div className="text-thor-gray px-4 py-2">
