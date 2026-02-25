@@ -1,11 +1,13 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl } from '@uswap/core'
+import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, USwapNumber } from '@uswap/core'
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
 import { CopyButton } from '@/components/button-copy'
 import { chainLabel } from '@/components/connect-wallet/config'
+import { DecimalText } from '@/components/decimal/decimal-text'
 import { Icon } from '@/components/icons'
+import { useRates } from '@/hooks/use-rates'
 import { getTrack } from '@/lib/api'
 import { cn, truncate } from '@/lib/utils'
 import { isTxPending, isTxTerminal, TxStatus } from '@/store/transaction-store'
@@ -37,74 +39,100 @@ export function TrackStatus({ params }: { params: TrackParams }) {
     refetchIntervalInBackground: false
   })
 
-  if (isPending) {
-    return (
-      <div className="flex flex-col items-center gap-4 py-12">
-        <LoaderCircle className="text-brand-first animate-spin" size={32} />
-        <span className="text-thor-gray text-sm font-semibold">Loading transaction status…</span>
-      </div>
-    )
-  }
+  const fromAssetId = data?.fromAsset || params.fromAsset
+  const toAssetId = data?.toAsset || params.toAsset
+  const fromAmountStr = data?.fromAmount || params.fromAmount
+  const toAmountStr = data?.toAmount || params.toAmount
 
-  if (isError) {
-    return (
-      <div className="flex flex-col items-center gap-4 py-12">
-        <CircleAlert className="text-lucian" size={32} />
-        <span className="text-thor-gray text-sm font-semibold">Failed to load transaction status</span>
-      </div>
-    )
-  }
+  const assetFrom = fromAssetId ? assetFromString(fromAssetId) : null
+  const assetTo = toAssetId ? assetFromString(toAssetId) : null
+  const amountFrom = fromAmountStr ? new USwapNumber(fromAmountStr) : null
+  const amountTo = toAmountStr ? new USwapNumber(toAmountStr) : null
+
+  const { rates } = useRates([fromAssetId, toAssetId].filter(Boolean))
+  const rateFrom = fromAssetId ? rates[fromAssetId] : undefined
+  const fiatFrom = rateFrom && amountFrom && rateFrom.mul(amountFrom)
+  const rateTo = toAssetId ? rates[toAssetId] : undefined
+  const fiatTo = rateTo && amountTo && rateTo.mul(amountTo)
 
   const status: TxStatus = data?.status ?? 'unknown'
-
   let statusTitle = status.replace('_', ' ')
   if (status === 'not_started') statusTitle = 'Deposit Pending'
 
   return (
     <div className="bg-blade/25 rounded-xl border">
-      <div className="flex items-center justify-between border-b px-4 py-4">
-        <span className="text-leah text-sm font-semibold">Transaction Status</span>
-        <div className="flex items-center gap-2">
-          <StatusIcon status={status} />
+      <div className="flex px-4 py-3">
+        <div className="flex flex-1 items-center gap-3">
+          <div className="flex flex-col gap-1">
+            <span className="text-leah text-sm font-semibold">
+              {amountFrom && assetFrom && <DecimalText className="break-all" amount={amountFrom.toSignificant()} symbol={assetFrom.ticker} />}
+            </span>
+            {fiatFrom && <span className="text-thor-gray text-xs font-medium">{fiatFrom.toCurrency()}</span>}
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center px-1">
+          <span className="pb-2">
+            {isPending ? (
+              <LoaderCircle className="animate-spin" size={16} />
+            ) : isError ? (
+              <CircleAlert className="text-lucian" size={16} />
+            ) : (
+              <StatusIcon status={status} />
+            )}
+          </span>
           <span
-            className={cn('text-thor-gray text-sm font-semibold capitalize', {
-              'text-lucian': status === 'expired' || status === 'failed'
+            className={cn('text-thor-gray text-[10px] font-semibold capitalize', {
+              'text-lucian': !isPending && !isError && (status === 'expired' || status === 'failed')
             })}
           >
-            {statusTitle}
+            {isPending ? 'loading' : isError ? 'error' : statusTitle}
           </span>
+        </div>
+
+        <div className="flex flex-1 items-center justify-end gap-3">
+          <div className="flex flex-col gap-1 text-right">
+            <span className="text-leah text-sm font-semibold">
+              {amountTo && assetTo && <DecimalText className="break-all" amount={amountTo.toSignificant()} symbol={assetTo.ticker} />}
+            </span>
+            {fiatTo && <span className="text-thor-gray text-xs font-medium">{fiatTo.toCurrency()}</span>}
+          </div>
         </div>
       </div>
 
-      {(data?.fromAddress || data?.toAddress) && (
-        <div className="space-y-3 border-b px-4 py-4 text-xs font-semibold">
-          {data.fromAddress && (
-            <div className="text-thor-gray flex items-center justify-between">
-              <span>Source Address</span>
-              <div className="flex items-center gap-2">
-                <span className="text-leah">{truncate(data.fromAddress)}</span>
-                <CopyButton text={data.fromAddress} />
-              </div>
+      {!isPending && !isError && data && (
+        <>
+          {(data.fromAddress || data.toAddress) && (
+            <div className="space-y-3 border-t px-4 py-4 text-xs font-semibold">
+              {data.fromAddress && (
+                <div className="text-thor-gray flex items-center justify-between">
+                  <span>Source Address</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-leah">{truncate(data.fromAddress)}</span>
+                    <CopyButton text={data.fromAddress} />
+                  </div>
+                </div>
+              )}
+              {data.toAddress && (
+                <div className="text-thor-gray flex items-center justify-between">
+                  <span>Destination Address</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-leah">{truncate(data.toAddress)}</span>
+                    <CopyButton text={data.toAddress} />
+                  </div>
+                </div>
+              )}
             </div>
           )}
-          {data.toAddress && (
-            <div className="text-thor-gray flex items-center justify-between">
-              <span>Destination Address</span>
-              <div className="flex items-center gap-2">
-                <span className="text-leah">{truncate(data.toAddress)}</span>
-                <CopyButton text={data.toAddress} />
-              </div>
-            </div>
-          )}
-        </div>
-      )}
 
-      {data?.legs?.length > 0 && (
-        <div className="space-y-4 px-4 py-4">
-          {data.legs.map((leg: any, i: number) => (
-            <LegRow key={i} leg={leg} txFromAsset={params.fromAsset} />
-          ))}
-        </div>
+          {data?.legs?.length > 0 && (
+            <div className="space-y-4 border-t px-4 py-4">
+              {data.legs.map((leg: any, i: number) => (
+                <LegRow key={i} leg={leg} txFromAsset={fromAssetId} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   )

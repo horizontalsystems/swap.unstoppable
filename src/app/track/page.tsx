@@ -28,20 +28,12 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
     depositAddress: getString('depositAddress')
   }
 
-  const missingRequired =
-    !trackParams.provider ||
-    !trackParams.chainId ||
-    !trackParams.fromAsset ||
-    !trackParams.fromAmount ||
-    !trackParams.toAsset ||
-    !trackParams.toAddress
-
   return (
     <main className="min-h-screen">
       <Header />
       <div className="mx-auto max-w-xl px-4 py-8">
         <h1 className="text-leah mb-6 text-xl font-semibold">Track Transaction</h1>
-        {missingRequired ? <p className="text-thor-gray text-sm">Missing required query parameters.</p> : <TrackStatus params={trackParams} />}
+        <TrackStatus params={trackParams} />
       </div>
       <Footer />
     </main>
