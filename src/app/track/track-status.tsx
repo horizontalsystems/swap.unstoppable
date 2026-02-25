@@ -24,6 +24,7 @@ export interface TrackParams {
   toAddress: string
   toAmount: string
   depositAddress?: string
+  refundAddress?: string
 }
 
 export function TrackStatus({ params }: { params: TrackParams }) {
@@ -43,6 +44,10 @@ export function TrackStatus({ params }: { params: TrackParams }) {
   const toAssetId = data?.toAsset || params.toAsset
   const fromAmountStr = data?.fromAmount || params.fromAmount
   const toAmountStr = data?.toAmount || params.toAmount
+  const fromAddress = data?.fromAddress || params.fromAddress
+  const toAddress = data?.toAddress || params.toAddress
+  const depositAddress = params.depositAddress
+  const refundAddress = data?.refundAddress || params.refundAddress
 
   const assetFrom = fromAssetId ? assetFromString(fromAssetId) : null
   const assetTo = toAssetId ? assetFromString(toAssetId) : null
@@ -72,21 +77,13 @@ export function TrackStatus({ params }: { params: TrackParams }) {
         </div>
 
         <div className="flex flex-col items-center justify-center px-1">
-          <span className="pb-2">
-            {isPending ? (
-              <LoaderCircle className="animate-spin" size={16} />
-            ) : isError ? (
-              <CircleAlert className="text-lucian" size={16} />
-            ) : (
-              <StatusIcon status={status} />
-            )}
-          </span>
+          <span className="pb-2">{isPending || isError ? <LoaderCircle className="animate-spin" size={16} /> : <StatusIcon status={status} />}</span>
           <span
             className={cn('text-thor-gray text-[10px] font-semibold capitalize', {
               'text-lucian': !isPending && !isError && (status === 'expired' || status === 'failed')
             })}
           >
-            {isPending ? 'loading' : isError ? 'error' : statusTitle}
+            {isPending || isError ? 'loading' : statusTitle}
           </span>
         </div>
 
@@ -100,39 +97,53 @@ export function TrackStatus({ params }: { params: TrackParams }) {
         </div>
       </div>
 
-      {!isPending && !isError && data && (
-        <>
-          {(data.fromAddress || data.toAddress) && (
-            <div className="space-y-3 border-t px-4 py-4 text-xs font-semibold">
-              {data.fromAddress && (
-                <div className="text-thor-gray flex items-center justify-between">
-                  <span>Source Address</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-leah">{truncate(data.fromAddress)}</span>
-                    <CopyButton text={data.fromAddress} />
-                  </div>
-                </div>
-              )}
-              {data.toAddress && (
-                <div className="text-thor-gray flex items-center justify-between">
-                  <span>Destination Address</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-leah">{truncate(data.toAddress)}</span>
-                    <CopyButton text={data.toAddress} />
-                  </div>
-                </div>
-              )}
+      {(fromAddress || toAddress || depositAddress || refundAddress) && (
+        <div className="space-y-3 border-t px-4 py-4 text-xs font-semibold">
+          {fromAddress && (
+            <div className="text-thor-gray flex items-center justify-between">
+              <span>Source Address</span>
+              <div className="flex items-center gap-2">
+                <span className="text-leah">{truncate(fromAddress)}</span>
+                <CopyButton text={fromAddress} />
+              </div>
             </div>
           )}
+          {toAddress && (
+            <div className="text-thor-gray flex items-center justify-between">
+              <span>Destination Address</span>
+              <div className="flex items-center gap-2">
+                <span className="text-leah">{truncate(toAddress)}</span>
+                <CopyButton text={toAddress} />
+              </div>
+            </div>
+          )}
+          {depositAddress && (
+            <div className="text-thor-gray flex items-center justify-between">
+              <span>Deposit Address</span>
+              <div className="flex items-center gap-2">
+                <span className="text-leah">{truncate(depositAddress)}</span>
+                <CopyButton text={depositAddress} />
+              </div>
+            </div>
+          )}
+          {refundAddress && (
+            <div className="text-thor-gray flex items-center justify-between">
+              <span>Refund Address</span>
+              <div className="flex items-center gap-2">
+                <span className="text-leah">{truncate(refundAddress)}</span>
+                <CopyButton text={refundAddress} />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
-          {data?.legs?.length > 0 && (
-            <div className="space-y-4 border-t px-4 py-4">
-              {data.legs.map((leg: any, i: number) => (
-                <LegRow key={i} leg={leg} txFromAsset={fromAssetId} />
-              ))}
-            </div>
-          )}
-        </>
+      {!isPending && !isError && data?.legs?.length > 0 && (
+        <div className="space-y-4 border-t px-4 py-4">
+          {data.legs.map((leg: any, i: number) => (
+            <LegRow key={i} leg={leg} txFromAsset={fromAssetId} />
+          ))}
+        </div>
       )}
     </div>
   )
