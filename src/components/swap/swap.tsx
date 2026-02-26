@@ -92,7 +92,7 @@ export const Swap = () => {
         )}
 
         <SwapButton instantSwapSupported={instantSwapSupported} instantSwapAvailable={!memolessError} />
-        <SwapDetails priceImpact={priceImpact} />
+        <SwapDetails />
       </div>
     </div>
   )
