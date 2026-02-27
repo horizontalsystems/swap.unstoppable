@@ -25,7 +25,8 @@ export enum ProviderName {
   QUICKEX = 'QUICKEX',
   STEALTHEX = 'STEALTHEX',
   SWAPUZ = 'SWAPUZ',
-  BARTER = 'BARTER'
+  BARTER = 'BARTER',
+  EXOLIX = 'EXOLIX'
 }
 
 export type QuoteResponseRoute = Omit<BaseQuoteResponseRoute, 'providers'> & {
