@@ -70,7 +70,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
   const onConfirm = () => {
     if (!quote || !assetFrom) return
 
-    const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ']
+    const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX']
     if (qrProviders.includes(provider)) {
       if (!quote.inboundAddress || !quote.qrCodeDataURL) return
 

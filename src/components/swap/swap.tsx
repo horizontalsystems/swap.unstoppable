@@ -51,7 +51,7 @@ export const Swap = () => {
       return new Error(`Minimum swap amount without a connected wallet is ${minAmount.toSignificant()} ${assetFrom.ticker}`)
   }, [memolessAsset, selectedAccount, valueFrom])
 
-  const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ']
+  const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX']
   const instantSwapSupported = !!memolessAsset || qrProviders.includes(quote?.providers[0] as string)
 
   const priceImpact = useMemo(() => {
