@@ -1,6 +1,7 @@
 import { Chain, getEIP6963Wallets, USwap, WalletOption } from '@uswap/core'
 import { EVMPlugin } from '@uswap/plugins/evm'
 import { NearPlugin } from '@uswap/plugins/near'
+import { P2PPlugin } from '@uswap/plugins/p2p'
 import { RadixPlugin } from '@uswap/plugins/radix'
 import { SolanaPlugin } from '@uswap/plugins/solana'
 import { MayachainPlugin, ThorchainPlugin } from '@uswap/plugins/thorchain'
@@ -21,7 +22,8 @@ const defaultPlugins = {
   ...ThorchainPlugin,
   ...RadixPlugin,
   ...SolanaPlugin,
-  ...NearPlugin
+  ...NearPlugin,
+  ...P2PPlugin
 }
 
 const defaultWallets = {
@@ -57,7 +59,8 @@ export function getUSwap() {
         uSwap: process.env.NEXT_PUBLIC_USWAP_API_KEY
       },
       rpcUrls: {
-        [Chain.Ethereum]: ['https://eth.llamarpc.com', 'https://ethereum-rpc.publicnode.com']
+        [Chain.Ethereum]: ['https://eth.llamarpc.com', 'https://ethereum-rpc.publicnode.com'],
+        [Chain.Solana]: ['https://solana-mainnet.g.alchemy.com/v2/IBi7xnfvpuwGkBEFaAlm0']
       },
       envs: {
         apiUrl: process.env.NEXT_PUBLIC_USWAP_API_URL,
