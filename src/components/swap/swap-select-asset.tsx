@@ -10,7 +10,6 @@ import { AssetIcon } from '@/components/asset-icon'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { Asset } from '@/components/swap/asset'
 import { useAssets } from '@/hooks/use-assets'
-import { useMimir } from '@/hooks/use-mimir'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 
@@ -56,10 +55,9 @@ export const SwapSelectAsset = ({ isOpen, onOpenChange, selected, onSelectAsset 
   const [searchQuery, setSearchQuery] = useState('')
 
   const { assets } = useAssets()
-  const { mimir } = useMimir()
 
   const isAssetHalted = (asset: Asset) => {
-    return mimir[`HALT${asset.ticker}TRADING`] === 1 || mimir['HALTTRADING'] === 1
+    return false // mimir[`HALT${asset.ticker}TRADING`] === 1 || mimir['HALTTRADING'] === 1
   }
 
   const chainMap: Map<FilterChain, Asset[]> = useMemo(() => {
