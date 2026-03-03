@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "@trivago/prettier-plugin-sort-imports",
     "prettier-plugin-tailwindcss"
   ],
   "arrowParens": "avoid",
@@ -11,14 +10,5 @@
   "semi": false,
   "proseWrap": "always",
   "printWidth": 150,
-  "importOrderCaseInsensitive": true,
-  "importOrder": [
-    "^next(/.*)?$",
-    "^react(/.*)?$",
-    "<THIRD_PARTY_MODULES>",
-    "^@/components/ui/(.*)$",
-    "^@/components/(.*)$",
-    "^@/(.*)$",
-    "^[./]"
-  ]
+  "importOrderCaseInsensitive": true
 }
