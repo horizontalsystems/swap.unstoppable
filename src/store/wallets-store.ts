@@ -72,7 +72,7 @@ export const useWalletStore = create<WalletState>()(
       }
     }),
     {
-      name: 'thorswap-wallet-store',
+      name: 'uw-wallet-store',
       partialize: state => ({
         accounts: state.accounts,
         selected: state.selected,

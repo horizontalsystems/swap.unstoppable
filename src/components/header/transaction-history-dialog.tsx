@@ -113,7 +113,8 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                   qrCodeData: tx.qrCodeData,
                   address: tx.addressDeposit,
                   value: tx.amountFrom,
-                  expiration: tx.expiration
+                  expiration: tx.expiration,
+                  txExtraAttribute: tx.txExtraAttribute
                 }
 
                 openDialog(InstantSwapChannelDialog, { assetFrom: tx.assetFrom, assetTo: tx.assetTo, channel: channel })

@@ -25,6 +25,7 @@ export interface DepositChannel {
   address: string
   value: string
   expiration?: number
+  txExtraAttribute?: any
 }
 
 export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwapDialogProps) => {
@@ -40,12 +41,13 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
 
   if (!assetFrom || !assetTo) return null
 
-  const createChannel = (quote: QuoteResponseRoute, qrCodeData: string, address: string, value: string, expiration?: number) => {
+  const createChannel = (quote: QuoteResponseRoute, qrCodeData: string, address: string, value: string, expiration?: number, txExtraAttribute?: any) => {
     setChannel({
       qrCodeData,
       address,
       value,
-      expiration
+      expiration,
+      txExtraAttribute
     })
 
     setTransaction({
@@ -63,7 +65,8 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
       addressDeposit: address,
       status: 'not_started',
       qrCodeData,
-      expiration
+      expiration,
+      txExtraAttribute
     })
   }
 
@@ -74,7 +77,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
     if (qrProviders.includes(provider)) {
       if (!quote.inboundAddress || !quote.qrCodeDataURL) return
 
-      createChannel(quote, quote.qrCodeDataURL, quote.inboundAddress, quote.sellAmount, quote.expiration ? Number(quote.expiration) : undefined)
+      createChannel(quote, quote.qrCodeDataURL, quote.inboundAddress, quote.sellAmount, quote.expiration ? Number(quote.expiration) : undefined, quote.txExtraAttribute)
 
       return
     }

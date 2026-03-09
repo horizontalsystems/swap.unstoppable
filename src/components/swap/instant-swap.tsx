@@ -4,7 +4,6 @@ import { formatDuration, intervalToDuration } from 'date-fns'
 import { CredenzaDescription, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CopyButton } from '@/components/button-copy'
-import { chainLabel } from '@/components/connect-wallet/config'
 import { Asset } from '@/components/swap/asset'
 import { DepositChannel } from '@/components/swap/instant-swap-dialog'
 import { SwapAddressWarning } from '@/components/swap/swap-address-warning'
@@ -61,14 +60,22 @@ export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannel
               <CopyButton text={channel.value} />
             </div>
 
-            <div className="flex flex-col items-center gap-2">
-              <div className="flex items-center gap-2">
-                <div className={cn('text-thor-gray text-sm font-semibold break-all', { 'blur-xs': isBlurred })}>{channel.address}</div>
-                <CopyButton text={channel.address} />
-              </div>
-
-              <div className="text-gray border-gray rounded-full border px-1.5 text-[10px] font-semibold">{chainLabel(assetFrom.chain)}</div>
+            <div className={cn('flex items-center gap-2', { 'blur-xs': isBlurred })}>
+              <div className="text-thor-gray text-sm font-semibold break-all">{channel.address}</div>
+              <CopyButton text={channel.address} />
             </div>
+
+            {(channel.txExtraAttribute?.destinationTag || channel.txExtraAttribute?.memo) && (
+              <div className={cn('flex items-center gap-1', { 'blur-xs': isBlurred })}>
+                <div className="text-gray text-sm font-semibold">{channel.txExtraAttribute.destinationTag ? 'destination tag' : 'memo'}</div>
+                <div className="flex items-center gap-2">
+                  <div className="text-thor-gray text-sm font-semibold break-all">
+                    {channel.txExtraAttribute.destinationTag ?? channel.txExtraAttribute.memo}
+                  </div>
+                  <CopyButton text={String(channel.txExtraAttribute.destinationTag ?? channel.txExtraAttribute.memo)} />
+                </div>
+              </div>
+            )}
 
             <div className="size-50 overflow-hidden rounded-4xl bg-white p-3">
               <Image src={channel.qrCodeData} alt="QR Code" className={cn('h-full w-full', { 'blur-sm': isBlurred })} width={200} height={200} />

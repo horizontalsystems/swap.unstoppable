@@ -26,6 +26,7 @@ export interface Transaction {
   qrCodeData?: string
   expiration?: number
   limitSwapMemo?: string
+  txExtraAttribute?: any
 }
 
 interface TransactionStore {
@@ -97,8 +98,8 @@ export const transactionStore = create<TransactionStore>()(
       }
     }),
     {
-      name: 'transactions',
-      version: 4
+      name: 'uw-transaction-store',
+      version: 1
     }
   )
 )
