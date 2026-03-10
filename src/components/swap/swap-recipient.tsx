@@ -60,7 +60,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
   if (!assetFrom || !assetTo) return null
 
-  const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX']
+  const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'THORCHAIN']
   const refundRequired = !selectedAccount && qrProviders.includes(provider)
   const options = accounts.filter(a => a.network === assetTo.chain)
 
