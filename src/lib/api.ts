@@ -10,7 +10,7 @@ const uSwap = axios.create({
   }
 })
 
-const thornode = axios.create({ baseURL: 'https://thornode.ninerealms.com' })
+const thornode = axios.create({ baseURL: 'https://gateway.liquify.com/chain/thorchain_api' })
 const coingecko = axios.create({ baseURL: 'https://api.coingecko.com/api/v3' })
 
 export const getAssetRates = async (ids: string) => {
