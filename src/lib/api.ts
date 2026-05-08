@@ -1,7 +1,7 @@
 import { AssetValue, Chain, getChainConfig } from '@uswap/core'
 import { BalanceResponse, QuoteRequest, USwapApi } from '@uswap/helpers/api'
 import axios from 'axios'
-import { QuoteResponse } from '@/types'
+import { Provider, QuoteResponse } from '@/types'
 
 const uSwap = axios.create({
   baseURL: process.env.NEXT_PUBLIC_USWAP_API_URL,
@@ -54,4 +54,8 @@ export const getMimir = async (): Promise<Record<string, number>> => {
 
 export const getInboundAddresses = () => {
   return USwapApi.thornode.getInboundAddresses()
+}
+
+export const getProviders = async (): Promise<Provider[]> => {
+  return uSwap.get('/providers').then(res => res.data)
 }

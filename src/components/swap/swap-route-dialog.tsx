@@ -40,6 +40,7 @@ export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) 
                     <span className="text-remus border-remus rounded-3xl border px-1.5 text-[10px] font-semibold">BEST PRICE</span>
                   ) : undefined
                 }
+                showAmlBadge
                 className={cn('cursor-pointer transition-colors', index === selectedIndex && 'border-remus')}
                 onClick={() => {
                   setSelectedIndex(index)

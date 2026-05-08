@@ -4,9 +4,12 @@ import { Separator } from '@/components/ui/separator'
 import { useDialog } from '@/components/global-dialog'
 import { Icon } from '@/components/icons'
 import { PriceImpact } from '@/components/swap/price-impact'
+import { AmlPolicyBadge } from '@/components/aml-policy/aml-policy-badge'
+import { AmlPolicyInfo } from '@/components/aml-policy/aml-policy-info'
 import { SwapFeeDialog } from '@/components/swap/swap-fee-dialog'
 import { SwapProvider } from '@/components/swap/swap-provider'
 import { InfoTooltip } from '@/components/tooltip'
+import { useProviders } from '@/hooks/use-providers'
 import { useRates, useSwapRates } from '@/hooks/use-rates'
 import { formatExpiration, resolveFees, resolvePriceImpact } from '@/lib/swap-helpers'
 import { cn } from '@/lib/utils'
@@ -20,6 +23,7 @@ interface SwapRouteCardProps {
   estimatedTime?: { total: number }
   providerAction?: ReactNode
   badge?: ReactNode
+  showAmlBadge?: boolean
   className?: string
   onClick?: () => void
 }
@@ -32,6 +36,7 @@ export function SwapRouteCard({
   estimatedTime,
   providerAction,
   badge,
+  showAmlBadge,
   className,
   onClick
 }: SwapRouteCardProps) {
@@ -39,6 +44,8 @@ export function SwapRouteCard({
   const [priceInverted, setPriceInverted] = useState(false)
   const { openDialog } = useDialog()
   const { rateFrom, rateTo } = useSwapRates()
+  const { getAmlPolicy } = useProviders()
+  const amlPolicy = showAmlBadge ? getAmlPolicy(route.providers[0]) : undefined
 
   const identifiers = useMemo(() => route.fees.map(t => t.asset).sort(), [route.fees])
   const { rates } = useRates(identifiers)
@@ -54,9 +61,20 @@ export function SwapRouteCard({
 
   return (
     <div className={cn('border-blade rounded-3xl border text-[13px] font-semibold', className)} onClick={onClick}>
-      <div className="flex items-center justify-between px-4 py-3">
-        {providerAction || <SwapProvider provider={route.providers[0]} />}
-        {badge}
+      <div className="flex items-center justify-between gap-2 px-4 py-3">
+        <div className="flex min-w-0 items-center gap-2">
+          {providerAction || <SwapProvider provider={route.providers[0]} />}
+          {badge}
+        </div>
+        {amlPolicy && (
+          <AmlPolicyBadge
+            amlPolicy={amlPolicy}
+            onClick={e => {
+              e.stopPropagation()
+              openDialog(AmlPolicyInfo, {})
+            }}
+          />
+        )}
       </div>
 
       <Separator className="bg-blade" />
