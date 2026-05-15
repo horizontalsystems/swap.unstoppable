@@ -335,6 +335,17 @@ const AlertCircleIcon = memo<IconProps>(props => (
   </SVG>
 ))
 
+const StarIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M10.1572 5.71484L15 6.41992L11.4951 9.84277L12.3213 14.667L8 12.3896L3.67871 14.667L4.50391 9.84277L1 6.41992L5.8418 5.71484L8 1.33301L10.1572 5.71484Z"
+      fill="currentColor"
+    />
+  </SVG>
+))
+
 // Icon name mapping
 const iconMap = {
   'arrow-m-up': ArrowMUpIcon,
@@ -373,7 +384,8 @@ const iconMap = {
   'shield-check': ShieldCheckIcon,
   'thumbs-up': ThumbsUpIcon,
   target: TargetIcon,
-  'alert-circle': AlertCircleIcon
+  'alert-circle': AlertCircleIcon,
+  star: StarIcon
 } as const
 
 export type IconName = keyof typeof iconMap

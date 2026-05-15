@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { SwapRouteCard } from '@/components/swap/swap-route-card'
@@ -16,6 +17,13 @@ export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) 
   const { valueFrom } = useSwap()
   const { quotes, selectedIndex, setSelectedIndex } = useQuote()
 
+  const fasterIndex = useMemo(() => {
+    if (quotes.length < 2) return -1
+    const times = quotes.slice(1).map(r => r.estimatedTime?.total ?? Infinity)
+    const min = Math.min(...times)
+    return min === Infinity ? -1 : times.indexOf(min) + 1
+  }, [quotes])
+
   if (!assetFrom || !assetTo) return null
 
   return (
@@ -26,7 +34,7 @@ export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) 
         </CredenzaHeader>
 
         <ScrollArea className="relative flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
-          <div className="space-y-3 pb-4">
+          <div className="space-y-2.5 pb-4">
             {quotes.map((route, index) => (
               <SwapRouteCard
                 key={route.providers[0]}
@@ -37,10 +45,13 @@ export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) 
                 estimatedTime={route.estimatedTime}
                 badge={
                   index === 0 ? (
-                    <span className="text-remus border-remus rounded-3xl border px-1.5 text-[10px] font-semibold">BEST PRICE</span>
+                    <span className="text-remus border-remus rounded-lg border px-1.5 text-[10px] font-semibold">BEST PRICE</span>
+                  ) : index === fasterIndex ? (
+                    <span className="text-jacob border-jacob rounded-lg border px-1.5 text-[10px] font-semibold">FASTER</span>
                   ) : undefined
                 }
                 showAmlBadge
+                showAmount
                 className={cn('cursor-pointer transition-colors', index === selectedIndex && 'border-remus')}
                 onClick={() => {
                   setSelectedIndex(index)

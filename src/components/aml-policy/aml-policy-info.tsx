@@ -11,22 +11,15 @@ interface AmlRiskLevelsDialogProps {
 const RISK_LEVELS: { policy: AmlPolicy; description: string }[] = [
   {
     policy: 'auto',
-    description:
-      'Automatic on-chain execution. Funds cannot be frozen or blocked after submission. If swap fails the funds are refunded automatically.'
+    description: 'Direct on-chain execution. No provider checks or freezes. Automatic refunds if swap fails.'
   },
   {
     policy: 'flexible',
-    description: 'Provider operates using their own liquidity. Rejections are rare. Freezes are theoretically possible but highly unlikely'
-  },
-  {
-    policy: 'precheck',
-    description:
-      'Provider does its own address screening prior processing swap. Rejections are rare. Freezes are theoretically possible but highly unlikely'
+    description: 'Provider checks transactions automatically before completion. If issues are detected, the swap is rejected and funds are refunded.'
   },
   {
     policy: 'controlled',
-    description:
-      'These provider operates with third party liquidity and has AML policies in place. In most cases swaps are rejected and refunded if any AML issues are detected. In some situations provider may request KYC before releasing funds'
+    description: 'Additional verification may be required for some transactions. If issues are detected, funds are usually refunded automatically.'
   }
 ]
 
@@ -40,7 +33,7 @@ export const AmlPolicyInfo = ({ isOpen, onOpenChange }: AmlRiskLevelsDialogProps
 
         <ScrollArea className="relative flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
           <div className="pb-4">
-            <p className="text-thor-gray text-sm">Risk levels show what actions a provider may take during execution.</p>
+            <p className="text-thor-gray text-sm">These levels show how providers handle swaps and transaction checks.</p>
 
             <div className="mt-6 flex flex-col gap-6">
               {RISK_LEVELS.map(({ policy, description }) => (

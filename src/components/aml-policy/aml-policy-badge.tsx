@@ -10,46 +10,43 @@ interface AmlPolicyMeta {
 
 const AML_POLICY_META: Record<AmlPolicy, AmlPolicyMeta> = {
   auto: {
-    label: 'Auto',
-    icon: 'shield-check',
+    label: 'Excellent',
+    icon: 'star',
     className: 'text-remus'
   },
   flexible: {
-    label: 'Flexible',
-    icon: 'thumbs-up',
+    label: 'Good',
+    icon: 'shield-check',
     className: 'text-blue-500'
   },
   precheck: {
-    label: 'PreCheck',
-    icon: 'target',
-    className: 'text-leah'
+    label: 'Good',
+    icon: 'shield-check',
+    className: 'text-blue-500'
   },
   controlled: {
-    label: 'Controlled',
-    icon: 'alert-circle',
+    label: 'Fair',
+    icon: 'thumbs-up',
     className: 'text-jacob'
   }
 }
 
 interface AmlPolicyBadgeProps {
   amlPolicy: AmlPolicy
-  className?: string
   onClick?: (e: React.MouseEvent) => void
 }
 
-export const AmlPolicyBadge = ({ amlPolicy, className, onClick }: AmlPolicyBadgeProps) => {
+export const AmlPolicyBadge = ({ amlPolicy, onClick }: AmlPolicyBadgeProps) => {
   const meta = AML_POLICY_META[amlPolicy]
   if (!meta) return null
 
   return (
     <button
-      type="button"
-      onClick={onClick}
       className={cn(
-        'border-blade flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold outline-none',
-        meta.className,
-        className
+        'border-blade box-border flex h-8 cursor-pointer items-center gap-1 rounded-xl border px-2 text-xs font-semibold',
+        meta.className
       )}
+      onClick={onClick}
     >
       <Icon viewBox="0 0 16 16" name={meta.icon} className="size-4" />
       <span>{meta.label}</span>
