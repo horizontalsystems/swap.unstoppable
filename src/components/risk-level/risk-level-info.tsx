@@ -1,29 +1,29 @@
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { AmlPolicyBadge } from '@/components/aml-policy/aml-policy-badge'
-import { AmlPolicy } from '@/types'
+import { RiskLevelBadge } from '@/components/risk-level/risk-level-badge'
+import { RiskLevel } from '@/types'
 
-interface AmlRiskLevelsDialogProps {
+interface RiskLevelInfoProps {
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
 }
 
-const RISK_LEVELS: { policy: AmlPolicy; description: string }[] = [
+const RISK_LEVELS: { riskLevel: RiskLevel; description: string }[] = [
   {
-    policy: 'auto',
+    riskLevel: 'excellent',
     description: 'Direct on-chain execution. No provider checks or freezes. Automatic refunds if swap fails.'
   },
   {
-    policy: 'flexible',
+    riskLevel: 'good',
     description: 'Provider checks transactions automatically before completion. If issues are detected, the swap is rejected and funds are refunded.'
   },
   {
-    policy: 'controlled',
+    riskLevel: 'fair',
     description: 'Additional verification may be required for some transactions. If issues are detected, funds are usually refunded automatically.'
   }
 ]
 
-export const AmlPolicyInfo = ({ isOpen, onOpenChange }: AmlRiskLevelsDialogProps) => {
+export const RiskLevelInfo = ({ isOpen, onOpenChange }: RiskLevelInfoProps) => {
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="flex h-auto max-h-5/6 flex-col md:max-w-md">
@@ -36,10 +36,10 @@ export const AmlPolicyInfo = ({ isOpen, onOpenChange }: AmlRiskLevelsDialogProps
             <p className="text-thor-gray text-sm">These levels show how providers handle swaps and transaction checks.</p>
 
             <div className="mt-6 flex flex-col gap-6">
-              {RISK_LEVELS.map(({ policy, description }) => (
-                <div key={policy} className="flex flex-col gap-3">
+              {RISK_LEVELS.map(({ riskLevel, description }) => (
+                <div key={riskLevel} className="flex flex-col gap-3">
                   <div>
-                    <AmlPolicyBadge amlPolicy={policy} />
+                    <RiskLevelBadge riskLevel={riskLevel} />
                   </div>
                   <p className="text-thor-gray text-sm">{description}</p>
                 </div>

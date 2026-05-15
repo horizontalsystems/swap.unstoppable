@@ -50,7 +50,7 @@ export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) 
                     <span className="text-jacob border-jacob rounded-lg border px-1.5 text-[10px] font-semibold">FASTER</span>
                   ) : undefined
                 }
-                showAmlBadge
+                showRiskLevel
                 showAmount
                 className={cn('cursor-pointer transition-colors', index === selectedIndex && 'border-remus')}
                 onClick={() => {

@@ -317,29 +317,11 @@ const ThumbsUpIcon = memo<IconProps>(props => (
   </SVG>
 ))
 
-const TargetIcon = memo<IconProps>(props => (
-  <SVG {...props}>
-    <path
-      d="M8 1.33301C11.6819 1.33301 14.667 4.3181 14.667 8C14.667 11.6819 11.6819 14.667 8 14.667C4.3181 14.667 1.33301 11.6819 1.33301 8C1.33301 6.16158 2.07825 4.49538 3.28125 3.29004L3.75293 2.81934L8.4707 7.52832L7.5293 8.47168L5.70117 6.64746C5.46732 7.04397 5.33301 7.50619 5.33301 8C5.33301 9.47276 6.52724 10.667 8 10.667C9.47276 10.667 10.667 9.47276 10.667 8C10.667 6.52724 9.47276 5.33301 8 5.33301V4C10.2091 4 12 5.79086 12 8C12 10.2091 10.2091 12 8 12C5.79086 12 4 10.2091 4 8C4 7.1378 4.27333 6.33867 4.7373 5.68555L3.78418 4.73438C3.08374 5.63707 2.66699 6.76918 2.66699 8C2.66699 10.9455 5.05448 13.333 8 13.333C10.9455 13.333 13.333 10.9455 13.333 8C13.333 5.05448 10.9455 2.66699 8 2.66699V1.33301Z"
-      fill="currentColor"
-    />
-  </SVG>
-))
-
-const AlertCircleIcon = memo<IconProps>(props => (
-  <SVG {...props}>
-    <path
-      d="M14.667 5.08301V10.917L10.917 14.667H5.08301L1.33301 10.917V5.08301L5.08301 1.33301H10.917L14.667 5.08301ZM7.33301 12H8.66699V10.667H7.33301V12ZM7.33301 9.33301H8.66699V4.66699H7.33301V9.33301Z"
-      fill="currentColor"
-    />
-  </SVG>
-))
-
 const StarIcon = memo<IconProps>(props => (
   <SVG {...props}>
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M10.1572 5.71484L15 6.41992L11.4951 9.84277L12.3213 14.667L8 12.3896L3.67871 14.667L4.50391 9.84277L1 6.41992L5.8418 5.71484L8 1.33301L10.1572 5.71484Z"
       fill="currentColor"
     />
@@ -383,8 +365,6 @@ const iconMap = {
   list: ListIcon,
   'shield-check': ShieldCheckIcon,
   'thumbs-up': ThumbsUpIcon,
-  target: TargetIcon,
-  'alert-circle': AlertCircleIcon,
   star: StarIcon
 } as const
 

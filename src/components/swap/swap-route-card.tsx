@@ -3,8 +3,8 @@ import { USwapNumber } from '@uswap/core'
 import { Separator } from '@/components/ui/separator'
 import { useDialog } from '@/components/global-dialog'
 import { Icon } from '@/components/icons'
-import { AmlPolicyBadge } from '@/components/aml-policy/aml-policy-badge'
-import { AmlPolicyInfo } from '@/components/aml-policy/aml-policy-info'
+import { RiskLevelBadge } from '@/components/risk-level/risk-level-badge'
+import { RiskLevelInfo } from '@/components/risk-level/risk-level-info'
 import { SwapProvider } from '@/components/swap/swap-provider'
 import { useProviders } from '@/hooks/use-providers'
 import { useSwapRates } from '@/hooks/use-rates'
@@ -20,7 +20,7 @@ interface SwapRouteCardProps {
   estimatedTime?: { total: number }
   providerAction?: ReactNode
   badge?: ReactNode
-  showAmlBadge?: boolean
+  showRiskLevel?: boolean
   showAmount?: boolean
   className?: string
   onClick?: () => void
@@ -34,7 +34,7 @@ export function SwapRouteCard({
   estimatedTime,
   providerAction,
   badge,
-  showAmlBadge,
+  showRiskLevel,
   showAmount,
   className,
   onClick
@@ -42,9 +42,9 @@ export function SwapRouteCard({
   const [priceInverted, setPriceInverted] = useState(false)
   const { openDialog } = useDialog()
   const { rateTo } = useSwapRates()
-  const { getAmlPolicy } = useProviders()
+  const { getRiskLevel } = useProviders()
 
-  const amlPolicy = showAmlBadge ? getAmlPolicy(route.providers[0]) : undefined
+  const riskLevel = showRiskLevel ? getRiskLevel(route.providers[0]) : undefined
   const valueTo = new USwapNumber(route.expectedBuyAmount)
   const fiatValueTo = (rateTo && valueTo.mul(rateTo)) || new USwapNumber(0)
   const priceDirect = priceInverted ? valueTo.lt(valueFrom) : valueTo.gt(valueFrom)
@@ -53,16 +53,16 @@ export function SwapRouteCard({
   return (
     <div className={cn('border-blade rounded-2xl border text-xs font-semibold', className)} onClick={onClick}>
       <div className="flex items-center justify-between gap-2 p-4">
-        <div className="flex min-w-0 items-center gap-2">
+        <div className={cn('flex min-w-0 items-center gap-2', { 'w-full justify-between': !showRiskLevel })}>
           {providerAction || <SwapProvider provider={route.providers[0]} />}
           {badge}
         </div>
-        {amlPolicy && (
-          <AmlPolicyBadge
-            amlPolicy={amlPolicy}
+        {riskLevel && (
+          <RiskLevelBadge
+            riskLevel={riskLevel}
             onClick={e => {
               e.stopPropagation()
-              openDialog(AmlPolicyInfo, {})
+              openDialog(RiskLevelInfo, {})
             }}
           />
         )}

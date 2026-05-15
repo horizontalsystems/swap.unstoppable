@@ -95,8 +95,7 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
               spenderAddress: approveData.spender,
               amount: approveData.amount
             })
-            .then(res => {
-              console.log({ res })
+            .then(() => {
               refetchQuote()
             })
 

@@ -15,14 +15,14 @@ export type QuoteResponse = Omit<BaseQuoteResponse, 'routes'> & {
   routes: QuoteResponseRoute[]
 }
 
-export type AmlPolicy = 'auto' | 'flexible' | 'precheck' | 'controlled'
+export type RiskLevel = 'excellent' | 'good' | 'fair'
 
 export interface Provider {
   name: string
   provider: string
   count: number
   supportedChainIds: string[]
-  amlPolicy: AmlPolicy
+  amlPolicy: RiskLevel
   amlPolicyDescription: string
   contact: string | null
   timestamp: string
