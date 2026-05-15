@@ -59,6 +59,13 @@ export const resolvePriceImpact = (quote?: QuoteResponseRoute, rateFrom?: USwapN
   return toPriceRatio && toPriceRatio.lte(hundredPercent) ? hundredPercent.sub(toPriceRatio) : undefined
 }
 
+export const findFasterIndex = (quotes: QuoteResponseRoute[]): number => {
+  if (quotes.length < 2) return -1
+  const times = quotes.slice(1).map(r => r.estimatedTime?.total ?? Infinity)
+  const min = Math.min(...times)
+  return min === Infinity ? -1 : times.indexOf(min) + 1
+}
+
 export const formatExpiration = (seconds: number) => {
   const duration = intervalToDuration({ start: 0, end: seconds * 1000 })
   const parts = []

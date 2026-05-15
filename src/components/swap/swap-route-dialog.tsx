@@ -1,9 +1,11 @@
 import { useMemo } from 'react'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { SwapRouteBadge } from '@/components/swap/swap-route-badge'
 import { SwapRouteCard } from '@/components/swap/swap-route-card'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
+import { findFasterIndex } from '@/lib/swap-helpers'
 import { cn } from '@/lib/utils'
 
 interface SwapRouteDialogProps {
@@ -17,12 +19,7 @@ export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) 
   const { valueFrom } = useSwap()
   const { quotes, selectedIndex, setSelectedIndex } = useQuote()
 
-  const fasterIndex = useMemo(() => {
-    if (quotes.length < 2) return -1
-    const times = quotes.slice(1).map(r => r.estimatedTime?.total ?? Infinity)
-    const min = Math.min(...times)
-    return min === Infinity ? -1 : times.indexOf(min) + 1
-  }, [quotes])
+  const fasterIndex = useMemo(() => findFasterIndex(quotes), [quotes])
 
   if (!assetFrom || !assetTo) return null
 
@@ -43,13 +40,7 @@ export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) 
                 assetFromTicker={assetFrom.ticker}
                 assetToTicker={assetTo.ticker}
                 estimatedTime={route.estimatedTime}
-                badge={
-                  index === 0 ? (
-                    <span className="text-remus border-remus rounded-lg border px-1.5 text-[10px] font-semibold">BEST PRICE</span>
-                  ) : index === fasterIndex ? (
-                    <span className="text-jacob border-jacob rounded-lg border px-1.5 text-[10px] font-semibold">FASTER</span>
-                  ) : undefined
-                }
+                badge={<SwapRouteBadge index={index} fasterIndex={fasterIndex} />}
                 showRiskLevel
                 showAmount
                 className={cn('cursor-pointer transition-colors', index === selectedIndex && 'border-remus')}

@@ -2,11 +2,13 @@ import { useMemo } from 'react'
 import { useDialog } from '@/components/global-dialog'
 import { Icon } from '@/components/icons'
 import { SwapProvider } from '@/components/swap/swap-provider'
+import { SwapRouteBadge } from '@/components/swap/swap-route-badge'
 import { SwapRouteCard } from '@/components/swap/swap-route-card'
 import { SwapRouteDialog } from '@/components/swap/swap-route-dialog'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSwap, useTwapMode } from '@/hooks/use-swap'
 import { recalculateEstimatedTime, THORCHAIN_BLOCK_TIME_SECONDS } from '@/lib/memo-helpers'
+import { findFasterIndex } from '@/lib/swap-helpers'
 import { ProviderName } from '@/types'
 
 export function SwapDetails() {
@@ -18,6 +20,8 @@ export function SwapDetails() {
   const twapMode = useTwapMode()
   const customInterval = useCustomInterval()
   const customQuantity = useCustomQuantity()
+
+  const fasterIndex = useMemo(() => findFasterIndex(quotes), [quotes])
 
   const isThorchain = quote?.providers[0] === ProviderName.THORCHAIN || quote?.providers[0] === ProviderName.THORCHAIN_STREAMING
   const estimatedTime = useMemo(() => {
@@ -47,7 +51,7 @@ export function SwapDetails() {
           </button>
         ) : undefined
       }
-      badge={selectedIndex === 0 ? <span className="text-remus border-remus rounded-3xl border px-1.5 text-[10px]">BEST PRICE</span> : undefined}
+      badge={<SwapRouteBadge index={selectedIndex} fasterIndex={fasterIndex} />}
     />
   )
 }
