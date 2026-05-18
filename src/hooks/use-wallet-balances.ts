@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
 import { AssetValue, Chain, USwapNumber } from '@uswap/core'
 import { useAssets } from '@/hooks/use-assets'
 import { useRates } from '@/hooks/use-rates'
@@ -37,7 +37,6 @@ export const useWalletBalances = () => {
   const accounts = useAccounts()
   const hasHydrated = useHasHydrated()
   const uSwap = getUSwap()
-  const queryClient = useQueryClient()
 
   const { iconMap, curatedIdentifiers } = useMemo(() => {
     const iconMap = new Map<string, string>()
@@ -51,71 +50,74 @@ export const useWalletBalances = () => {
     return { iconMap, curatedIdentifiers }
   }, [assets])
 
-  const queryKey = accounts.map(a => `${a.provider}-${a.network}`).join(',')
+  const balanceQueries = useQueries({
+    queries: accounts.map(account => ({
+      queryKey: ['wallet-balance', account.provider, account.network, account.address],
+      queryFn: async () => {
+        const wallet = uSwap.getWallet(account.provider, account.network)
+        if (!wallet || !('getBalance' in wallet)) {
+          return { balances: [] as AssetValue[], alchemyLogoMap: new Map<string, string>() }
+        }
+        const rawBalances = await (wallet as any).getBalance(wallet.address, false)
+        const balances: AssetValue[] = rawBalances ? [...rawBalances] : []
 
-  const { data: allBalances, isLoading } = useQuery({
-    queryKey: ['wallet-all-balances', queryKey],
-    queryFn: async () => {
-      const results = await Promise.allSettled(
-        accounts.map(async account => {
-          const wallet = uSwap.getWallet(account.provider, account.network)
-          if (!wallet || !('getBalance' in wallet)) return { account, balances: [] as AssetValue[], alchemyLogoMap: new Map<string, string>() }
-          const rawBalances = await queryClient.ensureQueryData({
-            queryKey: ['account-balance', account.network, account.address],
-            queryFn: () => (wallet as any).getBalance(wallet.address, false),
-            staleTime: 30_000
-          })
-          const balances: AssetValue[] = rawBalances ? [...rawBalances] : []
-
-          if (account.network === Chain.THORChain) {
-            const bankBalances = await getThorBankBalances(account.address)
-            const seen = new Set(balances.map(b => `${b.chain}.${b.symbol}`.toLowerCase()))
-            for (const b of bankBalances) {
-              const key = `${b.chain}.${b.symbol}`.toLowerCase()
-              if (!seen.has(key)) {
-                balances.push(b)
-                seen.add(key)
-              }
+        if (account.network === Chain.THORChain) {
+          const bankBalances = await getThorBankBalances(account.address)
+          const seen = new Set(balances.map(b => `${b.chain}.${b.symbol}`.toLowerCase()))
+          for (const b of bankBalances) {
+            const key = `${b.chain}.${b.symbol}`.toLowerCase()
+            if (!seen.has(key)) {
+              balances.push(b)
+              seen.add(key)
             }
           }
+        }
 
-          const alchemyLogoMap = new Map<string, string>()
-          if (account.network === Chain.Ethereum) {
-            const alchemyBalances = await getAlchemyTokenBalances(wallet.address, ETH_RPC_URL)
-            const existingAddresses = new Set(balances.map(b => b.address?.toLowerCase()).filter(Boolean))
-            for (const t of alchemyBalances) {
-              const addr = t.contractAddress.toLowerCase()
-              if (t.logo) alchemyLogoMap.set(addr, t.logo)
-              if (existingAddresses.has(addr)) continue
-              if (t.symbol && ETH_SCAM_TICKERS.has(t.symbol.toUpperCase())) continue
-              const value = BigInt(t.tokenBalance).toString()
-              try {
-                const av = AssetValue.from({
-                  asset: `ETH.${t.symbol}-${t.contractAddress}`,
-                  fromBaseDecimal: t.decimals,
-                  value
-                })
-                balances.push(av)
-              } catch {
-                // skip tokens that can't be parsed
-              }
+        const alchemyLogoMap = new Map<string, string>()
+        if (account.network === Chain.Ethereum) {
+          const alchemyBalances = await getAlchemyTokenBalances(wallet.address, ETH_RPC_URL)
+          const existingAddresses = new Set(balances.map(b => b.address?.toLowerCase()).filter(Boolean))
+          for (const t of alchemyBalances) {
+            const addr = t.contractAddress.toLowerCase()
+            if (t.logo) alchemyLogoMap.set(addr, t.logo)
+            if (existingAddresses.has(addr)) continue
+            if (t.symbol && ETH_SCAM_TICKERS.has(t.symbol.toUpperCase())) continue
+            const value = BigInt(t.tokenBalance).toString()
+            try {
+              const av = AssetValue.from({
+                asset: `ETH.${t.symbol}-${t.contractAddress}`,
+                fromBaseDecimal: t.decimals,
+                value
+              })
+              balances.push(av)
+            } catch {
+              // skip tokens that can't be parsed
             }
           }
+        }
 
-          return { account, balances, alchemyLogoMap }
-        })
-      )
-      return results.map((r, i) => ({
-        account: accounts[i],
-        balances: r.status === 'fulfilled' ? r.value.balances : ([] as AssetValue[]),
-        alchemyLogoMap: r.status === 'fulfilled' ? r.value.alchemyLogoMap : new Map<string, string>()
-      }))
-    },
-    enabled: accounts.length > 0 && hasHydrated,
-    staleTime: 30_000,
-    retry: false,
-    refetchOnMount: false
+        return { balances, alchemyLogoMap }
+      },
+      enabled: hasHydrated,
+      staleTime: 30_000,
+      retry: false,
+      refetchOnMount: false
+    }))
   })
+
+  const isLoading = balanceQueries.some(q => q.isLoading)
+
+  const allBalances = useMemo(() => {
+    return accounts.map((account, i) => {
+      const q = balanceQueries[i]
+      return {
+        account,
+        balances: q?.data?.balances ?? ([] as AssetValue[]),
+        alchemyLogoMap: q?.data?.alchemyLogoMap ?? new Map<string, string>()
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accounts, ...balanceQueries.map(q => q.data)])
 
   const tokenIdentifiers = useMemo(() => {
     if (!allBalances) return []
