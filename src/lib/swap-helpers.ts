@@ -1,4 +1,4 @@
-import { assetFromString, USwapNumber } from '@uswap/core'
+import { assetFromString, Chain, USwapNumber } from '@uswap/core'
 import { intervalToDuration } from 'date-fns'
 import { AssetRateMap } from '@/hooks/use-rates'
 import { QuoteResponseRoute } from '@/types'
@@ -80,4 +80,24 @@ export const formatExpiration = (seconds: number) => {
   }
 
   return parts.join(' ')
+}
+
+// Fetches all bank-module balances for a THORChain address. Includes Secured Asset denoms
+// (e.g. "btc-btc", "eth-usdc-0x…") which the wallet toolbox may or may not surface depending
+// on its scam-filter heuristics. Decimals on THORChain bank are always 8.
+//
+// Bank denoms come back in several shapes — we normalise each one so it parses cleanly:
+//   rune, tcy            → THOR.RUNE / THOR.TCY  (THORChain natives, missing chain prefix)
+//   x/ruji               → THOR.RUJI            (factory denom, strip the "x/" prefix)
+//   btc/btc              → THOR.BTC/BTC          (synth)
+//   btc~btc              → THOR.BTC~BTC          (trade)
+//   eth-eth, eth-usdc-0x → ETH-ETH               (secured, bare canonical form)
+export function normalizeThorBankDenom(denom: string): string | null {
+  const lower = denom.toLowerCase()
+
+  if (lower.startsWith('x/')) return `${Chain.THORChain}.${lower.slice(2).toUpperCase()}`
+  if (lower.includes('/') || lower.includes('~')) return `${Chain.THORChain}.${lower.toUpperCase()}`
+  if (lower.includes('-')) return lower.toUpperCase()
+
+  return `${Chain.THORChain}.${lower.toUpperCase()}`
 }

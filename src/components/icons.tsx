@@ -15,6 +15,29 @@ const SVG = ({ children, ...rest }: IconProps) => (
   </svg>
 )
 
+const SendIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <mask id="mask0_send" style={{ maskType: 'alpha' }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+      <rect width="24" height="24" fill="currentColor" />
+    </mask>
+    <g mask="url(#mask0_send)">
+      <path
+        d="M5.5 2.47363L20.5 11.1338L22 12L20.5 12.8662L5.5 21.5264L4 22.3926V1.60742L5.5 2.47363ZM6 13V18.9277L16.2676 13H6ZM6 11H16.2676L6 5.07227V11Z"
+        fill="currentColor"
+      />
+    </g>
+  </SVG>
+))
+
+const FilterIcon = memo<IconProps>(props => (
+  <SVG {...props}>
+    <path
+      d="M22 8.41406L16 14.4141V21H8V14.4141L2 8.41406V3H22V8.41406ZM4 7.58594L10 13.5859V19H14V13.5859L20 7.58594V5H4V7.58594Z"
+      fill="currentColor"
+    />
+  </SVG>
+))
+
 const PlusIcon = memo<IconProps>(props => (
   <SVG {...props}>
     <path d="M13 11H20V13H13V20H11V13H4V11H11V4H13V11Z" fill="currentColor" />
@@ -337,6 +360,8 @@ const iconMap = {
   'arrow-s-down': ArrowSDownIcon,
   'arrow-s-up': ArrowSUpIcon,
   check: CheckIcon,
+  filter: FilterIcon,
+  send: SendIcon,
   clock: ClockIcon,
   'clock-filled': ClockFilledIcon,
   'cloud-in': CloudInIcon,

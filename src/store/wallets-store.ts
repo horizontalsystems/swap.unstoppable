@@ -15,19 +15,22 @@ interface WalletState {
   selected?: WalletAccount
   connectedWallets: WalletOption[]
   hasHydrated: boolean
+  externalWalletMode: boolean
 
   select: (account?: WalletAccount) => void
   connect: (wallet: WalletOption, chains: Chain[], config?: any) => Promise<void>
   disconnect: (wallet: WalletOption) => void
+  setExternalWalletMode: (enabled: boolean) => void
 }
 
 export const useWalletStore = create<WalletState>()(
   persist(
-    (set, get) => ({
+    set => ({
       accounts: [],
       connectedWallets: [],
       selected: undefined,
       hasHydrated: false,
+      externalWalletMode: false,
 
       select: (account?: WalletAccount) => {
         set({ selected: account })
@@ -41,7 +44,8 @@ export const useWalletStore = create<WalletState>()(
           }
 
           set(state => {
-            const filtered = state.accounts.filter(acc => acc.provider !== wallet)
+            const replacedChains = new Set(newAccounts.map(a => a.network))
+            const filtered = state.accounts.filter(acc => acc.provider !== wallet || !replacedChains.has(acc.network))
             const accounts = [...filtered, ...newAccounts]
 
             return {
@@ -52,6 +56,10 @@ export const useWalletStore = create<WalletState>()(
         } catch (err: any) {
           toast.error(err.message)
         }
+      },
+
+      setExternalWalletMode: (enabled: boolean) => {
+        set({ externalWalletMode: enabled })
       },
 
       disconnect: (wallet: WalletOption) => {
@@ -73,18 +81,22 @@ export const useWalletStore = create<WalletState>()(
     }),
     {
       name: 'uw-wallet-store',
+      version: 1,
       partialize: state => ({
         accounts: state.accounts,
         selected: state.selected,
-        connectedWallets: state.connectedWallets
+        connectedWallets: state.connectedWallets,
+        externalWalletMode: state.externalWalletMode
       }),
       onRehydrateStorage: () => async (state, error) => {
         if (error || !state) {
-          return console.log(error)
+          console.log(error)
+          useWalletStore.setState({ hasHydrated: true })
+          return
         }
 
         Promise.allSettled(
-          state.accounts.map(w => {
+          (state.accounts ?? []).map(w => {
             return getAccounts(w.provider, [w.network])
           })
         )

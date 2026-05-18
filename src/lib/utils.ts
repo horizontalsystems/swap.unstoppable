@@ -5,6 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function toCurrencyFixed(value: string): string {
+  if (!value.includes('.')) return value + '.00'
+  const dot = value.indexOf('.')
+  const dec = value.slice(dot + 1)
+  if (dec.length === 1) return value + '0'
+  return value
+}
+
 export function truncate(text: string, maxLength: number = 15) {
   if (text.length <= maxLength) return text
 

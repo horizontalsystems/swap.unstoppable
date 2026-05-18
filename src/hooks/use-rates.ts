@@ -1,104 +1,149 @@
-import { useEffect } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { assetFromString, getCommonAssetInfo, USwapNumber } from '@uswap/core'
-import { useAssets } from '@/hooks/use-assets'
+import { useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { USwapNumber } from '@uswap/core'
 import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
-import { getAssetRates } from '@/lib/api'
+import { getDexScreenerTokens, getMayaMidgardCacaoPrice, getMayaMidgardPools, getMidgardPools, getMidgardRunePrice } from '@/lib/api'
 
 export type AssetRateMap = Record<string, USwapNumber>
+export type AssetLogoMap = Record<string, string>
 
-class RateIdentifierCache {
-  private maxSize: number
-  private cache: Map<string, number>
+const RUNE_IDENTIFIER = 'THOR.RUNE'
+const CACAO_IDENTIFIER = 'MAYA.CACAO'
 
-  constructor(maxSize: number = 100) {
-    this.maxSize = maxSize
-    this.cache = new Map()
-  }
+export const useRates = (identifiers: string[]): { rates: AssetRateMap; logos: AssetLogoMap; isLoading: boolean } => {
+  const { data: midgardData, isLoading: midgardLoading } = useQuery({
+    queryKey: ['thorchain-pool-prices'],
+    queryFn: async () => {
+      const [pools, runePrice, mayaPools, cacaoPrice] = await Promise.all([
+        getMidgardPools(),
+        getMidgardRunePrice(),
+        getMayaMidgardPools().catch(() => []),
+        getMayaMidgardCacaoPrice().catch(() => NaN)
+      ])
 
-  add(identifiers: string[]): boolean {
-    let hasNew = false
-    const now = Date.now()
+      const priceMap: AssetRateMap = {}
 
-    for (const id of identifiers) {
-      const _id = id.toLowerCase()
-      if (!this.cache.has(_id)) {
-        hasNew = true
+      for (const pool of mayaPools) {
+        const price = parseFloat(pool.assetPriceUSD)
+        if (pool.asset && !isNaN(price) && price > 0) {
+          priceMap[pool.asset.toLowerCase()] = new USwapNumber(price)
+        }
       }
-      this.cache.delete(_id)
-      this.cache.set(_id, now)
-    }
 
-    while (this.cache.size > this.maxSize) {
-      const oldestKey = this.cache.keys().next().value
-      if (oldestKey) {
-        this.cache.delete(oldestKey)
+      for (const pool of pools) {
+        const price = parseFloat(pool.assetPriceUSD)
+        if (pool.asset && !isNaN(price) && price > 0) {
+          priceMap[pool.asset.toLowerCase()] = new USwapNumber(price)
+
+          // Mirror the L1 pool price onto the corresponding Secured Asset identifier
+          // (e.g. BTC.BTC -> BTC-BTC, ETH.USDC-0x… -> ETH-USDC-0x…). Secured assets track
+          // 1:1 with the underlying L1 asset, so the L1 pool price is a close proxy.
+          const dotIndex = pool.asset.indexOf('.')
+          if (dotIndex > 0) {
+            const chainPart = pool.asset.slice(0, dotIndex)
+            const tickerPart = pool.asset.slice(dotIndex + 1)
+            const securedKey = `${chainPart}-${tickerPart}`.toLowerCase()
+            priceMap[securedKey] = new USwapNumber(price)
+          }
+        }
       }
-    }
 
-    return hasNew
-  }
+      if (!isNaN(runePrice) && runePrice > 0) {
+        priceMap[RUNE_IDENTIFIER.toLowerCase()] = new USwapNumber(runePrice)
+      }
 
-  getAll(): string[] {
-    return Array.from(this.cache.keys())
-  }
+      if (!isNaN(cacaoPrice) && cacaoPrice > 0) {
+        priceMap[CACAO_IDENTIFIER.toLowerCase()] = new USwapNumber(cacaoPrice)
+      }
 
-  size(): number {
-    return this.cache.size
-  }
-}
-
-const identifierCache = new RateIdentifierCache(100)
-
-export const useRates = (identifiers: string[]): { rates: AssetRateMap; isLoading: boolean } => {
-  const { geckoMap } = useAssets()
-  const queryClient = useQueryClient()
-
-  useEffect(() => {
-    const gasIdentifiers = identifiers.map(id => getCommonAssetInfo(assetFromString(id).chain).identifier)
-    const hasNew = identifierCache.add([...identifiers, ...gasIdentifiers])
-
-    if (hasNew) {
-      queryClient.invalidateQueries({ queryKey: ['asset-rates-accumulated'] })
-    }
-  }, [identifiers, queryClient])
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['asset-rates-accumulated'],
-    enabled: !!geckoMap && identifierCache.size() > 0,
-    retry: false,
+      return priceMap
+    },
     staleTime: 3 * 60_000,
     refetchOnMount: false,
-    queryFn: async () => {
-      if (!geckoMap || identifierCache.size() === 0) return {}
+    refetchOnWindowFocus: false,
+    retry: false
+  })
 
-      const allIdentifiers = identifierCache.getAll()
-      const idMap = new Map<string, string>()
-
-      for (const identifier of allIdentifiers) {
-        const gid = geckoMap.get(identifier)
-        if (gid) idMap.set(identifier, gid)
+  const solanaMints = useMemo(() => {
+    const mints: string[] = []
+    for (const id of identifiers) {
+      if (id.toUpperCase().startsWith('SOL.') && id.includes('-')) {
+        const mint = id.split('-').pop()
+        if (mint) mints.push(mint)
       }
-
-      if (!idMap.size) return {}
-
-      return await fetchRates(Array.from(idMap.values()), Array.from(idMap.keys()))
     }
+    return mints
+  }, [identifiers])
+
+  const ethAddresses = useMemo(() => {
+    const addresses: string[] = []
+    for (const id of identifiers) {
+      if (id.toUpperCase().startsWith('ETH.') && id.includes('-')) {
+        const addr = id.split('-').pop()
+        if (addr) addresses.push(addr.toLowerCase())
+      }
+    }
+    return addresses
+  }, [identifiers])
+
+  const { data: dexScreenerData, isLoading: dexScreenerLoading } = useQuery({
+    queryKey: ['dexscreener-tokens-sol', solanaMints.slice().sort().join(',')],
+    queryFn: () => getDexScreenerTokens(solanaMints, 'solana'),
+    enabled: solanaMints.length > 0,
+    staleTime: 3 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false
+  })
+
+  const { data: dexScreenerEthData, isLoading: dexScreenerEthLoading } = useQuery({
+    queryKey: ['dexscreener-tokens-eth', ethAddresses.slice().sort().join(',')],
+    queryFn: () => getDexScreenerTokens(ethAddresses, 'ethereum'),
+    enabled: ethAddresses.length > 0,
+    staleTime: 3 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false
   })
 
   const rates: AssetRateMap = {}
-  if (data) {
+  const logos: AssetLogoMap = {}
+  if (midgardData) {
     for (const id of identifiers) {
-      const _id = id.toLowerCase()
-      if (data[_id]) {
-        rates[id] = data[_id]
+      const price = midgardData[id.toLowerCase()]
+      if (price) rates[id] = price
+    }
+  }
+
+  if (dexScreenerData) {
+    for (const id of identifiers) {
+      if (id.toUpperCase().startsWith('SOL.') && id.includes('-')) {
+        const mint = id.split('-').pop()!
+        const info = dexScreenerData[mint]
+        if (info?.price && !rates[id]) rates[id] = new USwapNumber(info.price)
+        if (info?.logo) logos[id] = info.logo
       }
     }
   }
 
+  if (dexScreenerEthData) {
+    for (const id of identifiers) {
+      if (id.toUpperCase().startsWith('ETH.') && id.includes('-')) {
+        const addr = id.split('-').pop()!.toLowerCase()
+        const info = dexScreenerEthData[addr]
+        if (info?.price && !rates[id]) rates[id] = new USwapNumber(info.price)
+        if (info?.logo) logos[id] = info.logo
+      }
+    }
+  }
+
+  const dexScreenerPending = solanaMints.length > 0 && dexScreenerLoading
+  const dexScreenerEthPending = ethAddresses.length > 0 && dexScreenerEthLoading
+
   return {
     rates,
-    isLoading: isLoading || !geckoMap || identifiers.length === 0
+    logos,
+    isLoading: midgardLoading || dexScreenerPending || dexScreenerEthPending || identifiers.length === 0
   }
 }
 
@@ -112,16 +157,4 @@ export const useSwapRates = () => {
     rateFrom: assetFrom && rates[assetFrom.identifier],
     rateTo: assetTo && rates[assetTo.identifier]
   }
-}
-
-async function fetchRates(geckoIds: string[], identifiers: string[]): Promise<AssetRateMap> {
-  const data = await getAssetRates(geckoIds.join(','))
-  const result: AssetRateMap = {}
-
-  identifiers.forEach((id, i) => {
-    const price = data[geckoIds[i]]?.usd
-    if (price) result[id] = new USwapNumber(price)
-  })
-
-  return result
 }

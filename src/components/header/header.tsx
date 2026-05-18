@@ -2,23 +2,20 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
+import { WalletIcon } from '@/components/wallet-icon'
 import { useDialog } from '@/components/global-dialog'
 import { ThemeSwitchButton } from '@/components/header/theme-switch-button'
 import { TransactionHistoryButton } from '@/components/header/transaction-history-button'
 import { Icon } from '@/components/icons'
 import { ThemeButton } from '@/components/theme-button'
+import { WalletSidebar } from '@/components/wallet-sidebar/wallet-sidebar'
 import { AppConfig } from '@/config'
-import { useConnectedWallets, useDisconnect } from '@/hooks/use-wallets'
+import { useConnectedWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 
 export function Header() {
   const { openDialog } = useDialog()
-
   const connectedProviders = useConnectedWallets()
-  const disconnectProvider = useDisconnect()
-
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
@@ -29,6 +26,8 @@ export function Header() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const openSidebar = () => openDialog(WalletSidebar, {})
 
   return (
     <header
@@ -50,33 +49,24 @@ export function Header() {
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
           <ThemeSwitchButton />
           <TransactionHistoryButton />
-          <ThemeButton variant="secondarySmall" className="hidden md:flex" onClick={() => openDialog(ConnectWallet, {})}>
-            Connect Wallet
-          </ThemeButton>
-          <ThemeButton
-            variant="circleSmall"
-            className="flex md:hidden"
-            onClick={() => {
-              openDialog(ConnectWallet, {})
-            }}
-          >
-            <Icon name="plus" />
-          </ThemeButton>
-          {connectedProviders.map((provider, i) => (
-            <DropdownMenu key={i}>
-              <DropdownMenuTrigger asChild>
-                <ThemeButton variant="circleSmall" className="rounded-xl">
-                  <Image width="24" height="24" src={`/wallets/${provider.toLowerCase()}.svg`} alt={provider} />
+          {connectedProviders.length > 0 ? (
+            <div className="flex items-center gap-1">
+              {connectedProviders.map((provider, i) => (
+                <ThemeButton key={i} variant="circleSmall" className="rounded-xl" onClick={openSidebar}>
+                  <WalletIcon walletKey={provider.toLowerCase()} width={24} height={24} alt={provider} />
                 </ThemeButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem className="text-thor-gray flex cursor-pointer gap-4 p-4" onClick={() => disconnectProvider(provider)}>
-                  <Icon name="disconnect" className="size-6" />
-                  <span className="text-sm">Disconnect</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ))}
+              ))}
+            </div>
+          ) : (
+            <>
+              <ThemeButton variant="secondarySmall" className="hidden md:flex" onClick={openSidebar}>
+                Connect Wallet
+              </ThemeButton>
+              <ThemeButton variant="circleSmall" className="flex md:hidden" onClick={openSidebar}>
+                <Icon name="plus" />
+              </ThemeButton>
+            </>
+          )}
         </div>
       </div>
     </header>
