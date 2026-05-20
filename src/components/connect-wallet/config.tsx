@@ -38,7 +38,7 @@ export const ALL_CHAINS = [
   Chain.Zcash
 ]
 
-export const COMING_SOON_CHAINS = ['XMR']
+export const COMING_SOON_CHAINS = []
 
 export const WALLETS: WalletParams[] = [
   {
