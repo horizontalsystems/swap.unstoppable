@@ -1,8 +1,17 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { USwapNumber } from '@uswap/core'
+import { ProviderName, USwapNumber } from '@uswap/core'
+import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
-import { getDexScreenerTokens, getMayaMidgardCacaoPrice, getMayaMidgardPools, getMidgardPools, getMidgardRunePrice } from '@/lib/api'
+import { useAssets } from '@/hooks/use-assets'
+import {
+  getCoinGeckoPrices,
+  getDexScreenerTokens,
+  getMayaMidgardCacaoPrice,
+  getMayaMidgardPools,
+  getMidgardPools,
+  getMidgardRunePrice
+} from '@/lib/api'
 
 export type AssetRateMap = Record<string, USwapNumber>
 export type AssetLogoMap = Record<string, string>
@@ -10,7 +19,17 @@ export type AssetLogoMap = Record<string, string>
 const RUNE_IDENTIFIER = 'THOR.RUNE'
 const CACAO_IDENTIFIER = 'MAYA.CACAO'
 
-export const useRates = (identifiers: string[]): { rates: AssetRateMap; logos: AssetLogoMap; isLoading: boolean } => {
+type PriceSource = 'thor' | 'maya' | 'gecko'
+
+const rateSource = (provider?: ProviderName): PriceSource => {
+  if (provider === ProviderName.THORCHAIN) return 'thor'
+  if (provider === ProviderName.MAYACHAIN) return 'maya'
+  return 'gecko'
+}
+
+export const useRates = (identifiers: string[], provider?: ProviderName): { rates: AssetRateMap; logos: AssetLogoMap; isLoading: boolean } => {
+  const { geckoMap } = useAssets()
+
   const { data: midgardData, isLoading: midgardLoading } = useQuery({
     queryKey: ['thorchain-pool-prices'],
     queryFn: async () => {
@@ -21,19 +40,20 @@ export const useRates = (identifiers: string[]): { rates: AssetRateMap; logos: A
         getMayaMidgardCacaoPrice().catch(() => NaN)
       ])
 
-      const priceMap: AssetRateMap = {}
+      const thor: AssetRateMap = {}
+      const maya: AssetRateMap = {}
 
       for (const pool of mayaPools) {
         const price = parseFloat(pool.assetPriceUSD)
         if (pool.asset && !isNaN(price) && price > 0) {
-          priceMap[pool.asset.toLowerCase()] = new USwapNumber(price)
+          maya[pool.asset.toLowerCase()] = new USwapNumber(price)
         }
       }
 
       for (const pool of pools) {
         const price = parseFloat(pool.assetPriceUSD)
         if (pool.asset && !isNaN(price) && price > 0) {
-          priceMap[pool.asset.toLowerCase()] = new USwapNumber(price)
+          thor[pool.asset.toLowerCase()] = new USwapNumber(price)
 
           // Mirror the L1 pool price onto the corresponding Secured Asset identifier
           // (e.g. BTC.BTC -> BTC-BTC, ETH.USDC-0x… -> ETH-USDC-0x…). Secured assets track
@@ -43,20 +63,20 @@ export const useRates = (identifiers: string[]): { rates: AssetRateMap; logos: A
             const chainPart = pool.asset.slice(0, dotIndex)
             const tickerPart = pool.asset.slice(dotIndex + 1)
             const securedKey = `${chainPart}-${tickerPart}`.toLowerCase()
-            priceMap[securedKey] = new USwapNumber(price)
+            thor[securedKey] = new USwapNumber(price)
           }
         }
       }
 
       if (!isNaN(runePrice) && runePrice > 0) {
-        priceMap[RUNE_IDENTIFIER.toLowerCase()] = new USwapNumber(runePrice)
+        thor[RUNE_IDENTIFIER.toLowerCase()] = new USwapNumber(runePrice)
       }
 
       if (!isNaN(cacaoPrice) && cacaoPrice > 0) {
-        priceMap[CACAO_IDENTIFIER.toLowerCase()] = new USwapNumber(cacaoPrice)
+        maya[CACAO_IDENTIFIER.toLowerCase()] = new USwapNumber(cacaoPrice)
       }
 
-      return priceMap
+      return { thor, maya }
     },
     staleTime: 3 * 60_000,
     refetchOnMount: false,
@@ -64,32 +84,23 @@ export const useRates = (identifiers: string[]): { rates: AssetRateMap; logos: A
     retry: false
   })
 
-  const solanaMints = useMemo(() => {
-    const mints: string[] = []
+  // SOL/ETH token addresses (mint or contract) for DexScreener lookups, split by chain
+  const dexTokens = useMemo(() => {
+    const sol: string[] = []
+    const eth: string[] = []
     for (const id of identifiers) {
-      if (id.toUpperCase().startsWith('SOL.') && id.includes('-')) {
-        const mint = id.split('-').pop()
-        if (mint) mints.push(mint)
-      }
+      if (!id.includes('-')) continue
+      const addr = id.split('-').pop()!
+      if (id.toUpperCase().startsWith('SOL.')) sol.push(addr)
+      else if (id.toUpperCase().startsWith('ETH.')) eth.push(addr.toLowerCase())
     }
-    return mints
-  }, [identifiers])
-
-  const ethAddresses = useMemo(() => {
-    const addresses: string[] = []
-    for (const id of identifiers) {
-      if (id.toUpperCase().startsWith('ETH.') && id.includes('-')) {
-        const addr = id.split('-').pop()
-        if (addr) addresses.push(addr.toLowerCase())
-      }
-    }
-    return addresses
+    return { sol, eth }
   }, [identifiers])
 
   const { data: dexScreenerData, isLoading: dexScreenerLoading } = useQuery({
-    queryKey: ['dexscreener-tokens-sol', solanaMints.slice().sort().join(',')],
-    queryFn: () => getDexScreenerTokens(solanaMints, 'solana'),
-    enabled: solanaMints.length > 0,
+    queryKey: ['dexscreener-tokens-sol', dexTokens.sol.slice().sort().join(',')],
+    queryFn: () => getDexScreenerTokens(dexTokens.sol, 'solana'),
+    enabled: dexTokens.sol.length > 0,
     staleTime: 3 * 60_000,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -97,9 +108,31 @@ export const useRates = (identifiers: string[]): { rates: AssetRateMap; logos: A
   })
 
   const { data: dexScreenerEthData, isLoading: dexScreenerEthLoading } = useQuery({
-    queryKey: ['dexscreener-tokens-eth', ethAddresses.slice().sort().join(',')],
-    queryFn: () => getDexScreenerTokens(ethAddresses, 'ethereum'),
-    enabled: ethAddresses.length > 0,
+    queryKey: ['dexscreener-tokens-eth', dexTokens.eth.slice().sort().join(',')],
+    queryFn: () => getDexScreenerTokens(dexTokens.eth, 'ethereum'),
+    enabled: dexTokens.eth.length > 0,
+    staleTime: 3 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false
+  })
+
+  const geckoTargets = useMemo(() => {
+    if (!geckoMap || rateSource(provider) !== 'gecko') return [] as { id: string; geckoId: string }[]
+    const targets: { id: string; geckoId: string }[] = []
+    for (const id of identifiers) {
+      const geckoId = geckoMap.get(id.toLowerCase())
+      if (geckoId) targets.push({ id, geckoId })
+    }
+    return targets
+  }, [identifiers, geckoMap, provider])
+
+  const geckoIds = useMemo(() => Array.from(new Set(geckoTargets.map(t => t.geckoId))), [geckoTargets])
+
+  const { data: geckoData, isLoading: geckoLoading } = useQuery({
+    queryKey: ['coingecko-prices', geckoIds.slice().sort().join(',')],
+    queryFn: () => getCoinGeckoPrices(geckoIds),
+    enabled: geckoIds.length > 0,
     staleTime: 3 * 60_000,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -108,53 +141,60 @@ export const useRates = (identifiers: string[]): { rates: AssetRateMap; logos: A
 
   const rates: AssetRateMap = {}
   const logos: AssetLogoMap = {}
-  if (midgardData) {
-    for (const id of identifiers) {
-      const price = midgardData[id.toLowerCase()]
-      if (price) rates[id] = price
-    }
+  const gecko: AssetRateMap = {}
+
+  for (const { id, geckoId } of geckoTargets) {
+    const price = geckoData?.[geckoId]
+    if (price) gecko[id.toLowerCase()] = new USwapNumber(price)
   }
 
-  if (dexScreenerData) {
-    for (const id of identifiers) {
-      if (id.toUpperCase().startsWith('SOL.') && id.includes('-')) {
-        const mint = id.split('-').pop()!
-        const info = dexScreenerData[mint]
-        if (info?.price && !rates[id]) rates[id] = new USwapNumber(info.price)
-        if (info?.logo) logos[id] = info.logo
-      }
-    }
+  const source = rateSource(provider)
+  const priceMap = source === 'thor' ? midgardData?.thor : source === 'maya' ? midgardData?.maya : gecko
+  for (const id of identifiers) {
+    const price = priceMap?.[id.toLowerCase()]
+    if (price) rates[id] = price
   }
 
-  if (dexScreenerEthData) {
-    for (const id of identifiers) {
-      if (id.toUpperCase().startsWith('ETH.') && id.includes('-')) {
-        const addr = id.split('-').pop()!.toLowerCase()
-        const info = dexScreenerEthData[addr]
-        if (info?.price && !rates[id]) rates[id] = new USwapNumber(info.price)
-        if (info?.logo) logos[id] = info.logo
-      }
-    }
+  // DexScreener supplements prices/logos for SOL & ETH tokens not covered above
+  const dexData = { ...dexScreenerData, ...dexScreenerEthData }
+  for (const id of identifiers) {
+    const upper = id.toUpperCase()
+    const isEth = upper.startsWith('ETH.')
+    if ((!isEth && !upper.startsWith('SOL.')) || !id.includes('-')) continue
+    const addr = id.split('-').pop()!
+    const info = dexData[isEth ? addr.toLowerCase() : addr]
+    if (info?.price && !rates[id]) rates[id] = new USwapNumber(info.price)
+    if (info?.logo) logos[id] = info.logo
   }
-
-  const dexScreenerPending = solanaMints.length > 0 && dexScreenerLoading
-  const dexScreenerEthPending = ethAddresses.length > 0 && dexScreenerEthLoading
 
   return {
     rates,
     logos,
-    isLoading: midgardLoading || dexScreenerPending || dexScreenerEthPending || identifiers.length === 0
+    isLoading: midgardLoading || dexScreenerLoading || dexScreenerEthLoading || geckoLoading || identifiers.length === 0
   }
 }
 
 export const useSwapRates = () => {
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
+  const { quote, isLoading } = useQuote()
   const identifiers = [assetFrom?.identifier, assetTo?.identifier].filter(Boolean).sort() as string[]
-  const { rates } = useRates(identifiers)
+
+  // Keep the resolved provider for the current pair so the rate source stays put while a new
+  // quote loads, instead of switching source each time the quote resolves.
+  const pairKey = identifiers.join(',')
+  const providerRef = useRef<{ pairKey: string; provider?: ProviderName }>({ pairKey })
+  if (providerRef.current.pairKey !== pairKey) providerRef.current = { pairKey }
+  if (quote?.providers[0]) providerRef.current.provider = quote.providers[0]
+  const provider = providerRef.current.provider
+
+  // The first quote for a pair hasn't resolved a provider yet; wait for it rather than showing
+  // a price from the default source that would switch once the provider is known.
+  const { rates } = useRates(identifiers, provider)
+  const pending = isLoading && !provider
 
   return {
-    rateFrom: assetFrom && rates[assetFrom.identifier],
-    rateTo: assetTo && rates[assetTo.identifier]
+    rateFrom: pending || !assetFrom ? undefined : rates[assetFrom.identifier],
+    rateTo: pending || !assetTo ? undefined : rates[assetTo.identifier]
   }
 }
