@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import Script from 'next/script'
-import { GoogleTagManager } from '@next/third-parties/google'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from '@/components/ui/sonner'
 import { ReactQueryProvider } from '@/components/react-query/react-query-provider'
@@ -24,7 +24,7 @@ const manrope = Manrope({
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-brand={AppConfig.id} suppressHydrationWarning>
-      {AppConfig.gtag && <GoogleTagManager gtmId={AppConfig.gtag} />}
+      {AppConfig.gtag && <GoogleAnalytics gaId={AppConfig.gtag} />}
       {AppConfig.pixelId && (
         <Script
           dangerouslySetInnerHTML={{
