@@ -38,7 +38,8 @@ const apps: Record<AppKey, App> = {
     favicon: '/favicon.ico',
     logo: '/logo.svg',
     LogoText: HeaderLogoText,
-    supportEmail: 'swap@horizontalsystems.io'
+    supportEmail: 'swap@horizontalsystems.io',
+    gtag: 'G-9VJMF1935H',
   }
 }
 
