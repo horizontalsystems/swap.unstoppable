@@ -35,7 +35,8 @@ export const ALL_CHAINS = [
   Chain.Solana,
   Chain.THORChain,
   Chain.Tron,
-  Chain.Zcash
+  Chain.Zcash,
+  Chain.Monero
 ]
 
 export const COMING_SOON_CHAINS: string[] = []
