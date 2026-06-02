@@ -5,7 +5,7 @@ import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
 import { useAssets } from '@/hooks/use-assets'
 import {
-  getCoinGeckoPrices,
+  getBlocksDecodedPrices,
   getDexScreenerTokens,
   getMayaMidgardCacaoPrice,
   getMayaMidgardPools,
@@ -130,8 +130,8 @@ export const useRates = (identifiers: string[], provider?: ProviderName): { rate
   const geckoIds = useMemo(() => Array.from(new Set(geckoTargets.map(t => t.geckoId))), [geckoTargets])
 
   const { data: geckoData, isLoading: geckoLoading } = useQuery({
-    queryKey: ['coingecko-prices', geckoIds.slice().sort().join(',')],
-    queryFn: () => getCoinGeckoPrices(geckoIds),
+    queryKey: ['blocksdecoded-prices', geckoIds.slice().sort().join(',')],
+    queryFn: () => getBlocksDecodedPrices(geckoIds),
     enabled: geckoIds.length > 0,
     staleTime: 3 * 60_000,
     refetchOnMount: false,

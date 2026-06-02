@@ -43,16 +43,17 @@ export const getDexScreenerTokens = async (
   }
 }
 
-export const getCoinGeckoPrices = async (ids: string[]): Promise<Record<string, number>> => {
+export const getBlocksDecodedPrices = async (ids: string[]): Promise<Record<string, number>> => {
   if (ids.length === 0) return {}
   try {
-    const res = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
-      params: { ids: ids.join(','), vs_currencies: 'usd' }
+    const res = await axios.get('https://api.blocksdecoded.com/v1/coins', {
+      params: { uids: ids.join(','), fields: 'uid,price' }
     })
     const result: Record<string, number> = {}
-    for (const [id, value] of Object.entries(res.data || {})) {
-      const price = (value as { usd?: number })?.usd
-      if (typeof price === 'number' && price > 0) result[id] = price
+    for (const coin of (res.data as { uid?: string; price?: string }[]) || []) {
+      if (!coin?.uid) continue
+      const price = parseFloat(coin.price ?? '')
+      if (!isNaN(price) && price > 0) result[coin.uid] = price
     }
     return result
   } catch {
