@@ -149,9 +149,12 @@ export const useRates = (identifiers: string[], provider?: ProviderName): { rate
   }
 
   const source = rateSource(provider)
-  const priceMap = source === 'thor' ? midgardData?.thor : source === 'maya' ? midgardData?.maya : gecko
   for (const id of identifiers) {
-    const price = priceMap?.[id.toLowerCase()]
+    const key = id.toLowerCase()
+    let price: USwapNumber | undefined
+    if (source === 'thor') price = midgardData?.thor?.[key]
+    else if (source === 'maya') price = midgardData?.maya?.[key]
+    else price = gecko[key] ?? midgardData?.thor?.[key] ?? midgardData?.maya?.[key]
     if (price) rates[id] = price
   }
 
