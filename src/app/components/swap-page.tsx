@@ -6,7 +6,7 @@ import { Header } from '@/components/header/header'
 import { Swap } from '@/components/swap/swap'
 import { AppConfig } from '@/config'
 
-export default async function SwapPage() {
+export function SwapPage() {
   return (
     <main className="min-h-screen">
       <Header />

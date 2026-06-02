@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
+import { SwapPage } from '@/app/components/swap-page'
 
-export default function Page() {
-  redirect('/swap?sellAsset=BTC.BTC&buyAsset=XMR.XMR')
+export default async function Page() {
+  return <SwapPage />
 }
