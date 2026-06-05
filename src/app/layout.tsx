@@ -9,10 +9,46 @@ import { AppConfig } from '@/config'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(AppConfig.baseUrl),
   title: AppConfig.title,
   description: AppConfig.description,
   icons: {
-    icon: AppConfig.favicon
+    icon: AppConfig.favicon,
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }]
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'Unstoppable Swap',
+    statusBarStyle: 'black-translucent'
+  },
+  openGraph: {
+    title: AppConfig.title,
+    description: AppConfig.description,
+    url: AppConfig.baseUrl,
+    siteName: 'Unstoppable Swap',
+    images: [
+      {
+        url: `${AppConfig.baseUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: AppConfig.title
+      }
+    ],
+    type: 'website',
+    locale: 'en_US'
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: AppConfig.title,
+    description: AppConfig.description,
+    images: [
+      {
+        url: `${AppConfig.baseUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: AppConfig.title
+      }
+    ]
   }
 }
 

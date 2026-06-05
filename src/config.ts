@@ -7,6 +7,7 @@ type App = {
   id: AppKey
   title: string
   description: string
+  baseUrl: string
   providers: ProviderName[]
   favicon: string
   logo: string
@@ -23,8 +24,10 @@ type App = {
 const apps: Record<AppKey, App> = {
   unstoppable: {
     id: 'unstoppable',
-    title: 'Unstoppable Swap',
-    description: 'Unstoppable Swap',
+    title: 'Unstoppable Swap | Cross-Chain Crypto & Token Swaps',
+    description:
+      'Swap Bitcoin, Ethereum, and hundreds of tokens across chains with the best rates from THORChain, Near, 1inch, and more — non-custodial, no sign-up, no limits.',
+    baseUrl: 'https://swap.unstoppable.money',
     providers: [
       ProviderName.THORCHAIN,
       ProviderName.NEAR,
@@ -39,7 +42,7 @@ const apps: Record<AppKey, App> = {
     logo: '/logo.svg',
     LogoText: HeaderLogoText,
     supportEmail: 'swap@horizontalsystems.io',
-    gtag: 'G-9VJMF1935H',
+    gtag: 'G-9VJMF1935H'
   }
 }
 
