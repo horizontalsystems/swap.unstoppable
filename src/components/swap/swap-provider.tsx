@@ -10,7 +10,7 @@ export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' }) =
   } else if (provider === 'MAYACHAIN' || provider === 'MAYACHAIN_STREAMING') {
     title = 'MayaChain'
   } else if (provider === 'NEAR') {
-    title = 'Near'
+    title = 'NEAR Intents'
   } else if (provider === 'ONEINCH') {
     title = '1inch'
     icon = 'oneinch'
