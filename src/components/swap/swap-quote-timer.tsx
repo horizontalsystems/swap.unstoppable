@@ -4,7 +4,7 @@ import { RefetchOptions } from '@tanstack/react-query'
 import { Tooltip } from '@/components/tooltip'
 import { QuoteResponseRoute } from '@/types'
 
-const QUOTE_EXPIRATION_MS = 600000
+const QUOTE_EXPIRATION_MS = 60000
 
 interface SwapQuoteTimerProps {
   quote?: QuoteResponseRoute | undefined
