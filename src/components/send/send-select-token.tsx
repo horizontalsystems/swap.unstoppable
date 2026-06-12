@@ -2,6 +2,7 @@
 
 import { WalletOption } from '@uswap/core'
 import { CheckIcon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { WalletIcon } from '@/components/wallet-icon'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -22,6 +23,7 @@ export interface SelectTokenDialogProps {
 }
 
 export function SendSelectToken({ isOpen, onOpenChange, selected, selectedAccount, onSelect, filter }: SelectTokenDialogProps) {
+  const t = useTranslations('send')
   const { walletData } = useWalletBalances()
 
   const byProvider = walletData.reduce<Map<WalletOption, { account: WalletAccount; token: TokenBalance }[]>>((map, { account, tokens }) => {
@@ -36,7 +38,7 @@ export function SendSelectToken({ isOpen, onOpenChange, selected, selectedAccoun
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="flex max-h-5/6 flex-col md:max-w-sm">
         <CredenzaHeader>
-          <CredenzaTitle>Select coin</CredenzaTitle>
+          <CredenzaTitle>{t('selectCoin')}</CredenzaTitle>
         </CredenzaHeader>
 
         <ScrollArea className="min-h-0 flex-1">

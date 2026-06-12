@@ -2,8 +2,10 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { WalletIcon } from '@/components/wallet-icon'
 import { useDialog } from '@/components/global-dialog'
+import { LanguageSwitchButton } from '@/components/header/language-switch-button'
 import { ThemeSwitchButton } from '@/components/header/theme-switch-button'
 import { TransactionHistoryButton } from '@/components/header/transaction-history-button'
 import { Icon } from '@/components/icons'
@@ -14,6 +16,7 @@ import { useConnectedWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 
 export function Header() {
+  const t = useTranslations('common')
   const { openDialog } = useDialog()
   const connectedProviders = useConnectedWallets()
   const [isScrolled, setIsScrolled] = useState(false)
@@ -48,6 +51,7 @@ export function Header() {
 
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
           <ThemeSwitchButton />
+          <LanguageSwitchButton />
           <TransactionHistoryButton />
           {connectedProviders.length > 0 ? (
             <div className="flex items-center gap-1">
@@ -60,7 +64,7 @@ export function Header() {
           ) : (
             <>
               <ThemeButton variant="secondarySmall" className="hidden md:flex" onClick={openSidebar}>
-                Connect Wallet
+                {t('connectWallet')}
               </ThemeButton>
               <ThemeButton variant="circleSmall" className="flex md:hidden" onClick={openSidebar}>
                 <Icon name="plus" />

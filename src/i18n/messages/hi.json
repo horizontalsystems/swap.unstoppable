@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "वॉलेट कनेक्ट करें",
+    "balance": "बैलेंस:",
+    "close": "बंद करें",
+    "back": "वापस",
+    "next": "आगे",
+    "paste": "पेस्ट करें",
+    "clear": "साफ़ करें",
+    "expiresIn": "समाप्त होगा",
+    "language": "भाषा",
+    "address": {
+      "source": "स्रोत पता",
+      "destination": "गंतव्य पता",
+      "refund": "रिफ़ंड पता",
+      "deposit": "जमा पता"
+    }
+  },
+  "footer": {
+    "builtBy": "द्वारा निर्मित",
+    "reportBugsTo": "बग्स यहाँ रिपोर्ट करें",
+    "gotQuestions": "कोई प्रश्न है?"
+  },
+  "swap": {
+    "title": "स्वैप",
+    "input": {
+      "sell": "बेचें",
+      "buy": "खरीदें",
+      "priceImpact": "मूल्य प्रभाव"
+    },
+    "button": {
+      "enterAmount": "राशि दर्ज करें",
+      "quoting": "कोट हो रहा है...",
+      "noValidQuotes": "कोई वैध कोट नहीं",
+      "swap": "स्वैप",
+      "placeLimitOrder": "लिमिट ऑर्डर लगाएँ",
+      "connectWallet": "{chain} वॉलेट कनेक्ट करें",
+      "insufficientBalance": "अपर्याप्त बैलेंस",
+      "approve": "{ticker} स्वीकृत करें"
+    },
+    "toast": {
+      "success": "सफल",
+      "approvalTransaction": "स्वीकृति लेनदेन",
+      "errorSubmitting": "लेनदेन सबमिट करने में त्रुटि",
+      "submittingTransaction": "लेनदेन सबमिट हो रहा है",
+      "transactionSubmitted": "लेनदेन सबमिट हुआ"
+    },
+    "confirm": {
+      "titleSwap": "स्वैप की पुष्टि करें",
+      "titleLimit": "लिमिट ऑर्डर की पुष्टि करें",
+      "limitPrice": "लिमिट मूल्य",
+      "limitPriceTooltip": "वह प्रति-इकाई मूल्य जिस पर आपका लिमिट ऑर्डर निष्पादित होगा। ऑर्डर तभी पूरा होगा जब बाज़ार इस मूल्य तक पहुँचेगा।",
+      "targetAmount": "लक्ष्य राशि",
+      "targetAmountTooltip": "आपके निर्दिष्ट मूल्य पर लिमिट ऑर्डर निष्पादित होने पर आपको मिलने वाली सटीक राशि।",
+      "minimumPayout": "न्यूनतम भुगतान",
+      "minimumPayoutTooltip": "आपकी {slippage}% स्लिपेज सहनशीलता के आधार पर न्यूनतम गारंटीशुदा राशि। यदि बाज़ार की स्थिति आपको इससे कम देती है, तो लेनदेन स्वतः रद्द हो जाएगा।",
+      "notProtected": "सुरक्षित नहीं",
+      "priceImpact": "मूल्य प्रभाव",
+      "priceImpactTooltip": "ट्रेड के आकार के कारण बाज़ार मूल्य और आपकी वास्तविक स्वैप दर के बीच का अंतर। बड़े ट्रेड में आमतौर पर अधिक मूल्य प्रभाव होता है।",
+      "txFee": "लेनदेन शुल्क",
+      "estimatedTime": "अनुमानित समय",
+      "provider": "प्रदाता",
+      "memo": "मेमो",
+      "confirm": "पुष्टि करें"
+    },
+    "feeDialog": {
+      "title": "दर में शामिल शुल्क",
+      "description": "ये शुल्क पहले से ही दर में शामिल हैं — आप इन्हें अलग से नहीं चुकाते।",
+      "liquidityFee": "लिक्विडिटी शुल्क",
+      "liquidityFeeInfo": "रूट पर लिक्विडिटी प्रदाताओं के लिए शुल्क",
+      "outboundFee": "आउटबाउंड शुल्क",
+      "outboundFeeInfo": "आउटबाउंड लेनदेन भेजने का शुल्क",
+      "platformFee": "प्लेटफ़ॉर्म शुल्क",
+      "platformFeeInfo": "{app} द्वारा लिया गया शुल्क"
+    },
+    "recipient": {
+      "addressPlaceholder": "{chain} पता",
+      "invalidAddress": "अमान्य {chain} पता",
+      "titleAddresses": "पते दर्ज करें",
+      "titleReceiving": "प्राप्ति पता दर्ज करें",
+      "enterRefundAddress": "रिफ़ंड पता दर्ज करें:",
+      "enterReceivingAddress": "प्राप्ति पता दर्ज करें:",
+      "preparingSwap": "स्वैप तैयार हो रहा है",
+      "next": "आगे"
+    },
+    "warning": {
+      "selfCustody": "मैं समझता हूँ कि मुझे सेल्फ-कस्टडी वॉलेट का उपयोग करना होगा। मैं समझता हूँ कि स्मार्ट कॉन्ट्रैक्ट वॉलेट, एक्सचेंज पता, डेलिगेटेड पता या EIP 7702 वॉलेट का उपयोग करने से होगा",
+      "ltcMweb": "मैं समझता हूँ कि LTC MWEB पते का उपयोग करने से होगा",
+      "sendExact": "मैं समझता हूँ कि मुझे सेल्फ-कस्टडी वॉलेट से ठीक निर्दिष्ट राशि भेजनी होगी। मैं समझता हूँ कि स्मार्ट कॉन्ट्रैक्ट वॉलेट, एक्सचेंज पता, डेलिगेटेड पता या EIP 7702 वॉलेट से भेजने पर होगा",
+      "lossOfFunds": "धन की हानि।"
+    },
+    "selectAsset": {
+      "title": "सिक्का चुनें",
+      "allChains": "सभी चेन",
+      "search": "खोजें",
+      "currentlyUnavailable": "वर्तमान में अनुपलब्ध",
+      "selected": "चयनित"
+    },
+    "settings": {
+      "slippageTolerance": "स्लिपेज सहनशीलता",
+      "slippageToleranceTooltip": "बाज़ार की अस्थिरता के कारण, पूरा होने से पहले मूल्य बदल सकते हैं। यह सेटिंग सुनिश्चित करती है कि आपको कम से कम आपकी न्यूनतम राशि मिले।",
+      "noProtection": "कोई सुरक्षा नहीं",
+      "slippageDescription": "अधिकतम स्वीकार्य मूल्य परिवर्तन। यदि मूल्य इस सीमा से अधिक प्रतिकूल रूप से बदलता है तो लेनदेन विफल हो जाएगा।",
+      "twapTitle": "TWAP (टाइम वेटेड एवरेज प्राइस)",
+      "twapTooltip": "केवल बड़े वॉल्यूम वाले स्वैप के लिए प्रासंगिक। Best Price ऑर्डर के लिए सर्वोत्तम मूल्य प्रदान करता है। Best Time स्वैप निष्पादन समय को प्राथमिकता देता है (जब भी संभव हो)। Custom आपको यह कॉन्फ़िगर करने देता है कि स्वैप को कितने मिनी-स्वैप में बाँटा जाए और प्रत्येक मिनी-स्वैप के बीच कितना समय हो।",
+      "twapDescription": "टाइम वेटेड एवरेज प्राइस",
+      "bestPrice": "सर्वोत्तम मूल्य",
+      "bestTime": "सर्वोत्तम समय",
+      "custom": "कस्टम",
+      "numberOfSubSwaps": "सब-स्वैप की संख्या",
+      "numberOfSubSwapsDescription": "अपने ट्रेड को कितने सब-स्वैप में बाँटें। अधिक ट्रेड = बेहतर मूल्य, लंबा निष्पादन।",
+      "timeBetweenSubSwaps": "सब-स्वैप के बीच का समय",
+      "timeBetweenSubSwapsDescription": "प्रत्येक सब-स्वैप के बीच विलंब। लंबे अंतराल पूल को बेहतर मूल्य निर्धारण हेतु पुनर्संतुलित होने देते हैं।",
+      "reset": "रीसेट करें",
+      "save": "सहेजें"
+    },
+    "limit": {
+      "whenWorth": "जब 1 {ticker} की कीमत हो",
+      "expiry": "समाप्ति",
+      "oneHour": "1 घंटा",
+      "oneDay": "1 दिन",
+      "oneWeek": "1 सप्ताह",
+      "market": "बाज़ार"
+    },
+    "limitCancel": {
+      "titleModify": "लिमिट ऑर्डर संशोधित करें",
+      "titleCancel": "लिमिट ऑर्डर रद्द करें",
+      "descriptionModify": "इस लिमिट ऑर्डर को संशोधित करने से लक्ष्य मूल्य अपडेट होगा। संशोधन की प्रक्रिया के लिए एक छोटा नेटवर्क शुल्क लिया जाएगा।",
+      "descriptionCancel": "इस लिमिट ऑर्डर को रद्द करने से आपके जमा किए गए धन आपके वॉलेट में वापस आ जाएँगे। रद्दीकरण की प्रक्रिया के लिए एक छोटा नेटवर्क शुल्क लिया जाएगा।",
+      "youWillGet": "आपको मिलेगा",
+      "fromCurrent": "वर्तमान से {percent}%",
+      "modifying": "संशोधित हो रहा है...",
+      "cancelling": "रद्द हो रहा है...",
+      "loading": "लोड हो रहा है...",
+      "modifyOrder": "ऑर्डर संशोधित करें",
+      "cancelOrder": "ऑर्डर रद्द करें",
+      "cancelSubmitted": "रद्दीकरण लेनदेन सबमिट हुआ",
+      "modifySubmitted": "संशोधन लेनदेन सबमिट हुआ",
+      "connectWarning": "इस ऑर्डर को {mode, select, cancel {रद्द} modify {संशोधित} other {संशोधित}} करने के लिए {chain} वॉलेट कनेक्ट करें",
+      "switchWarning": "इस ऑर्डर को {mode, select, cancel {रद्द} modify {संशोधित} other {संशोधित}} करने के लिए {chain} वॉलेट पर स्विच करें",
+      "addressMismatch": "कनेक्टेड वॉलेट उस पते से मेल नहीं खाता जिसने यह ऑर्डर लगाया था",
+      "tradingPaused": "{chain} ट्रेडिंग वर्तमान में रुकी हुई है",
+      "errLoadInbound": "इनबाउंड पते लोड करने में विफल",
+      "errActionFailed": "लिमिट स्वैप {mode, select, cancel {रद्द} modify {संशोधित} other {संशोधित}} करने में विफल"
+    },
+    "quoteTimer": {
+      "refresh": "रिफ़्रेश करें"
+    },
+    "route": {
+      "chooseRoute": "रूट चुनें",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "सर्वोत्तम मूल्य",
+      "faster": "तेज़"
+    },
+    "instant": {
+      "sendTitle": "{asset} भेजें",
+      "sendDescription": "नीचे दिए गए पते पर सेल्फ-कस्टडी वॉलेट से ठीक {amount} {ticker} भेजें।",
+      "destinationTag": "गंतव्य टैग",
+      "memo": "मेमो",
+      "confirming": "पुष्टि हो रही है",
+      "confirm": "पुष्टि करें",
+      "errMemoMissing": "मेमो गायब है",
+      "errCalcAmount": "सुझाई गई राशि की गणना करने में विफल",
+      "errPreflight": "प्रीफ़्लाइट अनुरोध में विफल"
+    },
+    "error": {
+      "minAmountNoWallet": "बिना कनेक्टेड वॉलेट के न्यूनतम स्वैप राशि {amount} {ticker} है",
+      "unknown": "अज्ञात त्रुटि",
+      "insufficientOutboundFee": "आउटबाउंड शुल्क चुकाने के लिए अपर्याप्त एसेट लौटाया गया",
+      "insufficientWithdrawalFee": "आउटबाउंड शुल्क चुकाने के लिए अपर्याप्त निकासी",
+      "invalidSwap": "अमान्य स्वैप",
+      "insufficientFunds": "अपर्याप्त धन",
+      "sourceTargetSame": "स्रोत और लक्ष्य समान नहीं हो सकते",
+      "transactionCancelled": "लेनदेन रद्द हुआ",
+      "insufficientFundsCaps": "अपर्याप्त धन",
+      "invalidToAddress": "अमान्य \"to\" पता",
+      "pendingTransaction": "लंबित लेनदेन। थोड़ी देर में पुनः प्रयास करें",
+      "insufficientReturnAmount": "अपर्याप्त रिटर्न राशि",
+      "slippageExceeded": "स्लिपेज सहनशीलता पार हो गई",
+      "amountZero": "राशि शून्य नहीं हो सकती",
+      "invalidPrice": "अमान्य मूल्य",
+      "missingConfig": "एंट्री एडाप्टर में कॉन्फ़िगरेशन गायब है",
+      "insufficientLiquidity": "अंतर्निहित एसेट में से किसी एक के लिए अपर्याप्त ऑन-चेन लिक्विडिटी। स्लिपेज सहनशीलता बढ़ाकर देखें।"
+    }
+  },
+  "send": {
+    "title": "भेजें",
+    "amount": "राशि",
+    "to": "को",
+    "addressPlaceholder": "{chain} पता",
+    "invalidAddress": "अमान्य {chain} पता",
+    "transactionFee": "लेनदेन शुल्क",
+    "send": "भेजें",
+    "selectCoin": "सिक्का चुनें",
+    "toast": {
+      "walletNotConnected": "वॉलेट कनेक्ट नहीं है। कृपया पुनः कनेक्ट करें।",
+      "submitting": "लेनदेन सबमिट हो रहा है...",
+      "submitted": "लेनदेन सबमिट हुआ",
+      "submitError": "लेनदेन सबमिट करने में त्रुटि"
+    }
+  },
+  "wallet": {
+    "chains": "चेन",
+    "connected": "कनेक्टेड",
+    "disconnected": "डिस्कनेक्टेड",
+    "install": "इंस्टॉल करें",
+    "soon": "जल्द ही",
+    "connectNamed": "{name} कनेक्ट करें",
+    "deselectAll": "सभी अचयनित करें",
+    "selectAll": "सभी चुनें",
+    "evms": "EVMs",
+    "derivationPath": "डेरिवेशन पाथ",
+    "selectAccountType": "खाता प्रकार चुनें",
+    "index": "इंडेक्स",
+    "openKeystore": "Keystore खोलें",
+    "createNewWallet": "नया वॉलेट बनाएँ",
+    "importSeedPhrase": "सीड फ़्रेज़ इम्पोर्ट करें",
+    "createWalletInstructions": "इन 12 शब्दों को लिख लें और उन्हें सुरक्षित रूप से ऑफ़लाइन संग्रहीत करें। इस 12 शब्दों के फ़्रेज़ का उपयोग आपके वॉलेट की निजी कुंजियों को पुनर्प्राप्त करने के लिए किया जाता है।",
+    "copyPhrase": "फ़्रेज़ कॉपी करें",
+    "confirmSavedPassphrase": "मैं पुष्टि करता हूँ कि मैंने भविष्य में अपने खाते को पुनर्प्राप्त करने हेतु पासफ़्रेज़ को सुरक्षित रूप से सहेज लिया है।",
+    "setupDecryptionPassword": "डिक्रिप्शन पासवर्ड सेट करें",
+    "setupPasswordInstructions": "अपने बनाए गए वॉलेट को एन्क्रिप्ट करने के लिए एक मज़बूत पासवर्ड दर्ज करें। इसी से आप अपने वॉलेट तक पहुँचेंगे।",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "passwordMustMatch": "पासवर्ड मेल खाना चाहिए",
+    "create": "बनाएँ",
+    "importKeystore": "Keystore इम्पोर्ट करें",
+    "selectOrDragKeystore": "अपलोड करने के लिए अपनी keystore फ़ाइल चुनें या खींचें",
+    "decryptionPassword": "डिक्रिप्शन पासवर्ड",
+    "password": "पासवर्ड",
+    "import": "इम्पोर्ट करें",
+    "typeSeedPhrase": "अपना सीड फ़्रेज़ टाइप करें",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया एक JSON या TXT फ़ाइल अपलोड करें।",
+    "noTokensFound": "कोई टोकन नहीं मिला",
+    "copyAddress": "पता कॉपी करें",
+    "addressCopied": "पता कॉपी हुआ",
+    "disconnectWallet": "{name} डिस्कनेक्ट करें",
+    "noCoins": "कोई सिक्का नहीं",
+    "sendToken": "{ticker} भेजें",
+    "sidebar": {
+      "title": "वॉलेट",
+      "sortWallets": "वॉलेट क्रमबद्ध करें",
+      "sortBy": "इसके अनुसार क्रमबद्ध करें",
+      "sortByName": "नाम (A-Z)",
+      "sortByBalance": "बैलेंस (अधिक → कम)",
+      "externalWalletMode": "बाहरी वॉलेट मोड",
+      "externalWalletModeDescription": "अपना ऑर्डर दर्ज करें, स्वैप बटन पर क्लिक करें और निर्देशों का पालन करें",
+      "externalWalletInfo": "यदि कोई एसेट बाहरी वॉलेट मोड में समर्थित नहीं है, तो आपसे इन-ब्राउज़र वॉलेट कनेक्ट करने को कहा जाएगा"
+    }
+  },
+  "riskLevel": {
+    "excellent": "उत्कृष्ट",
+    "good": "अच्छा",
+    "fair": "ठीक",
+    "title": "प्रदाता जोखिम स्तर",
+    "description": "ये स्तर दर्शाते हैं कि प्रदाता स्वैप और लेनदेन जाँच को कैसे संभालते हैं।",
+    "excellentInfo": "सीधा ऑन-चेन निष्पादन। कोई प्रदाता जाँच या फ़्रीज़ नहीं। स्वैप विफल होने पर स्वतः रिफ़ंड।",
+    "goodInfo": "प्रदाता पूरा होने से पहले लेनदेन की स्वतः जाँच करता है। समस्या पाए जाने पर स्वैप अस्वीकृत हो जाता है और धन वापस कर दिया जाता है।",
+    "fairInfo": "कुछ लेनदेन के लिए अतिरिक्त सत्यापन आवश्यक हो सकता है। समस्या पाए जाने पर धन आमतौर पर स्वतः वापस कर दिया जाता है।"
+  },
+  "tx": {
+    "title": "इतिहास",
+    "today": "आज",
+    "yesterday": "कल",
+    "onlyCreatorModify": "केवल मूल स्वैप निर्माता ही संशोधित कर सकता है",
+    "showQr": "QR दिखाएँ",
+    "modify": "संशोधित करें",
+    "cancelOrder": "ऑर्डर रद्द करें",
+    "remaining": "{time} शेष",
+    "loading": "लोड हो रहा है",
+    "status": {
+      "not_started": "जमा लंबित",
+      "pending": "लंबित",
+      "swapping": "स्वैप हो रहा है",
+      "completed": "पूर्ण",
+      "failed": "विफल",
+      "expired": "समाप्त",
+      "refunded": "रिफ़ंड किया गया",
+      "unknown": "अज्ञात"
+    },
+    "leg": {
+      "deposit": "{ticker} जमा करें",
+      "send": "{ticker} भेजें",
+      "swap": "{from} को {to} में स्वैप करें"
+    }
+  },
+  "track": {
+    "title": "लेनदेन ट्रैक करें"
+  }
+}

@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { Chain } from '@uswap/core'
 import { LoaderCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { ALL_CHAINS, chainLabel, COMING_SOON_CHAINS, WalletParams } from '@/components/connect-wallet/config'
 import { ThemeButton } from '@/components/theme-button'
@@ -9,6 +10,7 @@ import { useWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 
 export const BrowserWallet = ({ wallet, chains, onConnect }: { wallet: WalletParams; chains: (Chain | string)[]; onConnect: () => void }) => {
+  const t = useTranslations('wallet')
   const availableChains: (Chain | string)[] = wallet.supportedChains.filter(c => ALL_CHAINS.includes(c))
 
   const [connecting, setConnecting] = useState(false)
@@ -42,9 +44,9 @@ export const BrowserWallet = ({ wallet, chains, onConnect }: { wallet: WalletPar
   return (
     <>
       <div className="mb-3 flex items-center justify-between px-4 md:px-8">
-        <div className="text-thor-gray text-base font-semibold">Chains</div>
+        <div className="text-thor-gray text-base font-semibold">{t('chains')}</div>
         <div className="text-leah cursor-pointer text-xs" onClick={() => setSelectedChains(selectedChains.length ? [] : availableChains)}>
-          {selectedChains.length ? 'Deselect All' : 'Select All'}
+          {selectedChains.length ? t('deselectAll') : t('selectAll')}
         </div>
       </div>
 
@@ -74,7 +76,7 @@ export const BrowserWallet = ({ wallet, chains, onConnect }: { wallet: WalletPar
                 >
                   <Image src={`/networks/${chain.toLowerCase()}.svg`} alt={chain} width="24" height="24" />
                   <div className="text-sm">{chainLabel(chain)}</div>
-                  {isComingSoon && <div className="text-gray border-gray rounded-full border px-1.5 text-[10px] font-semibold">Soon</div>}
+                  {isComingSoon && <div className="text-gray border-gray rounded-full border px-1.5 text-[10px] font-semibold">{t('soon')}</div>}
                 </div>
               )
             })}
@@ -92,7 +94,7 @@ export const BrowserWallet = ({ wallet, chains, onConnect }: { wallet: WalletPar
           onClick={() => handleConnect()}
         >
           {connecting && <LoaderCircle size={20} className="animate-spin" />}
-          Connect {wallet.label}
+          {t('connectNamed', { name: wallet.label })}
         </ThemeButton>
       </div>
     </>

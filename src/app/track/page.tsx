@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import { Footer } from '@/components/footer/footer'
 import { Header } from '@/components/header/header'
 import { TrackParams, TrackStatus } from './track-status'
@@ -7,6 +8,7 @@ interface TrackPageProps {
 }
 
 export default async function TrackPage({ searchParams }: TrackPageProps) {
+  const t = await getTranslations('track')
   const params = await searchParams
 
   const getString = (key: string) => {
@@ -33,7 +35,7 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
     <main className="min-h-screen">
       <Header />
       <div className="mx-auto max-w-xl px-4 py-8">
-        <h1 className="text-leah mb-6 text-xl font-semibold">Track Transaction</h1>
+        <h1 className="text-leah mb-6 text-xl font-semibold">{t('title')}</h1>
         <TrackStatus params={trackParams} />
       </div>
       <Footer />

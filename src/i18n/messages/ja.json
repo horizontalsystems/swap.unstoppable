@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "ウォレットを接続",
+    "balance": "残高：",
+    "close": "閉じる",
+    "back": "戻る",
+    "next": "次へ",
+    "paste": "貼り付け",
+    "clear": "クリア",
+    "expiresIn": "有効期限",
+    "language": "言語",
+    "address": {
+      "source": "送信元アドレス",
+      "destination": "送信先アドレス",
+      "refund": "返金アドレス",
+      "deposit": "入金アドレス"
+    }
+  },
+  "footer": {
+    "builtBy": "開発者",
+    "reportBugsTo": "バグ報告先",
+    "gotQuestions": "ご質問がありますか？"
+  },
+  "swap": {
+    "title": "スワップ",
+    "input": {
+      "sell": "売却",
+      "buy": "購入",
+      "priceImpact": "価格への影響"
+    },
+    "button": {
+      "enterAmount": "金額を入力",
+      "quoting": "見積もり中...",
+      "noValidQuotes": "有効な見積もりがありません",
+      "swap": "スワップ",
+      "placeLimitOrder": "指値注文を出す",
+      "connectWallet": "{chain} ウォレットを接続",
+      "insufficientBalance": "残高不足",
+      "approve": "{ticker} を承認"
+    },
+    "toast": {
+      "success": "成功",
+      "approvalTransaction": "承認トランザクション",
+      "errorSubmitting": "トランザクションの送信エラー",
+      "submittingTransaction": "トランザクションを送信中",
+      "transactionSubmitted": "トランザクションが送信されました"
+    },
+    "confirm": {
+      "titleSwap": "スワップを確認",
+      "titleLimit": "指値注文を確認",
+      "limitPrice": "指値価格",
+      "limitPriceTooltip": "指値注文が約定する単価です。注文は市場がこの価格に達したときのみ成立します。",
+      "targetAmount": "目標金額",
+      "targetAmountTooltip": "指値注文が指定した価格で約定した際に受け取る正確な金額です。",
+      "minimumPayout": "最低受取額",
+      "minimumPayoutTooltip": "{slippage}% のスリッページ許容範囲に基づく最低保証金額です。市場状況により受取額がこれを下回る場合、トランザクションは自動的にキャンセルされます。",
+      "notProtected": "保護されていません",
+      "priceImpact": "価格への影響",
+      "priceImpactTooltip": "取引規模による市場価格と実際のスワップレートとの差です。大きな取引ほど価格への影響が大きくなる傾向があります。",
+      "txFee": "取引手数料",
+      "estimatedTime": "推定時間",
+      "provider": "プロバイダー",
+      "memo": "メモ",
+      "confirm": "確認"
+    },
+    "feeDialog": {
+      "title": "レートに含まれる手数料",
+      "description": "これらの手数料はすでにレートに含まれており、別途お支払いいただく必要はありません。",
+      "liquidityFee": "流動性手数料",
+      "liquidityFeeInfo": "ルート上の流動性提供者への手数料",
+      "outboundFee": "送出手数料",
+      "outboundFeeInfo": "送出トランザクションの送信手数料",
+      "platformFee": "プラットフォーム手数料",
+      "platformFeeInfo": "{app} が請求する手数料"
+    },
+    "recipient": {
+      "addressPlaceholder": "{chain} アドレス",
+      "invalidAddress": "無効な {chain} アドレス",
+      "titleAddresses": "アドレスを入力",
+      "titleReceiving": "受取アドレスを入力",
+      "enterRefundAddress": "返金アドレスを入力：",
+      "enterReceivingAddress": "受取アドレスを入力：",
+      "preparingSwap": "スワップを準備中",
+      "next": "次へ"
+    },
+    "warning": {
+      "selfCustody": "セルフカストディウォレットを使用する必要があることを理解しています。スマートコントラクトウォレット、取引所アドレス、委任アドレス、または EIP 7702 ウォレットを使用すると、次の結果になることを理解しています：",
+      "ltcMweb": "LTC MWEB アドレスを使用すると、次の結果になることを理解しています：",
+      "sendExact": "セルフカストディウォレットから指定された正確な金額を送金する必要があることを理解しています。スマートコントラクトウォレット、取引所アドレス、委任アドレス、または EIP 7702 ウォレットから送金すると、次の結果になることを理解しています：",
+      "lossOfFunds": "資金の損失。"
+    },
+    "selectAsset": {
+      "title": "コインを選択",
+      "allChains": "すべてのチェーン",
+      "search": "検索",
+      "currentlyUnavailable": "現在利用できません",
+      "selected": "選択済み"
+    },
+    "settings": {
+      "slippageTolerance": "スリッページ許容範囲",
+      "slippageToleranceTooltip": "市場の変動により、完了前に価格が変わる場合があります。この設定により、最低限の金額を確実に受け取ることができます。",
+      "noProtection": "保護なし",
+      "slippageDescription": "許容できる最大の価格変動です。価格が不利にこの範囲を超えて変動した場合、トランザクションは失敗します。",
+      "twapTitle": "TWAP（時間加重平均価格）",
+      "twapTooltip": "大口スワップのみに関連します。最良価格は注文に最適な価格を提供します。最良時間はスワップの実行時間を優先します（可能な場合）。カスタムでは、スワップを分割するミニスワップの回数と各ミニスワップ間の時間を設定できます。",
+      "twapDescription": "時間加重平均価格",
+      "bestPrice": "最良価格",
+      "bestTime": "最良時間",
+      "custom": "カスタム",
+      "numberOfSubSwaps": "サブスワップの回数",
+      "numberOfSubSwapsDescription": "取引を分割するサブスワップの回数。取引が多いほど価格は良くなりますが、実行時間は長くなります。",
+      "timeBetweenSubSwaps": "サブスワップ間の時間",
+      "timeBetweenSubSwapsDescription": "各サブスワップ間の遅延。間隔が長いほど、プールがリバランスしてより良い価格になります。",
+      "reset": "リセット",
+      "save": "保存"
+    },
+    "limit": {
+      "whenWorth": "1 {ticker} の価値が",
+      "expiry": "有効期限",
+      "oneHour": "1 時間",
+      "oneDay": "1 日",
+      "oneWeek": "1 週間",
+      "market": "成行"
+    },
+    "limitCancel": {
+      "titleModify": "指値注文を変更",
+      "titleCancel": "指値注文をキャンセル",
+      "descriptionModify": "この指値注文を変更すると目標価格が更新されます。変更処理には少額のネットワーク手数料がかかります。",
+      "descriptionCancel": "この指値注文をキャンセルすると、預け入れた資金がウォレットに返却されます。キャンセル処理には少額のネットワーク手数料がかかります。",
+      "youWillGet": "受取額",
+      "fromCurrent": "現在から {percent}%",
+      "modifying": "変更中...",
+      "cancelling": "キャンセル中...",
+      "loading": "読み込み中...",
+      "modifyOrder": "注文を変更",
+      "cancelOrder": "注文をキャンセル",
+      "cancelSubmitted": "キャンセルトランザクションが送信されました",
+      "modifySubmitted": "変更トランザクションが送信されました",
+      "connectWarning": "{chain} ウォレットを接続してこの注文を{mode, select, cancel {キャンセル} modify {変更} other {変更}}してください",
+      "switchWarning": "{chain} ウォレットに切り替えてこの注文を{mode, select, cancel {キャンセル} modify {変更} other {変更}}してください",
+      "addressMismatch": "接続されたウォレットがこの注文を出したアドレスと一致しません",
+      "tradingPaused": "{chain} の取引は現在停止しています",
+      "errLoadInbound": "受信アドレスの読み込みに失敗しました",
+      "errActionFailed": "指値スワップの{mode, select, cancel {キャンセル} modify {変更} other {変更}}に失敗しました"
+    },
+    "quoteTimer": {
+      "refresh": "更新"
+    },
+    "route": {
+      "chooseRoute": "ルートを選択",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "最良価格",
+      "faster": "より速い"
+    },
+    "instant": {
+      "sendTitle": "{asset} を送信",
+      "sendDescription": "セルフカストディウォレットから下記のアドレスに正確に {amount} {ticker} を送信してください。",
+      "destinationTag": "宛先タグ",
+      "memo": "メモ",
+      "confirming": "確認中",
+      "confirm": "確認",
+      "errMemoMissing": "メモがありません",
+      "errCalcAmount": "推奨金額の計算に失敗しました",
+      "errPreflight": "プリフライトリクエストに失敗しました"
+    },
+    "error": {
+      "minAmountNoWallet": "ウォレットを接続していない場合の最低スワップ金額は {amount} {ticker} です",
+      "unknown": "不明なエラー",
+      "insufficientOutboundFee": "送出手数料を支払うための返却資産が不足しています",
+      "insufficientWithdrawalFee": "送出手数料を支払うための出金額が不足しています",
+      "invalidSwap": "無効なスワップ",
+      "insufficientFunds": "資金が不足しています",
+      "sourceTargetSame": "送信元と送信先を同じにすることはできません",
+      "transactionCancelled": "トランザクションがキャンセルされました",
+      "insufficientFundsCaps": "資金不足",
+      "invalidToAddress": "無効な「to」アドレス",
+      "pendingTransaction": "トランザクション処理中です。しばらくしてから再試行してください",
+      "insufficientReturnAmount": "返却金額が不足しています",
+      "slippageExceeded": "スリッページ許容範囲を超えました",
+      "amountZero": "金額をゼロにすることはできません",
+      "invalidPrice": "無効な価格",
+      "missingConfig": "エントリーアダプターに設定がありません",
+      "insufficientLiquidity": "基礎資産のいずれかのオンチェーン流動性が不足しています。スリッページ許容範囲を引き上げてみてください。"
+    }
+  },
+  "send": {
+    "title": "送信",
+    "amount": "金額",
+    "to": "宛先",
+    "addressPlaceholder": "{chain} アドレス",
+    "invalidAddress": "無効な {chain} アドレス",
+    "transactionFee": "取引手数料",
+    "send": "送信",
+    "selectCoin": "コインを選択",
+    "toast": {
+      "walletNotConnected": "ウォレットが接続されていません。再接続してください。",
+      "submitting": "トランザクションを送信中...",
+      "submitted": "トランザクションが送信されました",
+      "submitError": "トランザクションの送信エラー"
+    }
+  },
+  "wallet": {
+    "chains": "チェーン",
+    "connected": "接続済み",
+    "disconnected": "切断済み",
+    "install": "インストール",
+    "soon": "近日公開",
+    "connectNamed": "{name} を接続",
+    "deselectAll": "すべて選択解除",
+    "selectAll": "すべて選択",
+    "evms": "EVMs",
+    "derivationPath": "派生パス",
+    "selectAccountType": "アカウントタイプを選択",
+    "index": "インデックス",
+    "openKeystore": "Keystore を開く",
+    "createNewWallet": "新しいウォレットを作成",
+    "importSeedPhrase": "シードフレーズをインポート",
+    "createWalletInstructions": "これら 12 個の単語を書き留め、オフラインで安全に保管してください。この 12 単語のフレーズは、ウォレットの秘密鍵を復元するために使用されます。",
+    "copyPhrase": "フレーズをコピー",
+    "confirmSavedPassphrase": "将来アカウントを復元するためのパスフレーズを安全に保存したことを確認します。",
+    "setupDecryptionPassword": "復号パスワードを設定",
+    "setupPasswordInstructions": "作成したウォレットを暗号化するための強力なパスワードを入力してください。これがウォレットにアクセスする方法になります。",
+    "enterPassword": "パスワードを入力",
+    "confirmPassword": "パスワードを確認",
+    "passwordMustMatch": "パスワードが一致する必要があります",
+    "create": "作成",
+    "importKeystore": "Keystore をインポート",
+    "selectOrDragKeystore": "keystore ファイルを選択またはドラッグしてアップロードしてください",
+    "decryptionPassword": "復号パスワード",
+    "password": "パスワード",
+    "import": "インポート",
+    "typeSeedPhrase": "シードフレーズを入力してください",
+    "invalidFileType": "無効なファイルタイプです。JSON または TXT ファイルをアップロードしてください。",
+    "noTokensFound": "トークンが見つかりません",
+    "copyAddress": "アドレスをコピー",
+    "addressCopied": "アドレスをコピーしました",
+    "disconnectWallet": "{name} を切断",
+    "noCoins": "コインがありません",
+    "sendToken": "{ticker} を送信",
+    "sidebar": {
+      "title": "ウォレット",
+      "sortWallets": "ウォレットを並べ替え",
+      "sortBy": "並べ替え",
+      "sortByName": "名前（A-Z）",
+      "sortByBalance": "残高（高 → 低）",
+      "externalWalletMode": "外部ウォレットモード",
+      "externalWalletModeDescription": "注文を入力し、スワップボタンをクリックして、手順に従ってください",
+      "externalWalletInfo": "外部ウォレットモードで資産がサポートされていない場合、ブラウザ内ウォレットの接続を求められます"
+    }
+  },
+  "riskLevel": {
+    "excellent": "優良",
+    "good": "良好",
+    "fair": "普通",
+    "title": "プロバイダーのリスクレベル",
+    "description": "これらのレベルは、プロバイダーがスワップとトランザクションのチェックをどのように処理するかを示します。",
+    "excellentInfo": "オンチェーンで直接実行されます。プロバイダーによるチェックや凍結はありません。スワップが失敗した場合は自動的に返金されます。",
+    "goodInfo": "プロバイダーが完了前にトランザクションを自動的にチェックします。問題が検出された場合、スワップは拒否され資金が返金されます。",
+    "fairInfo": "一部のトランザクションでは追加の検証が必要になる場合があります。問題が検出された場合、通常は資金が自動的に返金されます。"
+  },
+  "tx": {
+    "title": "履歴",
+    "today": "今日",
+    "yesterday": "昨日",
+    "onlyCreatorModify": "元のスワップ作成者のみが変更できます",
+    "showQr": "QR を表示",
+    "modify": "変更",
+    "cancelOrder": "注文をキャンセル",
+    "remaining": "残り {time}",
+    "loading": "読み込み中",
+    "status": {
+      "not_started": "入金待ち",
+      "pending": "保留中",
+      "swapping": "スワップ中",
+      "completed": "完了",
+      "failed": "失敗",
+      "expired": "期限切れ",
+      "refunded": "返金済み",
+      "unknown": "不明"
+    },
+    "leg": {
+      "deposit": "{ticker} を入金",
+      "send": "{ticker} を送信",
+      "swap": "{from} を {to} にスワップ"
+    }
+  },
+  "track": {
+    "title": "トランザクションを追跡"
+  }
+}

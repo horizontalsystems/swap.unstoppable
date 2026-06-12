@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { CredenzaDescription, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -16,6 +17,9 @@ interface SwapMemolessChannelProps {
 }
 
 export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannelProps) => {
+  const t = useTranslations('swap.instant')
+  const tc = useTranslations('common')
+  const tw = useTranslations('swap.warning')
   const [warningChecked, setWarningChecked] = useState(false)
   const [warningCheckedLTC, setWarningCheckedLTC] = useState(false)
 
@@ -25,14 +29,8 @@ export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannel
   return (
     <>
       <CredenzaHeader>
-        <CredenzaTitle>Send {assetFrom.name || assetFrom.ticker}</CredenzaTitle>
-        <CredenzaDescription>
-          Send exactly{' '}
-          <b>
-            {channel.value} {assetFrom.ticker}
-          </b>{' '}
-          to the address below from a self custody wallet.
-        </CredenzaDescription>
+        <CredenzaTitle>{t('sendTitle', { asset: assetFrom.name || assetFrom.ticker })}</CredenzaTitle>
+        <CredenzaDescription>{t('sendDescription', { amount: channel.value, ticker: assetFrom.ticker })}</CredenzaDescription>
       </CredenzaHeader>
 
       <ScrollArea className="flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
@@ -40,16 +38,16 @@ export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannel
           <SwapAddressWarning
             checked={warningChecked}
             onCheckedChange={setWarningChecked}
-            text="I understand that I must send exactly the specified amount from a self-custody wallet. I understand that sending from a smart contract wallet, exchange address, delegated address, or an EIP 7702 wallet, will result in"
-            textAccent="loss of funds."
+            text={tw('sendExact')}
+            textAccent={tw('lossOfFunds')}
           />
 
           {isLTC && (
             <SwapAddressWarning
               checked={warningCheckedLTC}
               onCheckedChange={setWarningCheckedLTC}
-              text="I understand that using an LTC MWEB address will result in"
-              textAccent="loss of funds."
+              text={tw('ltcMweb')}
+              textAccent={tw('lossOfFunds')}
             />
           )}
           <div className="flex flex-col items-center space-y-4 rounded-xl border p-4 md:p-6">
@@ -67,7 +65,7 @@ export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannel
 
             {(channel.txExtraAttribute?.destinationTag || channel.txExtraAttribute?.memo) && (
               <div className={cn('flex items-center gap-1', { 'blur-xs': isBlurred })}>
-                <div className="text-gray text-sm font-semibold">{channel.txExtraAttribute.destinationTag ? 'destination tag' : 'memo'}</div>
+                <div className="text-gray text-sm font-semibold">{channel.txExtraAttribute.destinationTag ? t('destinationTag') : t('memo')}</div>
                 <div className="flex items-center gap-2">
                   <div className="text-thor-gray text-sm font-semibold break-all">
                     {channel.txExtraAttribute.destinationTag ?? channel.txExtraAttribute.memo}
@@ -83,7 +81,7 @@ export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannel
 
             {channel.expiration && (
               <div className="text-jacob text-xs font-semibold">
-                Expires in &nbsp;
+                {tc('expiresIn')} &nbsp;
                 {formatDuration(
                   intervalToDuration({
                     start: new Date().getTime(),

@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "والیٹ منسلک کریں",
+    "balance": "بیلنس:",
+    "close": "بند کریں",
+    "back": "واپس",
+    "next": "اگلا",
+    "paste": "پیسٹ کریں",
+    "clear": "صاف کریں",
+    "expiresIn": "ختم ہوگا",
+    "language": "زبان",
+    "address": {
+      "source": "ماخذ ایڈریس",
+      "destination": "منزل ایڈریس",
+      "refund": "رقم واپسی ایڈریس",
+      "deposit": "ڈپازٹ ایڈریس"
+    }
+  },
+  "footer": {
+    "builtBy": "تیار کردہ",
+    "reportBugsTo": "بگز یہاں رپورٹ کریں",
+    "gotQuestions": "سوالات ہیں؟"
+  },
+  "swap": {
+    "title": "سویپ",
+    "input": {
+      "sell": "فروخت",
+      "buy": "خریداری",
+      "priceImpact": "قیمت پر اثر"
+    },
+    "button": {
+      "enterAmount": "رقم درج کریں",
+      "quoting": "کوٹ کیا جا رہا ہے...",
+      "noValidQuotes": "کوئی درست کوٹ نہیں",
+      "swap": "سویپ",
+      "placeLimitOrder": "لمٹ آرڈر دیں",
+      "connectWallet": "{chain} والیٹ منسلک کریں",
+      "insufficientBalance": "ناکافی بیلنس",
+      "approve": "{ticker} منظور کریں"
+    },
+    "toast": {
+      "success": "کامیاب",
+      "approvalTransaction": "منظوری ٹرانزیکشن",
+      "errorSubmitting": "ٹرانزیکشن جمع کرانے میں خرابی",
+      "submittingTransaction": "ٹرانزیکشن جمع کرائی جا رہی ہے",
+      "transactionSubmitted": "ٹرانزیکشن جمع ہو گئی"
+    },
+    "confirm": {
+      "titleSwap": "سویپ کی تصدیق کریں",
+      "titleLimit": "لمٹ آرڈر کی تصدیق کریں",
+      "limitPrice": "لمٹ قیمت",
+      "limitPriceTooltip": "وہ فی یونٹ قیمت جس پر آپ کا لمٹ آرڈر عمل میں آئے گا۔ آرڈر صرف اسی وقت مکمل ہوگا جب مارکیٹ اس قیمت تک پہنچے گی۔",
+      "targetAmount": "ہدف رقم",
+      "targetAmountTooltip": "آپ کی مقرر کردہ قیمت پر لمٹ آرڈر عمل میں آنے پر آپ کو ملنے والی درست رقم۔",
+      "minimumPayout": "کم از کم ادائیگی",
+      "minimumPayoutTooltip": "آپ کی {slippage}% سلپیج برداشت کی بنیاد پر کم از کم ضمانت شدہ رقم۔ اگر مارکیٹ کے حالات آپ کو اس سے کم دیں تو ٹرانزیکشن خودکار طور پر منسوخ ہو جائے گی۔",
+      "notProtected": "محفوظ نہیں",
+      "priceImpact": "قیمت پر اثر",
+      "priceImpactTooltip": "ٹریڈ کے حجم کی وجہ سے مارکیٹ قیمت اور آپ کے اصل سویپ ریٹ کے درمیان فرق۔ بڑے ٹریڈز میں عموماً قیمت پر زیادہ اثر ہوتا ہے۔",
+      "txFee": "ٹرانزیکشن فیس",
+      "estimatedTime": "متوقع وقت",
+      "provider": "فراہم کنندہ",
+      "memo": "میمو",
+      "confirm": "تصدیق کریں"
+    },
+    "feeDialog": {
+      "title": "ریٹ میں شامل فیس",
+      "description": "یہ فیسیں پہلے سے ریٹ میں شامل ہیں — آپ انہیں الگ سے ادا نہیں کرتے۔",
+      "liquidityFee": "لیکویڈیٹی فیس",
+      "liquidityFeeInfo": "روٹ پر لیکویڈیٹی فراہم کنندگان کے لیے فیس",
+      "outboundFee": "آؤٹ باؤنڈ فیس",
+      "outboundFeeInfo": "آؤٹ باؤنڈ ٹرانزیکشن بھیجنے کی فیس",
+      "platformFee": "پلیٹ فارم فیس",
+      "platformFeeInfo": "{app} کی طرف سے لی جانے والی فیس"
+    },
+    "recipient": {
+      "addressPlaceholder": "{chain} ایڈریس",
+      "invalidAddress": "غلط {chain} ایڈریس",
+      "titleAddresses": "ایڈریسز درج کریں",
+      "titleReceiving": "وصولی ایڈریس درج کریں",
+      "enterRefundAddress": "رقم واپسی ایڈریس درج کریں:",
+      "enterReceivingAddress": "وصولی ایڈریس درج کریں:",
+      "preparingSwap": "سویپ تیار ہو رہا ہے",
+      "next": "اگلا"
+    },
+    "warning": {
+      "selfCustody": "میں سمجھتا ہوں کہ مجھے سیلف کسٹڈی والیٹ استعمال کرنا ہوگا۔ میں سمجھتا ہوں کہ اسمارٹ کنٹریکٹ والیٹ، ایکسچینج ایڈریس، ڈیلیگیٹڈ ایڈریس، یا EIP 7702 والیٹ استعمال کرنے سے ہوگا",
+      "ltcMweb": "میں سمجھتا ہوں کہ LTC MWEB ایڈریس استعمال کرنے سے ہوگا",
+      "sendExact": "میں سمجھتا ہوں کہ مجھے سیلف کسٹڈی والیٹ سے بالکل مقررہ رقم بھیجنی ہوگی۔ میں سمجھتا ہوں کہ اسمارٹ کنٹریکٹ والیٹ، ایکسچینج ایڈریس، ڈیلیگیٹڈ ایڈریس، یا EIP 7702 والیٹ سے بھیجنے سے ہوگا",
+      "lossOfFunds": "فنڈز کا نقصان۔"
+    },
+    "selectAsset": {
+      "title": "سکہ منتخب کریں",
+      "allChains": "تمام چینز",
+      "search": "تلاش",
+      "currentlyUnavailable": "فی الحال دستیاب نہیں",
+      "selected": "منتخب شدہ"
+    },
+    "settings": {
+      "slippageTolerance": "سلپیج برداشت",
+      "slippageToleranceTooltip": "مارکیٹ کے اتار چڑھاؤ کی وجہ سے، تکمیل سے پہلے قیمتیں بدل سکتی ہیں۔ یہ سیٹنگ یقینی بناتی ہے کہ آپ کو کم از کم آپ کی مقررہ کم از کم رقم ملے۔",
+      "noProtection": "کوئی تحفظ نہیں",
+      "slippageDescription": "زیادہ سے زیادہ قابلِ قبول قیمت تبدیلی۔ اگر قیمت اس حد سے زیادہ ناموافق انداز میں بدلے تو ٹرانزیکشن ناکام ہو جائے گی۔",
+      "twapTitle": "TWAP (ٹائم ویٹڈ ایوریج پرائس)",
+      "twapTooltip": "صرف بڑے حجم کے سویپس کے لیے متعلقہ۔ Best Price آرڈر کے لیے بہترین قیمت پیش کرتا ہے۔ Best Time سویپ عملدرآمد کے وقت کو ترجیح دیتا ہے (جب بھی ممکن ہو)۔ Custom آپ کو ترتیب دینے دیتا ہے کہ سویپ کو کتنے منی سویپس میں تقسیم کیا جائے اور ہر منی سویپ کے درمیان کتنا وقت ہو۔",
+      "twapDescription": "ٹائم ویٹڈ ایوریج پرائس",
+      "bestPrice": "بہترین قیمت",
+      "bestTime": "بہترین وقت",
+      "custom": "کسٹم",
+      "numberOfSubSwaps": "سب سویپس کی تعداد",
+      "numberOfSubSwapsDescription": "اپنے ٹریڈ کو کتنے سب سویپس میں تقسیم کریں۔ زیادہ ٹریڈز = بہتر قیمت، طویل عملدرآمد۔",
+      "timeBetweenSubSwaps": "سب سویپس کے درمیان وقت",
+      "timeBetweenSubSwapsDescription": "ہر سب سویپ کے درمیان تاخیر۔ طویل وقفے پولز کو بہتر قیمت کے لیے دوبارہ توازن کرنے دیتے ہیں۔",
+      "reset": "ری سیٹ",
+      "save": "محفوظ کریں"
+    },
+    "limit": {
+      "whenWorth": "جب 1 {ticker} کی قیمت ہو",
+      "expiry": "میعاد",
+      "oneHour": "1 گھنٹہ",
+      "oneDay": "1 دن",
+      "oneWeek": "1 ہفتہ",
+      "market": "مارکیٹ"
+    },
+    "limitCancel": {
+      "titleModify": "لمٹ آرڈر میں ترمیم کریں",
+      "titleCancel": "لمٹ آرڈر منسوخ کریں",
+      "descriptionModify": "اس لمٹ آرڈر میں ترمیم کرنے سے ہدف قیمت اپ ڈیٹ ہو جائے گی۔ ترمیم پر کارروائی کے لیے ایک معمولی نیٹ ورک فیس لی جائے گی۔",
+      "descriptionCancel": "اس لمٹ آرڈر کو منسوخ کرنے سے آپ کے جمع کردہ فنڈز آپ کے والیٹ میں واپس آ جائیں گے۔ منسوخی پر کارروائی کے لیے ایک معمولی نیٹ ورک فیس لی جائے گی۔",
+      "youWillGet": "آپ کو ملے گا",
+      "fromCurrent": "موجودہ سے {percent}%",
+      "modifying": "ترمیم ہو رہی ہے...",
+      "cancelling": "منسوخ ہو رہا ہے...",
+      "loading": "لوڈ ہو رہا ہے...",
+      "modifyOrder": "آرڈر میں ترمیم کریں",
+      "cancelOrder": "آرڈر منسوخ کریں",
+      "cancelSubmitted": "منسوخی ٹرانزیکشن جمع ہو گئی",
+      "modifySubmitted": "ترمیم ٹرانزیکشن جمع ہو گئی",
+      "connectWarning": "اس آرڈر کو {mode, select, cancel {منسوخ} modify {ترمیم} other {ترمیم}} کرنے کے لیے {chain} والیٹ منسلک کریں",
+      "switchWarning": "اس آرڈر کو {mode, select, cancel {منسوخ} modify {ترمیم} other {ترمیم}} کرنے کے لیے {chain} والیٹ پر سوئچ کریں",
+      "addressMismatch": "منسلک والیٹ اس ایڈریس سے میل نہیں کھاتا جس نے یہ آرڈر دیا تھا",
+      "tradingPaused": "{chain} ٹریڈنگ فی الحال روکی ہوئی ہے",
+      "errLoadInbound": "اِن باؤنڈ ایڈریسز لوڈ کرنے میں ناکامی",
+      "errActionFailed": "لمٹ سویپ {mode, select, cancel {منسوخ} modify {ترمیم} other {ترمیم}} کرنے میں ناکامی"
+    },
+    "quoteTimer": {
+      "refresh": "ریفریش"
+    },
+    "route": {
+      "chooseRoute": "روٹ منتخب کریں",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "بہترین قیمت",
+      "faster": "تیز تر"
+    },
+    "instant": {
+      "sendTitle": "{asset} بھیجیں",
+      "sendDescription": "نیچے دیے گئے ایڈریس پر سیلف کسٹڈی والیٹ سے بالکل {amount} {ticker} بھیجیں۔",
+      "destinationTag": "منزل ٹیگ",
+      "memo": "میمو",
+      "confirming": "تصدیق ہو رہی ہے",
+      "confirm": "تصدیق کریں",
+      "errMemoMissing": "میمو غائب ہے",
+      "errCalcAmount": "تجویز کردہ رقم کا حساب لگانے میں ناکامی",
+      "errPreflight": "پری فلائٹ درخواست ناکام"
+    },
+    "error": {
+      "minAmountNoWallet": "منسلک والیٹ کے بغیر کم از کم سویپ رقم {amount} {ticker} ہے",
+      "unknown": "نامعلوم خرابی",
+      "insufficientOutboundFee": "آؤٹ باؤنڈ فیس ادا کرنے کے لیے ناکافی اثاثہ واپس آیا",
+      "insufficientWithdrawalFee": "آؤٹ باؤنڈ فیس ادا کرنے کے لیے ناکافی واپسی",
+      "invalidSwap": "غلط سویپ",
+      "insufficientFunds": "ناکافی فنڈز",
+      "sourceTargetSame": "ماخذ اور ہدف ایک جیسے نہیں ہو سکتے",
+      "transactionCancelled": "ٹرانزیکشن منسوخ",
+      "insufficientFundsCaps": "ناکافی فنڈز",
+      "invalidToAddress": "غلط \"to\" ایڈریس",
+      "pendingTransaction": "زیر التواء ٹرانزیکشن۔ تھوڑی دیر بعد دوبارہ کوشش کریں",
+      "insufficientReturnAmount": "ناکافی واپسی رقم",
+      "slippageExceeded": "سلپیج برداشت سے تجاوز",
+      "amountZero": "رقم صفر نہیں ہو سکتی",
+      "invalidPrice": "غلط قیمت",
+      "missingConfig": "اینٹری اڈیپٹر میں کنفیگریشن غائب ہے",
+      "insufficientLiquidity": "بنیادی اثاثوں میں سے کسی ایک کے لیے ناکافی آن چین لیکویڈیٹی۔ سلپیج برداشت بڑھا کر کوشش کریں۔"
+    }
+  },
+  "send": {
+    "title": "بھیجیں",
+    "amount": "رقم",
+    "to": "بنام",
+    "addressPlaceholder": "{chain} ایڈریس",
+    "invalidAddress": "غلط {chain} ایڈریس",
+    "transactionFee": "ٹرانزیکشن فیس",
+    "send": "بھیجیں",
+    "selectCoin": "سکہ منتخب کریں",
+    "toast": {
+      "walletNotConnected": "والیٹ منسلک نہیں ہے۔ براہ کرم دوبارہ منسلک کریں۔",
+      "submitting": "ٹرانزیکشن جمع کرائی جا رہی ہے...",
+      "submitted": "ٹرانزیکشن جمع ہو گئی",
+      "submitError": "ٹرانزیکشن جمع کرانے میں خرابی"
+    }
+  },
+  "wallet": {
+    "chains": "چینز",
+    "connected": "منسلک",
+    "disconnected": "منقطع",
+    "install": "انسٹال کریں",
+    "soon": "جلد",
+    "connectNamed": "{name} منسلک کریں",
+    "deselectAll": "سب غیر منتخب کریں",
+    "selectAll": "سب منتخب کریں",
+    "evms": "EVMs",
+    "derivationPath": "ڈیریویشن پاتھ",
+    "selectAccountType": "اکاؤنٹ کی قسم منتخب کریں",
+    "index": "انڈیکس",
+    "openKeystore": "Keystore کھولیں",
+    "createNewWallet": "نیا والیٹ بنائیں",
+    "importSeedPhrase": "سیڈ فریز امپورٹ کریں",
+    "createWalletInstructions": "ان 12 الفاظ کو لکھ لیں اور انہیں محفوظ طریقے سے آف لائن محفوظ کریں۔ یہ 12 الفاظ کا فریز آپ کے والیٹ کی پرائیویٹ کیز بحال کرنے کے لیے استعمال ہوتا ہے۔",
+    "copyPhrase": "فریز کاپی کریں",
+    "confirmSavedPassphrase": "میں تصدیق کرتا ہوں کہ میں نے مستقبل میں اپنا اکاؤنٹ بحال کرنے کے لیے پاس فریز محفوظ طریقے سے محفوظ کر لیا ہے۔",
+    "setupDecryptionPassword": "ڈکرپشن پاس ورڈ سیٹ کریں",
+    "setupPasswordInstructions": "اپنے بنائے گئے والیٹ کو انکرپٹ کرنے کے لیے ایک مضبوط پاس ورڈ درج کریں۔ اسی سے آپ اپنے والیٹ تک رسائی حاصل کریں گے۔",
+    "enterPassword": "پاس ورڈ درج کریں",
+    "confirmPassword": "پاس ورڈ کی تصدیق کریں",
+    "passwordMustMatch": "پاس ورڈ مماثل ہونا چاہیے",
+    "create": "بنائیں",
+    "importKeystore": "Keystore امپورٹ کریں",
+    "selectOrDragKeystore": "اپ لوڈ کرنے کے لیے اپنی keystore فائل منتخب کریں یا گھسیٹیں",
+    "decryptionPassword": "ڈکرپشن پاس ورڈ",
+    "password": "پاس ورڈ",
+    "import": "امپورٹ کریں",
+    "typeSeedPhrase": "اپنا سیڈ فریز ٹائپ کریں",
+    "invalidFileType": "غلط فائل کی قسم۔ براہ کرم ایک JSON یا TXT فائل اپ لوڈ کریں۔",
+    "noTokensFound": "کوئی ٹوکن نہیں ملا",
+    "copyAddress": "ایڈریس کاپی کریں",
+    "addressCopied": "ایڈریس کاپی ہو گیا",
+    "disconnectWallet": "{name} منقطع کریں",
+    "noCoins": "کوئی سکہ نہیں",
+    "sendToken": "{ticker} بھیجیں",
+    "sidebar": {
+      "title": "والیٹس",
+      "sortWallets": "والیٹس ترتیب دیں",
+      "sortBy": "ترتیب بلحاظ",
+      "sortByName": "نام (A-Z)",
+      "sortByBalance": "بیلنس (زیادہ → کم)",
+      "externalWalletMode": "بیرونی والیٹ موڈ",
+      "externalWalletModeDescription": "اپنا آرڈر درج کریں، سویپ بٹن پر کلک کریں، اور ہدایات پر عمل کریں",
+      "externalWalletInfo": "اگر کوئی اثاثہ بیرونی والیٹ موڈ میں معاون نہ ہو، تو آپ سے اِن براؤزر والیٹ منسلک کرنے کو کہا جائے گا"
+    }
+  },
+  "riskLevel": {
+    "excellent": "بہترین",
+    "good": "اچھا",
+    "fair": "مناسب",
+    "title": "فراہم کنندہ خطرے کی سطحیں",
+    "description": "یہ سطحیں ظاہر کرتی ہیں کہ فراہم کنندگان سویپس اور ٹرانزیکشن چیکس کو کیسے سنبھالتے ہیں۔",
+    "excellentInfo": "براہ راست آن چین عملدرآمد۔ کوئی فراہم کنندہ چیک یا فریز نہیں۔ سویپ ناکام ہونے پر خودکار رقم واپسی۔",
+    "goodInfo": "فراہم کنندہ تکمیل سے پہلے خودکار طور پر ٹرانزیکشنز چیک کرتا ہے۔ مسائل کا پتہ چلنے پر سویپ مسترد کر دیا جاتا ہے اور فنڈز واپس کر دیے جاتے ہیں۔",
+    "fairInfo": "کچھ ٹرانزیکشنز کے لیے اضافی تصدیق کی ضرورت ہو سکتی ہے۔ مسائل کا پتہ چلنے پر فنڈز عام طور پر خودکار طور پر واپس کر دیے جاتے ہیں۔"
+  },
+  "tx": {
+    "title": "تاریخ",
+    "today": "آج",
+    "yesterday": "کل",
+    "onlyCreatorModify": "صرف اصل سویپ بنانے والا ہی ترمیم کر سکتا ہے",
+    "showQr": "QR دکھائیں",
+    "modify": "ترمیم کریں",
+    "cancelOrder": "آرڈر منسوخ کریں",
+    "remaining": "{time} باقی",
+    "loading": "لوڈ ہو رہا ہے",
+    "status": {
+      "not_started": "ڈپازٹ زیر التواء",
+      "pending": "زیر التواء",
+      "swapping": "سویپ ہو رہا ہے",
+      "completed": "مکمل",
+      "failed": "ناکام",
+      "expired": "میعاد ختم",
+      "refunded": "رقم واپس",
+      "unknown": "نامعلوم"
+    },
+    "leg": {
+      "deposit": "{ticker} ڈپازٹ کریں",
+      "send": "{ticker} بھیجیں",
+      "swap": "{from} کو {to} میں سویپ کریں"
+    }
+  },
+  "track": {
+    "title": "ٹرانزیکشن ٹریک کریں"
+  }
+}

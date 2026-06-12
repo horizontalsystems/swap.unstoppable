@@ -1,6 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, USwapNumber } from '@uswap/core'
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
 import { CopyButton } from '@/components/button-copy'
@@ -28,6 +29,8 @@ export interface TrackParams {
 }
 
 export function TrackStatus({ params }: { params: TrackParams }) {
+  const t = useTranslations('tx')
+  const tc = useTranslations('common')
   const { data, isPending, isError } = useQuery({
     queryKey: ['track', params],
     queryFn: () => getTrack(params),
@@ -61,8 +64,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
   const fiatTo = rateTo && amountTo && rateTo.mul(amountTo)
 
   const status: TxStatus = data?.status ?? 'unknown'
-  let statusTitle = status.replace('_', ' ')
-  if (status === 'not_started') statusTitle = 'Deposit Pending'
+  const statusTitle = t(`status.${status}`)
 
   return (
     <div className="bg-blade/25 rounded-xl border">
@@ -83,7 +85,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
               'text-lucian': !isPending && !isError && (status === 'expired' || status === 'failed')
             })}
           >
-            {isPending || isError ? 'loading' : statusTitle}
+            {isPending || isError ? t('loading') : statusTitle}
           </span>
         </div>
 
@@ -101,7 +103,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
         <div className="space-y-3 border-t px-4 py-4 text-xs font-semibold">
           {fromAddress && (
             <div className="text-thor-gray flex items-center justify-between">
-              <span>Source Address</span>
+              <span>{tc('address.source')}</span>
               <div className="flex items-center gap-2">
                 <span className="text-leah">{truncate(fromAddress)}</span>
                 <CopyButton text={fromAddress} />
@@ -110,7 +112,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
           )}
           {toAddress && (
             <div className="text-thor-gray flex items-center justify-between">
-              <span>Destination Address</span>
+              <span>{tc('address.destination')}</span>
               <div className="flex items-center gap-2">
                 <span className="text-leah">{truncate(toAddress)}</span>
                 <CopyButton text={toAddress} />
@@ -119,7 +121,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
           )}
           {depositAddress && (
             <div className="text-thor-gray flex items-center justify-between">
-              <span>Deposit Address</span>
+              <span>{tc('address.deposit')}</span>
               <div className="flex items-center gap-2">
                 <span className="text-leah">{truncate(depositAddress)}</span>
                 <CopyButton text={depositAddress} />
@@ -128,7 +130,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
           )}
           {refundAddress && (
             <div className="text-thor-gray flex items-center justify-between">
-              <span>Refund Address</span>
+              <span>{tc('address.refund')}</span>
               <div className="flex items-center gap-2">
                 <span className="text-leah">{truncate(refundAddress)}</span>
                 <CopyButton text={refundAddress} />
@@ -160,15 +162,16 @@ function StatusIcon({ status }: { status: TxStatus }) {
 }
 
 function LegRow({ leg, txFromAsset }: { leg: any; txFromAsset: string }) {
+  const t = useTranslations('tx')
   const from = assetFromString(leg.fromAsset)
   const to = assetFromString(leg.toAsset)
 
   const text =
     leg.fromAsset === leg.toAsset
       ? leg.fromAsset.toLowerCase() === txFromAsset.toLowerCase()
-        ? `Deposit ${from.ticker}`
-        : `Send ${to.ticker}`
-      : `Swap ${from.ticker} to ${to.ticker}`
+        ? t('leg.deposit', { ticker: from.ticker ?? '' })
+        : t('leg.send', { ticker: to.ticker ?? '' })
+      : t('leg.swap', { from: from.ticker ?? '', to: to.ticker ?? '' })
 
   const chain = ChainIdToChain[leg.chainId as ChainId]
   const explorerUrl = leg.hash && getExplorerTxUrl({ chain, txHash: leg.hash })

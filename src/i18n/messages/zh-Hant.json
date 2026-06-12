@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "連接錢包",
+    "balance": "餘額：",
+    "close": "關閉",
+    "back": "返回",
+    "next": "下一步",
+    "paste": "貼上",
+    "clear": "清除",
+    "expiresIn": "剩餘有效時間",
+    "language": "語言",
+    "address": {
+      "source": "來源地址",
+      "destination": "目標地址",
+      "refund": "退款地址",
+      "deposit": "充值地址"
+    }
+  },
+  "footer": {
+    "builtBy": "開發者",
+    "reportBugsTo": "問題回報至",
+    "gotQuestions": "有疑問？"
+  },
+  "swap": {
+    "title": "兌換",
+    "input": {
+      "sell": "賣出",
+      "buy": "買入",
+      "priceImpact": "價格影響"
+    },
+    "button": {
+      "enterAmount": "輸入金額",
+      "quoting": "報價中...",
+      "noValidQuotes": "無有效報價",
+      "swap": "兌換",
+      "placeLimitOrder": "下達限價單",
+      "connectWallet": "連接 {chain} 錢包",
+      "insufficientBalance": "餘額不足",
+      "approve": "授權 {ticker}"
+    },
+    "toast": {
+      "success": "成功",
+      "approvalTransaction": "授權交易",
+      "errorSubmitting": "提交交易出錯",
+      "submittingTransaction": "正在提交交易",
+      "transactionSubmitted": "交易已提交"
+    },
+    "confirm": {
+      "titleSwap": "確認兌換",
+      "titleLimit": "確認限價單",
+      "limitPrice": "限價",
+      "limitPriceTooltip": "您的限價單將以此單價執行。僅當市場達到該價格時訂單才會成交。",
+      "targetAmount": "目標金額",
+      "targetAmountTooltip": "當您的限價單以指定價格執行時您將收到的確切金額。",
+      "minimumPayout": "最低收款",
+      "minimumPayoutTooltip": "基於您 {slippage}% 滑點容差的最低保證金額。若市場狀況會使您收到更少，交易將被自動取消。",
+      "notProtected": "未受保護",
+      "priceImpact": "價格影響",
+      "priceImpactTooltip": "因交易規模導致的市場價格與您實際兌換匯率之間的差異。較大的交易通常具有更高的價格影響。",
+      "txFee": "交易手續費",
+      "estimatedTime": "預計時間",
+      "provider": "提供方",
+      "memo": "備註",
+      "confirm": "確認"
+    },
+    "feeDialog": {
+      "title": "匯率已包含的費用",
+      "description": "這些費用已包含在匯率中——您無需另行支付。",
+      "liquidityFee": "流動性費用",
+      "liquidityFeeInfo": "支付給路由上流動性提供者的費用",
+      "outboundFee": "出帳費用",
+      "outboundFeeInfo": "發送出帳交易的費用",
+      "platformFee": "平台費用",
+      "platformFeeInfo": "由 {app} 收取的費用"
+    },
+    "recipient": {
+      "addressPlaceholder": "{chain} 地址",
+      "invalidAddress": "無效的 {chain} 地址",
+      "titleAddresses": "輸入地址",
+      "titleReceiving": "輸入接收地址",
+      "enterRefundAddress": "輸入退款地址：",
+      "enterReceivingAddress": "輸入接收地址：",
+      "preparingSwap": "正在準備兌換",
+      "next": "下一步"
+    },
+    "warning": {
+      "selfCustody": "我理解我必須使用自我託管錢包。我理解使用智能合約錢包、交易所地址、委託地址或 EIP 7702 錢包將導致",
+      "ltcMweb": "我理解使用 LTC MWEB 地址將導致",
+      "sendExact": "我理解我必須從自我託管錢包發送指定的確切金額。我理解從智能合約錢包、交易所地址、委託地址或 EIP 7702 錢包發送將導致",
+      "lossOfFunds": "資金損失。"
+    },
+    "selectAsset": {
+      "title": "選擇幣種",
+      "allChains": "所有鏈",
+      "search": "搜尋",
+      "currentlyUnavailable": "目前無法使用",
+      "selected": "已選擇"
+    },
+    "settings": {
+      "slippageTolerance": "滑點容差",
+      "slippageToleranceTooltip": "由於市場波動，價格在完成前可能發生變化。此設定確保您至少收到您的最低金額。",
+      "noProtection": "無保護",
+      "slippageDescription": "可接受的最大價格變化。若價格不利變動超過此幅度，交易將失敗。",
+      "twapTitle": "TWAP（時間加權平均價格）",
+      "twapTooltip": "僅適用於大額兌換。最優價格為訂單提供最佳價格。最優時間優先考慮兌換執行時間（在可能的情況下）。自訂允許您配置兌換拆分的小額兌換數量以及每筆小額兌換之間的時間間隔。",
+      "twapDescription": "時間加權平均價格",
+      "bestPrice": "最優價格",
+      "bestTime": "最優時間",
+      "custom": "自訂",
+      "numberOfSubSwaps": "子兌換數量",
+      "numberOfSubSwapsDescription": "將您的交易拆分為多少筆子兌換。交易越多 = 價格越好，執行時間越長。",
+      "timeBetweenSubSwaps": "子兌換間隔時間",
+      "timeBetweenSubSwapsDescription": "每筆子兌換之間的延遲。間隔越長，資金池有更多時間重新平衡以獲得更優價格。",
+      "reset": "重設",
+      "save": "儲存"
+    },
+    "limit": {
+      "whenWorth": "當 1 {ticker} 價值",
+      "expiry": "有效期",
+      "oneHour": "1 小時",
+      "oneDay": "1 天",
+      "oneWeek": "1 週",
+      "market": "市價"
+    },
+    "limitCancel": {
+      "titleModify": "修改限價單",
+      "titleCancel": "取消限價單",
+      "descriptionModify": "修改此限價單將更新目標價格。處理修改將收取少量網路費用。",
+      "descriptionCancel": "取消此限價單將把您存入的資金退回您的錢包。處理取消將收取少量網路費用。",
+      "youWillGet": "您將獲得",
+      "fromCurrent": "較目前 {percent}%",
+      "modifying": "修改中...",
+      "cancelling": "取消中...",
+      "loading": "載入中...",
+      "modifyOrder": "修改訂單",
+      "cancelOrder": "取消訂單",
+      "cancelSubmitted": "取消交易已提交",
+      "modifySubmitted": "修改交易已提交",
+      "connectWarning": "連接 {chain} 錢包以{mode, select, cancel {取消} modify {修改} other {修改}}此訂單",
+      "switchWarning": "切換到 {chain} 錢包以{mode, select, cancel {取消} modify {修改} other {修改}}此訂單",
+      "addressMismatch": "已連接的錢包與下達此訂單的地址不符",
+      "tradingPaused": "{chain} 交易目前已暫停",
+      "errLoadInbound": "載入入帳地址失敗",
+      "errActionFailed": "{mode, select, cancel {取消} modify {修改} other {修改}}限價兌換失敗"
+    },
+    "quoteTimer": {
+      "refresh": "重新整理"
+    },
+    "route": {
+      "chooseRoute": "選擇路由",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "最優價格",
+      "faster": "更快"
+    },
+    "instant": {
+      "sendTitle": "發送 {asset}",
+      "sendDescription": "從自我託管錢包向下方地址發送恰好 {amount} {ticker}。",
+      "destinationTag": "目標標籤",
+      "memo": "備註",
+      "confirming": "確認中",
+      "confirm": "確認",
+      "errMemoMissing": "備註缺失",
+      "errCalcAmount": "計算建議金額失敗",
+      "errPreflight": "預檢請求失敗"
+    },
+    "error": {
+      "minAmountNoWallet": "未連接錢包時的最低兌換金額為 {amount} {ticker}",
+      "unknown": "未知錯誤",
+      "insufficientOutboundFee": "返還資產不足以支付出帳費用",
+      "insufficientWithdrawalFee": "提款不足以支付出帳費用",
+      "invalidSwap": "無效兌換",
+      "insufficientFunds": "資金不足",
+      "sourceTargetSame": "來源與目標不能相同",
+      "transactionCancelled": "交易已取消",
+      "insufficientFundsCaps": "資金不足",
+      "invalidToAddress": "無效的「to」地址",
+      "pendingTransaction": "交易待處理。請稍後重試",
+      "insufficientReturnAmount": "返還金額不足",
+      "slippageExceeded": "超出滑點容差",
+      "amountZero": "金額不能為零",
+      "invalidPrice": "無效價格",
+      "missingConfig": "入口轉接器中缺少配置",
+      "insufficientLiquidity": "其中一種底層資產的鏈上流動性不足。請嘗試提高滑點容差。"
+    }
+  },
+  "send": {
+    "title": "發送",
+    "amount": "金額",
+    "to": "至",
+    "addressPlaceholder": "{chain} 地址",
+    "invalidAddress": "無效的 {chain} 地址",
+    "transactionFee": "交易手續費",
+    "send": "發送",
+    "selectCoin": "選擇幣種",
+    "toast": {
+      "walletNotConnected": "錢包未連接。請重新連接。",
+      "submitting": "正在提交交易...",
+      "submitted": "交易已提交",
+      "submitError": "提交交易出錯"
+    }
+  },
+  "wallet": {
+    "chains": "鏈",
+    "connected": "已連接",
+    "disconnected": "已斷開",
+    "install": "安裝",
+    "soon": "即將推出",
+    "connectNamed": "連接 {name}",
+    "deselectAll": "取消全選",
+    "selectAll": "全選",
+    "evms": "EVMs",
+    "derivationPath": "衍生路徑",
+    "selectAccountType": "選擇帳戶類型",
+    "index": "索引",
+    "openKeystore": "開啟 Keystore",
+    "createNewWallet": "建立新錢包",
+    "importSeedPhrase": "匯入助記詞",
+    "createWalletInstructions": "請寫下這 12 個單字並安全地離線儲存。此 12 詞助記詞用於恢復您的錢包私鑰。",
+    "copyPhrase": "複製助記詞",
+    "confirmSavedPassphrase": "我確認已安全儲存助記詞，以便日後恢復我的帳戶。",
+    "setupDecryptionPassword": "設定解密密碼",
+    "setupPasswordInstructions": "輸入一個強密碼來加密您建立的錢包。這是您存取錢包的方式。",
+    "enterPassword": "輸入密碼",
+    "confirmPassword": "確認密碼",
+    "passwordMustMatch": "密碼必須一致",
+    "create": "建立",
+    "importKeystore": "匯入 Keystore",
+    "selectOrDragKeystore": "選擇或拖曳您的 keystore 檔案以上傳",
+    "decryptionPassword": "解密密碼",
+    "password": "密碼",
+    "import": "匯入",
+    "typeSeedPhrase": "輸入您的助記詞",
+    "invalidFileType": "無效的檔案類型。請上傳 JSON 或 TXT 檔案。",
+    "noTokensFound": "未找到代幣",
+    "copyAddress": "複製地址",
+    "addressCopied": "地址已複製",
+    "disconnectWallet": "斷開 {name}",
+    "noCoins": "無幣種",
+    "sendToken": "發送 {ticker}",
+    "sidebar": {
+      "title": "錢包",
+      "sortWallets": "排序錢包",
+      "sortBy": "排序方式",
+      "sortByName": "名稱（A-Z）",
+      "sortByBalance": "餘額（高 → 低）",
+      "externalWalletMode": "外部錢包模式",
+      "externalWalletModeDescription": "輸入您的訂單，點擊兌換按鈕，然後依照說明操作",
+      "externalWalletInfo": "如果某資產在外部錢包模式下不受支援，系統將提示您連接瀏覽器內錢包"
+    }
+  },
+  "riskLevel": {
+    "excellent": "優秀",
+    "good": "良好",
+    "fair": "一般",
+    "title": "提供方風險等級",
+    "description": "這些等級顯示提供方如何處理兌換和交易檢查。",
+    "excellentInfo": "直接鏈上執行。無提供方檢查或凍結。兌換失敗時自動退款。",
+    "goodInfo": "提供方在完成前自動檢查交易。若偵測到問題，兌換將被拒絕並退款。",
+    "fairInfo": "某些交易可能需要額外驗證。若偵測到問題，資金通常會自動退還。"
+  },
+  "tx": {
+    "title": "歷史",
+    "today": "今天",
+    "yesterday": "昨天",
+    "onlyCreatorModify": "只有原始兌換建立者才能修改",
+    "showQr": "顯示 QR",
+    "modify": "修改",
+    "cancelOrder": "取消訂單",
+    "remaining": "剩餘 {time}",
+    "loading": "載入中",
+    "status": {
+      "not_started": "充值待處理",
+      "pending": "待處理",
+      "swapping": "兌換中",
+      "completed": "已完成",
+      "failed": "失敗",
+      "expired": "已過期",
+      "refunded": "已退款",
+      "unknown": "未知"
+    },
+    "leg": {
+      "deposit": "充值 {ticker}",
+      "send": "發送 {ticker}",
+      "swap": "將 {from} 兌換為 {to}"
+    }
+  },
+  "track": {
+    "title": "追蹤交易"
+  }
+}

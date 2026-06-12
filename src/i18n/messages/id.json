@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "Hubungkan Dompet",
+    "balance": "Saldo:",
+    "close": "Tutup",
+    "back": "Kembali",
+    "next": "Lanjut",
+    "paste": "Tempel",
+    "clear": "Hapus",
+    "expiresIn": "Kedaluwarsa dalam",
+    "language": "Bahasa",
+    "address": {
+      "source": "Alamat Sumber",
+      "destination": "Alamat Tujuan",
+      "refund": "Alamat Pengembalian",
+      "deposit": "Alamat Setoran"
+    }
+  },
+  "footer": {
+    "builtBy": "Dibuat oleh",
+    "reportBugsTo": "Laporkan bug ke",
+    "gotQuestions": "Ada pertanyaan?"
+  },
+  "swap": {
+    "title": "Tukar",
+    "input": {
+      "sell": "Jual",
+      "buy": "Beli",
+      "priceImpact": "Dampak Harga"
+    },
+    "button": {
+      "enterAmount": "Masukkan Jumlah",
+      "quoting": "Menghitung...",
+      "noValidQuotes": "Tidak Ada Penawaran Valid",
+      "swap": "Tukar",
+      "placeLimitOrder": "Buat Order Limit",
+      "connectWallet": "Hubungkan Dompet {chain}",
+      "insufficientBalance": "Saldo Tidak Cukup",
+      "approve": "Setujui {ticker}"
+    },
+    "toast": {
+      "success": "Berhasil",
+      "approvalTransaction": "Transaksi Persetujuan",
+      "errorSubmitting": "Gagal Mengirim Transaksi",
+      "submittingTransaction": "Mengirim Transaksi",
+      "transactionSubmitted": "Transaksi terkirim"
+    },
+    "confirm": {
+      "titleSwap": "Konfirmasi Pertukaran",
+      "titleLimit": "Konfirmasi Order Limit",
+      "limitPrice": "Harga Limit",
+      "limitPriceTooltip": "Harga per unit di mana order limit Anda akan dieksekusi. Order hanya akan terisi saat pasar mencapai harga ini.",
+      "targetAmount": "Jumlah Target",
+      "targetAmountTooltip": "Jumlah pasti yang akan Anda terima saat order limit Anda dieksekusi pada harga yang ditentukan.",
+      "minimumPayout": "Pembayaran Minimum",
+      "minimumPayoutTooltip": "Jumlah minimum yang dijamin berdasarkan toleransi slippage {slippage}% Anda. Jika kondisi pasar memberi Anda lebih sedikit, transaksi akan dibatalkan secara otomatis.",
+      "notProtected": "Tidak Terlindungi",
+      "priceImpact": "Dampak Harga",
+      "priceImpactTooltip": "Selisih antara harga pasar dan kurs pertukaran aktual Anda akibat ukuran transaksi. Transaksi yang lebih besar biasanya memiliki dampak harga lebih tinggi.",
+      "txFee": "Biaya Transaksi",
+      "estimatedTime": "Perkiraan Waktu",
+      "provider": "Penyedia",
+      "memo": "Memo",
+      "confirm": "Konfirmasi"
+    },
+    "feeDialog": {
+      "title": "Biaya Termasuk dalam Kurs",
+      "description": "Biaya ini sudah termasuk dalam kurs — Anda tidak membayarnya secara terpisah.",
+      "liquidityFee": "Biaya Likuiditas",
+      "liquidityFeeInfo": "Biaya untuk penyedia likuiditas pada rute",
+      "outboundFee": "Biaya Keluar",
+      "outboundFeeInfo": "Biaya untuk mengirim transaksi keluar",
+      "platformFee": "Biaya Platform",
+      "platformFeeInfo": "Biaya yang dikenakan oleh {app}"
+    },
+    "recipient": {
+      "addressPlaceholder": "Alamat {chain}",
+      "invalidAddress": "Alamat {chain} tidak valid",
+      "titleAddresses": "Masukkan Alamat",
+      "titleReceiving": "Masukkan Alamat Penerima",
+      "enterRefundAddress": "Masukkan alamat pengembalian:",
+      "enterReceivingAddress": "Masukkan alamat penerima:",
+      "preparingSwap": "Menyiapkan Pertukaran",
+      "next": "Lanjut"
+    },
+    "warning": {
+      "selfCustody": "Saya memahami bahwa saya harus menggunakan dompet self-custody. Saya memahami bahwa menggunakan dompet smart contract, alamat bursa, alamat terdelegasi, atau dompet EIP 7702 akan mengakibatkan",
+      "ltcMweb": "Saya memahami bahwa menggunakan alamat LTC MWEB akan mengakibatkan",
+      "sendExact": "Saya memahami bahwa saya harus mengirim tepat sejumlah yang ditentukan dari dompet self-custody. Saya memahami bahwa mengirim dari dompet smart contract, alamat bursa, alamat terdelegasi, atau dompet EIP 7702 akan mengakibatkan",
+      "lossOfFunds": "hilangnya dana."
+    },
+    "selectAsset": {
+      "title": "Pilih koin",
+      "allChains": "Semua Rantai",
+      "search": "Cari",
+      "currentlyUnavailable": "Saat ini tidak tersedia",
+      "selected": "Terpilih"
+    },
+    "settings": {
+      "slippageTolerance": "Toleransi Slippage",
+      "slippageToleranceTooltip": "Karena volatilitas pasar, harga dapat berubah sebelum selesai. Pengaturan ini memastikan Anda menerima setidaknya jumlah minimum Anda.",
+      "noProtection": "Tanpa Perlindungan",
+      "slippageDescription": "Perubahan harga maksimum yang dapat diterima. Transaksi akan gagal jika harga bergerak tidak menguntungkan melebihi jumlah ini.",
+      "twapTitle": "TWAP (Harga Rata-rata Tertimbang Waktu)",
+      "twapTooltip": "Hanya relevan untuk pertukaran volume besar. Best Price menawarkan harga optimal untuk order. Best Time memprioritaskan waktu eksekusi pertukaran (jika memungkinkan). Custom memungkinkan Anda mengatur jumlah mini-swap yang akan dibagi dan waktu antar mini-swap.",
+      "twapDescription": "Harga Rata-rata Tertimbang Waktu",
+      "bestPrice": "Harga Terbaik",
+      "bestTime": "Waktu Terbaik",
+      "custom": "Kustom",
+      "numberOfSubSwaps": "Jumlah sub-swap",
+      "numberOfSubSwapsDescription": "Berapa banyak sub-swap untuk membagi transaksi Anda. Lebih banyak transaksi = harga lebih baik, eksekusi lebih lama.",
+      "timeBetweenSubSwaps": "Waktu antar sub-swap",
+      "timeBetweenSubSwapsDescription": "Jeda antara setiap sub-swap. Interval lebih panjang memungkinkan pool menyeimbangkan kembali untuk harga lebih baik.",
+      "reset": "Atur Ulang",
+      "save": "Simpan"
+    },
+    "limit": {
+      "whenWorth": "Ketika 1 {ticker} bernilai",
+      "expiry": "Kedaluwarsa",
+      "oneHour": "1 jam",
+      "oneDay": "1 hari",
+      "oneWeek": "1 minggu",
+      "market": "Pasar"
+    },
+    "limitCancel": {
+      "titleModify": "Ubah Order Limit",
+      "titleCancel": "Batalkan Order Limit",
+      "descriptionModify": "Mengubah order limit ini akan memperbarui harga target. Biaya jaringan kecil akan dikenakan untuk memproses perubahan.",
+      "descriptionCancel": "Membatalkan order limit ini akan mengembalikan dana yang Anda setorkan ke dompet Anda. Biaya jaringan kecil akan dikenakan untuk memproses pembatalan.",
+      "youWillGet": "Anda akan mendapatkan",
+      "fromCurrent": "{percent}% dari saat ini",
+      "modifying": "Mengubah...",
+      "cancelling": "Membatalkan...",
+      "loading": "Memuat...",
+      "modifyOrder": "Ubah Order",
+      "cancelOrder": "Batalkan Order",
+      "cancelSubmitted": "Transaksi pembatalan terkirim",
+      "modifySubmitted": "Transaksi perubahan terkirim",
+      "connectWarning": "Hubungkan dompet {chain} untuk {mode, select, cancel {membatalkan} modify {mengubah} other {mengubah}} order ini",
+      "switchWarning": "Beralih ke dompet {chain} untuk {mode, select, cancel {membatalkan} modify {mengubah} other {mengubah}} order ini",
+      "addressMismatch": "Dompet yang terhubung tidak cocok dengan alamat yang membuat order ini",
+      "tradingPaused": "Perdagangan {chain} saat ini dijeda",
+      "errLoadInbound": "Gagal memuat alamat masuk",
+      "errActionFailed": "Gagal {mode, select, cancel {membatalkan} modify {mengubah} other {mengubah}} pertukaran limit"
+    },
+    "quoteTimer": {
+      "refresh": "Segarkan"
+    },
+    "route": {
+      "chooseRoute": "Pilih Rute",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "HARGA TERBAIK",
+      "faster": "LEBIH CEPAT"
+    },
+    "instant": {
+      "sendTitle": "Kirim {asset}",
+      "sendDescription": "Kirim tepat {amount} {ticker} ke alamat di bawah dari dompet self-custody.",
+      "destinationTag": "tag tujuan",
+      "memo": "memo",
+      "confirming": "Mengonfirmasi",
+      "confirm": "Konfirmasi",
+      "errMemoMissing": "Memo tidak ada",
+      "errCalcAmount": "Gagal menghitung jumlah yang disarankan",
+      "errPreflight": "Gagal melakukan permintaan preflight"
+    },
+    "error": {
+      "minAmountNoWallet": "Jumlah pertukaran minimum tanpa dompet terhubung adalah {amount} {ticker}",
+      "unknown": "Kesalahan Tidak Diketahui",
+      "insufficientOutboundFee": "Aset yang dikembalikan tidak cukup untuk membayar biaya keluar",
+      "insufficientWithdrawalFee": "Penarikan tidak cukup untuk membayar biaya keluar",
+      "invalidSwap": "Pertukaran tidak valid",
+      "insufficientFunds": "Dana tidak cukup",
+      "sourceTargetSame": "Sumber dan Target tidak boleh sama",
+      "transactionCancelled": "Transaksi Dibatalkan",
+      "insufficientFundsCaps": "Dana Tidak Cukup",
+      "invalidToAddress": "Alamat \"to\" tidak valid",
+      "pendingTransaction": "Transaksi Tertunda. Coba lagi sebentar lagi",
+      "insufficientReturnAmount": "Jumlah pengembalian tidak cukup",
+      "slippageExceeded": "Toleransi slippage terlampaui",
+      "amountZero": "Jumlah tidak boleh nol",
+      "invalidPrice": "Harga Tidak Valid",
+      "missingConfig": "Konfigurasi Hilang di Entry Adapter",
+      "insufficientLiquidity": "Likuiditas on-chain tidak cukup untuk salah satu aset dasar. Coba tingkatkan toleransi slippage."
+    }
+  },
+  "send": {
+    "title": "Kirim",
+    "amount": "Jumlah",
+    "to": "Ke",
+    "addressPlaceholder": "Alamat {chain}",
+    "invalidAddress": "Alamat {chain} tidak valid",
+    "transactionFee": "Biaya Transaksi",
+    "send": "Kirim",
+    "selectCoin": "Pilih koin",
+    "toast": {
+      "walletNotConnected": "Dompet tidak terhubung. Silakan hubungkan kembali.",
+      "submitting": "Mengirim transaksi...",
+      "submitted": "Transaksi terkirim",
+      "submitError": "Gagal mengirim transaksi"
+    }
+  },
+  "wallet": {
+    "chains": "Rantai",
+    "connected": "Terhubung",
+    "disconnected": "Terputus",
+    "install": "Pasang",
+    "soon": "Segera",
+    "connectNamed": "Hubungkan {name}",
+    "deselectAll": "Batalkan Semua Pilihan",
+    "selectAll": "Pilih Semua",
+    "evms": "EVMs",
+    "derivationPath": "Jalur Derivasi",
+    "selectAccountType": "Pilih jenis akun",
+    "index": "Indeks",
+    "openKeystore": "Buka Keystore",
+    "createNewWallet": "Buat Dompet Baru",
+    "importSeedPhrase": "Impor Seed Phrase",
+    "createWalletInstructions": "Tulis 12 kata ini dan simpan dengan aman secara offline. Frasa 12 kata ini digunakan untuk memulihkan kunci privat dompet Anda.",
+    "copyPhrase": "Salin Frasa",
+    "confirmSavedPassphrase": "Saya mengonfirmasi telah menyimpan frasa sandi dengan aman untuk memulihkan akun saya di masa mendatang.",
+    "setupDecryptionPassword": "Atur Kata Sandi Dekripsi",
+    "setupPasswordInstructions": "Masukkan kata sandi yang kuat untuk mengenkripsi dompet yang Anda buat. Inilah cara Anda mengakses dompet Anda.",
+    "enterPassword": "Masukkan Kata Sandi",
+    "confirmPassword": "Konfirmasi Kata Sandi",
+    "passwordMustMatch": "Kata sandi harus cocok",
+    "create": "Buat",
+    "importKeystore": "Impor Keystore",
+    "selectOrDragKeystore": "Pilih atau seret file keystore Anda untuk mengunggahnya",
+    "decryptionPassword": "Kata Sandi Dekripsi",
+    "password": "Kata Sandi",
+    "import": "Impor",
+    "typeSeedPhrase": "Ketik seed phrase Anda",
+    "invalidFileType": "Jenis file tidak valid. Silakan unggah file JSON atau TXT.",
+    "noTokensFound": "Token tidak ditemukan",
+    "copyAddress": "Salin Alamat",
+    "addressCopied": "Alamat disalin",
+    "disconnectWallet": "Putuskan {name}",
+    "noCoins": "Tidak ada koin",
+    "sendToken": "Kirim {ticker}",
+    "sidebar": {
+      "title": "Dompet",
+      "sortWallets": "Urutkan dompet",
+      "sortBy": "Urutkan menurut",
+      "sortByName": "Nama (A-Z)",
+      "sortByBalance": "Saldo (Tinggi → Rendah)",
+      "externalWalletMode": "Mode Dompet Eksternal",
+      "externalWalletModeDescription": "Masukkan order Anda, klik tombol Tukar, dan ikuti petunjuknya",
+      "externalWalletInfo": "Jika suatu aset tidak didukung dalam mode Dompet Eksternal, Anda akan diminta untuk menghubungkan dompet dalam browser"
+    }
+  },
+  "riskLevel": {
+    "excellent": "Sangat Baik",
+    "good": "Baik",
+    "fair": "Cukup",
+    "title": "Tingkat Risiko Penyedia",
+    "description": "Tingkat ini menunjukkan bagaimana penyedia menangani pertukaran dan pemeriksaan transaksi.",
+    "excellentInfo": "Eksekusi on-chain langsung. Tanpa pemeriksaan atau pembekuan penyedia. Pengembalian otomatis jika pertukaran gagal.",
+    "goodInfo": "Penyedia memeriksa transaksi secara otomatis sebelum selesai. Jika masalah terdeteksi, pertukaran ditolak dan dana dikembalikan.",
+    "fairInfo": "Verifikasi tambahan mungkin diperlukan untuk beberapa transaksi. Jika masalah terdeteksi, dana biasanya dikembalikan secara otomatis."
+  },
+  "tx": {
+    "title": "Riwayat",
+    "today": "Hari Ini",
+    "yesterday": "Kemarin",
+    "onlyCreatorModify": "Hanya pembuat pertukaran asli yang dapat mengubah",
+    "showQr": "Tampilkan QR",
+    "modify": "Ubah",
+    "cancelOrder": "Batalkan Order",
+    "remaining": "{time} tersisa",
+    "loading": "memuat",
+    "status": {
+      "not_started": "Menunggu Setoran",
+      "pending": "Tertunda",
+      "swapping": "Menukar",
+      "completed": "Selesai",
+      "failed": "Gagal",
+      "expired": "Kedaluwarsa",
+      "refunded": "Dikembalikan",
+      "unknown": "Tidak Diketahui"
+    },
+    "leg": {
+      "deposit": "Setor {ticker}",
+      "send": "Kirim {ticker}",
+      "swap": "Tukar {from} ke {to}"
+    }
+  },
+  "track": {
+    "title": "Lacak Transaksi"
+  }
+}

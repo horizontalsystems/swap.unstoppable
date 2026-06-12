@@ -5,6 +5,7 @@ import { Chain, CosmosChain, CosmosChains, EVMChain, EVMChains, FeeOption, isGas
 import { getAddressValidator } from '@uswap/toolboxes'
 import { estimateTransactionFee } from '@uswap/toolboxes/cosmos'
 import { LoaderCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { WalletIcon } from '@/components/wallet-icon'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
@@ -35,6 +36,8 @@ export interface SendDialogProps {
 }
 
 export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialogProps) {
+  const t = useTranslations('send')
+  const tc = useTranslations('common')
   const uSwap = getUSwap()
   const accounts = useAccounts()
   const { openDialog } = useDialog()
@@ -139,7 +142,7 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
     const wallet = uSwap.getWallet(selectedAccount.provider, selectedToken.balance.chain)
     if (!wallet) {
       setSubmitting(false)
-      toast.error('Wallet not connected. Please reconnect.')
+      toast.error(t('toast.walletNotConnected'))
       return
     }
 
@@ -152,9 +155,9 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
       })
 
     toast.promise(broadcast, {
-      loading: 'Submitting transaction...',
-      success: () => 'Transaction submitted',
-      error: (err: any) => err?.message || 'Error submitting transaction'
+      loading: t('toast.submitting'),
+      success: () => t('toast.submitted'),
+      error: (err: any) => err?.message || t('toast.submitError')
     })
   }
 
@@ -184,13 +187,13 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="flex h-auto max-h-5/6 flex-col rounded-2xl md:max-w-xl">
         <CredenzaHeader>
-          <CredenzaTitle>Send</CredenzaTitle>
+          <CredenzaTitle>{t('title')}</CredenzaTitle>
         </CredenzaHeader>
 
         <ScrollArea className="relative flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
           <div className="mb-2 flex flex-col gap-6">
             <div className="bg-swap-bloc rounded-15 border p-7">
-              <div className="text-txt-label-small mb-3 font-semibold">Amount</div>
+              <div className="text-txt-label-small mb-3 font-semibold">{t('amount')}</div>
 
               <div className="flex items-center justify-between">
                 <div className="flex-1">
@@ -216,7 +219,7 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
               <div className="mt-2 flex items-end justify-between">
                 <div className="flex gap-2">
                   <ThemeButton className="h-6" variant="secondarySmall" onClick={() => setAmount('')} disabled={amount === ''}>
-                    Clear
+                    {tc('clear')}
                   </ThemeButton>
                   <ThemeButton className="h-6" variant="secondarySmall" onClick={() => setAmount(String(selectedToken.amount * 0.5))}>
                     50%
@@ -226,7 +229,7 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
                   </ThemeButton>
                 </div>
                 <div className="text-txt-label-small flex gap-1 text-[10px]">
-                  <span>Balance:</span>
+                  <span>{tc('balance')}</span>
                   <span>
                     <DecimalText amount={selectedToken.balance.toSignificant()} symbol={selectedToken.balance.ticker} />
                   </span>
@@ -235,10 +238,10 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
             </div>
 
             <div className="flex flex-col gap-3">
-              <div className="text-txt-label-small text-sm font-semibold">To</div>
+              <div className="text-txt-label-small text-sm font-semibold">{t('to')}</div>
               <div className="relative">
                 <Textarea
-                  placeholder={`${chainLabel(selectedToken.balance.chain)} address`}
+                  placeholder={t('addressPlaceholder', { chain: chainLabel(selectedToken.balance.chain) })}
                   value={recipient}
                   aria-invalid={!isValidRecipient}
                   onChange={e => setRecipient(e.target.value)}
@@ -286,18 +289,18 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
                         })
                       }}
                     >
-                      Paste
+                      {tc('paste')}
                     </ThemeButton>
                   </div>
                 )}
               </div>
               {!isValidRecipient && recipient.length > 0 && (
-                <div className="text-lucian text-xs font-semibold">Invalid {chainLabel(selectedToken.balance.chain)} address</div>
+                <div className="text-lucian text-xs font-semibold">{t('invalidAddress', { chain: chainLabel(selectedToken.balance.chain) })}</div>
               )}
             </div>
 
             <div className="text-txt-label-small flex items-center justify-between text-sm">
-              <div className="flex items-center gap-1">Transaction Fee</div>
+              <div className="flex items-center gap-1">{t('transactionFee')}</div>
               <span className="text-txt-high-contrast font-semibold">
                 {txFee ? (
                   <>
@@ -316,7 +319,7 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
 
         <div className="p-4 pt-2 md:p-8 md:pt-2">
           <ThemeButton variant="primaryMedium" className="w-full" onClick={handleSend} disabled={!canSend}>
-            {submitting ? <LoaderCircle size={20} className="animate-spin" /> : 'Send'}
+            {submitting ? <LoaderCircle size={20} className="animate-spin" /> : t('send')}
           </ThemeButton>
         </div>
       </CredenzaContent>

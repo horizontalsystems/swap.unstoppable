@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "Connetti wallet",
+    "balance": "Saldo:",
+    "close": "Chiudi",
+    "back": "Indietro",
+    "next": "Avanti",
+    "paste": "Incolla",
+    "clear": "Cancella",
+    "expiresIn": "Scade tra",
+    "language": "Lingua",
+    "address": {
+      "source": "Indirizzo di origine",
+      "destination": "Indirizzo di destinazione",
+      "refund": "Indirizzo di rimborso",
+      "deposit": "Indirizzo di deposito"
+    }
+  },
+  "footer": {
+    "builtBy": "Creato da",
+    "reportBugsTo": "Segnala bug a",
+    "gotQuestions": "Hai domande?"
+  },
+  "swap": {
+    "title": "Scambia",
+    "input": {
+      "sell": "Vendi",
+      "buy": "Compra",
+      "priceImpact": "Impatto sul prezzo"
+    },
+    "button": {
+      "enterAmount": "Inserisci l'importo",
+      "quoting": "Quotazione...",
+      "noValidQuotes": "Nessuna quotazione valida",
+      "swap": "Scambia",
+      "placeLimitOrder": "Crea ordine limite",
+      "connectWallet": "Connetti wallet {chain}",
+      "insufficientBalance": "Saldo insufficiente",
+      "approve": "Approva {ticker}"
+    },
+    "toast": {
+      "success": "Successo",
+      "approvalTransaction": "Transazione di approvazione",
+      "errorSubmitting": "Errore nell'invio della transazione",
+      "submittingTransaction": "Invio della transazione",
+      "transactionSubmitted": "Transazione inviata"
+    },
+    "confirm": {
+      "titleSwap": "Conferma scambio",
+      "titleLimit": "Conferma ordine limite",
+      "limitPrice": "Prezzo limite",
+      "limitPriceTooltip": "Il prezzo per unità al quale verrà eseguito il tuo ordine limite. L'ordine verrà eseguito solo quando il mercato raggiungerà questo prezzo.",
+      "targetAmount": "Importo obiettivo",
+      "targetAmountTooltip": "L'importo esatto che riceverai quando il tuo ordine limite verrà eseguito al prezzo specificato.",
+      "minimumPayout": "Pagamento minimo",
+      "minimumPayoutTooltip": "Importo minimo garantito in base alla tua tolleranza allo slippage del {slippage}%. Se le condizioni di mercato ti darebbero meno, la transazione verrà annullata automaticamente.",
+      "notProtected": "Non protetto",
+      "priceImpact": "Impatto sul prezzo",
+      "priceImpactTooltip": "La differenza tra il prezzo di mercato e il tuo tasso di scambio effettivo dovuta alle dimensioni dell'operazione. Le operazioni più grandi hanno in genere un impatto sul prezzo maggiore.",
+      "txFee": "Commissione tx",
+      "estimatedTime": "Tempo stimato",
+      "provider": "Provider",
+      "memo": "Memo",
+      "confirm": "Conferma"
+    },
+    "feeDialog": {
+      "title": "Commissioni incluse nel tasso",
+      "description": "Queste commissioni sono già incluse nel tasso — non le paghi separatamente.",
+      "liquidityFee": "Commissione di liquidità",
+      "liquidityFeeInfo": "Commissione per i fornitori di liquidità sul percorso",
+      "outboundFee": "Commissione in uscita",
+      "outboundFeeInfo": "Commissione per l'invio della transazione in uscita",
+      "platformFee": "Commissione della piattaforma",
+      "platformFeeInfo": "Commissione applicata da {app}"
+    },
+    "recipient": {
+      "addressPlaceholder": "Indirizzo {chain}",
+      "invalidAddress": "Indirizzo {chain} non valido",
+      "titleAddresses": "Inserisci gli indirizzi",
+      "titleReceiving": "Inserisci l'indirizzo di ricezione",
+      "enterRefundAddress": "Inserisci l'indirizzo di rimborso:",
+      "enterReceivingAddress": "Inserisci l'indirizzo di ricezione:",
+      "preparingSwap": "Preparazione dello scambio",
+      "next": "Avanti"
+    },
+    "warning": {
+      "selfCustody": "Comprendo che devo usare un wallet self-custody. Comprendo che l'uso di un wallet con smart contract, un indirizzo di exchange, un indirizzo delegato o un wallet EIP 7702 comporterà la",
+      "ltcMweb": "Comprendo che l'uso di un indirizzo LTC MWEB comporterà la",
+      "sendExact": "Comprendo che devo inviare esattamente l'importo specificato da un wallet self-custody. Comprendo che l'invio da un wallet con smart contract, un indirizzo di exchange, un indirizzo delegato o un wallet EIP 7702 comporterà la",
+      "lossOfFunds": "perdita dei fondi."
+    },
+    "selectAsset": {
+      "title": "Seleziona moneta",
+      "allChains": "Tutte le catene",
+      "search": "Cerca",
+      "currentlyUnavailable": "Attualmente non disponibile",
+      "selected": "Selezionata"
+    },
+    "settings": {
+      "slippageTolerance": "Tolleranza allo slippage",
+      "slippageToleranceTooltip": "A causa della volatilità del mercato, i prezzi potrebbero cambiare prima del completamento. Questa impostazione garantisce che tu riceva almeno il tuo importo minimo.",
+      "noProtection": "Nessuna protezione",
+      "slippageDescription": "Variazione massima di prezzo accettabile. La transazione fallirà se il prezzo si muove sfavorevolmente oltre questo importo.",
+      "twapTitle": "TWAP (prezzo medio ponderato nel tempo)",
+      "twapTooltip": "Rilevante solo per scambi di grande volume. Best Price offre il prezzo ottimale per l'ordine. Best Time dà priorità al tempo di esecuzione dello scambio (quando possibile). Custom ti consente di configurare il numero di mini-scambi in cui suddividere lo scambio e il tempo tra ogni mini-scambio.",
+      "twapDescription": "Prezzo medio ponderato nel tempo",
+      "bestPrice": "Prezzo migliore",
+      "bestTime": "Tempo migliore",
+      "custom": "Personalizzato",
+      "numberOfSubSwaps": "Numero di sotto-scambi",
+      "numberOfSubSwapsDescription": "In quanti sotto-scambi suddividere la tua operazione. Più operazioni = prezzo migliore, esecuzione più lunga.",
+      "timeBetweenSubSwaps": "Tempo tra i sotto-scambi",
+      "timeBetweenSubSwapsDescription": "Ritardo tra ogni sotto-scambio. Intervalli più lunghi consentono ai pool di riequilibrarsi per un prezzo migliore.",
+      "reset": "Reimposta",
+      "save": "Salva"
+    },
+    "limit": {
+      "whenWorth": "Quando 1 {ticker} vale",
+      "expiry": "Scadenza",
+      "oneHour": "1 ora",
+      "oneDay": "1 giorno",
+      "oneWeek": "1 settimana",
+      "market": "Mercato"
+    },
+    "limitCancel": {
+      "titleModify": "Modifica ordine limite",
+      "titleCancel": "Annulla ordine limite",
+      "descriptionModify": "La modifica di questo ordine limite aggiornerà il prezzo obiettivo. Verrà applicata una piccola commissione di rete per elaborare la modifica.",
+      "descriptionCancel": "L'annullamento di questo ordine limite restituirà i fondi depositati al tuo wallet. Verrà applicata una piccola commissione di rete per elaborare l'annullamento.",
+      "youWillGet": "Riceverai",
+      "fromCurrent": "{percent}% rispetto all'attuale",
+      "modifying": "Modifica in corso...",
+      "cancelling": "Annullamento in corso...",
+      "loading": "Caricamento...",
+      "modifyOrder": "Modifica ordine",
+      "cancelOrder": "Annulla ordine",
+      "cancelSubmitted": "Transazione di annullamento inviata",
+      "modifySubmitted": "Transazione di modifica inviata",
+      "connectWarning": "Connetti un wallet {chain} per {mode, select, cancel {annullare} modify {modificare} other {modificare}} questo ordine",
+      "switchWarning": "Passa a un wallet {chain} per {mode, select, cancel {annullare} modify {modificare} other {modificare}} questo ordine",
+      "addressMismatch": "Il wallet connesso non corrisponde all'indirizzo che ha creato questo ordine",
+      "tradingPaused": "Il trading su {chain} è attualmente in pausa",
+      "errLoadInbound": "Impossibile caricare gli indirizzi in entrata",
+      "errActionFailed": "Impossibile {mode, select, cancel {annullare} modify {modificare} other {modificare}} lo scambio limite"
+    },
+    "quoteTimer": {
+      "refresh": "Aggiorna"
+    },
+    "route": {
+      "chooseRoute": "Scegli percorso",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "PREZZO MIGLIORE",
+      "faster": "PIÙ VELOCE"
+    },
+    "instant": {
+      "sendTitle": "Invia {asset}",
+      "sendDescription": "Invia esattamente {amount} {ticker} all'indirizzo qui sotto da un wallet self-custody.",
+      "destinationTag": "tag di destinazione",
+      "memo": "memo",
+      "confirming": "Conferma in corso",
+      "confirm": "Conferma",
+      "errMemoMissing": "Memo mancante",
+      "errCalcAmount": "Impossibile calcolare l'importo suggerito",
+      "errPreflight": "Impossibile eseguire la richiesta di pre-verifica"
+    },
+    "error": {
+      "minAmountNoWallet": "L'importo minimo di scambio senza un wallet connesso è {amount} {ticker}",
+      "unknown": "Errore sconosciuto",
+      "insufficientOutboundFee": "Asset restituito insufficiente per pagare la commissione in uscita",
+      "insufficientWithdrawalFee": "Prelievo insufficiente per pagare la commissione in uscita",
+      "invalidSwap": "Scambio non valido",
+      "insufficientFunds": "Fondi insufficienti",
+      "sourceTargetSame": "L'origine e la destinazione non possono coincidere",
+      "transactionCancelled": "Transazione annullata",
+      "insufficientFundsCaps": "Fondi insufficienti",
+      "invalidToAddress": "Indirizzo \"to\" non valido",
+      "pendingTransaction": "Transazione in sospeso. Riprova a breve",
+      "insufficientReturnAmount": "Importo di ritorno insufficiente",
+      "slippageExceeded": "Tolleranza allo slippage superata",
+      "amountZero": "L'importo non può essere zero",
+      "invalidPrice": "Prezzo non valido",
+      "missingConfig": "Configurazione mancante nell'adattatore di ingresso",
+      "insufficientLiquidity": "Liquidità on-chain insufficiente per uno degli asset sottostanti. Prova ad aumentare la tolleranza allo slippage."
+    }
+  },
+  "send": {
+    "title": "Invia",
+    "amount": "Importo",
+    "to": "A",
+    "addressPlaceholder": "Indirizzo {chain}",
+    "invalidAddress": "Indirizzo {chain} non valido",
+    "transactionFee": "Commissione di transazione",
+    "send": "Invia",
+    "selectCoin": "Seleziona moneta",
+    "toast": {
+      "walletNotConnected": "Wallet non connesso. Riconnettilo.",
+      "submitting": "Invio della transazione...",
+      "submitted": "Transazione inviata",
+      "submitError": "Errore nell'invio della transazione"
+    }
+  },
+  "wallet": {
+    "chains": "Catene",
+    "connected": "Connesso",
+    "disconnected": "Disconnesso",
+    "install": "Installa",
+    "soon": "Presto",
+    "connectNamed": "Connetti {name}",
+    "deselectAll": "Deseleziona tutto",
+    "selectAll": "Seleziona tutto",
+    "evms": "EVMs",
+    "derivationPath": "Percorso di derivazione",
+    "selectAccountType": "Seleziona tipo di account",
+    "index": "Indice",
+    "openKeystore": "Apri Keystore",
+    "createNewWallet": "Crea nuovo wallet",
+    "importSeedPhrase": "Importa frase seed",
+    "createWalletInstructions": "Annota queste 12 parole e conservale in modo sicuro offline. Questa frase di 12 parole serve a recuperare le chiavi private del tuo wallet.",
+    "copyPhrase": "Copia frase",
+    "confirmSavedPassphrase": "Confermo di aver salvato in modo sicuro la passphrase per recuperare il mio account in futuro.",
+    "setupDecryptionPassword": "Imposta password di decrittazione",
+    "setupPasswordInstructions": "Inserisci una password robusta per crittografare il wallet creato. È così che accederai al tuo wallet.",
+    "enterPassword": "Inserisci password",
+    "confirmPassword": "Conferma password",
+    "passwordMustMatch": "Le password devono coincidere",
+    "create": "Crea",
+    "importKeystore": "Importa Keystore",
+    "selectOrDragKeystore": "Seleziona o trascina il tuo file keystore per caricarlo",
+    "decryptionPassword": "Password di decrittazione",
+    "password": "Password",
+    "import": "Importa",
+    "typeSeedPhrase": "Digita la tua frase seed",
+    "invalidFileType": "Tipo di file non valido. Carica un file JSON o TXT.",
+    "noTokensFound": "Nessun token trovato",
+    "copyAddress": "Copia indirizzo",
+    "addressCopied": "Indirizzo copiato",
+    "disconnectWallet": "Disconnetti {name}",
+    "noCoins": "Nessuna moneta",
+    "sendToken": "Invia {ticker}",
+    "sidebar": {
+      "title": "Wallet",
+      "sortWallets": "Ordina wallet",
+      "sortBy": "Ordina per",
+      "sortByName": "Nome (A-Z)",
+      "sortByBalance": "Saldo (alto → basso)",
+      "externalWalletMode": "Modalità wallet esterno",
+      "externalWalletModeDescription": "Inserisci il tuo ordine, fai clic sul pulsante Scambia e segui le istruzioni",
+      "externalWalletInfo": "Se un asset non è supportato in modalità wallet esterno, ti verrà chiesto di connettere un wallet nel browser"
+    }
+  },
+  "riskLevel": {
+    "excellent": "Eccellente",
+    "good": "Buono",
+    "fair": "Discreto",
+    "title": "Livelli di rischio del provider",
+    "description": "Questi livelli mostrano come i provider gestiscono gli scambi e i controlli delle transazioni.",
+    "excellentInfo": "Esecuzione diretta on-chain. Nessun controllo o blocco del provider. Rimborsi automatici se lo scambio fallisce.",
+    "goodInfo": "Il provider controlla automaticamente le transazioni prima del completamento. Se vengono rilevati problemi, lo scambio viene rifiutato e i fondi vengono rimborsati.",
+    "fairInfo": "Per alcune transazioni potrebbe essere richiesta una verifica aggiuntiva. Se vengono rilevati problemi, i fondi vengono solitamente rimborsati automaticamente."
+  },
+  "tx": {
+    "title": "Cronologia",
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "onlyCreatorModify": "Solo il creatore originale dello scambio può modificarlo",
+    "showQr": "Mostra QR",
+    "modify": "Modifica",
+    "cancelOrder": "Annulla ordine",
+    "remaining": "{time} rimanente",
+    "loading": "caricamento",
+    "status": {
+      "not_started": "Deposito in sospeso",
+      "pending": "In sospeso",
+      "swapping": "Scambio in corso",
+      "completed": "Completato",
+      "failed": "Fallito",
+      "expired": "Scaduto",
+      "refunded": "Rimborsato",
+      "unknown": "Sconosciuto"
+    },
+    "leg": {
+      "deposit": "Deposita {ticker}",
+      "send": "Invia {ticker}",
+      "swap": "Scambia {from} con {to}"
+    }
+  },
+  "track": {
+    "title": "Traccia transazione"
+  }
+}

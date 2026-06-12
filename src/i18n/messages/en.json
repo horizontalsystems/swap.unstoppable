@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "Connect Wallet",
+    "balance": "Balance:",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "paste": "Paste",
+    "clear": "Clear",
+    "expiresIn": "Expires in",
+    "language": "Language",
+    "address": {
+      "source": "Source Address",
+      "destination": "Destination Address",
+      "refund": "Refund Address",
+      "deposit": "Deposit Address"
+    }
+  },
+  "footer": {
+    "builtBy": "Built by",
+    "reportBugsTo": "Report bugs to",
+    "gotQuestions": "Got questions?"
+  },
+  "swap": {
+    "title": "Swap",
+    "input": {
+      "sell": "Sell",
+      "buy": "Buy",
+      "priceImpact": "Price Impact"
+    },
+    "button": {
+      "enterAmount": "Enter Amount",
+      "quoting": "Quoting...",
+      "noValidQuotes": "No Valid Quotes",
+      "swap": "Swap",
+      "placeLimitOrder": "Place Limit Order",
+      "connectWallet": "Connect {chain} Wallet",
+      "insufficientBalance": "Insufficient Balance",
+      "approve": "Approve {ticker}"
+    },
+    "toast": {
+      "success": "Success",
+      "approvalTransaction": "Approval Transaction",
+      "errorSubmitting": "Error Submitting Transaction",
+      "submittingTransaction": "Submitting Transaction",
+      "transactionSubmitted": "Transaction submitted"
+    },
+    "confirm": {
+      "titleSwap": "Confirm Swap",
+      "titleLimit": "Confirm Limit Order",
+      "limitPrice": "Limit Price",
+      "limitPriceTooltip": "The price per unit at which your limit order will execute. The order will only fill when the market reaches this price.",
+      "targetAmount": "Target Amount",
+      "targetAmountTooltip": "The exact amount you will receive when your limit order executes at your specified price.",
+      "minimumPayout": "Minimum Payout",
+      "minimumPayoutTooltip": "Minimum guaranteed amount based on your {slippage}% slippage tolerance. If market conditions would give you less, the transaction will be canceled automatically.",
+      "notProtected": "Not Protected",
+      "priceImpact": "Price Impact",
+      "priceImpactTooltip": "The difference between the market price and your actual swap rate due to trade size. Larger trades typically have higher price impact.",
+      "txFee": "Tx Fee",
+      "estimatedTime": "Estimated Time",
+      "provider": "Provider",
+      "memo": "Memo",
+      "confirm": "Confirm"
+    },
+    "feeDialog": {
+      "title": "Fees Included in the Rate",
+      "description": "These fees are already included in the rate — you don't pay them separately.",
+      "liquidityFee": "Liquidity Fee",
+      "liquidityFeeInfo": "Fee for liquidity providers on the route",
+      "outboundFee": "Outbound Fee",
+      "outboundFeeInfo": "Fee for sending outbound transaction",
+      "platformFee": "Platform Fee",
+      "platformFeeInfo": "Fee charged by {app}"
+    },
+    "recipient": {
+      "addressPlaceholder": "{chain} address",
+      "invalidAddress": "Invalid {chain} address",
+      "titleAddresses": "Enter Addresses",
+      "titleReceiving": "Enter Receiving Address",
+      "enterRefundAddress": "Enter refund address:",
+      "enterReceivingAddress": "Enter receiving address:",
+      "preparingSwap": "Preparing Swap",
+      "next": "Next"
+    },
+    "warning": {
+      "selfCustody": "I understand that I must use a self-custody wallet. I understand that using a smart contract wallet, exchange address, delegated address, or an EIP 7702 wallet, will result in",
+      "ltcMweb": "I understand that using an LTC MWEB address will result in",
+      "sendExact": "I understand that I must send exactly the specified amount from a self-custody wallet. I understand that sending from a smart contract wallet, exchange address, delegated address, or an EIP 7702 wallet, will result in",
+      "lossOfFunds": "loss of funds."
+    },
+    "selectAsset": {
+      "title": "Select coin",
+      "allChains": "All Chains",
+      "search": "Search",
+      "currentlyUnavailable": "Currently unavailable",
+      "selected": "Selected"
+    },
+    "settings": {
+      "slippageTolerance": "Slippage Tolerance",
+      "slippageToleranceTooltip": "Due to market volatility, prices may change before completion. This setting ensures you receive at least your minimum amount.",
+      "noProtection": "No Protection",
+      "slippageDescription": "Maximum acceptable price change. Transaction will fail if the price moves unfavorably beyond this amount.",
+      "twapTitle": "TWAP (Time Weighted Average Price)",
+      "twapTooltip": "Relevant for large volume swaps only. Best Price offers optimum price for the order. Best Time prioritizes swap execution time (whenever possible). Custom lets you configure the number of mini-swaps the swap should be broken into and time between each mini-swap.",
+      "twapDescription": "Time Weighted Average Price",
+      "bestPrice": "Best Price",
+      "bestTime": "Best Time",
+      "custom": "Custom",
+      "numberOfSubSwaps": "Number of sub-swaps",
+      "numberOfSubSwapsDescription": "How many sub-swaps to split your trade into. More trades = better price, longer execution.",
+      "timeBetweenSubSwaps": "Time between sub-swaps",
+      "timeBetweenSubSwapsDescription": "Delay between each sub-swap. Longer intervals allow pools to rebalance for better pricing.",
+      "reset": "Reset",
+      "save": "Save"
+    },
+    "limit": {
+      "whenWorth": "When 1 {ticker} is worth",
+      "expiry": "Expiry",
+      "oneHour": "1 hour",
+      "oneDay": "1 day",
+      "oneWeek": "1 week",
+      "market": "Market"
+    },
+    "limitCancel": {
+      "titleModify": "Modify Limit Order",
+      "titleCancel": "Cancel Limit Order",
+      "descriptionModify": "Modifying this limit order will update the target price. A small network fee will be charged to process the modification.",
+      "descriptionCancel": "Cancelling this limit order will return your deposited funds to your wallet. A small network fee will be charged to process the cancellation.",
+      "youWillGet": "You will get",
+      "fromCurrent": "{percent}% from current",
+      "modifying": "Modifying...",
+      "cancelling": "Cancelling...",
+      "loading": "Loading...",
+      "modifyOrder": "Modify Order",
+      "cancelOrder": "Cancel Order",
+      "cancelSubmitted": "Cancel transaction submitted",
+      "modifySubmitted": "Modify transaction submitted",
+      "connectWarning": "Connect a {chain} wallet to {mode, select, cancel {cancel} modify {modify} other {modify}} this order",
+      "switchWarning": "Switch to a {chain} wallet to {mode, select, cancel {cancel} modify {modify} other {modify}} this order",
+      "addressMismatch": "Connected wallet does not match the address that placed this order",
+      "tradingPaused": "{chain} trading is currently paused",
+      "errLoadInbound": "Failed to load inbound addresses",
+      "errActionFailed": "Failed to {mode, select, cancel {cancel} modify {modify} other {modify}} limit swap"
+    },
+    "quoteTimer": {
+      "refresh": "Refresh"
+    },
+    "route": {
+      "chooseRoute": "Choose Route",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "BEST PRICE",
+      "faster": "FASTER"
+    },
+    "instant": {
+      "sendTitle": "Send {asset}",
+      "sendDescription": "Send exactly {amount} {ticker} to the address below from a self custody wallet.",
+      "destinationTag": "destination tag",
+      "memo": "memo",
+      "confirming": "Confirming",
+      "confirm": "Confirm",
+      "errMemoMissing": "Memo is missing",
+      "errCalcAmount": "Failed to calculate suggested amount",
+      "errPreflight": "Failed to preflight request"
+    },
+    "error": {
+      "minAmountNoWallet": "Minimum swap amount without a connected wallet is {amount} {ticker}",
+      "unknown": "Unknown Error",
+      "insufficientOutboundFee": "Insufficient asset returned to pay for outbound fee",
+      "insufficientWithdrawalFee": "Insufficient withdrawal to pay for outbound fee",
+      "invalidSwap": "Invalid swap",
+      "insufficientFunds": "Insufficient funds",
+      "sourceTargetSame": "Source and Target cannot be the same",
+      "transactionCancelled": "Transaction Cancelled",
+      "insufficientFundsCaps": "Insufficient Funds",
+      "invalidToAddress": "Invalid \"to\" address",
+      "pendingTransaction": "Pending Transaction. Try again shortly",
+      "insufficientReturnAmount": "Insufficient return amount",
+      "slippageExceeded": "Slippage tolerance exceeded",
+      "amountZero": "Amount cannot be zero",
+      "invalidPrice": "Invalid Price",
+      "missingConfig": "Missing Configuration in Entry Adapter",
+      "insufficientLiquidity": "Insufficient on-chain liquidity for one of the underlying assets. Try increasing the slippage tolerance."
+    }
+  },
+  "send": {
+    "title": "Send",
+    "amount": "Amount",
+    "to": "To",
+    "addressPlaceholder": "{chain} address",
+    "invalidAddress": "Invalid {chain} address",
+    "transactionFee": "Transaction Fee",
+    "send": "Send",
+    "selectCoin": "Select coin",
+    "toast": {
+      "walletNotConnected": "Wallet not connected. Please reconnect.",
+      "submitting": "Submitting transaction...",
+      "submitted": "Transaction submitted",
+      "submitError": "Error submitting transaction"
+    }
+  },
+  "wallet": {
+    "chains": "Chains",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "install": "Install",
+    "soon": "Soon",
+    "connectNamed": "Connect {name}",
+    "deselectAll": "Deselect All",
+    "selectAll": "Select All",
+    "evms": "EVMs",
+    "derivationPath": "Derivation Path",
+    "selectAccountType": "Select account type",
+    "index": "Index",
+    "openKeystore": "Open Keystore",
+    "createNewWallet": "Create New Wallet",
+    "importSeedPhrase": "Import Seed Phrase",
+    "createWalletInstructions": "Write these 12 words down and store them securely offline. This 12 word phrase is used to recover your wallet private keys.",
+    "copyPhrase": "Copy Phrase",
+    "confirmSavedPassphrase": "I confirm I have securely saved the passphrase to recover my account in the future.",
+    "setupDecryptionPassword": "Setup Decryption Password",
+    "setupPasswordInstructions": "Enter a strong password to encrypt your created wallet. This is how you will access your wallet.",
+    "enterPassword": "Enter Password",
+    "confirmPassword": "Confirm Password",
+    "passwordMustMatch": "Password must match",
+    "create": "Create",
+    "importKeystore": "Import Keystore",
+    "selectOrDragKeystore": "Select or drag your keystore file to upload it",
+    "decryptionPassword": "Decryption Password",
+    "password": "Password",
+    "import": "Import",
+    "typeSeedPhrase": "Type your seed phrase",
+    "invalidFileType": "Invalid file type. Please upload a JSON or TXT file.",
+    "noTokensFound": "No tokens found",
+    "copyAddress": "Copy Address",
+    "addressCopied": "Address copied",
+    "disconnectWallet": "Disconnect {name}",
+    "noCoins": "No coins",
+    "sendToken": "Send {ticker}",
+    "sidebar": {
+      "title": "Wallets",
+      "sortWallets": "Sort wallets",
+      "sortBy": "Sort by",
+      "sortByName": "Name (A-Z)",
+      "sortByBalance": "Balance (High → Low)",
+      "externalWalletMode": "External Wallet Mode",
+      "externalWalletModeDescription": "Enter your order, click the Swap button, and follow the instructions",
+      "externalWalletInfo": "If an asset isn't supported in External Wallet mode, you'll be prompted to connect an in-browser wallet"
+    }
+  },
+  "riskLevel": {
+    "excellent": "Excellent",
+    "good": "Good",
+    "fair": "Fair",
+    "title": "Provider Risk Levels",
+    "description": "These levels show how providers handle swaps and transaction checks.",
+    "excellentInfo": "Direct on-chain execution. No provider checks or freezes. Automatic refunds if swap fails.",
+    "goodInfo": "Provider checks transactions automatically before completion. If issues are detected, the swap is rejected and funds are refunded.",
+    "fairInfo": "Additional verification may be required for some transactions. If issues are detected, funds are usually refunded automatically."
+  },
+  "tx": {
+    "title": "History",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "onlyCreatorModify": "Only the original swap creator can modify",
+    "showQr": "Show QR",
+    "modify": "Modify",
+    "cancelOrder": "Cancel Order",
+    "remaining": "{time} remaining",
+    "loading": "loading",
+    "status": {
+      "not_started": "Deposit Pending",
+      "pending": "Pending",
+      "swapping": "Swapping",
+      "completed": "Completed",
+      "failed": "Failed",
+      "expired": "Expired",
+      "refunded": "Refunded",
+      "unknown": "Unknown"
+    },
+    "leg": {
+      "deposit": "Deposit {ticker}",
+      "send": "Send {ticker}",
+      "swap": "Swap {from} to {to}"
+    }
+  },
+  "track": {
+    "title": "Track Transaction"
+  }
+}

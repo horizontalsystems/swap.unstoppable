@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "والیٹ جوڑو",
+    "balance": "بیلنس:",
+    "close": "بند کرو",
+    "back": "واپس",
+    "next": "اگلا",
+    "paste": "پیسٹ کرو",
+    "clear": "صاف کرو",
+    "expiresIn": "ختم تھیسی",
+    "language": "زبان",
+    "address": {
+      "source": "ماخذ ایڈریس",
+      "destination": "منزل ایڈریس",
+      "refund": "رقم واپسی ایڈریس",
+      "deposit": "ڈپازٹ ایڈریس"
+    }
+  },
+  "footer": {
+    "builtBy": "تیار کیتا",
+    "reportBugsTo": "بگ ایتھاں رپورٹ کرو",
+    "gotQuestions": "سوال ہِن؟"
+  },
+  "swap": {
+    "title": "سویپ",
+    "input": {
+      "sell": "وکری",
+      "buy": "خریداری",
+      "priceImpact": "قیمت تے اثر"
+    },
+    "button": {
+      "enterAmount": "رقم درج کرو",
+      "quoting": "کوٹ تھیندا پئے...",
+      "noValidQuotes": "کوئی درست کوٹ کائنی",
+      "swap": "سویپ",
+      "placeLimitOrder": "لمٹ آرڈر ڈیو",
+      "connectWallet": "{chain} والیٹ جوڑو",
+      "insufficientBalance": "ناکافی بیلنس",
+      "approve": "{ticker} منظور کرو"
+    },
+    "toast": {
+      "success": "کامیاب",
+      "approvalTransaction": "منظوری ٹرانزیکشن",
+      "errorSubmitting": "ٹرانزیکشن جمع کرائݨ وچ خرابی",
+      "submittingTransaction": "ٹرانزیکشن جمع کرائی ویندی پئی",
+      "transactionSubmitted": "ٹرانزیکشن جمع تھی گئی"
+    },
+    "confirm": {
+      "titleSwap": "سویپ دی تصدیق کرو",
+      "titleLimit": "لمٹ آرڈر دی تصدیق کرو",
+      "limitPrice": "لمٹ قیمت",
+      "limitPriceTooltip": "اوہ فی یونٹ قیمت جیندے تے تہاݙا لمٹ آرڈر عمل وچ آسی۔ آرڈر اوسے ویلھے پورا تھیسی جڈاں مارکیٹ ایہ قیمت تے اپڑسی۔",
+      "targetAmount": "ہدف رقم",
+      "targetAmountTooltip": "تہاݙی مقرر کیتی قیمت تے لمٹ آرڈر عمل وچ آوݨ تے تہاکوں ملݨ والی درست رقم۔",
+      "minimumPayout": "گھٹ توں گھٹ ادائیگی",
+      "minimumPayoutTooltip": "تہاݙی {slippage}% سلپیج برداشت دی بنیاد تے گھٹ توں گھٹ ضمانت شدہ رقم۔ جے مارکیٹ دے حالات تہاکوں ایندوں گھٹ ڈیون تاں ٹرانزیکشن خودکار طور تے منسوخ تھی ویسی۔",
+      "notProtected": "محفوظ کائنی",
+      "priceImpact": "قیمت تے اثر",
+      "priceImpactTooltip": "ٹریڈ دے حجم دی وجہ کنوں مارکیٹ قیمت تے تہاݙے اصل سویپ ریٹ وچال فرق۔ وݙے ٹریڈاں وچ عام طور تے قیمت تے ودھ اثر ہوندے۔",
+      "txFee": "ٹرانزیکشن فیس",
+      "estimatedTime": "متوقع ویلھا",
+      "provider": "فراہم کنندہ",
+      "memo": "میمو",
+      "confirm": "تصدیق کرو"
+    },
+    "feeDialog": {
+      "title": "ریٹ وچ شامل فیس",
+      "description": "ایہ فیساں پہلوں ای ریٹ وچ شامل ہِن — تُساں انہاں کوں الگ نہیں ڈیندے۔",
+      "liquidityFee": "لیکویڈیٹی فیس",
+      "liquidityFeeInfo": "روٹ تے لیکویڈیٹی فراہم کنندگاں آستے فیس",
+      "outboundFee": "آؤٹ باؤنڈ فیس",
+      "outboundFeeInfo": "آؤٹ باؤنڈ ٹرانزیکشن گھلݨ دی فیس",
+      "platformFee": "پلیٹ فارم فیس",
+      "platformFeeInfo": "{app} ولوں ورتی ویندی فیس"
+    },
+    "recipient": {
+      "addressPlaceholder": "{chain} ایڈریس",
+      "invalidAddress": "غلط {chain} ایڈریس",
+      "titleAddresses": "ایڈریس درج کرو",
+      "titleReceiving": "وصولی ایڈریس درج کرو",
+      "enterRefundAddress": "رقم واپسی ایڈریس درج کرو:",
+      "enterReceivingAddress": "وصولی ایڈریس درج کرو:",
+      "preparingSwap": "سویپ تیار تھیندا پئے",
+      "next": "اگلا"
+    },
+    "warning": {
+      "selfCustody": "میں سمجھدا ہاں جو مینکوں سیلف کسٹڈی والیٹ ورتݨا پوسی۔ میں سمجھدا ہاں جو اسمارٹ کنٹریکٹ والیٹ، ایکسچینج ایڈریس، ڈیلیگیٹڈ ایڈریس، یا EIP 7702 والیٹ ورتݨ نال تھیسی",
+      "ltcMweb": "میں سمجھدا ہاں جو LTC MWEB ایڈریس ورتݨ نال تھیسی",
+      "sendExact": "میں سمجھدا ہاں جو مینکوں سیلف کسٹڈی والیٹ کنوں بالکل مقررہ رقم گھلݨی پوسی۔ میں سمجھدا ہاں جو اسمارٹ کنٹریکٹ والیٹ، ایکسچینج ایڈریس، ڈیلیگیٹڈ ایڈریس، یا EIP 7702 والیٹ کنوں گھلݨ نال تھیسی",
+      "lossOfFunds": "فنڈاں دا نقصان۔"
+    },
+    "selectAsset": {
+      "title": "سکہ چݨو",
+      "allChains": "سارے چینز",
+      "search": "ڳول",
+      "currentlyUnavailable": "ہݨ دستیاب کائنی",
+      "selected": "چݨیا ہویا"
+    },
+    "settings": {
+      "slippageTolerance": "سلپیج برداشت",
+      "slippageToleranceTooltip": "مارکیٹ دے اتار چڑھاؤ دی وجہ کنوں، تکمیل کنوں پہلوں قیمتاں بدل سڳدیاں ہِن۔ ایہ سیٹنگ یقینی بݨاندی اے جو تہاکوں گھٹ توں گھٹ تہاݙی مقررہ گھٹ رقم ملے۔",
+      "noProtection": "کوئی تحفظ کائنی",
+      "slippageDescription": "ودھ توں ودھ قابلِ قبول قیمت تبدیلی۔ جے قیمت ایں حد کنوں ودھ ناموافق انداز وچ بدلے تاں ٹرانزیکشن ناکام تھی ویسی۔",
+      "twapTitle": "TWAP (ٹائم ویٹڈ ایوریج پرائس)",
+      "twapTooltip": "صرف وݙے حجم دے سویپاں آستے متعلقہ۔ Best Price آرڈر آستے بہترین قیمت ڈیندے۔ Best Time سویپ عملدرآمد دے ویلھے کوں ترجیح ڈیندے (جڈاں وی ممکن ہووے)۔ Custom تہاکوں ترتیب ڈیوݨ ڈیندے جو سویپ کوں کِتنے منی سویپاں وچ ونڈیا ونجے تے ہر منی سویپ وچال کِتنا ویلھا ہووے۔",
+      "twapDescription": "ٹائم ویٹڈ ایوریج پرائس",
+      "bestPrice": "بہترین قیمت",
+      "bestTime": "بہترین ویلھا",
+      "custom": "کسٹم",
+      "numberOfSubSwaps": "سب سویپاں دی تعداد",
+      "numberOfSubSwapsDescription": "اپݨے ٹریڈ کوں کِتنے سب سویپاں وچ ونڈو۔ ودھ ٹریڈاں = بہتر قیمت، ودھ عملدرآمد۔",
+      "timeBetweenSubSwaps": "سب سویپاں وچال ویلھا",
+      "timeBetweenSubSwapsDescription": "ہر سب سویپ وچال تاخیر۔ ودھ وقفے پولاں کوں بہتر قیمت آستے دوبارہ توازن کرݨ ڈیندے ہِن۔",
+      "reset": "ری سیٹ",
+      "save": "محفوظ کرو"
+    },
+    "limit": {
+      "whenWorth": "جڈاں 1 {ticker} دی قیمت ہووے",
+      "expiry": "میعاد",
+      "oneHour": "1 گھنٹہ",
+      "oneDay": "1 ڈینہہ",
+      "oneWeek": "1 ہفتہ",
+      "market": "مارکیٹ"
+    },
+    "limitCancel": {
+      "titleModify": "لمٹ آرڈر وچ ترمیم کرو",
+      "titleCancel": "لمٹ آرڈر منسوخ کرو",
+      "descriptionModify": "ایں لمٹ آرڈر وچ ترمیم کرݨ نال ہدف قیمت اپ ڈیٹ تھی ویسی۔ ترمیم تے کارروائی آستے ہک نکی نیٹ ورک فیس ورتی ویسی۔",
+      "descriptionCancel": "ایں لمٹ آرڈر کوں منسوخ کرݨ نال تہاݙے جمع کیتے فنڈ تہاݙے والیٹ وچ واپس آ ویسن۔ منسوخی تے کارروائی آستے ہک نکی نیٹ ورک فیس ورتی ویسی۔",
+      "youWillGet": "تہاکوں ملسی",
+      "fromCurrent": "موجودہ کنوں {percent}%",
+      "modifying": "ترمیم تھیندی پئی...",
+      "cancelling": "منسوخ تھیندا پئے...",
+      "loading": "لوڈ تھیندا پئے...",
+      "modifyOrder": "آرڈر وچ ترمیم کرو",
+      "cancelOrder": "آرڈر منسوخ کرو",
+      "cancelSubmitted": "منسوخی ٹرانزیکشن جمع تھی گئی",
+      "modifySubmitted": "ترمیم ٹرانزیکشن جمع تھی گئی",
+      "connectWarning": "ایں آرڈر کوں {mode, select, cancel {منسوخ} modify {ترمیم} other {ترمیم}} کرݨ آستے {chain} والیٹ جوڑو",
+      "switchWarning": "ایں آرڈر کوں {mode, select, cancel {منسوخ} modify {ترمیم} other {ترمیم}} کرݨ آستے {chain} والیٹ تے سوئچ کرو",
+      "addressMismatch": "جُڑیا والیٹ اوں ایڈریس نال میل کائنی کھاندا جیں ایہ آرڈر ڈتا ہا",
+      "tradingPaused": "{chain} ٹریڈنگ ہݨ روکی ہوئی اے",
+      "errLoadInbound": "اِن باؤنڈ ایڈریس لوڈ کرݨ وچ ناکامی",
+      "errActionFailed": "لمٹ سویپ {mode, select, cancel {منسوخ} modify {ترمیم} other {ترمیم}} کرݨ وچ ناکامی"
+    },
+    "quoteTimer": {
+      "refresh": "ریفریش"
+    },
+    "route": {
+      "chooseRoute": "روٹ چݨو",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "بہترین قیمت",
+      "faster": "تیز تر"
+    },
+    "instant": {
+      "sendTitle": "{asset} گھلو",
+      "sendDescription": "تلوار ڈتے ایڈریس تے سیلف کسٹڈی والیٹ کنوں بالکل {amount} {ticker} گھلو۔",
+      "destinationTag": "منزل ٹیگ",
+      "memo": "میمو",
+      "confirming": "تصدیق تھیندی پئی",
+      "confirm": "تصدیق کرو",
+      "errMemoMissing": "میمو غائب اے",
+      "errCalcAmount": "تجویز کیتی رقم دا حساب لاوݨ وچ ناکامی",
+      "errPreflight": "پری فلائٹ درخواست ناکام"
+    },
+    "error": {
+      "minAmountNoWallet": "جُڑے والیٹ دے بغیر گھٹ توں گھٹ سویپ رقم {amount} {ticker} اے",
+      "unknown": "نامعلوم خرابی",
+      "insufficientOutboundFee": "آؤٹ باؤنڈ فیس ادا کرݨ آستے ناکافی اثاثہ واپس آیا",
+      "insufficientWithdrawalFee": "آؤٹ باؤنڈ فیس ادا کرݨ آستے ناکافی واپسی",
+      "invalidSwap": "غلط سویپ",
+      "insufficientFunds": "ناکافی فنڈ",
+      "sourceTargetSame": "ماخذ تے ہدف ہکو جہے نہیں تھی سڳدے",
+      "transactionCancelled": "ٹرانزیکشن منسوخ",
+      "insufficientFundsCaps": "ناکافی فنڈ",
+      "invalidToAddress": "غلط \"to\" ایڈریس",
+      "pendingTransaction": "زیر التواء ٹرانزیکشن۔ تھوڑی دیر بعد ولدا کوشش کرو",
+      "insufficientReturnAmount": "ناکافی واپسی رقم",
+      "slippageExceeded": "سلپیج برداشت کنوں ودھ",
+      "amountZero": "رقم صفر نہیں تھی سڳدی",
+      "invalidPrice": "غلط قیمت",
+      "missingConfig": "اینٹری اڈیپٹر وچ کنفیگریشن غائب اے",
+      "insufficientLiquidity": "بنیادی اثاثیاں وچوں ہک آستے ناکافی آن چین لیکویڈیٹی۔ سلپیج برداشت ودھا کے کوشش کرو۔"
+    }
+  },
+  "send": {
+    "title": "گھلو",
+    "amount": "رقم",
+    "to": "بنام",
+    "addressPlaceholder": "{chain} ایڈریس",
+    "invalidAddress": "غلط {chain} ایڈریس",
+    "transactionFee": "ٹرانزیکشن فیس",
+    "send": "گھلو",
+    "selectCoin": "سکہ چݨو",
+    "toast": {
+      "walletNotConnected": "والیٹ جُڑیا کائنی۔ مہربانی کر کے ولدا جوڑو۔",
+      "submitting": "ٹرانزیکشن جمع کرائی ویندی پئی...",
+      "submitted": "ٹرانزیکشن جمع تھی گئی",
+      "submitError": "ٹرانزیکشن جمع کرائݨ وچ خرابی"
+    }
+  },
+  "wallet": {
+    "chains": "چینز",
+    "connected": "جُڑیا ہویا",
+    "disconnected": "منقطع",
+    "install": "انسٹال کرو",
+    "soon": "چھیتی",
+    "connectNamed": "{name} جوڑو",
+    "deselectAll": "سارے غیر چݨو",
+    "selectAll": "سارے چݨو",
+    "evms": "EVMs",
+    "derivationPath": "ڈیریویشن پاتھ",
+    "selectAccountType": "اکاؤنٹ دی قسم چݨو",
+    "index": "انڈیکس",
+    "openKeystore": "Keystore کھولو",
+    "createNewWallet": "نواں والیٹ بݨاؤ",
+    "importSeedPhrase": "سیڈ فریز امپورٹ کرو",
+    "createWalletInstructions": "ایہ 12 لفظ لکھ گھنو تے انہاں کوں محفوظ طریقے نال آف لائن محفوظ کرو۔ ایہ 12 لفظاں دا فریز تہاݙے والیٹ دیاں پرائیویٹ کیاں بحال کرݨ آستے ورتیجدے۔",
+    "copyPhrase": "فریز کاپی کرو",
+    "confirmSavedPassphrase": "میں تصدیق کرینداں جو میں مستقبل وچ اپݨا اکاؤنٹ بحال کرݨ آستے پاس فریز محفوظ طریقے نال محفوظ کر چھݙیا اے۔",
+    "setupDecryptionPassword": "ڈکرپشن پاس ورڈ سیٹ کرو",
+    "setupPasswordInstructions": "اپݨے بݨائے والیٹ کوں انکرپٹ کرݨ آستے ہک مضبوط پاس ورڈ درج کرو۔ ایسے نال تُساں اپݨے والیٹ تئیں رسائی گھنسو۔",
+    "enterPassword": "پاس ورڈ درج کرو",
+    "confirmPassword": "پاس ورڈ دی تصدیق کرو",
+    "passwordMustMatch": "پاس ورڈ میل کھاوݨ چاہیدا",
+    "create": "بݨاؤ",
+    "importKeystore": "Keystore امپورٹ کرو",
+    "selectOrDragKeystore": "اپ لوڈ کرݨ آستے اپݨی keystore فائل چݨو یا گھسیٹو",
+    "decryptionPassword": "ڈکرپشن پاس ورڈ",
+    "password": "پاس ورڈ",
+    "import": "امپورٹ کرو",
+    "typeSeedPhrase": "اپݨا سیڈ فریز ٹائپ کرو",
+    "invalidFileType": "غلط فائل دی قسم۔ مہربانی کر کے ہک JSON یا TXT فائل اپ لوڈ کرو۔",
+    "noTokensFound": "کوئی ٹوکن نہ ملیا",
+    "copyAddress": "ایڈریس کاپی کرو",
+    "addressCopied": "ایڈریس کاپی تھی گیا",
+    "disconnectWallet": "{name} منقطع کرو",
+    "noCoins": "کوئی سکہ کائنی",
+    "sendToken": "{ticker} گھلو",
+    "sidebar": {
+      "title": "والیٹاں",
+      "sortWallets": "والیٹاں ترتیب ڈیو",
+      "sortBy": "ترتیب بلحاظ",
+      "sortByName": "ناں (A-Z)",
+      "sortByBalance": "بیلنس (ودھ → گھٹ)",
+      "externalWalletMode": "بیرونی والیٹ موڈ",
+      "externalWalletModeDescription": "اپݨا آرڈر درج کرو، سویپ بٹن تے کلک کرو، تے ہدایتاں تے عمل کرو",
+      "externalWalletInfo": "جے کوئی اثاثہ بیرونی والیٹ موڈ وچ معاون نہ ہووے، تاں تہاکوں اِن براؤزر والیٹ جوڑݨ کوں آکھیا ویسی"
+    }
+  },
+  "riskLevel": {
+    "excellent": "بہترین",
+    "good": "چنگا",
+    "fair": "مناسب",
+    "title": "فراہم کنندہ خطرے دیاں سطحاں",
+    "description": "ایہ سطحاں ݙسدیاں ہِن جو فراہم کنندہ سویپاں تے ٹرانزیکشن چیکاں کوں کیویں سنبھالدے ہِن۔",
+    "excellentInfo": "براہ راست آن چین عملدرآمد۔ کوئی فراہم کنندہ چیک یا فریز کائنی۔ سویپ ناکام تھیوݨ تے خودکار رقم واپسی۔",
+    "goodInfo": "فراہم کنندہ تکمیل کنوں پہلوں خودکار طور تے ٹرانزیکشناں چیک کریندے۔ مسئلیاں دا پتہ لڳݨ تے سویپ مسترد کر ڈتا ویندے تے فنڈ واپس کر ڈتے ویندن۔",
+    "fairInfo": "کجھ ٹرانزیکشناں آستے اضافی تصدیق دی ضرورت تھی سڳدی اے۔ مسئلیاں دا پتہ لڳݨ تے فنڈ عام طور تے خودکار طور تے واپس کر ڈتے ویندن۔"
+  },
+  "tx": {
+    "title": "تاریخ",
+    "today": "اڄ",
+    "yesterday": "کلھ",
+    "onlyCreatorModify": "صرف اصل سویپ بݨاوݨ والا ای ترمیم کر سڳدے",
+    "showQr": "QR ݙکھاؤ",
+    "modify": "ترمیم کرو",
+    "cancelOrder": "آرڈر منسوخ کرو",
+    "remaining": "{time} باقی",
+    "loading": "لوڈ تھیندا پئے",
+    "status": {
+      "not_started": "ڈپازٹ زیر التواء",
+      "pending": "زیر التواء",
+      "swapping": "سویپ تھیندا پئے",
+      "completed": "مکمل",
+      "failed": "ناکام",
+      "expired": "میعاد ختم",
+      "refunded": "رقم واپس",
+      "unknown": "نامعلوم"
+    },
+    "leg": {
+      "deposit": "{ticker} ڈپازٹ کرو",
+      "send": "{ticker} گھلو",
+      "swap": "{from} کوں {to} وچ سویپ کرو"
+    }
+  },
+  "track": {
+    "title": "ٹرانزیکشن ٹریک کرو"
+  }
+}

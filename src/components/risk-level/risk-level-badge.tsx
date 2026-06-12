@@ -1,4 +1,5 @@
 import { MouseEvent } from 'react'
+import { useTranslations } from 'next-intl'
 import { Icon, IconName } from '@/components/icons'
 import { cn } from '@/lib/utils'
 import { RiskLevel } from '@/types'
@@ -21,6 +22,7 @@ interface RiskLevelBadgeProps {
 }
 
 export const RiskLevelBadge = ({ riskLevel, onClick }: RiskLevelBadgeProps) => {
+  const t = useTranslations('riskLevel')
   const meta = RISK_LEVEL_META[riskLevel]
   if (!meta) return null
   return (
@@ -32,7 +34,7 @@ export const RiskLevelBadge = ({ riskLevel, onClick }: RiskLevelBadgeProps) => {
       onClick={onClick}
     >
       <Icon viewBox="0 0 16 16" name={meta.icon} className="size-4" />
-      <span>{meta.label}</span>
+      <span>{t(riskLevel)}</span>
     </button>
   )
 }

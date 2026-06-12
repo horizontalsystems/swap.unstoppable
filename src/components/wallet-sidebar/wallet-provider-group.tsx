@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslations } from 'next-intl'
 import { Power } from 'lucide-react'
 import { WalletOption } from '@uswap/core'
 import { WalletIcon } from '@/components/wallet-icon'
@@ -20,6 +21,7 @@ export interface WalletProviderGroupProps {
 }
 
 export function WalletProviderGroup({ provider, chainDataList, expandedChains, onToggleChain, onDisconnect, disabled, sortBy }: WalletProviderGroupProps) {
+  const t = useTranslations('wallet')
   const walletInfo = wallet(provider) || WALLETS.find(w => w.option === provider)
   const walletKey = walletInfo?.key || provider.toLowerCase()
   const walletName = walletInfo?.label || provider
@@ -54,7 +56,7 @@ export function WalletProviderGroup({ provider, chainDataList, expandedChains, o
         <button
           onClick={() => !disabled && onDisconnect(provider)}
           className={cn('text-txt-label-small transition-colors', { 'hover:text-txt-high-contrast cursor-pointer': !disabled })}
-          aria-label={`Disconnect ${walletName}`}
+          aria-label={t('disconnectWallet', { name: walletName })}
         >
           <Power className="size-4.5" />
         </button>
@@ -62,7 +64,7 @@ export function WalletProviderGroup({ provider, chainDataList, expandedChains, o
 
       <div className="bg-body rounded-2xl border">
         {visibleChains.length === 0 ? (
-          <div className="text-txt-label-small px-4 py-4 text-center text-sm">No coins</div>
+          <div className="text-txt-label-small px-4 py-4 text-center text-sm">{t('noCoins')}</div>
         ) : (
           visibleChains.map((data, i) => {
             const key = `${data.account.provider}-${data.account.network}`

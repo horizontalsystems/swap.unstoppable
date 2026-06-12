@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "Conectar carteira",
+    "balance": "Saldo:",
+    "close": "Fechar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "paste": "Colar",
+    "clear": "Limpar",
+    "expiresIn": "Expira em",
+    "language": "Idioma",
+    "address": {
+      "source": "Endereço de origem",
+      "destination": "Endereço de destino",
+      "refund": "Endereço de reembolso",
+      "deposit": "Endereço de depósito"
+    }
+  },
+  "footer": {
+    "builtBy": "Desenvolvido por",
+    "reportBugsTo": "Reportar erros para",
+    "gotQuestions": "Tem perguntas?"
+  },
+  "swap": {
+    "title": "Trocar",
+    "input": {
+      "sell": "Vender",
+      "buy": "Comprar",
+      "priceImpact": "Impacto no preço"
+    },
+    "button": {
+      "enterAmount": "Insira o valor",
+      "quoting": "Cotando...",
+      "noValidQuotes": "Sem cotações válidas",
+      "swap": "Trocar",
+      "placeLimitOrder": "Criar ordem limite",
+      "connectWallet": "Conectar carteira {chain}",
+      "insufficientBalance": "Saldo insuficiente",
+      "approve": "Aprovar {ticker}"
+    },
+    "toast": {
+      "success": "Sucesso",
+      "approvalTransaction": "Transação de aprovação",
+      "errorSubmitting": "Erro ao enviar a transação",
+      "submittingTransaction": "Enviando transação",
+      "transactionSubmitted": "Transação enviada"
+    },
+    "confirm": {
+      "titleSwap": "Confirmar troca",
+      "titleLimit": "Confirmar ordem limite",
+      "limitPrice": "Preço limite",
+      "limitPriceTooltip": "O preço por unidade pelo qual sua ordem limite será executada. A ordem só será preenchida quando o mercado atingir esse preço.",
+      "targetAmount": "Valor alvo",
+      "targetAmountTooltip": "O valor exato que você receberá quando sua ordem limite for executada pelo preço especificado.",
+      "minimumPayout": "Pagamento mínimo",
+      "minimumPayoutTooltip": "Valor mínimo garantido com base na sua tolerância de slippage de {slippage}%. Se as condições de mercado lhe derem menos, a transação será cancelada automaticamente.",
+      "notProtected": "Não protegido",
+      "priceImpact": "Impacto no preço",
+      "priceImpactTooltip": "A diferença entre o preço de mercado e sua taxa de troca real devido ao tamanho da operação. Operações maiores geralmente têm maior impacto no preço.",
+      "txFee": "Taxa da tx",
+      "estimatedTime": "Tempo estimado",
+      "provider": "Provedor",
+      "memo": "Memo",
+      "confirm": "Confirmar"
+    },
+    "feeDialog": {
+      "title": "Taxas incluídas na cotação",
+      "description": "Essas taxas já estão incluídas na cotação — você não as paga separadamente.",
+      "liquidityFee": "Taxa de liquidez",
+      "liquidityFeeInfo": "Taxa para os provedores de liquidez na rota",
+      "outboundFee": "Taxa de saída",
+      "outboundFeeInfo": "Taxa para enviar a transação de saída",
+      "platformFee": "Taxa da plataforma",
+      "platformFeeInfo": "Taxa cobrada pela {app}"
+    },
+    "recipient": {
+      "addressPlaceholder": "Endereço {chain}",
+      "invalidAddress": "Endereço {chain} inválido",
+      "titleAddresses": "Insira os endereços",
+      "titleReceiving": "Insira o endereço de recebimento",
+      "enterRefundAddress": "Insira o endereço de reembolso:",
+      "enterReceivingAddress": "Insira o endereço de recebimento:",
+      "preparingSwap": "Preparando troca",
+      "next": "Próximo"
+    },
+    "warning": {
+      "selfCustody": "Entendo que devo usar uma carteira de autocustódia. Entendo que usar uma carteira de contrato inteligente, endereço de exchange, endereço delegado ou uma carteira EIP 7702 resultará em",
+      "ltcMweb": "Entendo que usar um endereço LTC MWEB resultará em",
+      "sendExact": "Entendo que devo enviar exatamente o valor especificado de uma carteira de autocustódia. Entendo que enviar de uma carteira de contrato inteligente, endereço de exchange, endereço delegado ou uma carteira EIP 7702 resultará em",
+      "lossOfFunds": "perda de fundos."
+    },
+    "selectAsset": {
+      "title": "Selecionar moeda",
+      "allChains": "Todas as cadeias",
+      "search": "Buscar",
+      "currentlyUnavailable": "Indisponível no momento",
+      "selected": "Selecionada"
+    },
+    "settings": {
+      "slippageTolerance": "Tolerância de slippage",
+      "slippageToleranceTooltip": "Devido à volatilidade do mercado, os preços podem mudar antes da conclusão. Essa configuração garante que você receba pelo menos o valor mínimo.",
+      "noProtection": "Sem proteção",
+      "slippageDescription": "Mudança máxima de preço aceitável. A transação falhará se o preço se mover desfavoravelmente além desse valor.",
+      "twapTitle": "TWAP (Preço médio ponderado pelo tempo)",
+      "twapTooltip": "Relevante apenas para trocas de grande volume. Best Price oferece o preço ideal para a ordem. Best Time prioriza o tempo de execução da troca (sempre que possível). Custom permite configurar o número de mini-trocas em que a troca deve ser dividida e o tempo entre cada mini-troca.",
+      "twapDescription": "Preço médio ponderado pelo tempo",
+      "bestPrice": "Melhor preço",
+      "bestTime": "Melhor tempo",
+      "custom": "Personalizado",
+      "numberOfSubSwaps": "Número de subtrocas",
+      "numberOfSubSwapsDescription": "Em quantas subtrocas dividir sua operação. Mais operações = melhor preço, execução mais longa.",
+      "timeBetweenSubSwaps": "Tempo entre subtrocas",
+      "timeBetweenSubSwapsDescription": "Atraso entre cada subtroca. Intervalos mais longos permitem que os pools se reequilibrem para melhores preços.",
+      "reset": "Redefinir",
+      "save": "Salvar"
+    },
+    "limit": {
+      "whenWorth": "Quando 1 {ticker} valer",
+      "expiry": "Vencimento",
+      "oneHour": "1 hora",
+      "oneDay": "1 dia",
+      "oneWeek": "1 semana",
+      "market": "Mercado"
+    },
+    "limitCancel": {
+      "titleModify": "Modificar ordem limite",
+      "titleCancel": "Cancelar ordem limite",
+      "descriptionModify": "Modificar esta ordem limite atualizará o preço alvo. Uma pequena taxa de rede será cobrada para processar a modificação.",
+      "descriptionCancel": "Cancelar esta ordem limite devolverá os fundos depositados para sua carteira. Uma pequena taxa de rede será cobrada para processar o cancelamento.",
+      "youWillGet": "Você receberá",
+      "fromCurrent": "{percent}% em relação ao atual",
+      "modifying": "Modificando...",
+      "cancelling": "Cancelando...",
+      "loading": "Carregando...",
+      "modifyOrder": "Modificar ordem",
+      "cancelOrder": "Cancelar ordem",
+      "cancelSubmitted": "Transação de cancelamento enviada",
+      "modifySubmitted": "Transação de modificação enviada",
+      "connectWarning": "Conecte uma carteira {chain} para {mode, select, cancel {cancelar} modify {modificar} other {modificar}} esta ordem",
+      "switchWarning": "Mude para uma carteira {chain} para {mode, select, cancel {cancelar} modify {modificar} other {modificar}} esta ordem",
+      "addressMismatch": "A carteira conectada não corresponde ao endereço que criou esta ordem",
+      "tradingPaused": "A negociação de {chain} está pausada no momento",
+      "errLoadInbound": "Falha ao carregar os endereços de entrada",
+      "errActionFailed": "Falha ao {mode, select, cancel {cancelar} modify {modificar} other {modificar}} a troca limite"
+    },
+    "quoteTimer": {
+      "refresh": "Atualizar"
+    },
+    "route": {
+      "chooseRoute": "Escolher rota",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "MELHOR PREÇO",
+      "faster": "MAIS RÁPIDO"
+    },
+    "instant": {
+      "sendTitle": "Enviar {asset}",
+      "sendDescription": "Envie exatamente {amount} {ticker} para o endereço abaixo a partir de uma carteira de autocustódia.",
+      "destinationTag": "tag de destino",
+      "memo": "memo",
+      "confirming": "Confirmando",
+      "confirm": "Confirmar",
+      "errMemoMissing": "O memo está faltando",
+      "errCalcAmount": "Falha ao calcular o valor sugerido",
+      "errPreflight": "Falha na solicitação de pré-verificação"
+    },
+    "error": {
+      "minAmountNoWallet": "O valor mínimo de troca sem uma carteira conectada é {amount} {ticker}",
+      "unknown": "Erro desconhecido",
+      "insufficientOutboundFee": "Ativo retornado insuficiente para pagar a taxa de saída",
+      "insufficientWithdrawalFee": "Saque insuficiente para pagar a taxa de saída",
+      "invalidSwap": "Troca inválida",
+      "insufficientFunds": "Fundos insuficientes",
+      "sourceTargetSame": "A origem e o destino não podem ser iguais",
+      "transactionCancelled": "Transação cancelada",
+      "insufficientFundsCaps": "Fundos insuficientes",
+      "invalidToAddress": "Endereço \"to\" inválido",
+      "pendingTransaction": "Transação pendente. Tente novamente em breve",
+      "insufficientReturnAmount": "Valor de retorno insuficiente",
+      "slippageExceeded": "Tolerância de slippage excedida",
+      "amountZero": "O valor não pode ser zero",
+      "invalidPrice": "Preço inválido",
+      "missingConfig": "Configuração ausente no adaptador de entrada",
+      "insufficientLiquidity": "Liquidez on-chain insuficiente para um dos ativos subjacentes. Tente aumentar a tolerância de slippage."
+    }
+  },
+  "send": {
+    "title": "Enviar",
+    "amount": "Valor",
+    "to": "Para",
+    "addressPlaceholder": "Endereço {chain}",
+    "invalidAddress": "Endereço {chain} inválido",
+    "transactionFee": "Taxa de transação",
+    "send": "Enviar",
+    "selectCoin": "Selecionar moeda",
+    "toast": {
+      "walletNotConnected": "Carteira não conectada. Reconecte por favor.",
+      "submitting": "Enviando transação...",
+      "submitted": "Transação enviada",
+      "submitError": "Erro ao enviar a transação"
+    }
+  },
+  "wallet": {
+    "chains": "Cadeias",
+    "connected": "Conectada",
+    "disconnected": "Desconectada",
+    "install": "Instalar",
+    "soon": "Em breve",
+    "connectNamed": "Conectar {name}",
+    "deselectAll": "Desmarcar tudo",
+    "selectAll": "Selecionar tudo",
+    "evms": "EVMs",
+    "derivationPath": "Caminho de derivação",
+    "selectAccountType": "Selecionar tipo de conta",
+    "index": "Índice",
+    "openKeystore": "Abrir Keystore",
+    "createNewWallet": "Criar nova carteira",
+    "importSeedPhrase": "Importar frase semente",
+    "createWalletInstructions": "Anote estas 12 palavras e guarde-as com segurança offline. Esta frase de 12 palavras é usada para recuperar as chaves privadas da sua carteira.",
+    "copyPhrase": "Copiar frase",
+    "confirmSavedPassphrase": "Confirmo que salvei com segurança a frase de recuperação para restaurar minha conta no futuro.",
+    "setupDecryptionPassword": "Configurar senha de descriptografia",
+    "setupPasswordInstructions": "Insira uma senha forte para criptografar a carteira criada. É assim que você acessará sua carteira.",
+    "enterPassword": "Inserir senha",
+    "confirmPassword": "Confirmar senha",
+    "passwordMustMatch": "As senhas devem coincidir",
+    "create": "Criar",
+    "importKeystore": "Importar Keystore",
+    "selectOrDragKeystore": "Selecione ou arraste seu arquivo keystore para enviá-lo",
+    "decryptionPassword": "Senha de descriptografia",
+    "password": "Senha",
+    "import": "Importar",
+    "typeSeedPhrase": "Digite sua frase semente",
+    "invalidFileType": "Tipo de arquivo inválido. Envie um arquivo JSON ou TXT.",
+    "noTokensFound": "Nenhum token encontrado",
+    "copyAddress": "Copiar endereço",
+    "addressCopied": "Endereço copiado",
+    "disconnectWallet": "Desconectar {name}",
+    "noCoins": "Sem moedas",
+    "sendToken": "Enviar {ticker}",
+    "sidebar": {
+      "title": "Carteiras",
+      "sortWallets": "Ordenar carteiras",
+      "sortBy": "Ordenar por",
+      "sortByName": "Nome (A-Z)",
+      "sortByBalance": "Saldo (Alto → Baixo)",
+      "externalWalletMode": "Modo de carteira externa",
+      "externalWalletModeDescription": "Insira sua ordem, clique no botão Trocar e siga as instruções",
+      "externalWalletInfo": "Se um ativo não for compatível no modo de carteira externa, você será solicitado a conectar uma carteira no navegador"
+    }
+  },
+  "riskLevel": {
+    "excellent": "Excelente",
+    "good": "Bom",
+    "fair": "Razoável",
+    "title": "Níveis de risco do provedor",
+    "description": "Esses níveis mostram como os provedores lidam com trocas e verificações de transações.",
+    "excellentInfo": "Execução direta on-chain. Sem verificações ou bloqueios do provedor. Reembolsos automáticos se a troca falhar.",
+    "goodInfo": "O provedor verifica as transações automaticamente antes da conclusão. Se problemas forem detectados, a troca é rejeitada e os fundos são reembolsados.",
+    "fairInfo": "Verificação adicional pode ser necessária para algumas transações. Se problemas forem detectados, os fundos geralmente são reembolsados automaticamente."
+  },
+  "tx": {
+    "title": "Histórico",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "onlyCreatorModify": "Apenas o criador original da troca pode modificar",
+    "showQr": "Mostrar QR",
+    "modify": "Modificar",
+    "cancelOrder": "Cancelar ordem",
+    "remaining": "{time} restante",
+    "loading": "carregando",
+    "status": {
+      "not_started": "Depósito pendente",
+      "pending": "Pendente",
+      "swapping": "Trocando",
+      "completed": "Concluído",
+      "failed": "Falhou",
+      "expired": "Expirado",
+      "refunded": "Reembolsado",
+      "unknown": "Desconhecido"
+    },
+    "leg": {
+      "deposit": "Depositar {ticker}",
+      "send": "Enviar {ticker}",
+      "swap": "Trocar {from} por {to}"
+    }
+  },
+  "track": {
+    "title": "Rastrear transação"
+  }
+}

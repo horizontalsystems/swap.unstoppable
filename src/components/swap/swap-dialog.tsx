@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FeeOption, getChainConfig, USwapNumber } from '@uswap/core'
 import { LoaderCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { Credenza, CredenzaContent } from '@/components/ui/credenza'
 import { SwapConfirm } from '@/components/swap/swap-confirm'
@@ -21,6 +22,8 @@ interface SwapDialogProps {
 }
 
 export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) => {
+  const t = useTranslations('swap.toast')
+  const t2 = useTranslations('swap.confirm')
   const uSwap = getUSwap()
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
@@ -74,11 +77,11 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
       })
 
     toast.promise(broadcast, {
-      loading: 'Submitting Transaction',
-      success: () => 'Transaction submitted',
+      loading: t('submittingTransaction'),
+      success: () => t('transactionSubmitted'),
       error: (err: any) => {
         console.log(err)
-        return 'Error Submitting Transaction'
+        return t('errorSubmitting')
       }
     })
   }
@@ -92,7 +95,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
 
             <div className="p-4 pt-2 md:p-8 md:pt-2">
               <ThemeButton variant="primaryMedium" className="w-full" onClick={() => onConfirm()} disabled={!quote || submitting}>
-                {submitting ? <LoaderCircle size={20} className="animate-spin" /> : <span>Confirm</span>}
+                {submitting ? <LoaderCircle size={20} className="animate-spin" /> : <span>{t2('confirm')}</span>}
               </ThemeButton>
             </div>
           </>

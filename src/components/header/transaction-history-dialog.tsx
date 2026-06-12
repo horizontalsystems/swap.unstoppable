@@ -1,6 +1,7 @@
 'use client'
 
 import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, USwapNumber } from '@uswap/core'
 import { format, formatDuration, intervalToDuration, isSameDay, isToday, isYesterday } from 'date-fns'
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
@@ -31,6 +32,8 @@ interface HistoryDialogProps {
 }
 
 export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialogProps) => {
+  const t = useTranslations('tx')
+  const tc = useTranslations('common')
   const transactions = useTransactions()
   const selectedAccount = useSelectedAccount()
   const [expandTx, setExpandTx] = useState<string | null>(null)
@@ -47,17 +50,17 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
   const now = new Date()
   const formatDate = (date: Date): string => {
     if (isToday(date)) {
-      return 'Today'
+      return t('today')
     }
     if (isYesterday(date)) {
-      return 'Yesterday'
+      return t('yesterday')
     }
     return format(date, 'd MMMM')
   }
 
   const onLimitModify = (mode: 'cancel' | 'modify', tx: Transaction) => {
     if (selectedAccount?.network !== tx.assetFrom.chain) {
-      return toast.error('Only the original swap creator can modify')
+      return toast.error(t('onlyCreatorModify'))
     }
 
     openDialog(SwapLimitCancel, {
@@ -77,7 +80,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="flex h-auto max-h-5/6 flex-col md:max-w-xl">
         <CredenzaHeader>
-          <CredenzaTitle className="text-leah text-base font-semibold md:text-2xl">History</CredenzaTitle>
+          <CredenzaTitle className="text-leah text-base font-semibold md:text-2xl">{t('title')}</CredenzaTitle>
         </CredenzaHeader>
 
         <ScrollArea className="flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
@@ -100,12 +103,9 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
 
               const isExpanded = expandTx === tx.uid
 
-              let statusTitle = status.replace('_', ' ')
-              if (status === 'not_started') {
-                statusTitle = 'Deposit Pending'
-              }
+              const statusTitle = t(`status.${status}`)
 
-              const showRemainingTime = statusTitle === 'pending' && tx.estimatedTime
+              const showRemainingTime = status === 'pending' && tx.estimatedTime
               const showQrCode = () => {
                 if (!tx.qrCodeData || !tx.addressDeposit) return
 
@@ -188,7 +188,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                             <div className="text-thor-gray text-xs font-semibold">
                               {tx.expiration && (
                                 <span>
-                                  Expires in &nbsp;
+                                  {tc('expiresIn')} &nbsp;
                                   {formatDuration(
                                     intervalToDuration({
                                       start: now.getTime(),
@@ -200,18 +200,18 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                               )}
                             </div>
                             <ThemeButton variant="primarySmallTransparent" onClick={showQrCode}>
-                              Show QR
+                              {t('showQr')}
                             </ThemeButton>
                           </div>
                         )}
                         {showLimitSwapActions && (
                           <ThemeButton className="rounded-none" variant="primarySmallTransparent" onClick={() => onLimitModify('modify', tx)}>
-                            Modify
+                            {t('modify')}
                           </ThemeButton>
                         )}
                         {showLimitSwapActions && (
                           <ThemeButton className="rounded-none" variant="primarySmallTransparent" onClick={() => onLimitModify('cancel', tx)}>
-                            Cancel Order
+                            {t('cancelOrder')}
                           </ThemeButton>
                         )}
                       </div>
@@ -222,7 +222,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         <div className="space-y-4 border-t p-4 text-xs font-semibold">
                           {details.fromAddress && (
                             <div className="text-thor-gray flex items-center justify-between">
-                              <span>Source Address</span>
+                              <span>{tc('address.source')}</span>
                               <div className="flex items-center gap-2">
                                 <span className="text-leah">{truncate(details.fromAddress)}</span>
                                 <CopyButton text={details.fromAddress} />
@@ -231,7 +231,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                           )}
 
                           <div className="text-thor-gray flex items-center justify-between">
-                            <span>Destination Address</span>
+                            <span>{tc('address.destination')}</span>
                             <div className="flex items-center gap-2">
                               <span className="text-leah">{truncate(details.toAddress)}</span>
                               <CopyButton text={details.toAddress} />
@@ -241,7 +241,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
 
                         <div className="space-y-4 border-t p-4 text-xs font-semibold">
                           {details.legs.map((legTx: any, i: number) => {
-                            return <div key={i}>{renderLeg(tx, legTx)}</div>
+                            return <div key={i}>{renderLeg(tx, legTx, t)}</div>
                           })}
                         </div>
                       </>
@@ -285,16 +285,16 @@ function RemainingTime({ startTime, estimatedTime, fallback }: { startTime: numb
   return <>{formatExpiration(remainingSeconds)} remaining</>
 }
 
-function renderLeg(tx: any, legTx: any) {
+function renderLeg(tx: any, legTx: any, t: ReturnType<typeof useTranslations>) {
   const from = assetFromString(legTx.fromAsset)
   const to = assetFromString(legTx.toAsset)
 
   const text =
     legTx.fromAsset === legTx.toAsset
       ? legTx.fromAsset.toLowerCase() === tx.assetFrom.identifier.toLowerCase()
-        ? `Deposit ${from.ticker}`
-        : `Send ${to.ticker}`
-      : `Swap ${from.ticker} to ${to.ticker}`
+        ? t('leg.deposit', { ticker: from.ticker ?? '' })
+        : t('leg.send', { ticker: to.ticker ?? '' })
+      : t('leg.swap', { from: from.ticker ?? '', to: to.ticker ?? '' })
 
   const chain = ChainIdToChain[legTx.chainId as ChainId]
   const explorerUrl = legTx.hash && getExplorerTxUrl({ chain: chain, txHash: legTx.hash })

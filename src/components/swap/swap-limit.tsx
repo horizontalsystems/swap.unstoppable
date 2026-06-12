@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { USwapNumber } from '@uswap/core'
 import { X } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
@@ -20,6 +21,7 @@ const BLOCKS_PER_DAY = 14400
 const BLOCKS_PER_WEEK = 100800
 
 export const SwapLimit = ({ quote }: SwapLimitProps) => {
+  const t = useTranslations('swap.limit')
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const setLimitSwapBuyAmount = useSetLimitSwapBuyAmount()
@@ -112,13 +114,12 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
 
       <div className="flex items-center justify-between pt-4">
         <div className="text-thor-gray flex items-center text-sm font-medium">
-          <span>When 1</span>
-          {assetFrom && <img className="mx-1 h-4 w-4" src={assetFrom.logoURI} alt={assetFrom.ticker} />}
-          <span>{assetFrom?.ticker} is worth</span>
+          {assetFrom && <img className="mr-1 h-4 w-4" src={assetFrom.logoURI} alt={assetFrom.ticker} />}
+          <span>{t('whenWorth', { ticker: assetFrom?.ticker ?? '' })}</span>
         </div>
 
         <div className="text-thor-gray flex items-center text-sm font-medium">
-          Expiry
+          {t('expiry')}
           <Select value={activeExpiryPreset || '1h'} onValueChange={v => applyExpiryPreset(v as ExpiryPreset)}>
             <SelectTrigger className="text-andy ml-1 h-auto w-auto border-none p-0 shadow-none" showIcon={false}>
               <ThemeButton className="h-6" variant="secondarySmall">
@@ -126,9 +127,9 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
               </ThemeButton>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1h">1 hour</SelectItem>
-              <SelectItem value="1d">1 day</SelectItem>
-              <SelectItem value="1w">1 week</SelectItem>
+              <SelectItem value="1h">{t('oneHour')}</SelectItem>
+              <SelectItem value="1d">{t('oneDay')}</SelectItem>
+              <SelectItem value="1w">{t('oneWeek')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -162,7 +163,7 @@ export const SwapLimit = ({ quote }: SwapLimitProps) => {
             variant="secondarySmall"
             onClick={() => applyPreset(0)}
           >
-            Market
+            {t('market')}
           </ThemeButton>
         )}
 

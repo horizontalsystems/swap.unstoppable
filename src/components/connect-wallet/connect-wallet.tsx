@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
 import { Chain, WalletOption } from '@uswap/core'
+import { useTranslations } from 'next-intl'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { BrowserWallet } from '@/components/connect-wallet/browser-wallet'
@@ -18,6 +19,8 @@ interface ConnectWalletProps {
 }
 
 export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProps) => {
+  const t = useTranslations('wallet')
+  const tc = useTranslations('common')
   const [selectedWallet, setSelectedWallet] = useState<WalletParams | undefined>(undefined)
   const [selectedChain, setSelectedChain] = useState<Chain | undefined>(chain)
   const { connectedWallets } = useWallets()
@@ -93,13 +96,13 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
             <div className="text-xs">
               {isInstalled ? (
                 isConnected ? (
-                  <span className="text-brand-first">Connected</span>
+                  <span className="text-brand-first">{t('connected')}</span>
                 ) : (
-                  <span>Disconnected</span>
+                  <span>{t('disconnected')}</span>
                 )
               ) : (
                 <a href={wallet.link} className="text-jacob" rel="noopener noreferrer" target="_blank">
-                  Install
+                  {t('install')}
                 </a>
               )}
             </div>
@@ -133,7 +136,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="flex h-auto max-h-5/6 flex-col">
         <CredenzaHeader>
-          <CredenzaTitle>Connect Wallet</CredenzaTitle>
+          <CredenzaTitle>{tc('connectWallet')}</CredenzaTitle>
         </CredenzaHeader>
 
         <div className="flex min-h-0 flex-col md:flex-row">
@@ -160,7 +163,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
             <div className="flex min-h-0 flex-1 flex-col">{renderSelectedWallet(selectedWallet)}</div>
           ) : (
             <div className="hidden flex-1 flex-col md:flex">
-              <div className="text-thor-gray mb-3 px-8 text-base font-semibold">Chains</div>
+              <div className="text-thor-gray mb-3 px-8 text-base font-semibold">{t('chains')}</div>
 
               <div className="hidden min-h-0 flex-1 md:flex">
                 <ScrollArea className="flex px-8" classNameViewport="flex-1 h-auto">
@@ -186,7 +189,9 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
                         >
                           <Image src={`/networks/${chain.toLowerCase()}.svg`} alt={chain} width="24" height="24" />
                           <div className="text-sm">{chainLabel(chain)}</div>
-                          {isComingSoon && <div className="text-gray border-gray rounded-full border px-1.5 text-[10px] font-semibold">Soon</div>}
+                          {isComingSoon && (
+                            <div className="text-gray border-gray rounded-full border px-1.5 text-[10px] font-semibold">{t('soon')}</div>
+                          )}
                         </div>
                       )
                     })}

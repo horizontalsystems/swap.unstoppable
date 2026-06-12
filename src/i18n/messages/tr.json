@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "Cüzdan Bağla",
+    "balance": "Bakiye:",
+    "close": "Kapat",
+    "back": "Geri",
+    "next": "İleri",
+    "paste": "Yapıştır",
+    "clear": "Temizle",
+    "expiresIn": "Sona erme süresi",
+    "language": "Dil",
+    "address": {
+      "source": "Kaynak Adresi",
+      "destination": "Hedef Adresi",
+      "refund": "İade Adresi",
+      "deposit": "Yatırma Adresi"
+    }
+  },
+  "footer": {
+    "builtBy": "Geliştiren",
+    "reportBugsTo": "Hataları bildirin",
+    "gotQuestions": "Sorularınız mı var?"
+  },
+  "swap": {
+    "title": "Takas",
+    "input": {
+      "sell": "Sat",
+      "buy": "Al",
+      "priceImpact": "Fiyat Etkisi"
+    },
+    "button": {
+      "enterAmount": "Tutar Girin",
+      "quoting": "Hesaplanıyor...",
+      "noValidQuotes": "Geçerli Teklif Yok",
+      "swap": "Takas Et",
+      "placeLimitOrder": "Limit Emri Ver",
+      "connectWallet": "{chain} Cüzdanı Bağla",
+      "insufficientBalance": "Yetersiz Bakiye",
+      "approve": "{ticker} Onayla"
+    },
+    "toast": {
+      "success": "Başarılı",
+      "approvalTransaction": "Onay İşlemi",
+      "errorSubmitting": "İşlem Gönderilirken Hata",
+      "submittingTransaction": "İşlem Gönderiliyor",
+      "transactionSubmitted": "İşlem gönderildi"
+    },
+    "confirm": {
+      "titleSwap": "Takası Onayla",
+      "titleLimit": "Limit Emrini Onayla",
+      "limitPrice": "Limit Fiyatı",
+      "limitPriceTooltip": "Limit emrinizin gerçekleşeceği birim fiyatı. Emir yalnızca piyasa bu fiyata ulaştığında dolar.",
+      "targetAmount": "Hedef Tutar",
+      "targetAmountTooltip": "Limit emriniz belirttiğiniz fiyattan gerçekleştiğinde alacağınız kesin tutar.",
+      "minimumPayout": "Asgari Ödeme",
+      "minimumPayoutTooltip": "%{slippage} kayma toleransınıza göre garanti edilen asgari tutar. Piyasa koşulları size daha az verecekse işlem otomatik olarak iptal edilir.",
+      "notProtected": "Korumasız",
+      "priceImpact": "Fiyat Etkisi",
+      "priceImpactTooltip": "İşlem büyüklüğü nedeniyle piyasa fiyatı ile gerçek takas kurunuz arasındaki fark. Büyük işlemlerin fiyat etkisi genellikle daha yüksektir.",
+      "txFee": "İşlem Ücreti",
+      "estimatedTime": "Tahmini Süre",
+      "provider": "Sağlayıcı",
+      "memo": "Memo",
+      "confirm": "Onayla"
+    },
+    "feeDialog": {
+      "title": "Ücretler Kura Dahildir",
+      "description": "Bu ücretler kura zaten dahildir — ayrıca ödemezsiniz.",
+      "liquidityFee": "Likidite Ücreti",
+      "liquidityFeeInfo": "Rota üzerindeki likidite sağlayıcıları için ücret",
+      "outboundFee": "Giden İşlem Ücreti",
+      "outboundFeeInfo": "Giden işlemin gönderilmesi için ücret",
+      "platformFee": "Platform Ücreti",
+      "platformFeeInfo": "{app} tarafından alınan ücret"
+    },
+    "recipient": {
+      "addressPlaceholder": "{chain} adresi",
+      "invalidAddress": "Geçersiz {chain} adresi",
+      "titleAddresses": "Adresleri Girin",
+      "titleReceiving": "Alıcı Adresi Girin",
+      "enterRefundAddress": "İade adresini girin:",
+      "enterReceivingAddress": "Alıcı adresini girin:",
+      "preparingSwap": "Takas Hazırlanıyor",
+      "next": "İleri"
+    },
+    "warning": {
+      "selfCustody": "Saklamasız bir cüzdan kullanmam gerektiğini anlıyorum. Akıllı sözleşme cüzdanı, borsa adresi, yetkilendirilmiş adres veya EIP 7702 cüzdanı kullanmanın şu sonuca yol açacağını anlıyorum:",
+      "ltcMweb": "Bir LTC MWEB adresi kullanmanın şu sonuca yol açacağını anlıyorum:",
+      "sendExact": "Belirtilen tutarı tam olarak saklamasız bir cüzdandan göndermem gerektiğini anlıyorum. Akıllı sözleşme cüzdanı, borsa adresi, yetkilendirilmiş adres veya EIP 7702 cüzdanından göndermenin şu sonuca yol açacağını anlıyorum:",
+      "lossOfFunds": "fon kaybı."
+    },
+    "selectAsset": {
+      "title": "Coin seçin",
+      "allChains": "Tüm Zincirler",
+      "search": "Ara",
+      "currentlyUnavailable": "Şu anda kullanılamıyor",
+      "selected": "Seçildi"
+    },
+    "settings": {
+      "slippageTolerance": "Kayma Toleransı",
+      "slippageToleranceTooltip": "Piyasa oynaklığı nedeniyle fiyatlar tamamlanmadan önce değişebilir. Bu ayar, en azından asgari tutarınızı almanızı sağlar.",
+      "noProtection": "Koruma Yok",
+      "slippageDescription": "Kabul edilebilir azami fiyat değişimi. Fiyat bu miktarın ötesinde olumsuz yönde hareket ederse işlem başarısız olur.",
+      "twapTitle": "TWAP (Zaman Ağırlıklı Ortalama Fiyat)",
+      "twapTooltip": "Yalnızca yüksek hacimli takaslar için geçerlidir. En İyi Fiyat, emir için en uygun fiyatı sunar. En İyi Zaman, takas gerçekleşme süresine öncelik verir (mümkün olduğunda). Özel, takasın kaç mini takasa bölüneceğini ve her mini takas arasındaki süreyi ayarlamanızı sağlar.",
+      "twapDescription": "Zaman Ağırlıklı Ortalama Fiyat",
+      "bestPrice": "En İyi Fiyat",
+      "bestTime": "En İyi Zaman",
+      "custom": "Özel",
+      "numberOfSubSwaps": "Alt takas sayısı",
+      "numberOfSubSwapsDescription": "İşleminizin kaç alt takasa bölüneceği. Daha fazla işlem = daha iyi fiyat, daha uzun gerçekleşme.",
+      "timeBetweenSubSwaps": "Alt takaslar arası süre",
+      "timeBetweenSubSwapsDescription": "Her alt takas arasındaki gecikme. Daha uzun aralıklar, havuzların daha iyi fiyatlandırma için dengelenmesine olanak tanır.",
+      "reset": "Sıfırla",
+      "save": "Kaydet"
+    },
+    "limit": {
+      "whenWorth": "1 {ticker} şu değere ulaştığında",
+      "expiry": "Geçerlilik",
+      "oneHour": "1 saat",
+      "oneDay": "1 gün",
+      "oneWeek": "1 hafta",
+      "market": "Piyasa"
+    },
+    "limitCancel": {
+      "titleModify": "Limit Emrini Değiştir",
+      "titleCancel": "Limit Emrini İptal Et",
+      "descriptionModify": "Bu limit emrini değiştirmek hedef fiyatı güncelleyecektir. Değişikliğin işlenmesi için küçük bir ağ ücreti alınır.",
+      "descriptionCancel": "Bu limit emrini iptal etmek yatırdığınız fonları cüzdanınıza geri gönderir. İptalin işlenmesi için küçük bir ağ ücreti alınır.",
+      "youWillGet": "Alacağınız tutar",
+      "fromCurrent": "mevcuttan %{percent}",
+      "modifying": "Değiştiriliyor...",
+      "cancelling": "İptal ediliyor...",
+      "loading": "Yükleniyor...",
+      "modifyOrder": "Emri Değiştir",
+      "cancelOrder": "Emri İptal Et",
+      "cancelSubmitted": "İptal işlemi gönderildi",
+      "modifySubmitted": "Değişiklik işlemi gönderildi",
+      "connectWarning": "Bu emri {mode, select, cancel {iptal etmek} modify {değiştirmek} other {değiştirmek}} için bir {chain} cüzdanı bağlayın",
+      "switchWarning": "Bu emri {mode, select, cancel {iptal etmek} modify {değiştirmek} other {değiştirmek}} için bir {chain} cüzdanına geçin",
+      "addressMismatch": "Bağlı cüzdan, bu emri veren adresle eşleşmiyor",
+      "tradingPaused": "{chain} işlemleri şu anda duraklatıldı",
+      "errLoadInbound": "Gelen adresler yüklenemedi",
+      "errActionFailed": "Limit takası {mode, select, cancel {iptal edilemedi} modify {değiştirilemedi} other {değiştirilemedi}}"
+    },
+    "quoteTimer": {
+      "refresh": "Yenile"
+    },
+    "route": {
+      "chooseRoute": "Rota Seçin",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "EN İYİ FİYAT",
+      "faster": "DAHA HIZLI"
+    },
+    "instant": {
+      "sendTitle": "{asset} Gönder",
+      "sendDescription": "Aşağıdaki adrese saklamasız bir cüzdandan tam olarak {amount} {ticker} gönderin.",
+      "destinationTag": "hedef etiketi",
+      "memo": "memo",
+      "confirming": "Onaylanıyor",
+      "confirm": "Onayla",
+      "errMemoMissing": "Memo eksik",
+      "errCalcAmount": "Önerilen tutar hesaplanamadı",
+      "errPreflight": "Ön kontrol isteği başarısız oldu"
+    },
+    "error": {
+      "minAmountNoWallet": "Cüzdan bağlamadan asgari takas tutarı {amount} {ticker}",
+      "unknown": "Bilinmeyen Hata",
+      "insufficientOutboundFee": "Giden işlem ücretini ödemek için iade edilen varlık yetersiz",
+      "insufficientWithdrawalFee": "Giden işlem ücretini ödemek için çekim yetersiz",
+      "invalidSwap": "Geçersiz takas",
+      "insufficientFunds": "Yetersiz bakiye",
+      "sourceTargetSame": "Kaynak ve hedef aynı olamaz",
+      "transactionCancelled": "İşlem İptal Edildi",
+      "insufficientFundsCaps": "Yetersiz Bakiye",
+      "invalidToAddress": "Geçersiz \"to\" adresi",
+      "pendingTransaction": "Bekleyen İşlem. Lütfen kısa süre sonra tekrar deneyin",
+      "insufficientReturnAmount": "Yetersiz iade tutarı",
+      "slippageExceeded": "Kayma toleransı aşıldı",
+      "amountZero": "Tutar sıfır olamaz",
+      "invalidPrice": "Geçersiz Fiyat",
+      "missingConfig": "Entry Adapter'da Yapılandırma Eksik",
+      "insufficientLiquidity": "Temel varlıklardan biri için zincir üzerinde yetersiz likidite. Kayma toleransını artırmayı deneyin."
+    }
+  },
+  "send": {
+    "title": "Gönder",
+    "amount": "Tutar",
+    "to": "Alıcı",
+    "addressPlaceholder": "{chain} adresi",
+    "invalidAddress": "Geçersiz {chain} adresi",
+    "transactionFee": "İşlem Ücreti",
+    "send": "Gönder",
+    "selectCoin": "Coin seçin",
+    "toast": {
+      "walletNotConnected": "Cüzdan bağlı değil. Lütfen yeniden bağlanın.",
+      "submitting": "İşlem gönderiliyor...",
+      "submitted": "İşlem gönderildi",
+      "submitError": "İşlem gönderilirken hata"
+    }
+  },
+  "wallet": {
+    "chains": "Zincirler",
+    "connected": "Bağlandı",
+    "disconnected": "Bağlantı kesildi",
+    "install": "Yükle",
+    "soon": "Yakında",
+    "connectNamed": "{name} Bağla",
+    "deselectAll": "Tümünün Seçimini Kaldır",
+    "selectAll": "Tümünü Seç",
+    "evms": "EVMs",
+    "derivationPath": "Türetme Yolu",
+    "selectAccountType": "Hesap türünü seçin",
+    "index": "Dizin",
+    "openKeystore": "Keystore Aç",
+    "createNewWallet": "Yeni Cüzdan Oluştur",
+    "importSeedPhrase": "Tohum İfadesini İçe Aktar",
+    "createWalletInstructions": "Bu 12 kelimeyi yazın ve çevrimdışı olarak güvenli bir şekilde saklayın. Bu 12 kelimelik ifade, cüzdanınızın özel anahtarlarını kurtarmak için kullanılır.",
+    "copyPhrase": "İfadeyi Kopyala",
+    "confirmSavedPassphrase": "Hesabımı gelecekte kurtarmak için parola ifadesini güvenli bir şekilde kaydettiğimi onaylıyorum.",
+    "setupDecryptionPassword": "Şifre Çözme Parolası Ayarla",
+    "setupPasswordInstructions": "Oluşturduğunuz cüzdanı şifrelemek için güçlü bir parola girin. Cüzdanınıza bu şekilde erişeceksiniz.",
+    "enterPassword": "Parola Girin",
+    "confirmPassword": "Parolayı Onayla",
+    "passwordMustMatch": "Parolalar eşleşmeli",
+    "create": "Oluştur",
+    "importKeystore": "Keystore İçe Aktar",
+    "selectOrDragKeystore": "Yüklemek için keystore dosyanızı seçin veya sürükleyin",
+    "decryptionPassword": "Şifre Çözme Parolası",
+    "password": "Parola",
+    "import": "İçe Aktar",
+    "typeSeedPhrase": "Tohum ifadenizi yazın",
+    "invalidFileType": "Geçersiz dosya türü. Lütfen bir JSON veya TXT dosyası yükleyin.",
+    "noTokensFound": "Token bulunamadı",
+    "copyAddress": "Adresi Kopyala",
+    "addressCopied": "Adres kopyalandı",
+    "disconnectWallet": "{name} Bağlantısını Kes",
+    "noCoins": "Coin yok",
+    "sendToken": "{ticker} Gönder",
+    "sidebar": {
+      "title": "Cüzdanlar",
+      "sortWallets": "Cüzdanları sırala",
+      "sortBy": "Sıralama ölçütü",
+      "sortByName": "İsim (A-Z)",
+      "sortByBalance": "Bakiye (Yüksek → Düşük)",
+      "externalWalletMode": "Harici Cüzdan Modu",
+      "externalWalletModeDescription": "Emrinizi girin, Takas Et düğmesine tıklayın ve talimatları izleyin",
+      "externalWalletInfo": "Bir varlık Harici Cüzdan modunda desteklenmiyorsa, tarayıcı içi bir cüzdan bağlamanız istenir"
+    }
+  },
+  "riskLevel": {
+    "excellent": "Mükemmel",
+    "good": "İyi",
+    "fair": "Orta",
+    "title": "Sağlayıcı Risk Seviyeleri",
+    "description": "Bu seviyeler, sağlayıcıların takasları ve işlem kontrollerini nasıl ele aldığını gösterir.",
+    "excellentInfo": "Doğrudan zincir üzerinde gerçekleşme. Sağlayıcı kontrolü veya dondurma yok. Takas başarısız olursa otomatik iade.",
+    "goodInfo": "Sağlayıcı, tamamlanmadan önce işlemleri otomatik olarak kontrol eder. Sorun tespit edilirse takas reddedilir ve fonlar iade edilir.",
+    "fairInfo": "Bazı işlemler için ek doğrulama gerekebilir. Sorun tespit edilirse fonlar genellikle otomatik olarak iade edilir."
+  },
+  "tx": {
+    "title": "Geçmiş",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "onlyCreatorModify": "Yalnızca takası oluşturan kişi değişiklik yapabilir",
+    "showQr": "QR Göster",
+    "modify": "Değiştir",
+    "cancelOrder": "Emri İptal Et",
+    "remaining": "{time} kaldı",
+    "loading": "yükleniyor",
+    "status": {
+      "not_started": "Yatırma Bekleniyor",
+      "pending": "Beklemede",
+      "swapping": "Takas Ediliyor",
+      "completed": "Tamamlandı",
+      "failed": "Başarısız",
+      "expired": "Süresi Doldu",
+      "refunded": "İade Edildi",
+      "unknown": "Bilinmiyor"
+    },
+    "leg": {
+      "deposit": "{ticker} Yatır",
+      "send": "{ticker} Gönder",
+      "swap": "{from} varlığını {to} ile takas et"
+    }
+  },
+  "track": {
+    "title": "İşlemi Takip Et"
+  }
+}

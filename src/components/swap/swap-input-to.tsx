@@ -1,4 +1,5 @@
 import { USwapNumber } from '@uswap/core'
+import { useTranslations } from 'next-intl'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AssetIcon } from '@/components/asset-icon'
 import { chainLabel } from '@/components/connect-wallet/config'
@@ -14,6 +15,7 @@ import { useAssetTo, useSetAssetTo } from '@/hooks/use-swap'
 import { useIsLimitSwap, useLimitSwapBuyAmount } from '@/store/limit-swap-store'
 
 export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
+  const t = useTranslations('swap.input')
   const assetTo = useAssetTo()
   const setAssetTo = useSetAssetTo()
   const { quote } = useQuote()
@@ -37,7 +39,7 @@ export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
 
   return (
     <div className="px-6 pt-2 pb-6">
-      <div className="text-thor-gray mb-3 font-semibold">Buy</div>
+      <div className="text-thor-gray mb-3 font-semibold">{t('buy')}</div>
 
       <div className="flex items-center justify-between">
         <div className="flex-1">
@@ -51,7 +53,7 @@ export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
           <div className="flex gap-2 text-sm font-medium">
             <span className="text-thor-gray">{fiatValueTo.toCurrency()}</span>
             {priceImpact && (
-              <Tooltip content="Price Impact">
+              <Tooltip content={t('priceImpact')}>
                 <span>
                   (<PriceImpact priceImpact={priceImpact} />)
                 </span>

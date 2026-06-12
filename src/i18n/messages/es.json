@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "Conectar billetera",
+    "balance": "Saldo:",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "paste": "Pegar",
+    "clear": "Borrar",
+    "expiresIn": "Caduca en",
+    "language": "Idioma",
+    "address": {
+      "source": "Dirección de origen",
+      "destination": "Dirección de destino",
+      "refund": "Dirección de reembolso",
+      "deposit": "Dirección de depósito"
+    }
+  },
+  "footer": {
+    "builtBy": "Creado por",
+    "reportBugsTo": "Reportar errores a",
+    "gotQuestions": "¿Tienes preguntas?"
+  },
+  "swap": {
+    "title": "Intercambiar",
+    "input": {
+      "sell": "Vender",
+      "buy": "Comprar",
+      "priceImpact": "Impacto en el precio"
+    },
+    "button": {
+      "enterAmount": "Introduce el importe",
+      "quoting": "Cotizando...",
+      "noValidQuotes": "Sin cotizaciones válidas",
+      "swap": "Intercambiar",
+      "placeLimitOrder": "Colocar orden límite",
+      "connectWallet": "Conectar billetera {chain}",
+      "insufficientBalance": "Saldo insuficiente",
+      "approve": "Aprobar {ticker}"
+    },
+    "toast": {
+      "success": "Éxito",
+      "approvalTransaction": "Transacción de aprobación",
+      "errorSubmitting": "Error al enviar la transacción",
+      "submittingTransaction": "Enviando transacción",
+      "transactionSubmitted": "Transacción enviada"
+    },
+    "confirm": {
+      "titleSwap": "Confirmar intercambio",
+      "titleLimit": "Confirmar orden límite",
+      "limitPrice": "Precio límite",
+      "limitPriceTooltip": "El precio por unidad al que se ejecutará tu orden límite. La orden solo se completará cuando el mercado alcance este precio.",
+      "targetAmount": "Importe objetivo",
+      "targetAmountTooltip": "El importe exacto que recibirás cuando tu orden límite se ejecute al precio especificado.",
+      "minimumPayout": "Pago mínimo",
+      "minimumPayoutTooltip": "Importe mínimo garantizado según tu tolerancia al deslizamiento del {slippage}%. Si las condiciones del mercado te dieran menos, la transacción se cancelará automáticamente.",
+      "notProtected": "Sin protección",
+      "priceImpact": "Impacto en el precio",
+      "priceImpactTooltip": "La diferencia entre el precio de mercado y tu tasa de intercambio real debido al tamaño de la operación. Las operaciones más grandes suelen tener un mayor impacto en el precio.",
+      "txFee": "Comisión de tx",
+      "estimatedTime": "Tiempo estimado",
+      "provider": "Proveedor",
+      "memo": "Memo",
+      "confirm": "Confirmar"
+    },
+    "feeDialog": {
+      "title": "Comisiones incluidas en la tarifa",
+      "description": "Estas comisiones ya están incluidas en la tarifa: no las pagas por separado.",
+      "liquidityFee": "Comisión de liquidez",
+      "liquidityFeeInfo": "Comisión para los proveedores de liquidez en la ruta",
+      "outboundFee": "Comisión de salida",
+      "outboundFeeInfo": "Comisión por enviar la transacción de salida",
+      "platformFee": "Comisión de la plataforma",
+      "platformFeeInfo": "Comisión cobrada por {app}"
+    },
+    "recipient": {
+      "addressPlaceholder": "Dirección {chain}",
+      "invalidAddress": "Dirección {chain} no válida",
+      "titleAddresses": "Introduce las direcciones",
+      "titleReceiving": "Introduce la dirección de recepción",
+      "enterRefundAddress": "Introduce la dirección de reembolso:",
+      "enterReceivingAddress": "Introduce la dirección de recepción:",
+      "preparingSwap": "Preparando intercambio",
+      "next": "Siguiente"
+    },
+    "warning": {
+      "selfCustody": "Entiendo que debo usar una billetera de autocustodia. Entiendo que usar una billetera de contrato inteligente, una dirección de exchange, una dirección delegada o una billetera EIP 7702 resultará en",
+      "ltcMweb": "Entiendo que usar una dirección LTC MWEB resultará en",
+      "sendExact": "Entiendo que debo enviar exactamente el importe especificado desde una billetera de autocustodia. Entiendo que enviar desde una billetera de contrato inteligente, una dirección de exchange, una dirección delegada o una billetera EIP 7702 resultará en",
+      "lossOfFunds": "pérdida de fondos."
+    },
+    "selectAsset": {
+      "title": "Seleccionar moneda",
+      "allChains": "Todas las cadenas",
+      "search": "Buscar",
+      "currentlyUnavailable": "No disponible actualmente",
+      "selected": "Seleccionada"
+    },
+    "settings": {
+      "slippageTolerance": "Tolerancia al deslizamiento",
+      "slippageToleranceTooltip": "Debido a la volatilidad del mercado, los precios pueden cambiar antes de completarse. Este ajuste garantiza que recibas al menos tu importe mínimo.",
+      "noProtection": "Sin protección",
+      "slippageDescription": "Cambio de precio máximo aceptable. La transacción fallará si el precio se mueve de forma desfavorable más allá de este importe.",
+      "twapTitle": "TWAP (Precio promedio ponderado por tiempo)",
+      "twapTooltip": "Relevante solo para intercambios de gran volumen. Best Price ofrece el precio óptimo para la orden. Best Time prioriza el tiempo de ejecución del intercambio (siempre que sea posible). Custom te permite configurar el número de mini-intercambios en los que se debe dividir el intercambio y el tiempo entre cada mini-intercambio.",
+      "twapDescription": "Precio promedio ponderado por tiempo",
+      "bestPrice": "Mejor precio",
+      "bestTime": "Mejor tiempo",
+      "custom": "Personalizado",
+      "numberOfSubSwaps": "Número de sub-intercambios",
+      "numberOfSubSwapsDescription": "En cuántos sub-intercambios dividir tu operación. Más operaciones = mejor precio, ejecución más larga.",
+      "timeBetweenSubSwaps": "Tiempo entre sub-intercambios",
+      "timeBetweenSubSwapsDescription": "Retraso entre cada sub-intercambio. Los intervalos más largos permiten que los pools se reequilibren para obtener mejores precios.",
+      "reset": "Restablecer",
+      "save": "Guardar"
+    },
+    "limit": {
+      "whenWorth": "Cuando 1 {ticker} valga",
+      "expiry": "Vencimiento",
+      "oneHour": "1 hora",
+      "oneDay": "1 día",
+      "oneWeek": "1 semana",
+      "market": "Mercado"
+    },
+    "limitCancel": {
+      "titleModify": "Modificar orden límite",
+      "titleCancel": "Cancelar orden límite",
+      "descriptionModify": "Modificar esta orden límite actualizará el precio objetivo. Se cobrará una pequeña comisión de red para procesar la modificación.",
+      "descriptionCancel": "Cancelar esta orden límite devolverá los fondos depositados a tu billetera. Se cobrará una pequeña comisión de red para procesar la cancelación.",
+      "youWillGet": "Recibirás",
+      "fromCurrent": "{percent}% respecto al actual",
+      "modifying": "Modificando...",
+      "cancelling": "Cancelando...",
+      "loading": "Cargando...",
+      "modifyOrder": "Modificar orden",
+      "cancelOrder": "Cancelar orden",
+      "cancelSubmitted": "Transacción de cancelación enviada",
+      "modifySubmitted": "Transacción de modificación enviada",
+      "connectWarning": "Conecta una billetera {chain} para {mode, select, cancel {cancelar} modify {modificar} other {modificar}} esta orden",
+      "switchWarning": "Cambia a una billetera {chain} para {mode, select, cancel {cancelar} modify {modificar} other {modificar}} esta orden",
+      "addressMismatch": "La billetera conectada no coincide con la dirección que colocó esta orden",
+      "tradingPaused": "El trading de {chain} está pausado actualmente",
+      "errLoadInbound": "No se pudieron cargar las direcciones de entrada",
+      "errActionFailed": "No se pudo {mode, select, cancel {cancelar} modify {modificar} other {modificar}} el intercambio límite"
+    },
+    "quoteTimer": {
+      "refresh": "Actualizar"
+    },
+    "route": {
+      "chooseRoute": "Elegir ruta",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "MEJOR PRECIO",
+      "faster": "MÁS RÁPIDO"
+    },
+    "instant": {
+      "sendTitle": "Enviar {asset}",
+      "sendDescription": "Envía exactamente {amount} {ticker} a la dirección de abajo desde una billetera de autocustodia.",
+      "destinationTag": "etiqueta de destino",
+      "memo": "memo",
+      "confirming": "Confirmando",
+      "confirm": "Confirmar",
+      "errMemoMissing": "Falta el memo",
+      "errCalcAmount": "No se pudo calcular el importe sugerido",
+      "errPreflight": "No se pudo realizar la solicitud previa"
+    },
+    "error": {
+      "minAmountNoWallet": "El importe mínimo de intercambio sin una billetera conectada es {amount} {ticker}",
+      "unknown": "Error desconocido",
+      "insufficientOutboundFee": "Activo devuelto insuficiente para pagar la comisión de salida",
+      "insufficientWithdrawalFee": "Retiro insuficiente para pagar la comisión de salida",
+      "invalidSwap": "Intercambio no válido",
+      "insufficientFunds": "Fondos insuficientes",
+      "sourceTargetSame": "El origen y el destino no pueden ser iguales",
+      "transactionCancelled": "Transacción cancelada",
+      "insufficientFundsCaps": "Fondos insuficientes",
+      "invalidToAddress": "Dirección \"to\" no válida",
+      "pendingTransaction": "Transacción pendiente. Inténtalo de nuevo en breve",
+      "insufficientReturnAmount": "Importe de retorno insuficiente",
+      "slippageExceeded": "Tolerancia al deslizamiento superada",
+      "amountZero": "El importe no puede ser cero",
+      "invalidPrice": "Precio no válido",
+      "missingConfig": "Falta configuración en el adaptador de entrada",
+      "insufficientLiquidity": "Liquidez on-chain insuficiente para uno de los activos subyacentes. Intenta aumentar la tolerancia al deslizamiento."
+    }
+  },
+  "send": {
+    "title": "Enviar",
+    "amount": "Importe",
+    "to": "Para",
+    "addressPlaceholder": "Dirección {chain}",
+    "invalidAddress": "Dirección {chain} no válida",
+    "transactionFee": "Comisión de transacción",
+    "send": "Enviar",
+    "selectCoin": "Seleccionar moneda",
+    "toast": {
+      "walletNotConnected": "Billetera no conectada. Vuelve a conectarla.",
+      "submitting": "Enviando transacción...",
+      "submitted": "Transacción enviada",
+      "submitError": "Error al enviar la transacción"
+    }
+  },
+  "wallet": {
+    "chains": "Cadenas",
+    "connected": "Conectada",
+    "disconnected": "Desconectada",
+    "install": "Instalar",
+    "soon": "Pronto",
+    "connectNamed": "Conectar {name}",
+    "deselectAll": "Deseleccionar todo",
+    "selectAll": "Seleccionar todo",
+    "evms": "EVMs",
+    "derivationPath": "Ruta de derivación",
+    "selectAccountType": "Seleccionar tipo de cuenta",
+    "index": "Índice",
+    "openKeystore": "Abrir Keystore",
+    "createNewWallet": "Crear nueva billetera",
+    "importSeedPhrase": "Importar frase semilla",
+    "createWalletInstructions": "Anota estas 12 palabras y guárdalas de forma segura sin conexión. Esta frase de 12 palabras se usa para recuperar las claves privadas de tu billetera.",
+    "copyPhrase": "Copiar frase",
+    "confirmSavedPassphrase": "Confirmo que he guardado de forma segura la frase de contraseña para recuperar mi cuenta en el futuro.",
+    "setupDecryptionPassword": "Configurar contraseña de descifrado",
+    "setupPasswordInstructions": "Introduce una contraseña segura para cifrar la billetera creada. Así es como accederás a tu billetera.",
+    "enterPassword": "Introducir contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "passwordMustMatch": "Las contraseñas deben coincidir",
+    "create": "Crear",
+    "importKeystore": "Importar Keystore",
+    "selectOrDragKeystore": "Selecciona o arrastra tu archivo keystore para subirlo",
+    "decryptionPassword": "Contraseña de descifrado",
+    "password": "Contraseña",
+    "import": "Importar",
+    "typeSeedPhrase": "Escribe tu frase semilla",
+    "invalidFileType": "Tipo de archivo no válido. Sube un archivo JSON o TXT.",
+    "noTokensFound": "No se encontraron tokens",
+    "copyAddress": "Copiar dirección",
+    "addressCopied": "Dirección copiada",
+    "disconnectWallet": "Desconectar {name}",
+    "noCoins": "Sin monedas",
+    "sendToken": "Enviar {ticker}",
+    "sidebar": {
+      "title": "Billeteras",
+      "sortWallets": "Ordenar billeteras",
+      "sortBy": "Ordenar por",
+      "sortByName": "Nombre (A-Z)",
+      "sortByBalance": "Saldo (Alto → Bajo)",
+      "externalWalletMode": "Modo de billetera externa",
+      "externalWalletModeDescription": "Introduce tu orden, haz clic en el botón Intercambiar y sigue las instrucciones",
+      "externalWalletInfo": "Si un activo no es compatible en el modo de billetera externa, se te pedirá que conectes una billetera en el navegador"
+    }
+  },
+  "riskLevel": {
+    "excellent": "Excelente",
+    "good": "Bueno",
+    "fair": "Aceptable",
+    "title": "Niveles de riesgo del proveedor",
+    "description": "Estos niveles muestran cómo gestionan los proveedores los intercambios y las verificaciones de transacciones.",
+    "excellentInfo": "Ejecución directa on-chain. Sin verificaciones ni bloqueos del proveedor. Reembolsos automáticos si el intercambio falla.",
+    "goodInfo": "El proveedor verifica las transacciones automáticamente antes de completarlas. Si se detectan problemas, el intercambio se rechaza y los fondos se reembolsan.",
+    "fairInfo": "Algunas transacciones pueden requerir verificación adicional. Si se detectan problemas, los fondos suelen reembolsarse automáticamente."
+  },
+  "tx": {
+    "title": "Historial",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "onlyCreatorModify": "Solo el creador original del intercambio puede modificarlo",
+    "showQr": "Mostrar QR",
+    "modify": "Modificar",
+    "cancelOrder": "Cancelar orden",
+    "remaining": "{time} restante",
+    "loading": "cargando",
+    "status": {
+      "not_started": "Depósito pendiente",
+      "pending": "Pendiente",
+      "swapping": "Intercambiando",
+      "completed": "Completado",
+      "failed": "Fallido",
+      "expired": "Caducado",
+      "refunded": "Reembolsado",
+      "unknown": "Desconocido"
+    },
+    "leg": {
+      "deposit": "Depositar {ticker}",
+      "send": "Enviar {ticker}",
+      "swap": "Intercambiar {from} a {to}"
+    }
+  },
+  "track": {
+    "title": "Rastrear transacción"
+  }
+}

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
@@ -35,6 +36,7 @@ function quantityToSliderIndex(quantity: number): number {
 }
 
 export const SwapSettings = () => {
+  const t = useTranslations('swap.settings')
   const slippage = useSlippage()
   const setSlippage = useSetSlippage()
   const twapMode = useTwapMode()
@@ -51,7 +53,7 @@ export const SwapSettings = () => {
   const [localCustomQuantity, setLocalCustomQuantity] = useState(customQuantity)
 
   const enabledSteps = [...Array(22).keys(), 25]
-  const ramExpansions = [slippageValues[0], 'No Protection']
+  const ramExpansions = [slippageValues[0], t('noProtection')]
   const currentSlippage = slippageValues[sliderValue[0]]
 
   const handleValueChange = (newValue: [number]) => {
@@ -95,16 +97,12 @@ export const SwapSettings = () => {
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-sm font-semibold">
               <div className="flex items-center gap-1">
-                <span>Slippage Tolerance</span>
-                <InfoTooltip>
-                  Due to market volatility, prices may change before completion. This setting ensures you receive at least your minimum amount.
-                </InfoTooltip>
+                <span>{t('slippageTolerance')}</span>
+                <InfoTooltip>{t('slippageToleranceTooltip')}</InfoTooltip>
               </div>
-              <span>{currentSlippage ? `${currentSlippage}%` : 'No Protection'}</span>
+              <span>{currentSlippage ? `${currentSlippage}%` : t('noProtection')}</span>
             </div>
-            <span className="text-thor-gray text-xs">
-              Maximum acceptable price change. Transaction will fail if the price moves unfavorably beyond this amount.
-            </span>
+            <span className="text-thor-gray text-xs">{t('slippageDescription')}</span>
           </div>
           <div className="w-full">
             <Slider
@@ -129,15 +127,11 @@ export const SwapSettings = () => {
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-sm font-semibold">
               <div className="flex items-center gap-1">
-                <span>TWAP (Time Weighted Average Price)</span>
-                <InfoTooltip>
-                  Relevant for large volume swaps only. Best Price offers optimum price for the order. Best Time prioritizes swap execution time
-                  (whenever possible). Custom lets you configure the number of mini-swaps the swap should be broken into and time between each
-                  mini-swapt.
-                </InfoTooltip>
+                <span>{t('twapTitle')}</span>
+                <InfoTooltip>{t('twapTooltip')}</InfoTooltip>
               </div>
             </div>
-            <span className="text-thor-gray text-xs">Time Weighted Average Price</span>
+            <span className="text-thor-gray text-xs">{t('twapDescription')}</span>
           </div>
           <div className="flex flex-col gap-4">
             <div className="bg-blade flex rounded-full">
@@ -148,9 +142,9 @@ export const SwapSettings = () => {
                   className="flex-1"
                   onClick={() => setLocalTwapMode(mode)}
                 >
-                  {mode === 'bestPrice' && 'Best Price'}
-                  {mode === 'bestTime' && 'Best Time'}
-                  {mode === 'custom' && 'Custom'}
+                  {mode === 'bestPrice' && t('bestPrice')}
+                  {mode === 'bestTime' && t('bestTime')}
+                  {mode === 'custom' && t('custom')}
                 </ThemeButton>
               ))}
             </div>
@@ -158,12 +152,10 @@ export const SwapSettings = () => {
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold">Number of sub-swaps</span>
+                    <span className="text-sm font-semibold">{t('numberOfSubSwaps')}</span>
                     <span className="text-xs font-semibold">{localCustomQuantity}</span>
                   </div>
-                  <span className="text-thor-gray text-xs">
-                    How many sub-swaps to split your trade into. More trades = better price, longer execution.
-                  </span>
+                  <span className="text-thor-gray text-xs">{t('numberOfSubSwapsDescription')}</span>
                 </div>
                 <div className="w-full">
                   <Slider
@@ -178,10 +170,8 @@ export const SwapSettings = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <span className="text-sm font-semibold">Time between sub-swaps</span>
-                  <span className="text-thor-gray text-xs">
-                    Delay between each sub-swap. Longer intervals allow pools to rebalance for better pricing.
-                  </span>
+                  <span className="text-sm font-semibold">{t('timeBetweenSubSwaps')}</span>
+                  <span className="text-thor-gray text-xs">{t('timeBetweenSubSwapsDescription')}</span>
                   <Select value={localCustomInterval.toString()} onValueChange={value => setLocalCustomInterval(Number(value))}>
                     <SelectTrigger className="w-full">
                       <SelectValue />
@@ -219,7 +209,7 @@ export const SwapSettings = () => {
                 customQuantity === INITIAL_CUSTOM_QUANTITY
               }
             >
-              Reset
+              {t('reset')}
             </ThemeButton>
 
             <ThemeButton
@@ -239,7 +229,7 @@ export const SwapSettings = () => {
                 localCustomQuantity === customQuantity
               }
             >
-              Save
+              {t('save')}
             </ThemeButton>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { ChevronDown, ChevronUp, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { chainLabel } from '@/components/connect-wallet/config'
@@ -14,6 +15,7 @@ interface WalletChainProps {
 }
 
 export function WalletChain({ data, isExpanded, onToggle, disabled }: WalletChainProps) {
+  const t = useTranslations('wallet')
   const { account, tokens, totalUsd, isLoading } = data
   const chainName = chainLabel(account.network)
 
@@ -46,17 +48,17 @@ export function WalletChain({ data, isExpanded, onToggle, disabled }: WalletChai
           {tokens.filter(t => t.amount > 0).length > 0 ? (
             tokens.filter(t => t.amount > 0).map((token, i) => <WalletToken bordered={false} key={i} token={token} account={account} />)
           ) : (
-            <div className="text-txt-label-small px-4 py-1 text-xs">No tokens found</div>
+            <div className="text-txt-label-small px-4 py-1 text-xs">{t('noTokensFound')}</div>
           )}
           <div className="border-t py-1">
             <div className="mx-4 flex gap-2">
               <div
                 className="text-txt-label-small hover:text-green-contrast hover:border-green-contrast flex flex-1 cursor-pointer items-center justify-center rounded-xl border py-1.5 text-sm"
                 onClick={() => {
-                  navigator.clipboard.writeText(account.address).then(() => toast.success('Address copied'))
+                  navigator.clipboard.writeText(account.address).then(() => toast.success(t('addressCopied')))
                 }}
               >
-                Copy Address
+                {t('copyAddress')}
               </div>
             </div>
           </div>

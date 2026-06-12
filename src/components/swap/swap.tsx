@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
+import { useTranslations } from 'next-intl'
 import { AssetValue, USwapNumber } from '@uswap/core'
 import { type MemolessAsset } from '@uswap/helpers/api'
 import { SwapAddressFrom } from '@/components/swap/swap-address-from'
@@ -23,6 +24,8 @@ import { resolvePriceImpact } from '@/lib/swap-helpers'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
 
 export const Swap = () => {
+  const t = useTranslations('swap')
+  const te = useTranslations('swap.error')
   const assetFrom = useAssetFrom()
   const selectedAccount = useSelectedAccount()
   const isLimitSwap = useIsLimitSwap()
@@ -48,7 +51,7 @@ export const Swap = () => {
     if (selectedAccount || !memolessAsset || !assetFrom) return
     const minAmount = new USwapNumber(10 ** -(memolessAsset.decimals - 5))
     if (valueFrom.lt(minAmount))
-      return new Error(`Minimum swap amount without a connected wallet is ${minAmount.toSignificant()} ${assetFrom.ticker}`)
+      return new Error(te('minAmountNoWallet', { amount: minAmount.toSignificant(), ticker: assetFrom.ticker }))
   }, [memolessAsset, selectedAccount, valueFrom])
 
   const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'CCE']
@@ -62,7 +65,7 @@ export const Swap = () => {
     <div className="flex flex-col items-center justify-center px-4 pt-4 pb-4 md:pb-20">
       <div className="w-full max-w-md">
         <div className="mb-3 flex items-center justify-between">
-          <h1 className="text-leah text-xl font-medium">Swap</h1>
+          <h1 className="text-leah text-xl font-medium">{t('title')}</h1>
           {/*<div className="bg-blade rounded-full">*/}
           {/*  <ThemeButton variant={isLimitSwap ? 'secondarySmall' : 'primarySmall'} onClick={() => setIsLimitSwap(false)}>*/}
           {/*    Market*/}

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { useDialog } from '@/components/global-dialog'
 import { Send } from '@/components/send/send'
 import { DecimalText } from '@/components/decimal/decimal-text'
@@ -13,6 +14,7 @@ interface TokenRowProps {
 }
 
 export function WalletToken({ token, bordered, account }: TokenRowProps) {
+  const t = useTranslations('wallet')
   const { openDialog } = useDialog()
   const { balance, usdValue, logoURI } = token
   const iconUrl = logoURI
@@ -45,7 +47,7 @@ export function WalletToken({ token, bordered, account }: TokenRowProps) {
             openDialog(Send, { initialToken: token, account })
           }}
           className="text-txt-label-small hover:text-green-contrast cursor-pointer"
-          aria-label={`Send ${balance.ticker}`}
+          aria-label={t('sendToken', { ticker: balance.ticker })}
         >
           <Icon name="send" className="size-6" />
         </button>

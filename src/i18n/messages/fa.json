@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "اتصال کیف پول",
+    "balance": "موجودی:",
+    "close": "بستن",
+    "back": "بازگشت",
+    "next": "بعدی",
+    "paste": "چسباندن",
+    "clear": "پاک کردن",
+    "expiresIn": "انقضا در",
+    "language": "زبان",
+    "address": {
+      "source": "آدرس مبدأ",
+      "destination": "آدرس مقصد",
+      "refund": "آدرس بازپرداخت",
+      "deposit": "آدرس واریز"
+    }
+  },
+  "footer": {
+    "builtBy": "ساخته‌شده توسط",
+    "reportBugsTo": "گزارش خطاها به",
+    "gotQuestions": "سؤالی دارید؟"
+  },
+  "swap": {
+    "title": "تبادل",
+    "input": {
+      "sell": "فروش",
+      "buy": "خرید",
+      "priceImpact": "تأثیر قیمت"
+    },
+    "button": {
+      "enterAmount": "مقدار را وارد کنید",
+      "quoting": "در حال محاسبه قیمت...",
+      "noValidQuotes": "هیچ قیمت معتبری وجود ندارد",
+      "swap": "تبادل",
+      "placeLimitOrder": "ثبت سفارش محدود",
+      "connectWallet": "اتصال کیف پول {chain}",
+      "insufficientBalance": "موجودی ناکافی",
+      "approve": "تأیید {ticker}"
+    },
+    "toast": {
+      "success": "موفق",
+      "approvalTransaction": "تراکنش تأیید",
+      "errorSubmitting": "خطا در ارسال تراکنش",
+      "submittingTransaction": "در حال ارسال تراکنش",
+      "transactionSubmitted": "تراکنش ارسال شد"
+    },
+    "confirm": {
+      "titleSwap": "تأیید تبادل",
+      "titleLimit": "تأیید سفارش محدود",
+      "limitPrice": "قیمت محدود",
+      "limitPriceTooltip": "قیمت هر واحد که سفارش محدود شما در آن اجرا خواهد شد. سفارش تنها زمانی پر می‌شود که بازار به این قیمت برسد.",
+      "targetAmount": "مقدار هدف",
+      "targetAmountTooltip": "مقدار دقیقی که هنگام اجرای سفارش محدود شما در قیمت تعیین‌شده دریافت خواهید کرد.",
+      "minimumPayout": "حداقل پرداختی",
+      "minimumPayoutTooltip": "حداقل مقدار تضمین‌شده بر اساس تحمل لغزش قیمت {slippage}٪ شما. اگر شرایط بازار کمتر از این به شما بدهد، تراکنش به‌طور خودکار لغو می‌شود.",
+      "notProtected": "محافظت‌نشده",
+      "priceImpact": "تأثیر قیمت",
+      "priceImpactTooltip": "تفاوت بین قیمت بازار و نرخ واقعی تبادل شما به دلیل اندازه معامله. معاملات بزرگ‌تر معمولاً تأثیر قیمتی بیشتری دارند.",
+      "txFee": "کارمزد تراکنش",
+      "estimatedTime": "زمان تخمینی",
+      "provider": "ارائه‌دهنده",
+      "memo": "یادداشت",
+      "confirm": "تأیید"
+    },
+    "feeDialog": {
+      "title": "کارمزدهای گنجانده‌شده در نرخ",
+      "description": "این کارمزدها از پیش در نرخ گنجانده شده‌اند — آن‌ها را جداگانه پرداخت نمی‌کنید.",
+      "liquidityFee": "کارمزد نقدینگی",
+      "liquidityFeeInfo": "کارمزد برای تأمین‌کنندگان نقدینگی در مسیر",
+      "outboundFee": "کارمزد خروجی",
+      "outboundFeeInfo": "کارمزد ارسال تراکنش خروجی",
+      "platformFee": "کارمزد پلتفرم",
+      "platformFeeInfo": "کارمزد دریافت‌شده توسط {app}"
+    },
+    "recipient": {
+      "addressPlaceholder": "آدرس {chain}",
+      "invalidAddress": "آدرس {chain} نامعتبر است",
+      "titleAddresses": "آدرس‌ها را وارد کنید",
+      "titleReceiving": "آدرس دریافت را وارد کنید",
+      "enterRefundAddress": "آدرس بازپرداخت را وارد کنید:",
+      "enterReceivingAddress": "آدرس دریافت را وارد کنید:",
+      "preparingSwap": "در حال آماده‌سازی تبادل",
+      "next": "بعدی"
+    },
+    "warning": {
+      "selfCustody": "می‌دانم که باید از یک کیف پول خودنگه‌دار استفاده کنم. می‌دانم که استفاده از کیف پول قرارداد هوشمند، آدرس صرافی، آدرس واگذارشده یا کیف پول EIP 7702 منجر به",
+      "ltcMweb": "می‌دانم که استفاده از آدرس LTC MWEB منجر به",
+      "sendExact": "می‌دانم که باید دقیقاً همان مقدار مشخص‌شده را از یک کیف پول خودنگه‌دار ارسال کنم. می‌دانم که ارسال از کیف پول قرارداد هوشمند، آدرس صرافی، آدرس واگذارشده یا کیف پول EIP 7702 منجر به",
+      "lossOfFunds": "از دست رفتن وجوه می‌شود."
+    },
+    "selectAsset": {
+      "title": "انتخاب کوین",
+      "allChains": "همه زنجیره‌ها",
+      "search": "جستجو",
+      "currentlyUnavailable": "در حال حاضر در دسترس نیست",
+      "selected": "انتخاب‌شده"
+    },
+    "settings": {
+      "slippageTolerance": "تحمل لغزش قیمت",
+      "slippageToleranceTooltip": "به دلیل نوسانات بازار، قیمت‌ها ممکن است پیش از تکمیل تغییر کنند. این تنظیم تضمین می‌کند که حداقل مقدار خود را دریافت کنید.",
+      "noProtection": "بدون محافظت",
+      "slippageDescription": "حداکثر تغییر قابل قبول قیمت. اگر قیمت بیش از این مقدار به‌طور نامطلوب حرکت کند، تراکنش ناموفق خواهد شد.",
+      "twapTitle": "TWAP (میانگین قیمت وزن‌دار زمانی)",
+      "twapTooltip": "تنها برای تبادل‌های حجم بالا مرتبط است. بهترین قیمت، قیمت بهینه را برای سفارش ارائه می‌دهد. بهترین زمان، زمان اجرای تبادل را در اولویت قرار می‌دهد (هرگاه ممکن باشد). سفارشی به شما اجازه می‌دهد تعداد تبادل‌های کوچکی که تبادل باید به آن‌ها تقسیم شود و زمان میان هر تبادل کوچک را تنظیم کنید.",
+      "twapDescription": "میانگین قیمت وزن‌دار زمانی",
+      "bestPrice": "بهترین قیمت",
+      "bestTime": "بهترین زمان",
+      "custom": "سفارشی",
+      "numberOfSubSwaps": "تعداد زیر-تبادل‌ها",
+      "numberOfSubSwapsDescription": "معامله شما به چند زیر-تبادل تقسیم شود. معاملات بیشتر = قیمت بهتر، اجرای طولانی‌تر.",
+      "timeBetweenSubSwaps": "زمان میان زیر-تبادل‌ها",
+      "timeBetweenSubSwapsDescription": "تأخیر میان هر زیر-تبادل. فواصل طولانی‌تر به استخرها اجازه می‌دهد برای قیمت‌گذاری بهتر تعادل خود را بازیابند.",
+      "reset": "بازنشانی",
+      "save": "ذخیره"
+    },
+    "limit": {
+      "whenWorth": "وقتی ۱ {ticker} برابر باشد با",
+      "expiry": "انقضا",
+      "oneHour": "۱ ساعت",
+      "oneDay": "۱ روز",
+      "oneWeek": "۱ هفته",
+      "market": "بازار"
+    },
+    "limitCancel": {
+      "titleModify": "ویرایش سفارش محدود",
+      "titleCancel": "لغو سفارش محدود",
+      "descriptionModify": "ویرایش این سفارش محدود قیمت هدف را به‌روزرسانی می‌کند. کارمزد کوچکی از شبکه برای پردازش ویرایش دریافت خواهد شد.",
+      "descriptionCancel": "لغو این سفارش محدود وجوه واریزی شما را به کیف پولتان بازمی‌گرداند. کارمزد کوچکی از شبکه برای پردازش لغو دریافت خواهد شد.",
+      "youWillGet": "دریافت خواهید کرد",
+      "fromCurrent": "{percent}٪ نسبت به قیمت فعلی",
+      "modifying": "در حال ویرایش...",
+      "cancelling": "در حال لغو...",
+      "loading": "در حال بارگذاری...",
+      "modifyOrder": "ویرایش سفارش",
+      "cancelOrder": "لغو سفارش",
+      "cancelSubmitted": "تراکنش لغو ارسال شد",
+      "modifySubmitted": "تراکنش ویرایش ارسال شد",
+      "connectWarning": "برای {mode, select, cancel {لغو} modify {ویرایش} other {ویرایش}} این سفارش یک کیف پول {chain} متصل کنید",
+      "switchWarning": "برای {mode, select, cancel {لغو} modify {ویرایش} other {ویرایش}} این سفارش به یک کیف پول {chain} تغییر دهید",
+      "addressMismatch": "کیف پول متصل با آدرسی که این سفارش را ثبت کرده مطابقت ندارد",
+      "tradingPaused": "معاملات {chain} در حال حاضر متوقف شده است",
+      "errLoadInbound": "بارگذاری آدرس‌های ورودی ناموفق بود",
+      "errActionFailed": "{mode, select, cancel {لغو} modify {ویرایش} other {ویرایش}} تبادل محدود ناموفق بود"
+    },
+    "quoteTimer": {
+      "refresh": "تازه‌سازی"
+    },
+    "route": {
+      "chooseRoute": "انتخاب مسیر",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "بهترین قیمت",
+      "faster": "سریع‌تر"
+    },
+    "instant": {
+      "sendTitle": "ارسال {asset}",
+      "sendDescription": "دقیقاً {amount} {ticker} را به آدرس زیر از یک کیف پول خودنگه‌دار ارسال کنید.",
+      "destinationTag": "برچسب مقصد",
+      "memo": "یادداشت",
+      "confirming": "در حال تأیید",
+      "confirm": "تأیید",
+      "errMemoMissing": "یادداشت موجود نیست",
+      "errCalcAmount": "محاسبه مقدار پیشنهادی ناموفق بود",
+      "errPreflight": "درخواست بررسی اولیه ناموفق بود"
+    },
+    "error": {
+      "minAmountNoWallet": "حداقل مقدار تبادل بدون کیف پول متصل {amount} {ticker} است",
+      "unknown": "خطای ناشناخته",
+      "insufficientOutboundFee": "دارایی بازگشتی برای پرداخت کارمزد خروجی کافی نیست",
+      "insufficientWithdrawalFee": "برداشت برای پرداخت کارمزد خروجی کافی نیست",
+      "invalidSwap": "تبادل نامعتبر",
+      "insufficientFunds": "وجوه ناکافی",
+      "sourceTargetSame": "مبدأ و مقصد نمی‌توانند یکسان باشند",
+      "transactionCancelled": "تراکنش لغو شد",
+      "insufficientFundsCaps": "وجوه ناکافی",
+      "invalidToAddress": "آدرس \"به\" نامعتبر است",
+      "pendingTransaction": "تراکنش در انتظار. کمی بعد دوباره تلاش کنید",
+      "insufficientReturnAmount": "مقدار بازگشتی ناکافی",
+      "slippageExceeded": "تحمل لغزش قیمت بیش از حد شد",
+      "amountZero": "مقدار نمی‌تواند صفر باشد",
+      "invalidPrice": "قیمت نامعتبر",
+      "missingConfig": "پیکربندی در آداپتور ورودی موجود نیست",
+      "insufficientLiquidity": "نقدینگی روی‌زنجیره برای یکی از دارایی‌های پایه ناکافی است. تحمل لغزش قیمت را افزایش دهید."
+    }
+  },
+  "send": {
+    "title": "ارسال",
+    "amount": "مقدار",
+    "to": "به",
+    "addressPlaceholder": "آدرس {chain}",
+    "invalidAddress": "آدرس {chain} نامعتبر است",
+    "transactionFee": "کارمزد تراکنش",
+    "send": "ارسال",
+    "selectCoin": "انتخاب کوین",
+    "toast": {
+      "walletNotConnected": "کیف پول متصل نیست. لطفاً دوباره متصل شوید.",
+      "submitting": "در حال ارسال تراکنش...",
+      "submitted": "تراکنش ارسال شد",
+      "submitError": "خطا در ارسال تراکنش"
+    }
+  },
+  "wallet": {
+    "chains": "زنجیره‌ها",
+    "connected": "متصل",
+    "disconnected": "قطع‌شده",
+    "install": "نصب",
+    "soon": "به‌زودی",
+    "connectNamed": "اتصال {name}",
+    "deselectAll": "لغو انتخاب همه",
+    "selectAll": "انتخاب همه",
+    "evms": "EVMs",
+    "derivationPath": "مسیر اشتقاق",
+    "selectAccountType": "انتخاب نوع حساب",
+    "index": "ایندکس",
+    "openKeystore": "باز کردن Keystore",
+    "createNewWallet": "ایجاد کیف پول جدید",
+    "importSeedPhrase": "وارد کردن عبارت بازیابی",
+    "createWalletInstructions": "این ۱۲ کلمه را یادداشت کنید و آن‌ها را به‌صورت آفلاین و امن نگه دارید. این عبارت ۱۲ کلمه‌ای برای بازیابی کلیدهای خصوصی کیف پول شما استفاده می‌شود.",
+    "copyPhrase": "کپی عبارت",
+    "confirmSavedPassphrase": "تأیید می‌کنم که عبارت بازیابی را برای بازیابی حساب خود در آینده به‌صورت امن ذخیره کرده‌ام.",
+    "setupDecryptionPassword": "تنظیم رمز رمزگشایی",
+    "setupPasswordInstructions": "یک رمز قوی برای رمزگذاری کیف پول ساخته‌شده خود وارد کنید. به این روش به کیف پول خود دسترسی خواهید داشت.",
+    "enterPassword": "رمز را وارد کنید",
+    "confirmPassword": "تأیید رمز",
+    "passwordMustMatch": "رمزها باید مطابقت داشته باشند",
+    "create": "ایجاد",
+    "importKeystore": "وارد کردن Keystore",
+    "selectOrDragKeystore": "فایل keystore خود را برای بارگذاری انتخاب یا بکشید",
+    "decryptionPassword": "رمز رمزگشایی",
+    "password": "رمز",
+    "import": "وارد کردن",
+    "typeSeedPhrase": "عبارت بازیابی خود را تایپ کنید",
+    "invalidFileType": "نوع فایل نامعتبر است. لطفاً یک فایل JSON یا TXT بارگذاری کنید.",
+    "noTokensFound": "هیچ توکنی یافت نشد",
+    "copyAddress": "کپی آدرس",
+    "addressCopied": "آدرس کپی شد",
+    "disconnectWallet": "قطع اتصال {name}",
+    "noCoins": "هیچ کوینی نیست",
+    "sendToken": "ارسال {ticker}",
+    "sidebar": {
+      "title": "کیف پول‌ها",
+      "sortWallets": "مرتب‌سازی کیف پول‌ها",
+      "sortBy": "مرتب‌سازی بر اساس",
+      "sortByName": "نام (الف-ی)",
+      "sortByBalance": "موجودی (زیاد → کم)",
+      "externalWalletMode": "حالت کیف پول خارجی",
+      "externalWalletModeDescription": "سفارش خود را وارد کنید، روی دکمه تبادل کلیک کنید و دستورالعمل‌ها را دنبال کنید",
+      "externalWalletInfo": "اگر دارایی‌ای در حالت کیف پول خارجی پشتیبانی نشود، از شما خواسته می‌شود یک کیف پول درون‌مرورگری متصل کنید"
+    }
+  },
+  "riskLevel": {
+    "excellent": "عالی",
+    "good": "خوب",
+    "fair": "متوسط",
+    "title": "سطوح ریسک ارائه‌دهندگان",
+    "description": "این سطوح نشان می‌دهند ارائه‌دهندگان چگونه تبادل‌ها و بررسی تراکنش‌ها را مدیریت می‌کنند.",
+    "excellentInfo": "اجرای مستقیم روی‌زنجیره. بدون بررسی یا توقیف از سوی ارائه‌دهنده. بازپرداخت خودکار در صورت ناموفق بودن تبادل.",
+    "goodInfo": "ارائه‌دهنده تراکنش‌ها را پیش از تکمیل به‌طور خودکار بررسی می‌کند. در صورت شناسایی مشکل، تبادل رد و وجوه بازپرداخت می‌شود.",
+    "fairInfo": "ممکن است برای برخی تراکنش‌ها تأیید بیشتری لازم باشد. در صورت شناسایی مشکل، وجوه معمولاً به‌طور خودکار بازپرداخت می‌شوند."
+  },
+  "tx": {
+    "title": "تاریخچه",
+    "today": "امروز",
+    "yesterday": "دیروز",
+    "onlyCreatorModify": "تنها سازنده اصلی تبادل می‌تواند ویرایش کند",
+    "showQr": "نمایش QR",
+    "modify": "ویرایش",
+    "cancelOrder": "لغو سفارش",
+    "remaining": "{time} باقی‌مانده",
+    "loading": "در حال بارگذاری",
+    "status": {
+      "not_started": "واریز در انتظار",
+      "pending": "در انتظار",
+      "swapping": "در حال تبادل",
+      "completed": "تکمیل‌شده",
+      "failed": "ناموفق",
+      "expired": "منقضی‌شده",
+      "refunded": "بازپرداخت‌شده",
+      "unknown": "نامشخص"
+    },
+    "leg": {
+      "deposit": "واریز {ticker}",
+      "send": "ارسال {ticker}",
+      "swap": "تبادل {from} به {to}"
+    }
+  },
+  "track": {
+    "title": "پیگیری تراکنش"
+  }
+}

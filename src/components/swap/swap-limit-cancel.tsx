@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { AssetValue, FeeOption, USwapNumber } from '@uswap/core'
 import type { InboundAddressesItem } from '@uswap/helpers/api'
 import { AlertTriangle, LoaderCircle } from 'lucide-react'
@@ -34,6 +35,8 @@ interface SwapLimitCancelProps {
 }
 
 export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: SwapLimitCancelProps) => {
+  const t = useTranslations('swap.limitCancel')
+  const tl = useTranslations('swap.limit')
   const uSwap = getUSwap()
   const selectedAccount = useSelectedAccount()
   const [inboundAddresses, setInboundAddresses] = useState<InboundAddressesItem[]>([])
@@ -71,7 +74,7 @@ export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: Swa
 
     getInboundAddresses()
       .then(addresses => setInboundAddresses(addresses))
-      .catch(() => setError(new Error('Failed to load inbound addresses')))
+      .catch(() => setError(new Error(t('errLoadInbound'))))
       .finally(() => setLoading(false))
   }, [isOpen])
 
@@ -144,30 +147,30 @@ export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: Swa
         feeOptionKey: FeeOption.Fast
       })
 
-      toast.success(mode === 'cancel' ? 'Cancel transaction submitted' : 'Modify transaction submitted')
+      toast.success(mode === 'cancel' ? t('cancelSubmitted') : t('modifySubmitted'))
       onOpenChange(false)
     } catch (err: any) {
       console.error(`Failed to ${mode} limit swap:`, err)
-      setError(new Error(err.message || `Failed to ${mode} limit swap`))
+      setError(new Error(err.message || t('errActionFailed', { mode })))
     } finally {
       setSubmitting(false)
     }
   }
 
   const renderWarnings = () => {
-    const action = mode === 'cancel' ? 'cancel' : 'modify'
+    const chain = chainLabel(assetFrom.chain)
     const warnings: string[] = []
 
     if (!selectedAccount) {
-      warnings.push(`Connect a ${chainLabel(assetFrom.chain)} wallet to ${action} this order`)
+      warnings.push(t('connectWarning', { chain, mode }))
     } else if (selectedAccount.network !== assetFrom.chain) {
-      warnings.push(`Switch to a ${chainLabel(assetFrom.chain)} wallet to ${action} this order`)
+      warnings.push(t('switchWarning', { chain, mode }))
     } else if (addressFrom && selectedAccount.address.toLowerCase() !== addressFrom.toLowerCase()) {
-      warnings.push(`Connected wallet does not match the address that placed this order`)
+      warnings.push(t('addressMismatch'))
     }
 
     if (inboundAddress?.halted || inboundAddress?.chain_trading_paused) {
-      warnings.push(`${chainLabel(assetFrom.chain)} trading is currently paused`)
+      warnings.push(t('tradingPaused', { chain }))
     }
 
     if (warnings.length === 0) return null
@@ -185,8 +188,8 @@ export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: Swa
   }
 
   const isModify = mode === 'modify'
-  const title = isModify ? 'Modify Limit Order' : 'Cancel Limit Order'
-  const buttonLabel = submitting ? (isModify ? 'Modifying...' : 'Cancelling...') : loading ? 'Loading...' : isModify ? 'Modify Order' : 'Cancel Order'
+  const title = isModify ? t('titleModify') : t('titleCancel')
+  const buttonLabel = submitting ? (isModify ? t('modifying') : t('cancelling')) : loading ? t('loading') : isModify ? t('modifyOrder') : t('cancelOrder')
 
   return (
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
@@ -233,9 +236,8 @@ export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: Swa
                   <div className="flex gap-4">
                     <div className="flex-1 space-y-1">
                       <div className="text-thor-gray flex items-center text-xs font-medium">
-                        <span>When 1</span>
-                        {assetFrom && <img className="mx-1 h-4 w-4" src={assetFrom.logoURI} alt={assetFrom.ticker} />}
-                        <span>{assetFrom.ticker} is worth</span>
+                        {assetFrom && <img className="mr-1 h-4 w-4" src={assetFrom.logoURI} alt={assetFrom.ticker} />}
+                        <span>{tl('whenWorth', { ticker: assetFrom.ticker })}</span>
                       </div>
                       <DecimalInput
                         className="text-leah w-full bg-transparent text-lg font-semibold outline-none"
@@ -245,13 +247,12 @@ export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: Swa
                       />
                       {differencePercent && !differencePercent.eq(0) && (
                         <div className="text-thor-gray text-xs font-medium">
-                          {differencePercent.gte(0) ? '+' : ''}
-                          {differencePercent.toFixed(1)}% from current
+                          {t('fromCurrent', { percent: `${differencePercent.gte(0) ? '+' : ''}${differencePercent.toFixed(1)}` })}
                         </div>
                       )}
                     </div>
                     <div className="flex-1 space-y-1 text-right">
-                      <div className="text-thor-gray text-xs font-medium">You will get</div>
+                      <div className="text-thor-gray text-xs font-medium">{t('youWillGet')}</div>
                       <DecimalInput
                         className="text-leah w-full bg-transparent text-right text-lg font-semibold outline-none"
                         amount={totalAmount?.toSignificant() ?? amountTo}
@@ -266,9 +267,7 @@ export const SwapLimitCancel = ({ isOpen, onOpenChange, mode, transaction }: Swa
             </div>
 
             <p className="text-thor-gray text-sm">
-              {isModify
-                ? 'Modifying this limit order will update the target price. A small network fee will be charged to process the modification.'
-                : 'Cancelling this limit order will return your deposited funds to your wallet. A small network fee will be charged to process the cancellation.'}
+              {isModify ? t('descriptionModify') : t('descriptionCancel')}
             </p>
 
             {renderWarnings()}

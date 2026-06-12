@@ -1,4 +1,5 @@
 import { ReactNode, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { USwapNumber } from '@uswap/core'
 import { Separator } from '@/components/ui/separator'
 import { useDialog } from '@/components/global-dialog'
@@ -39,6 +40,7 @@ export function SwapRouteCard({
   className,
   onClick
 }: SwapRouteCardProps) {
+  const t = useTranslations('swap.route')
   const [priceInverted, setPriceInverted] = useState(false)
   const { openDialog } = useDialog()
   const { rateTo } = useSwapRates()
@@ -86,7 +88,11 @@ export function SwapRouteCard({
               setPriceInverted(!priceInverted)
             }}
           >
-            1 {priceDirect ? assetFromTicker : assetToTicker} = {price.toSignificant()} ${priceDirect ? assetToTicker : assetFromTicker}
+            {t('price', {
+              from: priceDirect ? assetFromTicker : assetToTicker,
+              price: price.toSignificant(),
+              to: priceDirect ? assetToTicker : assetFromTicker
+            })}
           </span>
         )}
 

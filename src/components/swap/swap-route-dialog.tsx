@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslations } from 'next-intl'
 import { Credenza, CredenzaContent, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { SwapRouteBadge } from '@/components/swap/swap-route-badge'
@@ -14,6 +15,7 @@ interface SwapRouteDialogProps {
 }
 
 export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) => {
+  const t = useTranslations('swap.route')
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const { valueFrom } = useSwap()
@@ -27,7 +29,7 @@ export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) 
     <Credenza open={isOpen} onOpenChange={onOpenChange}>
       <CredenzaContent className="flex h-auto max-h-5/6 flex-col md:max-w-md">
         <CredenzaHeader>
-          <CredenzaTitle>Choose Route</CredenzaTitle>
+          <CredenzaTitle>{t('chooseRoute')}</CredenzaTitle>
         </CredenzaHeader>
 
         <ScrollArea className="relative flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">

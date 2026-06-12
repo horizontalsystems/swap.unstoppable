@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useDialog } from '@/components/global-dialog'
 import { TransactionHistoryDialog } from '@/components/header/transaction-history-dialog'
 import { Icon } from '@/components/icons'
@@ -7,6 +8,7 @@ import { ThemeButton } from '@/components/theme-button'
 import { useHasTransactions, usePendingTransactions } from '@/store/transaction-store'
 
 export const TransactionHistoryButton = () => {
+  const t = useTranslations('tx')
   const { openDialog } = useDialog()
 
   const hasTransactions = useHasTransactions()
@@ -23,7 +25,7 @@ export const TransactionHistoryButton = () => {
   return (
     <div className="relative">
       <ThemeButton variant="secondarySmall" className="hidden md:flex" onClick={onClick}>
-        <Icon name="clock" /> History
+        <Icon name="clock" /> {t('title')}
       </ThemeButton>
       <ThemeButton variant="circleSmall" className="flex md:hidden" onClick={onClick}>
         <Icon name="clock" />

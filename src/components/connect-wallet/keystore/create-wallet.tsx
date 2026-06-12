@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { WalletOption } from '@uswap/core'
 import { encryptToKeyStore, generatePhrase } from '@uswap/wallets/keystore'
 import { LoaderCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { ALL_CHAINS } from '@/components/connect-wallet/config'
@@ -11,6 +12,8 @@ import { useWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 
 export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConnect: () => void }) {
+  const t = useTranslations('wallet')
+  const tc = useTranslations('common')
   const [showPassword, setShowPassword] = useState(false)
   const [connecting, setConnecting] = useState(false)
   const [accepted, setAccepted] = useState(false)
@@ -61,11 +64,9 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
       <div className="relative flex min-h-0 flex-1">
         <ScrollArea className="flex-1 px-4 md:px-8">
           <div className="flex flex-col">
-            <div className="text-leah mb-3 text-base font-semibold">Create New Wallet</div>
+            <div className="text-leah mb-3 text-base font-semibold">{t('createNewWallet')}</div>
 
-            <p className="text-thor-gray mb-5 text-sm">
-              Write these 12 words down and store them securely offline. This 12 word phrase is used to recover your wallet private keys.
-            </p>
+            <p className="text-thor-gray mb-5 text-sm">{t('createWalletInstructions')}</p>
 
             <div className="mb-2 flex flex-col items-center gap-6 rounded-xl bg-black p-4 pb-4">
               <div className="grid w-full grid-cols-3">
@@ -78,7 +79,7 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
               </div>
 
               <ThemeButton variant="secondarySmall" onClick={handleCopy}>
-                Copy Phrase
+                {t('copyPhrase')}
               </ThemeButton>
             </div>
 
@@ -89,7 +90,7 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
                 <div className="bg-blade size-6 shrink-0 rounded-full" />
               )}
 
-              <span className="text-thor-gray text-sm">I confirm I have securely saved the passphrase to recover my account in the future.</span>
+              <span className="text-thor-gray text-sm">{t('confirmSavedPassphrase')}</span>
             </div>
           </div>
         </ScrollArea>
@@ -99,10 +100,10 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
 
       <div className="flex gap-6 p-4 pt-2 md:justify-end md:px-8 md:pb-8">
         <ThemeButton variant="secondaryMedium" onClick={onBack}>
-          Back
+          {tc('back')}
         </ThemeButton>
         <ThemeButton variant="primaryMedium" className="flex-1 md:flex-0" disabled={connecting || !accepted} onClick={() => setShowPassword(true)}>
-          {connecting && <LoaderCircle size={20} className="animate-spin" />} Next
+          {connecting && <LoaderCircle size={20} className="animate-spin" />} {tc('next')}
         </ThemeButton>
       </div>
     </>
@@ -110,6 +111,8 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
 }
 
 export function SetupPassword({ onBack, onSetup, connecting }: { onBack: () => void; onSetup: (p: string) => void; connecting: boolean }) {
+  const t = useTranslations('wallet')
+  const tc = useTranslations('common')
   const [password1, setPassword1] = useState('')
   const [password2, setPassword2] = useState('')
 
@@ -118,23 +121,21 @@ export function SetupPassword({ onBack, onSetup, connecting }: { onBack: () => v
       <div className="relative flex min-h-0 flex-1">
         <ScrollArea className="flex-1 px-4 md:px-8">
           <div className="mb-4 flex flex-col">
-            <div className="text-leah mb-3 text-base font-semibold">Setup Decryption Password</div>
-            <p className="text-thor-gray mb-5 text-sm">
-              Enter a strong password to encrypt your created wallet. This is how you will access your wallet.
-            </p>
+            <div className="text-leah mb-3 text-base font-semibold">{t('setupDecryptionPassword')}</div>
+            <p className="text-thor-gray mb-5 text-sm">{t('setupPasswordInstructions')}</p>
 
             <div className="space-y-4">
-              <Input placeholder="Enter Password" type="password" onChange={e => setPassword1(e.target.value)} />
+              <Input placeholder={t('enterPassword')} type="password" onChange={e => setPassword1(e.target.value)} />
               <div>
                 <Input
-                  placeholder="Confirm Password"
+                  placeholder={t('confirmPassword')}
                   type="password"
                   onChange={e => setPassword2(e.target.value)}
                   className={cn({
                     'border-lucian focus-visible:border-lucian': password2 && password1 !== password2
                   })}
                 />
-                {password2 && password1 !== password2 && <span className="text-lucian text-xs">Password must match</span>}
+                {password2 && password1 !== password2 && <span className="text-lucian text-xs">{t('passwordMustMatch')}</span>}
               </div>
             </div>
           </div>
@@ -145,7 +146,7 @@ export function SetupPassword({ onBack, onSetup, connecting }: { onBack: () => v
 
       <div className="flex gap-3 p-4 pt-2 md:justify-end md:gap-6 md:px-8 md:pb-8">
         <ThemeButton variant="secondaryMedium" onClick={onBack}>
-          Back
+          {tc('back')}
         </ThemeButton>
         <ThemeButton
           variant="primaryMedium"
@@ -153,7 +154,7 @@ export function SetupPassword({ onBack, onSetup, connecting }: { onBack: () => v
           disabled={!password1.length || !password2.length || password1 !== password2 || connecting}
           onClick={() => onSetup(password1)}
         >
-          {connecting && <LoaderCircle size={20} className="animate-spin" />} Create
+          {connecting && <LoaderCircle size={20} className="animate-spin" />} {t('create')}
         </ThemeButton>
       </div>
     </>

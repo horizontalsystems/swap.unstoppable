@@ -1,5 +1,6 @@
 import { EVMChain } from '@uswap/core'
 import { LoaderCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { ConnectWallet } from '@/components/connect-wallet/connect-wallet'
@@ -29,6 +30,8 @@ interface ButtonState {
 }
 
 export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapButtonProps) => {
+  const t = useTranslations('swap.button')
+  const tt = useTranslations('swap.toast')
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const uSwap = getUSwap()
@@ -52,20 +55,20 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
   const getState = (): ButtonState => {
     if (!assetFrom || !assetTo) return { text: '', spinner: true, accent: false }
 
-    if (valueFrom.eqValue(0)) return { text: 'Enter Amount', spinner: false, accent: false }
+    if (valueFrom.eqValue(0)) return { text: t('enterAmount'), spinner: false, accent: false }
 
-    if (isQuoting || isSimulating) return { text: 'Quoting...', spinner: true, accent: false }
+    if (isQuoting || isSimulating) return { text: t('quoting'), spinner: true, accent: false }
 
-    if (!quote) return { text: 'No Valid Quotes', spinner: false, accent: false }
+    if (!quote) return { text: t('noValidQuotes'), spinner: false, accent: false }
 
     if (!selectedAccount) {
       if (instantSwapSupported) {
-        if (!instantSwapAvailable) return { text: 'Swap', spinner: false, accent: false }
+        if (!instantSwapAvailable) return { text: t('swap'), spinner: false, accent: false }
 
-        return { text: 'Swap', spinner: false, accent: true, onClick: () => onInstantSwap(quote) }
+        return { text: t('swap'), spinner: false, accent: true, onClick: () => onInstantSwap(quote) }
       } else {
         return {
-          text: `Connect ${chainLabel(assetFrom.chain)} Wallet`,
+          text: t('connectWallet', { chain: chainLabel(assetFrom.chain) }),
           spinner: false,
           accent: false,
           onClick: () => openDialog(ConnectWallet, { chain: assetFrom.chain })
@@ -75,7 +78,7 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
 
     if (isBalanceLoading || !balance || balance.spendable.lt(valueFrom)) {
       return {
-        text: 'Insufficient Balance',
+        text: t('insufficientBalance'),
         spinner: false,
         accent: false
       }
@@ -83,7 +86,7 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
 
     if (approveData) {
       return {
-        text: `Approve ${assetFrom.ticker}`,
+        text: t('approve', { ticker: assetFrom.ticker }),
         spinner: false,
         accent: false,
         onClick: async () => {
@@ -100,16 +103,16 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
             })
 
           toast.promise(promise, {
-            loading: 'Approval Transaction',
-            success: 'Success',
-            error: (err: any) => err.message || 'Error Submitting Transaction'
+            loading: tt('approvalTransaction'),
+            success: tt('success'),
+            error: (err: any) => err.message || tt('errorSubmitting')
           })
         }
       }
     }
 
     return {
-      text: isLimitSwap ? 'Place Limit Order' : 'Swap',
+      text: isLimitSwap ? t('placeLimitOrder') : t('swap'),
       spinner: false,
       accent: true,
       onClick: () => onSwap(quote)

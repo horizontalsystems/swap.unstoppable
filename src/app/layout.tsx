@@ -1,11 +1,14 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import Script from 'next/script'
-import { GoogleAnalytics } from '@next/third-parties/google'
 import { ThemeProvider } from 'next-themes'
+import { GoogleAnalytics } from '@next/third-parties/google'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 import { Toaster } from '@/components/ui/sonner'
 import { ReactQueryProvider } from '@/components/react-query/react-query-provider'
 import { AppConfig } from '@/config'
+import { getLangDir, type Locale } from '@/i18n/config'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -57,9 +60,12 @@ const manrope = Manrope({
   display: 'swap'
 })
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const locale = (await getLocale()) as Locale
+  const messages = await getMessages()
+
   return (
-    <html lang="en" data-brand={AppConfig.id} suppressHydrationWarning>
+    <html lang={locale} dir={getLangDir(locale)} data-brand={AppConfig.id} suppressHydrationWarning>
       {AppConfig.gtag && <GoogleAnalytics gaId={AppConfig.gtag} />}
       {AppConfig.pixelId && (
         <Script
@@ -70,9 +76,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       )}
       <body className={`${manrope.className} bg-tyler antialiased`}>
         <ReactQueryProvider>
-          <ThemeProvider defaultTheme="light" attribute="class">
-            {children}
-          </ThemeProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <ThemeProvider defaultTheme="light" attribute="class">
+              {children}
+            </ThemeProvider>
+          </NextIntlClientProvider>
         </ReactQueryProvider>
         <Toaster />
       </body>

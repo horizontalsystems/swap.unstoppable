@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "Kết nối ví",
+    "balance": "Số dư:",
+    "close": "Đóng",
+    "back": "Quay lại",
+    "next": "Tiếp",
+    "paste": "Dán",
+    "clear": "Xóa",
+    "expiresIn": "Hết hạn sau",
+    "language": "Ngôn ngữ",
+    "address": {
+      "source": "Địa chỉ nguồn",
+      "destination": "Địa chỉ đích",
+      "refund": "Địa chỉ hoàn tiền",
+      "deposit": "Địa chỉ nạp"
+    }
+  },
+  "footer": {
+    "builtBy": "Phát triển bởi",
+    "reportBugsTo": "Báo lỗi tới",
+    "gotQuestions": "Có thắc mắc?"
+  },
+  "swap": {
+    "title": "Hoán đổi",
+    "input": {
+      "sell": "Bán",
+      "buy": "Mua",
+      "priceImpact": "Tác động giá"
+    },
+    "button": {
+      "enterAmount": "Nhập số lượng",
+      "quoting": "Đang báo giá...",
+      "noValidQuotes": "Không có báo giá hợp lệ",
+      "swap": "Hoán đổi",
+      "placeLimitOrder": "Đặt lệnh giới hạn",
+      "connectWallet": "Kết nối ví {chain}",
+      "insufficientBalance": "Số dư không đủ",
+      "approve": "Phê duyệt {ticker}"
+    },
+    "toast": {
+      "success": "Thành công",
+      "approvalTransaction": "Giao dịch phê duyệt",
+      "errorSubmitting": "Lỗi gửi giao dịch",
+      "submittingTransaction": "Đang gửi giao dịch",
+      "transactionSubmitted": "Đã gửi giao dịch"
+    },
+    "confirm": {
+      "titleSwap": "Xác nhận hoán đổi",
+      "titleLimit": "Xác nhận lệnh giới hạn",
+      "limitPrice": "Giá giới hạn",
+      "limitPriceTooltip": "Giá mỗi đơn vị mà lệnh giới hạn của bạn sẽ được thực hiện. Lệnh chỉ khớp khi thị trường đạt đến mức giá này.",
+      "targetAmount": "Số lượng mục tiêu",
+      "targetAmountTooltip": "Số lượng chính xác bạn sẽ nhận được khi lệnh giới hạn được thực hiện ở mức giá bạn chỉ định.",
+      "minimumPayout": "Khoản nhận tối thiểu",
+      "minimumPayoutTooltip": "Số tiền tối thiểu được đảm bảo dựa trên mức trượt giá {slippage}% của bạn. Nếu điều kiện thị trường khiến bạn nhận ít hơn, giao dịch sẽ tự động bị hủy.",
+      "notProtected": "Không được bảo vệ",
+      "priceImpact": "Tác động giá",
+      "priceImpactTooltip": "Chênh lệch giữa giá thị trường và tỷ giá hoán đổi thực tế của bạn do quy mô giao dịch. Giao dịch lớn hơn thường có tác động giá cao hơn.",
+      "txFee": "Phí giao dịch",
+      "estimatedTime": "Thời gian ước tính",
+      "provider": "Nhà cung cấp",
+      "memo": "Memo",
+      "confirm": "Xác nhận"
+    },
+    "feeDialog": {
+      "title": "Phí đã bao gồm trong tỷ giá",
+      "description": "Các khoản phí này đã được tính trong tỷ giá — bạn không phải trả riêng.",
+      "liquidityFee": "Phí thanh khoản",
+      "liquidityFeeInfo": "Phí cho các nhà cung cấp thanh khoản trên tuyến đường",
+      "outboundFee": "Phí gửi đi",
+      "outboundFeeInfo": "Phí cho việc gửi giao dịch đi",
+      "platformFee": "Phí nền tảng",
+      "platformFeeInfo": "Phí do {app} tính"
+    },
+    "recipient": {
+      "addressPlaceholder": "Địa chỉ {chain}",
+      "invalidAddress": "Địa chỉ {chain} không hợp lệ",
+      "titleAddresses": "Nhập địa chỉ",
+      "titleReceiving": "Nhập địa chỉ nhận",
+      "enterRefundAddress": "Nhập địa chỉ hoàn tiền:",
+      "enterReceivingAddress": "Nhập địa chỉ nhận:",
+      "preparingSwap": "Đang chuẩn bị hoán đổi",
+      "next": "Tiếp"
+    },
+    "warning": {
+      "selfCustody": "Tôi hiểu rằng tôi phải sử dụng ví tự giám hộ. Tôi hiểu rằng việc sử dụng ví hợp đồng thông minh, địa chỉ sàn giao dịch, địa chỉ được ủy quyền hoặc ví EIP 7702 sẽ dẫn đến",
+      "ltcMweb": "Tôi hiểu rằng việc sử dụng địa chỉ LTC MWEB sẽ dẫn đến",
+      "sendExact": "Tôi hiểu rằng tôi phải gửi chính xác số lượng đã chỉ định từ ví tự giám hộ. Tôi hiểu rằng việc gửi từ ví hợp đồng thông minh, địa chỉ sàn giao dịch, địa chỉ được ủy quyền hoặc ví EIP 7702 sẽ dẫn đến",
+      "lossOfFunds": "mất tiền."
+    },
+    "selectAsset": {
+      "title": "Chọn đồng coin",
+      "allChains": "Tất cả chuỗi",
+      "search": "Tìm kiếm",
+      "currentlyUnavailable": "Hiện không khả dụng",
+      "selected": "Đã chọn"
+    },
+    "settings": {
+      "slippageTolerance": "Mức trượt giá",
+      "slippageToleranceTooltip": "Do biến động thị trường, giá có thể thay đổi trước khi hoàn tất. Cài đặt này đảm bảo bạn nhận được ít nhất số lượng tối thiểu của mình.",
+      "noProtection": "Không bảo vệ",
+      "slippageDescription": "Mức thay đổi giá tối đa có thể chấp nhận. Giao dịch sẽ thất bại nếu giá biến động bất lợi vượt quá mức này.",
+      "twapTitle": "TWAP (Giá trung bình theo trọng số thời gian)",
+      "twapTooltip": "Chỉ áp dụng cho các giao dịch khối lượng lớn. Giá tốt nhất mang lại mức giá tối ưu cho lệnh. Thời gian tốt nhất ưu tiên thời gian thực hiện hoán đổi (khi có thể). Tùy chỉnh cho phép bạn cấu hình số lượng mini-swap mà giao dịch sẽ được chia ra và thời gian giữa mỗi mini-swap.",
+      "twapDescription": "Giá trung bình theo trọng số thời gian",
+      "bestPrice": "Giá tốt nhất",
+      "bestTime": "Thời gian tốt nhất",
+      "custom": "Tùy chỉnh",
+      "numberOfSubSwaps": "Số lượng giao dịch con",
+      "numberOfSubSwapsDescription": "Chia giao dịch của bạn thành bao nhiêu giao dịch con. Nhiều giao dịch hơn = giá tốt hơn, thực hiện lâu hơn.",
+      "timeBetweenSubSwaps": "Thời gian giữa các giao dịch con",
+      "timeBetweenSubSwapsDescription": "Độ trễ giữa mỗi giao dịch con. Khoảng thời gian dài hơn cho phép các pool tái cân bằng để có giá tốt hơn.",
+      "reset": "Đặt lại",
+      "save": "Lưu"
+    },
+    "limit": {
+      "whenWorth": "Khi 1 {ticker} có giá trị",
+      "expiry": "Hết hạn",
+      "oneHour": "1 giờ",
+      "oneDay": "1 ngày",
+      "oneWeek": "1 tuần",
+      "market": "Thị trường"
+    },
+    "limitCancel": {
+      "titleModify": "Sửa lệnh giới hạn",
+      "titleCancel": "Hủy lệnh giới hạn",
+      "descriptionModify": "Việc sửa lệnh giới hạn này sẽ cập nhật giá mục tiêu. Một khoản phí mạng nhỏ sẽ được tính để xử lý việc sửa đổi.",
+      "descriptionCancel": "Việc hủy lệnh giới hạn này sẽ trả lại số tiền đã nạp về ví của bạn. Một khoản phí mạng nhỏ sẽ được tính để xử lý việc hủy.",
+      "youWillGet": "Bạn sẽ nhận được",
+      "fromCurrent": "{percent}% so với hiện tại",
+      "modifying": "Đang sửa...",
+      "cancelling": "Đang hủy...",
+      "loading": "Đang tải...",
+      "modifyOrder": "Sửa lệnh",
+      "cancelOrder": "Hủy lệnh",
+      "cancelSubmitted": "Đã gửi giao dịch hủy",
+      "modifySubmitted": "Đã gửi giao dịch sửa đổi",
+      "connectWarning": "Kết nối ví {chain} để {mode, select, cancel {hủy} modify {sửa} other {sửa}} lệnh này",
+      "switchWarning": "Chuyển sang ví {chain} để {mode, select, cancel {hủy} modify {sửa} other {sửa}} lệnh này",
+      "addressMismatch": "Ví đã kết nối không khớp với địa chỉ đã đặt lệnh này",
+      "tradingPaused": "Giao dịch {chain} hiện đang tạm dừng",
+      "errLoadInbound": "Không thể tải địa chỉ nhận",
+      "errActionFailed": "Không thể {mode, select, cancel {hủy} modify {sửa} other {sửa}} hoán đổi giới hạn"
+    },
+    "quoteTimer": {
+      "refresh": "Làm mới"
+    },
+    "route": {
+      "chooseRoute": "Chọn tuyến đường",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "GIÁ TỐT NHẤT",
+      "faster": "NHANH HƠN"
+    },
+    "instant": {
+      "sendTitle": "Gửi {asset}",
+      "sendDescription": "Gửi chính xác {amount} {ticker} đến địa chỉ bên dưới từ ví tự giám hộ.",
+      "destinationTag": "thẻ đích",
+      "memo": "memo",
+      "confirming": "Đang xác nhận",
+      "confirm": "Xác nhận",
+      "errMemoMissing": "Thiếu memo",
+      "errCalcAmount": "Không thể tính số lượng đề xuất",
+      "errPreflight": "Không thể thực hiện yêu cầu kiểm tra trước"
+    },
+    "error": {
+      "minAmountNoWallet": "Số lượng hoán đổi tối thiểu khi chưa kết nối ví là {amount} {ticker}",
+      "unknown": "Lỗi không xác định",
+      "insufficientOutboundFee": "Tài sản trả lại không đủ để thanh toán phí gửi đi",
+      "insufficientWithdrawalFee": "Số rút không đủ để thanh toán phí gửi đi",
+      "invalidSwap": "Hoán đổi không hợp lệ",
+      "insufficientFunds": "Số dư không đủ",
+      "sourceTargetSame": "Nguồn và đích không được trùng nhau",
+      "transactionCancelled": "Giao dịch đã hủy",
+      "insufficientFundsCaps": "Số dư không đủ",
+      "invalidToAddress": "Địa chỉ \"to\" không hợp lệ",
+      "pendingTransaction": "Giao dịch đang chờ xử lý. Vui lòng thử lại sau giây lát",
+      "insufficientReturnAmount": "Số lượng trả về không đủ",
+      "slippageExceeded": "Đã vượt mức trượt giá",
+      "amountZero": "Số lượng không được bằng không",
+      "invalidPrice": "Giá không hợp lệ",
+      "missingConfig": "Thiếu cấu hình trong Entry Adapter",
+      "insufficientLiquidity": "Thanh khoản on-chain không đủ cho một trong các tài sản cơ sở. Hãy thử tăng mức trượt giá."
+    }
+  },
+  "send": {
+    "title": "Gửi",
+    "amount": "Số lượng",
+    "to": "Đến",
+    "addressPlaceholder": "Địa chỉ {chain}",
+    "invalidAddress": "Địa chỉ {chain} không hợp lệ",
+    "transactionFee": "Phí giao dịch",
+    "send": "Gửi",
+    "selectCoin": "Chọn đồng coin",
+    "toast": {
+      "walletNotConnected": "Ví chưa kết nối. Vui lòng kết nối lại.",
+      "submitting": "Đang gửi giao dịch...",
+      "submitted": "Đã gửi giao dịch",
+      "submitError": "Lỗi gửi giao dịch"
+    }
+  },
+  "wallet": {
+    "chains": "Chuỗi",
+    "connected": "Đã kết nối",
+    "disconnected": "Đã ngắt kết nối",
+    "install": "Cài đặt",
+    "soon": "Sắp có",
+    "connectNamed": "Kết nối {name}",
+    "deselectAll": "Bỏ chọn tất cả",
+    "selectAll": "Chọn tất cả",
+    "evms": "EVMs",
+    "derivationPath": "Đường dẫn dẫn xuất",
+    "selectAccountType": "Chọn loại tài khoản",
+    "index": "Chỉ mục",
+    "openKeystore": "Mở Keystore",
+    "createNewWallet": "Tạo ví mới",
+    "importSeedPhrase": "Nhập cụm từ khôi phục",
+    "createWalletInstructions": "Hãy viết ra 12 từ này và lưu trữ an toàn ngoại tuyến. Cụm 12 từ này được dùng để khôi phục khóa riêng tư của ví bạn.",
+    "copyPhrase": "Sao chép cụm từ",
+    "confirmSavedPassphrase": "Tôi xác nhận đã lưu trữ an toàn cụm mật khẩu để khôi phục tài khoản của mình trong tương lai.",
+    "setupDecryptionPassword": "Thiết lập mật khẩu giải mã",
+    "setupPasswordInstructions": "Nhập mật khẩu mạnh để mã hóa ví bạn đã tạo. Đây là cách bạn truy cập ví của mình.",
+    "enterPassword": "Nhập mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "passwordMustMatch": "Mật khẩu phải khớp",
+    "create": "Tạo",
+    "importKeystore": "Nhập Keystore",
+    "selectOrDragKeystore": "Chọn hoặc kéo tệp keystore của bạn để tải lên",
+    "decryptionPassword": "Mật khẩu giải mã",
+    "password": "Mật khẩu",
+    "import": "Nhập",
+    "typeSeedPhrase": "Nhập cụm từ khôi phục của bạn",
+    "invalidFileType": "Loại tệp không hợp lệ. Vui lòng tải lên tệp JSON hoặc TXT.",
+    "noTokensFound": "Không tìm thấy token",
+    "copyAddress": "Sao chép địa chỉ",
+    "addressCopied": "Đã sao chép địa chỉ",
+    "disconnectWallet": "Ngắt kết nối {name}",
+    "noCoins": "Không có đồng coin",
+    "sendToken": "Gửi {ticker}",
+    "sidebar": {
+      "title": "Ví",
+      "sortWallets": "Sắp xếp ví",
+      "sortBy": "Sắp xếp theo",
+      "sortByName": "Tên (A-Z)",
+      "sortByBalance": "Số dư (Cao → Thấp)",
+      "externalWalletMode": "Chế độ ví ngoài",
+      "externalWalletModeDescription": "Nhập lệnh của bạn, nhấn nút Hoán đổi và làm theo hướng dẫn",
+      "externalWalletInfo": "Nếu một tài sản không được hỗ trợ trong chế độ ví ngoài, bạn sẽ được nhắc kết nối ví trong trình duyệt"
+    }
+  },
+  "riskLevel": {
+    "excellent": "Xuất sắc",
+    "good": "Tốt",
+    "fair": "Khá",
+    "title": "Mức độ rủi ro của nhà cung cấp",
+    "description": "Các mức này cho thấy cách nhà cung cấp xử lý hoán đổi và kiểm tra giao dịch.",
+    "excellentInfo": "Thực hiện trực tiếp on-chain. Không có kiểm tra hay đóng băng từ nhà cung cấp. Tự động hoàn tiền nếu hoán đổi thất bại.",
+    "goodInfo": "Nhà cung cấp tự động kiểm tra giao dịch trước khi hoàn tất. Nếu phát hiện vấn đề, hoán đổi bị từ chối và tiền được hoàn lại.",
+    "fairInfo": "Một số giao dịch có thể cần xác minh bổ sung. Nếu phát hiện vấn đề, tiền thường được hoàn lại tự động."
+  },
+  "tx": {
+    "title": "Lịch sử",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "onlyCreatorModify": "Chỉ người tạo hoán đổi ban đầu mới có thể sửa",
+    "showQr": "Hiển thị QR",
+    "modify": "Sửa",
+    "cancelOrder": "Hủy lệnh",
+    "remaining": "còn lại {time}",
+    "loading": "đang tải",
+    "status": {
+      "not_started": "Chờ nạp tiền",
+      "pending": "Đang chờ",
+      "swapping": "Đang hoán đổi",
+      "completed": "Hoàn tất",
+      "failed": "Thất bại",
+      "expired": "Hết hạn",
+      "refunded": "Đã hoàn tiền",
+      "unknown": "Không xác định"
+    },
+    "leg": {
+      "deposit": "Nạp {ticker}",
+      "send": "Gửi {ticker}",
+      "swap": "Hoán đổi {from} sang {to}"
+    }
+  },
+  "track": {
+    "title": "Theo dõi giao dịch"
+  }
+}

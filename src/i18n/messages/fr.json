@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "Connecter le portefeuille",
+    "balance": "Solde :",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "paste": "Coller",
+    "clear": "Effacer",
+    "expiresIn": "Expire dans",
+    "language": "Langue",
+    "address": {
+      "source": "Adresse source",
+      "destination": "Adresse de destination",
+      "refund": "Adresse de remboursement",
+      "deposit": "Adresse de dépôt"
+    }
+  },
+  "footer": {
+    "builtBy": "Conçu par",
+    "reportBugsTo": "Signaler les bugs à",
+    "gotQuestions": "Des questions ?"
+  },
+  "swap": {
+    "title": "Échanger",
+    "input": {
+      "sell": "Vendre",
+      "buy": "Acheter",
+      "priceImpact": "Impact sur le prix"
+    },
+    "button": {
+      "enterAmount": "Saisir le montant",
+      "quoting": "Cotation...",
+      "noValidQuotes": "Aucune cotation valide",
+      "swap": "Échanger",
+      "placeLimitOrder": "Placer un ordre à cours limité",
+      "connectWallet": "Connecter le portefeuille {chain}",
+      "insufficientBalance": "Solde insuffisant",
+      "approve": "Approuver {ticker}"
+    },
+    "toast": {
+      "success": "Succès",
+      "approvalTransaction": "Transaction d'approbation",
+      "errorSubmitting": "Erreur lors de l'envoi de la transaction",
+      "submittingTransaction": "Envoi de la transaction",
+      "transactionSubmitted": "Transaction envoyée"
+    },
+    "confirm": {
+      "titleSwap": "Confirmer l'échange",
+      "titleLimit": "Confirmer l'ordre à cours limité",
+      "limitPrice": "Prix limite",
+      "limitPriceTooltip": "Le prix unitaire auquel votre ordre à cours limité sera exécuté. L'ordre ne sera exécuté que lorsque le marché atteindra ce prix.",
+      "targetAmount": "Montant cible",
+      "targetAmountTooltip": "Le montant exact que vous recevrez lorsque votre ordre à cours limité sera exécuté au prix spécifié.",
+      "minimumPayout": "Paiement minimum",
+      "minimumPayoutTooltip": "Montant minimum garanti selon votre tolérance au slippage de {slippage} %. Si les conditions du marché vous donnaient moins, la transaction sera annulée automatiquement.",
+      "notProtected": "Non protégé",
+      "priceImpact": "Impact sur le prix",
+      "priceImpactTooltip": "La différence entre le prix du marché et votre taux d'échange réel due à la taille de la transaction. Les transactions plus importantes ont généralement un impact sur le prix plus élevé.",
+      "txFee": "Frais de tx",
+      "estimatedTime": "Temps estimé",
+      "provider": "Fournisseur",
+      "memo": "Mémo",
+      "confirm": "Confirmer"
+    },
+    "feeDialog": {
+      "title": "Frais inclus dans le taux",
+      "description": "Ces frais sont déjà inclus dans le taux — vous ne les payez pas séparément.",
+      "liquidityFee": "Frais de liquidité",
+      "liquidityFeeInfo": "Frais pour les fournisseurs de liquidité sur la route",
+      "outboundFee": "Frais de sortie",
+      "outboundFeeInfo": "Frais pour l'envoi de la transaction de sortie",
+      "platformFee": "Frais de plateforme",
+      "platformFeeInfo": "Frais facturés par {app}"
+    },
+    "recipient": {
+      "addressPlaceholder": "Adresse {chain}",
+      "invalidAddress": "Adresse {chain} invalide",
+      "titleAddresses": "Saisir les adresses",
+      "titleReceiving": "Saisir l'adresse de réception",
+      "enterRefundAddress": "Saisir l'adresse de remboursement :",
+      "enterReceivingAddress": "Saisir l'adresse de réception :",
+      "preparingSwap": "Préparation de l'échange",
+      "next": "Suivant"
+    },
+    "warning": {
+      "selfCustody": "Je comprends que je dois utiliser un portefeuille auto-hébergé. Je comprends qu'utiliser un portefeuille à contrat intelligent, une adresse d'échange, une adresse déléguée ou un portefeuille EIP 7702 entraînera une",
+      "ltcMweb": "Je comprends qu'utiliser une adresse LTC MWEB entraînera une",
+      "sendExact": "Je comprends que je dois envoyer exactement le montant spécifié depuis un portefeuille auto-hébergé. Je comprends qu'envoyer depuis un portefeuille à contrat intelligent, une adresse d'échange, une adresse déléguée ou un portefeuille EIP 7702 entraînera une",
+      "lossOfFunds": "perte de fonds."
+    },
+    "selectAsset": {
+      "title": "Sélectionner une pièce",
+      "allChains": "Toutes les chaînes",
+      "search": "Rechercher",
+      "currentlyUnavailable": "Actuellement indisponible",
+      "selected": "Sélectionnée"
+    },
+    "settings": {
+      "slippageTolerance": "Tolérance au slippage",
+      "slippageToleranceTooltip": "En raison de la volatilité du marché, les prix peuvent changer avant la finalisation. Ce paramètre garantit que vous recevez au moins votre montant minimum.",
+      "noProtection": "Aucune protection",
+      "slippageDescription": "Variation de prix maximale acceptable. La transaction échouera si le prix évolue défavorablement au-delà de ce montant.",
+      "twapTitle": "TWAP (prix moyen pondéré dans le temps)",
+      "twapTooltip": "Pertinent uniquement pour les échanges de gros volume. Best Price offre le prix optimal pour l'ordre. Best Time privilégie le temps d'exécution de l'échange (dans la mesure du possible). Custom vous permet de configurer le nombre de mini-échanges en lesquels l'échange doit être divisé et le temps entre chaque mini-échange.",
+      "twapDescription": "Prix moyen pondéré dans le temps",
+      "bestPrice": "Meilleur prix",
+      "bestTime": "Meilleur temps",
+      "custom": "Personnalisé",
+      "numberOfSubSwaps": "Nombre de sous-échanges",
+      "numberOfSubSwapsDescription": "En combien de sous-échanges diviser votre transaction. Plus de transactions = meilleur prix, exécution plus longue.",
+      "timeBetweenSubSwaps": "Temps entre les sous-échanges",
+      "timeBetweenSubSwapsDescription": "Délai entre chaque sous-échange. Des intervalles plus longs permettent aux pools de se rééquilibrer pour un meilleur prix.",
+      "reset": "Réinitialiser",
+      "save": "Enregistrer"
+    },
+    "limit": {
+      "whenWorth": "Quand 1 {ticker} vaut",
+      "expiry": "Expiration",
+      "oneHour": "1 heure",
+      "oneDay": "1 jour",
+      "oneWeek": "1 semaine",
+      "market": "Marché"
+    },
+    "limitCancel": {
+      "titleModify": "Modifier l'ordre à cours limité",
+      "titleCancel": "Annuler l'ordre à cours limité",
+      "descriptionModify": "Modifier cet ordre à cours limité mettra à jour le prix cible. De petits frais de réseau seront facturés pour traiter la modification.",
+      "descriptionCancel": "Annuler cet ordre à cours limité renverra vos fonds déposés vers votre portefeuille. De petits frais de réseau seront facturés pour traiter l'annulation.",
+      "youWillGet": "Vous recevrez",
+      "fromCurrent": "{percent} % par rapport à l'actuel",
+      "modifying": "Modification...",
+      "cancelling": "Annulation...",
+      "loading": "Chargement...",
+      "modifyOrder": "Modifier l'ordre",
+      "cancelOrder": "Annuler l'ordre",
+      "cancelSubmitted": "Transaction d'annulation envoyée",
+      "modifySubmitted": "Transaction de modification envoyée",
+      "connectWarning": "Connectez un portefeuille {chain} pour {mode, select, cancel {annuler} modify {modifier} other {modifier}} cet ordre",
+      "switchWarning": "Passez à un portefeuille {chain} pour {mode, select, cancel {annuler} modify {modifier} other {modifier}} cet ordre",
+      "addressMismatch": "Le portefeuille connecté ne correspond pas à l'adresse ayant placé cet ordre",
+      "tradingPaused": "Le trading {chain} est actuellement en pause",
+      "errLoadInbound": "Échec du chargement des adresses entrantes",
+      "errActionFailed": "Échec de {mode, select, cancel {l'annulation} modify {la modification} other {la modification}} de l'échange à cours limité"
+    },
+    "quoteTimer": {
+      "refresh": "Actualiser"
+    },
+    "route": {
+      "chooseRoute": "Choisir la route",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "MEILLEUR PRIX",
+      "faster": "PLUS RAPIDE"
+    },
+    "instant": {
+      "sendTitle": "Envoyer {asset}",
+      "sendDescription": "Envoyez exactement {amount} {ticker} à l'adresse ci-dessous depuis un portefeuille auto-hébergé.",
+      "destinationTag": "tag de destination",
+      "memo": "mémo",
+      "confirming": "Confirmation",
+      "confirm": "Confirmer",
+      "errMemoMissing": "Le mémo est manquant",
+      "errCalcAmount": "Échec du calcul du montant suggéré",
+      "errPreflight": "Échec de la requête de pré-vérification"
+    },
+    "error": {
+      "minAmountNoWallet": "Le montant minimum d'échange sans portefeuille connecté est de {amount} {ticker}",
+      "unknown": "Erreur inconnue",
+      "insufficientOutboundFee": "Actif retourné insuffisant pour payer les frais de sortie",
+      "insufficientWithdrawalFee": "Retrait insuffisant pour payer les frais de sortie",
+      "invalidSwap": "Échange invalide",
+      "insufficientFunds": "Fonds insuffisants",
+      "sourceTargetSame": "La source et la cible ne peuvent pas être identiques",
+      "transactionCancelled": "Transaction annulée",
+      "insufficientFundsCaps": "Fonds insuffisants",
+      "invalidToAddress": "Adresse \"to\" invalide",
+      "pendingTransaction": "Transaction en attente. Réessayez sous peu",
+      "insufficientReturnAmount": "Montant de retour insuffisant",
+      "slippageExceeded": "Tolérance au slippage dépassée",
+      "amountZero": "Le montant ne peut pas être nul",
+      "invalidPrice": "Prix invalide",
+      "missingConfig": "Configuration manquante dans l'adaptateur d'entrée",
+      "insufficientLiquidity": "Liquidité on-chain insuffisante pour l'un des actifs sous-jacents. Essayez d'augmenter la tolérance au slippage."
+    }
+  },
+  "send": {
+    "title": "Envoyer",
+    "amount": "Montant",
+    "to": "À",
+    "addressPlaceholder": "Adresse {chain}",
+    "invalidAddress": "Adresse {chain} invalide",
+    "transactionFee": "Frais de transaction",
+    "send": "Envoyer",
+    "selectCoin": "Sélectionner une pièce",
+    "toast": {
+      "walletNotConnected": "Portefeuille non connecté. Veuillez vous reconnecter.",
+      "submitting": "Envoi de la transaction...",
+      "submitted": "Transaction envoyée",
+      "submitError": "Erreur lors de l'envoi de la transaction"
+    }
+  },
+  "wallet": {
+    "chains": "Chaînes",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "install": "Installer",
+    "soon": "Bientôt",
+    "connectNamed": "Connecter {name}",
+    "deselectAll": "Tout désélectionner",
+    "selectAll": "Tout sélectionner",
+    "evms": "EVMs",
+    "derivationPath": "Chemin de dérivation",
+    "selectAccountType": "Sélectionner le type de compte",
+    "index": "Index",
+    "openKeystore": "Ouvrir Keystore",
+    "createNewWallet": "Créer un nouveau portefeuille",
+    "importSeedPhrase": "Importer la phrase de récupération",
+    "createWalletInstructions": "Notez ces 12 mots et conservez-les en lieu sûr hors ligne. Cette phrase de 12 mots sert à récupérer les clés privées de votre portefeuille.",
+    "copyPhrase": "Copier la phrase",
+    "confirmSavedPassphrase": "Je confirme avoir enregistré en lieu sûr la phrase secrète permettant de récupérer mon compte à l'avenir.",
+    "setupDecryptionPassword": "Configurer le mot de passe de déchiffrement",
+    "setupPasswordInstructions": "Saisissez un mot de passe robuste pour chiffrer le portefeuille créé. C'est ainsi que vous accéderez à votre portefeuille.",
+    "enterPassword": "Saisir le mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordMustMatch": "Les mots de passe doivent correspondre",
+    "create": "Créer",
+    "importKeystore": "Importer Keystore",
+    "selectOrDragKeystore": "Sélectionnez ou glissez votre fichier keystore pour le téléverser",
+    "decryptionPassword": "Mot de passe de déchiffrement",
+    "password": "Mot de passe",
+    "import": "Importer",
+    "typeSeedPhrase": "Tapez votre phrase de récupération",
+    "invalidFileType": "Type de fichier invalide. Veuillez téléverser un fichier JSON ou TXT.",
+    "noTokensFound": "Aucun token trouvé",
+    "copyAddress": "Copier l'adresse",
+    "addressCopied": "Adresse copiée",
+    "disconnectWallet": "Déconnecter {name}",
+    "noCoins": "Aucune pièce",
+    "sendToken": "Envoyer {ticker}",
+    "sidebar": {
+      "title": "Portefeuilles",
+      "sortWallets": "Trier les portefeuilles",
+      "sortBy": "Trier par",
+      "sortByName": "Nom (A-Z)",
+      "sortByBalance": "Solde (élevé → faible)",
+      "externalWalletMode": "Mode portefeuille externe",
+      "externalWalletModeDescription": "Saisissez votre ordre, cliquez sur le bouton Échanger et suivez les instructions",
+      "externalWalletInfo": "Si un actif n'est pas pris en charge en mode portefeuille externe, vous serez invité à connecter un portefeuille dans le navigateur"
+    }
+  },
+  "riskLevel": {
+    "excellent": "Excellent",
+    "good": "Bon",
+    "fair": "Correct",
+    "title": "Niveaux de risque des fournisseurs",
+    "description": "Ces niveaux montrent comment les fournisseurs gèrent les échanges et les vérifications de transactions.",
+    "excellentInfo": "Exécution directe on-chain. Aucune vérification ni gel du fournisseur. Remboursements automatiques en cas d'échec de l'échange.",
+    "goodInfo": "Le fournisseur vérifie automatiquement les transactions avant la finalisation. En cas de problème détecté, l'échange est rejeté et les fonds sont remboursés.",
+    "fairInfo": "Une vérification supplémentaire peut être requise pour certaines transactions. En cas de problème détecté, les fonds sont généralement remboursés automatiquement."
+  },
+  "tx": {
+    "title": "Historique",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "onlyCreatorModify": "Seul le créateur initial de l'échange peut le modifier",
+    "showQr": "Afficher le QR",
+    "modify": "Modifier",
+    "cancelOrder": "Annuler l'ordre",
+    "remaining": "{time} restant",
+    "loading": "chargement",
+    "status": {
+      "not_started": "Dépôt en attente",
+      "pending": "En attente",
+      "swapping": "Échange en cours",
+      "completed": "Terminé",
+      "failed": "Échoué",
+      "expired": "Expiré",
+      "refunded": "Remboursé",
+      "unknown": "Inconnu"
+    },
+    "leg": {
+      "deposit": "Déposer {ticker}",
+      "send": "Envoyer {ticker}",
+      "swap": "Échanger {from} contre {to}"
+    }
+  },
+  "track": {
+    "title": "Suivre la transaction"
+  }
+}

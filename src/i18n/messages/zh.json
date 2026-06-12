@@ -1,0 +1,290 @@
+{
+  "common": {
+    "connectWallet": "连接钱包",
+    "balance": "余额：",
+    "close": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "paste": "粘贴",
+    "clear": "清除",
+    "expiresIn": "剩余有效时间",
+    "language": "语言",
+    "address": {
+      "source": "源地址",
+      "destination": "目标地址",
+      "refund": "退款地址",
+      "deposit": "充值地址"
+    }
+  },
+  "footer": {
+    "builtBy": "开发者",
+    "reportBugsTo": "问题反馈至",
+    "gotQuestions": "有疑问？"
+  },
+  "swap": {
+    "title": "兑换",
+    "input": {
+      "sell": "卖出",
+      "buy": "买入",
+      "priceImpact": "价格影响"
+    },
+    "button": {
+      "enterAmount": "输入金额",
+      "quoting": "报价中...",
+      "noValidQuotes": "无有效报价",
+      "swap": "兑换",
+      "placeLimitOrder": "下达限价单",
+      "connectWallet": "连接 {chain} 钱包",
+      "insufficientBalance": "余额不足",
+      "approve": "授权 {ticker}"
+    },
+    "toast": {
+      "success": "成功",
+      "approvalTransaction": "授权交易",
+      "errorSubmitting": "提交交易出错",
+      "submittingTransaction": "正在提交交易",
+      "transactionSubmitted": "交易已提交"
+    },
+    "confirm": {
+      "titleSwap": "确认兑换",
+      "titleLimit": "确认限价单",
+      "limitPrice": "限价",
+      "limitPriceTooltip": "您的限价单将以此单价执行。仅当市场达到该价格时订单才会成交。",
+      "targetAmount": "目标金额",
+      "targetAmountTooltip": "当您的限价单以指定价格执行时您将收到的确切金额。",
+      "minimumPayout": "最低收款",
+      "minimumPayoutTooltip": "基于您 {slippage}% 滑点容差的最低保证金额。若市场状况会使您收到更少，交易将被自动取消。",
+      "notProtected": "未受保护",
+      "priceImpact": "价格影响",
+      "priceImpactTooltip": "因交易规模导致的市场价格与您实际兑换汇率之间的差异。较大的交易通常具有更高的价格影响。",
+      "txFee": "交易手续费",
+      "estimatedTime": "预计时间",
+      "provider": "提供方",
+      "memo": "备注",
+      "confirm": "确认"
+    },
+    "feeDialog": {
+      "title": "汇率已包含的费用",
+      "description": "这些费用已包含在汇率中——您无需另行支付。",
+      "liquidityFee": "流动性费用",
+      "liquidityFeeInfo": "支付给路由上流动性提供者的费用",
+      "outboundFee": "出账费用",
+      "outboundFeeInfo": "发送出账交易的费用",
+      "platformFee": "平台费用",
+      "platformFeeInfo": "由 {app} 收取的费用"
+    },
+    "recipient": {
+      "addressPlaceholder": "{chain} 地址",
+      "invalidAddress": "无效的 {chain} 地址",
+      "titleAddresses": "输入地址",
+      "titleReceiving": "输入接收地址",
+      "enterRefundAddress": "输入退款地址：",
+      "enterReceivingAddress": "输入接收地址：",
+      "preparingSwap": "正在准备兑换",
+      "next": "下一步"
+    },
+    "warning": {
+      "selfCustody": "我理解我必须使用自托管钱包。我理解使用智能合约钱包、交易所地址、委托地址或 EIP 7702 钱包将导致",
+      "ltcMweb": "我理解使用 LTC MWEB 地址将导致",
+      "sendExact": "我理解我必须从自托管钱包发送指定的确切金额。我理解从智能合约钱包、交易所地址、委托地址或 EIP 7702 钱包发送将导致",
+      "lossOfFunds": "资金损失。"
+    },
+    "selectAsset": {
+      "title": "选择币种",
+      "allChains": "所有链",
+      "search": "搜索",
+      "currentlyUnavailable": "当前不可用",
+      "selected": "已选择"
+    },
+    "settings": {
+      "slippageTolerance": "滑点容差",
+      "slippageToleranceTooltip": "由于市场波动，价格在完成前可能发生变化。此设置确保您至少收到您的最低金额。",
+      "noProtection": "无保护",
+      "slippageDescription": "可接受的最大价格变化。若价格不利变动超过此幅度，交易将失败。",
+      "twapTitle": "TWAP（时间加权平均价格）",
+      "twapTooltip": "仅适用于大额兑换。最优价格为订单提供最佳价格。最优时间优先考虑兑换执行时间（在可能的情况下）。自定义允许您配置兑换拆分的小额兑换数量以及每笔小额兑换之间的时间间隔。",
+      "twapDescription": "时间加权平均价格",
+      "bestPrice": "最优价格",
+      "bestTime": "最优时间",
+      "custom": "自定义",
+      "numberOfSubSwaps": "子兑换数量",
+      "numberOfSubSwapsDescription": "将您的交易拆分为多少笔子兑换。交易越多 = 价格越好，执行时间越长。",
+      "timeBetweenSubSwaps": "子兑换间隔时间",
+      "timeBetweenSubSwapsDescription": "每笔子兑换之间的延迟。间隔越长，资金池有更多时间重新平衡以获得更优价格。",
+      "reset": "重置",
+      "save": "保存"
+    },
+    "limit": {
+      "whenWorth": "当 1 {ticker} 价值",
+      "expiry": "有效期",
+      "oneHour": "1 小时",
+      "oneDay": "1 天",
+      "oneWeek": "1 周",
+      "market": "市价"
+    },
+    "limitCancel": {
+      "titleModify": "修改限价单",
+      "titleCancel": "取消限价单",
+      "descriptionModify": "修改此限价单将更新目标价格。处理修改将收取少量网络费用。",
+      "descriptionCancel": "取消此限价单将把您存入的资金退回您的钱包。处理取消将收取少量网络费用。",
+      "youWillGet": "您将获得",
+      "fromCurrent": "较当前 {percent}%",
+      "modifying": "修改中...",
+      "cancelling": "取消中...",
+      "loading": "加载中...",
+      "modifyOrder": "修改订单",
+      "cancelOrder": "取消订单",
+      "cancelSubmitted": "取消交易已提交",
+      "modifySubmitted": "修改交易已提交",
+      "connectWarning": "连接 {chain} 钱包以{mode, select, cancel {取消} modify {修改} other {修改}}此订单",
+      "switchWarning": "切换到 {chain} 钱包以{mode, select, cancel {取消} modify {修改} other {修改}}此订单",
+      "addressMismatch": "已连接的钱包与下达此订单的地址不匹配",
+      "tradingPaused": "{chain} 交易当前已暂停",
+      "errLoadInbound": "加载入账地址失败",
+      "errActionFailed": "{mode, select, cancel {取消} modify {修改} other {修改}}限价兑换失败"
+    },
+    "quoteTimer": {
+      "refresh": "刷新"
+    },
+    "route": {
+      "chooseRoute": "选择路由",
+      "price": "1 {from} = {price} {to}",
+      "bestPrice": "最优价格",
+      "faster": "更快"
+    },
+    "instant": {
+      "sendTitle": "发送 {asset}",
+      "sendDescription": "从自托管钱包向下方地址发送恰好 {amount} {ticker}。",
+      "destinationTag": "目标标签",
+      "memo": "备注",
+      "confirming": "确认中",
+      "confirm": "确认",
+      "errMemoMissing": "备注缺失",
+      "errCalcAmount": "计算建议金额失败",
+      "errPreflight": "预检请求失败"
+    },
+    "error": {
+      "minAmountNoWallet": "未连接钱包时的最低兑换金额为 {amount} {ticker}",
+      "unknown": "未知错误",
+      "insufficientOutboundFee": "返还资产不足以支付出账费用",
+      "insufficientWithdrawalFee": "提款不足以支付出账费用",
+      "invalidSwap": "无效兑换",
+      "insufficientFunds": "资金不足",
+      "sourceTargetSame": "源与目标不能相同",
+      "transactionCancelled": "交易已取消",
+      "insufficientFundsCaps": "资金不足",
+      "invalidToAddress": "无效的“to”地址",
+      "pendingTransaction": "交易待处理。请稍后重试",
+      "insufficientReturnAmount": "返还金额不足",
+      "slippageExceeded": "超出滑点容差",
+      "amountZero": "金额不能为零",
+      "invalidPrice": "无效价格",
+      "missingConfig": "入口适配器中缺少配置",
+      "insufficientLiquidity": "其中一种底层资产的链上流动性不足。请尝试提高滑点容差。"
+    }
+  },
+  "send": {
+    "title": "发送",
+    "amount": "金额",
+    "to": "至",
+    "addressPlaceholder": "{chain} 地址",
+    "invalidAddress": "无效的 {chain} 地址",
+    "transactionFee": "交易手续费",
+    "send": "发送",
+    "selectCoin": "选择币种",
+    "toast": {
+      "walletNotConnected": "钱包未连接。请重新连接。",
+      "submitting": "正在提交交易...",
+      "submitted": "交易已提交",
+      "submitError": "提交交易出错"
+    }
+  },
+  "wallet": {
+    "chains": "链",
+    "connected": "已连接",
+    "disconnected": "已断开",
+    "install": "安装",
+    "soon": "即将推出",
+    "connectNamed": "连接 {name}",
+    "deselectAll": "取消全选",
+    "selectAll": "全选",
+    "evms": "EVMs",
+    "derivationPath": "派生路径",
+    "selectAccountType": "选择账户类型",
+    "index": "索引",
+    "openKeystore": "打开 Keystore",
+    "createNewWallet": "创建新钱包",
+    "importSeedPhrase": "导入助记词",
+    "createWalletInstructions": "请写下这 12 个单词并安全地离线存储。此 12 词助记词用于恢复您的钱包私钥。",
+    "copyPhrase": "复制助记词",
+    "confirmSavedPassphrase": "我确认已安全保存助记词，以便日后恢复我的账户。",
+    "setupDecryptionPassword": "设置解密密码",
+    "setupPasswordInstructions": "输入一个强密码来加密您创建的钱包。这是您访问钱包的方式。",
+    "enterPassword": "输入密码",
+    "confirmPassword": "确认密码",
+    "passwordMustMatch": "密码必须一致",
+    "create": "创建",
+    "importKeystore": "导入 Keystore",
+    "selectOrDragKeystore": "选择或拖动您的 keystore 文件以上传",
+    "decryptionPassword": "解密密码",
+    "password": "密码",
+    "import": "导入",
+    "typeSeedPhrase": "输入您的助记词",
+    "invalidFileType": "无效的文件类型。请上传 JSON 或 TXT 文件。",
+    "noTokensFound": "未找到代币",
+    "copyAddress": "复制地址",
+    "addressCopied": "地址已复制",
+    "disconnectWallet": "断开 {name}",
+    "noCoins": "无币种",
+    "sendToken": "发送 {ticker}",
+    "sidebar": {
+      "title": "钱包",
+      "sortWallets": "排序钱包",
+      "sortBy": "排序方式",
+      "sortByName": "名称（A-Z）",
+      "sortByBalance": "余额（高 → 低）",
+      "externalWalletMode": "外部钱包模式",
+      "externalWalletModeDescription": "输入您的订单，点击兑换按钮，然后按照说明操作",
+      "externalWalletInfo": "如果某资产在外部钱包模式下不受支持，系统将提示您连接浏览器内钱包"
+    }
+  },
+  "riskLevel": {
+    "excellent": "优秀",
+    "good": "良好",
+    "fair": "一般",
+    "title": "提供方风险等级",
+    "description": "这些等级显示提供方如何处理兑换和交易检查。",
+    "excellentInfo": "直接链上执行。无提供方检查或冻结。兑换失败时自动退款。",
+    "goodInfo": "提供方在完成前自动检查交易。若检测到问题，兑换将被拒绝并退款。",
+    "fairInfo": "某些交易可能需要额外验证。若检测到问题，资金通常会自动退还。"
+  },
+  "tx": {
+    "title": "历史",
+    "today": "今天",
+    "yesterday": "昨天",
+    "onlyCreatorModify": "只有原始兑换创建者才能修改",
+    "showQr": "显示 QR",
+    "modify": "修改",
+    "cancelOrder": "取消订单",
+    "remaining": "剩余 {time}",
+    "loading": "加载中",
+    "status": {
+      "not_started": "充值待处理",
+      "pending": "待处理",
+      "swapping": "兑换中",
+      "completed": "已完成",
+      "failed": "失败",
+      "expired": "已过期",
+      "refunded": "已退款",
+      "unknown": "未知"
+    },
+    "leg": {
+      "deposit": "充值 {ticker}",
+      "send": "发送 {ticker}",
+      "swap": "将 {from} 兑换为 {to}"
+    }
+  },
+  "track": {
+    "title": "追踪交易"
+  }
+}

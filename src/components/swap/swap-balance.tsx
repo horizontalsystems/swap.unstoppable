@@ -1,9 +1,11 @@
 import { Loader } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { DecimalText } from '@/components/decimal/decimal-text'
 import { useBalance } from '@/hooks/use-balance'
 import { useAssetFrom } from '@/hooks/use-swap'
 
 export const SwapBalance = () => {
+  const t = useTranslations('common')
   const assetFrom = useAssetFrom()
   const { balance, isLoading: isBalanceLoading } = useBalance()
 
@@ -25,7 +27,7 @@ export const SwapBalance = () => {
 
   return (
     <div className="text-thor-gray flex gap-1 text-[10px]">
-      <span>Balance:</span>
+      <span>{t('balance')}</span>
       {balanceContent}
     </div>
   )
