@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { Footer } from '@/components/footer/footer'
 import { Header } from '@/components/header/header'
 import { TrackParams, TrackStatus } from './track-status'
+
+export const metadata: Metadata = {
+  title: 'Track Transaction | Unstoppable Swap',
+  robots: { index: false, follow: false }
+}
 
 interface TrackPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>

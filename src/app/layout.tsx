@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: AppConfig.description,
   icons: {
     icon: AppConfig.favicon,
-    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }]
+    apple: [{ url: '/apple-touch-icon.png', sizes: '500x500', type: 'image/png' }]
   },
   appleWebApp: {
     capable: true,
@@ -60,6 +60,17 @@ const manrope = Manrope({
   display: 'swap'
 })
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Unstoppable Swap',
+  url: AppConfig.baseUrl,
+  description: AppConfig.description,
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+}
+
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = (await getLocale()) as Locale
   const messages = await getMessages()
@@ -75,6 +86,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         />
       )}
       <body className={`${manrope.className} bg-tyler antialiased`}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <ReactQueryProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ThemeProvider defaultTheme="light" attribute="class">
