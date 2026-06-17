@@ -20,7 +20,7 @@ import { useResolveSource } from '@/hooks/use-resolve-source'
 import { useAssetFrom, useSwap } from '@/hooks/use-swap'
 import { useUrlParams } from '@/hooks/use-url-params'
 import { useSelectedAccount } from '@/hooks/use-wallets'
-import { resolvePriceImpact } from '@/lib/swap-helpers'
+import { QR_PROVIDERS, resolvePriceImpact } from '@/lib/swap-helpers'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
 
 export const Swap = () => {
@@ -54,8 +54,7 @@ export const Swap = () => {
       return new Error(te('minAmountNoWallet', { amount: minAmount.toSignificant(), ticker: assetFrom.ticker }))
   }, [memolessAsset, selectedAccount, valueFrom])
 
-  const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'CCE']
-  const instantSwapSupported = !!memolessAsset || qrProviders.includes(quote?.providers[0] as string)
+  const instantSwapSupported = !!memolessAsset || QR_PROVIDERS.includes(quote?.providers[0] as string)
 
   const priceImpact = useMemo(() => {
     return resolvePriceImpact(quote, rateFrom, rateTo)

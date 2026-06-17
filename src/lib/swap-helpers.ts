@@ -3,6 +3,8 @@ import { intervalToDuration } from 'date-fns'
 import { AssetRateMap } from '@/hooks/use-rates'
 import { QuoteResponseRoute } from '@/types'
 
+export const QR_PROVIDERS = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'CCE', 'PEGASUS']
+
 export type FeeData = {
   amount: USwapNumber
   usd: USwapNumber

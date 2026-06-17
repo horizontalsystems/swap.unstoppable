@@ -11,6 +11,7 @@ import { SwapError } from '@/components/swap/swap-error'
 import { SwapRecipient } from '@/components/swap/swap-recipient'
 import { ThemeButton } from '@/components/theme-button'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
+import { QR_PROVIDERS } from '@/lib/swap-helpers'
 import { generateId } from '@/lib/utils'
 import { useSetTransaction } from '@/store/transaction-store'
 import { ProviderName, QuoteResponseRoute } from '@/types'
@@ -75,8 +76,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
   const onConfirm = () => {
     if (!quote || !assetFrom) return
 
-    const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'CCE']
-    if (qrProviders.includes(provider)) {
+    if (QR_PROVIDERS.includes(provider)) {
       if (!quote.inboundAddress || !quote.qrCodeDataURL) return
 
       createChannel(quote, quote.qrCodeDataURL, quote.inboundAddress, quote.sellAmount, quote.expiration ? Number(quote.expiration) : undefined, quote.txExtraAttribute)

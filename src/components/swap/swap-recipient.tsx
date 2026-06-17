@@ -19,6 +19,7 @@ import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSlip
 import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
 import { getQuotes } from '@/lib/api'
 import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/memo-helpers'
+import { QR_PROVIDERS } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
 import { useIsLimitSwap, useLimitSwapBuyAmount, useLimitSwapExpiry } from '@/store/limit-swap-store'
 import { WalletAccount } from '@/store/wallets-store'
@@ -64,8 +65,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
   if (!assetFrom || !assetTo) return null
 
-  const qrProviders = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'THORCHAIN', 'CCE']
-  const refundRequired = !selectedAccount && qrProviders.includes(provider)
+  const refundRequired = !selectedAccount && [...QR_PROVIDERS, 'THORCHAIN'].includes(provider)
   const options = accounts.filter(a => a.network === assetTo.chain)
 
   useEffect(() => {
