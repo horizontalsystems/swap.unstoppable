@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { WalletIcon } from '@/components/wallet-icon'
@@ -39,15 +40,10 @@ export function Header() {
       })}
     >
       <div className="flex items-start justify-between gap-4">
-        <a
-          href={AppConfig.logoLink || '/'}
-          className="flex items-center gap-2"
-          rel="noopener noreferrer"
-          target={AppConfig.logoLink ? '_blank' : '_self'}
-        >
+        <Link href="/" className="flex items-center gap-2">
           <Image src={AppConfig.logo} alt={AppConfig.title} width={32} height={32} priority />
           <AppConfig.LogoText />
-        </a>
+        </Link>
 
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
           <ThemeSwitchButton />

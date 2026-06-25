@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
-import Script from 'next/script'
 import { ThemeProvider } from 'next-themes'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { NextIntlClientProvider } from 'next-intl'
@@ -78,13 +77,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang={locale} dir={getLangDir(locale)} data-brand={AppConfig.id} suppressHydrationWarning>
       {AppConfig.gtag && <GoogleAnalytics gaId={AppConfig.gtag} />}
-      {AppConfig.pixelId && (
-        <Script
-          dangerouslySetInnerHTML={{
-            __html: `!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');twq('config','${AppConfig.pixelId}')`
-          }}
-        />
-      )}
       <body className={`${manrope.className} bg-tyler antialiased`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <ReactQueryProvider>

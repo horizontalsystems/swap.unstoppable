@@ -15,10 +15,7 @@ type App = {
   logo: string
   LogoText: () => JSX.Element
   supportEmail: string
-  logoLink?: string
   gtag?: string
-  pixelId?: string
-  pixelEvent?: string
   discordLink?: string
   telegramLink?: string
 }
