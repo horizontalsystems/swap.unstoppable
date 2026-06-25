@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SwapPage } from '@/app/components/swap-page'
+import { AppConfig } from '@/config'
 
 const PAIR_PATTERN = /^sell-(.+?)-buy-(.+)$/
 
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const sell = assetTicker(match[1])
   const buy = assetTicker(match[2])
-  const title = `Swap ${sell} to ${buy} | Unstoppable Swap`
+  const title = `Swap ${sell} to ${buy} | ${AppConfig.name}`
   const description = `Exchange ${sell} for ${buy} at the best cross-chain rates from THORChain, Near, 1inch, and more — non-custodial, no sign-up, no limits.`
   const canonical = `/sell-${match[1].toUpperCase()}-buy-${match[2].toUpperCase()}`
 
@@ -39,8 +40,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: { canonical },
-    openGraph: { title, description, url: canonical, siteName: 'Unstoppable Swap', images: ['/og-image.png'], type: 'website' },
-    twitter: { card: 'summary_large_image', title, description, images: ['/og-image.png'] }
+    openGraph: { title, description, url: canonical, siteName: AppConfig.name, images: [AppConfig.ogImage], type: 'website' },
+    twitter: { card: 'summary_large_image', title, description, images: [AppConfig.ogImage] }
   }
 }
 

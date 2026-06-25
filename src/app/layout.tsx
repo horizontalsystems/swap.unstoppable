@@ -17,21 +17,21 @@ export const metadata: Metadata = {
   description: AppConfig.description,
   icons: {
     icon: AppConfig.favicon,
-    apple: [{ url: '/apple-touch-icon.png', sizes: '500x500', type: 'image/png' }]
+    apple: [{ url: AppConfig.appIcon, sizes: '500x500', type: 'image/png' }]
   },
   appleWebApp: {
     capable: true,
-    title: 'Unstoppable Swap',
+    title: AppConfig.name,
     statusBarStyle: 'black-translucent'
   },
   openGraph: {
     title: AppConfig.title,
     description: AppConfig.description,
     url: AppConfig.baseUrl,
-    siteName: 'Unstoppable Swap',
+    siteName: AppConfig.name,
     images: [
       {
-        url: `${AppConfig.baseUrl}/og-image.png`,
+        url: `${AppConfig.baseUrl}${AppConfig.ogImage}`,
         width: 1200,
         height: 630,
         alt: AppConfig.title
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     description: AppConfig.description,
     images: [
       {
-        url: `${AppConfig.baseUrl}/og-image.png`,
+        url: `${AppConfig.baseUrl}${AppConfig.ogImage}`,
         width: 1200,
         height: 630,
         alt: AppConfig.title
@@ -63,7 +63,7 @@ const manrope = Manrope({
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: 'Unstoppable Swap',
+  name: AppConfig.name,
   url: AppConfig.baseUrl,
   description: AppConfig.description,
   applicationCategory: 'FinanceApplication',

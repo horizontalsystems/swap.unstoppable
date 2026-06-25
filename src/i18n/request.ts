@@ -1,6 +1,6 @@
 import { getRequestConfig } from 'next-intl/server'
 import { cookies } from 'next/headers'
-import { COOKIE_NAME, defaultLocale, isLocale } from './config'
+import { baseLocale, COOKIE_NAME, defaultLocale, isLocale } from './config'
 import en from './messages/en.json'
 
 type Messages = Record<string, unknown>
@@ -27,8 +27,7 @@ export default getRequestConfig(async () => {
   const cookieLocale = (await cookies()).get(COOKIE_NAME)?.value
   const locale = isLocale(cookieLocale) ? cookieLocale : defaultLocale
 
-  const messages =
-    locale === defaultLocale ? en : withFallback(en as Messages, (await import(`./messages/${locale}.json`)).default)
+  const messages = locale === baseLocale ? en : withFallback(en as Messages, (await import(`./messages/${locale}.json`)).default)
 
   return { locale, messages: messages as Messages }
 })

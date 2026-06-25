@@ -28,6 +28,7 @@ export const locales = [
 export type Locale = (typeof locales)[number]
 
 export const defaultLocale: Locale = 'en'
+export const baseLocale: Locale = 'en'
 
 export const COOKIE_NAME = 'NEXT_LOCALE'
 

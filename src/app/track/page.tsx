@@ -2,10 +2,11 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { Footer } from '@/components/footer/footer'
 import { Header } from '@/components/header/header'
+import { AppConfig } from '@/config'
 import { TrackParams, TrackStatus } from './track-status'
 
 export const metadata: Metadata = {
-  title: 'Track Transaction | Unstoppable Swap',
+  title: `Track Transaction | ${AppConfig.name}`,
   robots: { index: false, follow: false }
 }
 
