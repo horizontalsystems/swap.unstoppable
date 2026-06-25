@@ -41,8 +41,8 @@ export function Header() {
     >
       <div className="flex items-start justify-between gap-4">
         <Link href="/" className="flex items-center gap-2">
-          <Image src={AppConfig.logo} alt={AppConfig.title} width={32} height={32} priority />
-          <AppConfig.LogoText />
+          <Image src={AppConfig.logo} alt={AppConfig.title} width={AppConfig.logoWidth ?? 32} height={32} priority />
+          {AppConfig.LogoText && <AppConfig.LogoText />}
         </Link>
 
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">

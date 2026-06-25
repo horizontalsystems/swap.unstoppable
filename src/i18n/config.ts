@@ -1,3 +1,5 @@
+import { AppConfig } from '@/config'
+
 // i18n configuration — cookie-based locale (no locale in the URL)
 export const locales = [
   'en',
@@ -27,7 +29,9 @@ export const locales = [
 
 export type Locale = (typeof locales)[number]
 
-export const defaultLocale: Locale = 'en'
+export const isLocale = (value: unknown): value is Locale => locales.includes(value as Locale)
+
+export const defaultLocale: Locale = isLocale(AppConfig.defaultLocale) ? AppConfig.defaultLocale : 'en'
 export const baseLocale: Locale = 'en'
 
 export const COOKIE_NAME = 'NEXT_LOCALE'
@@ -63,5 +67,3 @@ export const localeNames: Record<Locale, string> = {
 const rtlLocales: Locale[] = ['fa', 'ar', 'arz', 'ur', 'lah']
 
 export const getLangDir = (locale: Locale): 'rtl' | 'ltr' => (rtlLocales.includes(locale) ? 'rtl' : 'ltr')
-
-export const isLocale = (value: unknown): value is Locale => locales.includes(value as Locale)

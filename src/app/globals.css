@@ -191,6 +191,12 @@
     --brand-second: var(--rb-d);
     --brand-third: var(--sp-d);
   }
+
+  [data-brand="xmrtrade"] {
+    --brand-first: #fe5c02;
+    --brand-second: #ff7a1f;
+    --brand-third: #ee4d00;
+  }
 }
 
 @layer base {
