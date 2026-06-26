@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "ウォレットを接続",
+    "integrate": "統合",
     "balance": "残高：",
     "close": "閉じる",
     "back": "戻る",

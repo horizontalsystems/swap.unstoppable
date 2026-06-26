@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "Connetti wallet",
+    "integrate": "Integra",
     "balance": "Saldo:",
     "close": "Chiudi",
     "back": "Indietro",

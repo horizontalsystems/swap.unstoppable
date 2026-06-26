@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "連接錢包",
+    "integrate": "整合",
     "balance": "餘額：",
     "close": "關閉",
     "back": "返回",

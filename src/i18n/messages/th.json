@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "เชื่อมต่อกระเป๋าเงิน",
+    "integrate": "ผสานรวม",
     "balance": "ยอดคงเหลือ:",
     "close": "ปิด",
     "back": "ย้อนกลับ",

@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "Connect Wallet",
+    "integrate": "Integrate",
     "balance": "Balance:",
     "close": "Close",
     "back": "Back",

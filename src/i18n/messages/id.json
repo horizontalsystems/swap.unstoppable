@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "Hubungkan Dompet",
+    "integrate": "Integrasikan",
     "balance": "Saldo:",
     "close": "Tutup",
     "back": "Kembali",

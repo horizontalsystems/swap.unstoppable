@@ -46,6 +46,9 @@ export function Header() {
         </Link>
 
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
+          <a href="/affiliate" className="hover:text-primary hidden px-3 text-sm font-medium transition-colors md:flex md:items-center">
+            {t('integrate')}
+          </a>
           <ThemeSwitchButton />
           <LanguageSwitchButton />
           <TransactionHistoryButton />

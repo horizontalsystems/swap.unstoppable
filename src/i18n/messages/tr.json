@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "Cüzdan Bağla",
+    "integrate": "Entegre Et",
     "balance": "Bakiye:",
     "close": "Kapat",
     "back": "Geri",

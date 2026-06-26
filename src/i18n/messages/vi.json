@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "Kết nối ví",
+    "integrate": "Tích hợp",
     "balance": "Số dư:",
     "close": "Đóng",
     "back": "Quay lại",

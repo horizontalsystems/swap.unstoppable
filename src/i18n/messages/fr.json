@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "Connecter le portefeuille",
+    "integrate": "Intégrer",
     "balance": "Solde :",
     "close": "Fermer",
     "back": "Retour",

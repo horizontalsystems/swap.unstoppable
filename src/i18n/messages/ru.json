@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "Подключить кошелёк",
+    "integrate": "Интеграция",
     "balance": "Баланс:",
     "close": "Закрыть",
     "back": "Назад",

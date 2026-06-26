@@ -1,6 +1,7 @@
 {
   "common": {
     "connectWallet": "Conectar billetera",
+    "integrate": "Integrar",
     "balance": "Saldo:",
     "close": "Cerrar",
     "back": "Atrás",
