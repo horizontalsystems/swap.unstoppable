@@ -13,6 +13,7 @@ import {
   UTXOChains
 } from '@uswap/core'
 import { estimateTransactionFee } from '@uswap/toolboxes/cosmos'
+import { getProvider } from '@uswap/toolboxes/evm'
 import { useAssetFrom } from '@/hooks/use-swap'
 import { useWallets } from '@/hooks/use-wallets'
 import { getAssetBalance } from '@/lib/api'
@@ -80,11 +81,11 @@ export const useBalance = (): UseBalance => {
         try {
           if (EVMChains.includes(assetFrom.chain as EVMChain)) {
             const gasLimit = 300_000n
-            const evmWallet = uSwap.getWallet<EVMChain>(selected.provider, assetFrom.chain as EVMChain)
 
-            const estimateFn = evmWallet.estimateGasPrices
-            const gasPrices = await (typeof estimateFn === 'function' ? estimateFn() : estimateFn)
-            const { gasPrice, maxFeePerGas, maxPriorityFeePerGas } = gasPrices[FeeOption.Fast]
+            // Use the chain's configured RPC for gas, not the wallet's injected provider (which a
+            // multi-chain wallet keeps on one network — e.g. Polygon's gwei would zero out ETH).
+            const provider = await getProvider(assetFrom.chain as EVMChain)
+            const { gasPrice, maxFeePerGas, maxPriorityFeePerGas } = await provider.getFeeData()
 
             if (gasPrice) {
               return USwapNumber.fromBigInt(gasPrice * gasLimit, assetFrom.decimals)
