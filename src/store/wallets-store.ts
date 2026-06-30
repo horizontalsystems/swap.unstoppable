@@ -82,6 +82,7 @@ export const useWalletStore = create<WalletState>()(
     {
       name: 'uw-wallet-store',
       version: 1,
+      skipHydration: true, // Rehydrate on the client to avoid an import-cycle TDZ.
       partialize: state => ({
         accounts: state.accounts,
         selected: state.selected,
