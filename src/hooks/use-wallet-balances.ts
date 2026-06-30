@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useQueries } from '@tanstack/react-query'
+import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { AssetValue, Chain, USwapNumber } from '@uswap/core'
 import { useAssets } from '@/hooks/use-assets'
 import { useRates } from '@/hooks/use-rates'
@@ -37,6 +37,7 @@ export const useWalletBalances = () => {
   const accounts = useAccounts()
   const hasHydrated = useHasHydrated()
   const uSwap = getUSwap()
+  const queryClient = useQueryClient()
 
   const { iconMap, curatedIdentifiers } = useMemo(() => {
     const iconMap = new Map<string, string>()
@@ -58,7 +59,11 @@ export const useWalletBalances = () => {
         if (!wallet || !('getBalance' in wallet)) {
           return { balances: [] as AssetValue[], alchemyLogoMap: new Map<string, string>() }
         }
-        const rawBalances = await (wallet as any).getBalance(wallet.address, false)
+        const rawBalances = await queryClient.ensureQueryData({
+          queryKey: ['account-balance', account.network, account.address],
+          queryFn: () => (wallet as any).getBalance(wallet.address, false),
+          staleTime: 30_000
+        })
         const balances: AssetValue[] = rawBalances ? [...rawBalances] : []
 
         if (account.network === Chain.THORChain) {

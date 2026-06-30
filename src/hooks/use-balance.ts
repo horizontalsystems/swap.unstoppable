@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AssetValue,
   Chain,
@@ -32,6 +32,7 @@ export const useBalance = (): UseBalance => {
   const uSwap = getUSwap()
   const assetFrom = useAssetFrom()
   const { selected } = useWallets()
+  const queryClient = useQueryClient()
 
   const {
     data: balance,
@@ -62,7 +63,11 @@ export const useBalance = (): UseBalance => {
 
         if (balance) value = balance
       } else if ('getBalance' in wallet) {
-        const balances = await wallet.getBalance(wallet.address, true)
+        const balances = await queryClient.ensureQueryData({
+          queryKey: ['account-balance', assetFrom.chain, wallet.address],
+          queryFn: () => wallet.getBalance(wallet.address, false),
+          staleTime: 30_000
+        })
         const balance = balances.find(finder)
 
         if (balance) value = balance
