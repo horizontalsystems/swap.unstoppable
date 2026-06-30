@@ -59,7 +59,7 @@ export function getUSwap() {
         uSwap: process.env.NEXT_PUBLIC_USWAP_API_KEY
       },
       rpcUrls: {
-        [Chain.Ethereum]: ['https://eth.llamarpc.com', 'https://ethereum-rpc.publicnode.com'],
+        [Chain.Ethereum]: ['https://ethereum-rpc.publicnode.com', 'https://eth.llamarpc.com'],
         [Chain.Solana]: ['https://solana-mainnet.g.alchemy.com/v2/IBi7xnfvpuwGkBEFaAlm0']
       },
       envs: {

@@ -54,8 +54,11 @@ export const useBalance = (): UseBalance => {
 
       let value = AssetValue.from({ chain: assetFrom.chain, value: 0 })
 
-      const finder = (b: AssetValue) =>
-        `${b.chain}.${b.isSynthetic || b.isTradeAsset ? b.ticker : b.symbol}`.toLowerCase() === assetFrom.identifier.toLowerCase()
+      const finder = (b: AssetValue) => {
+        const symbolPart = b.isSynthetic || b.isTradeAsset ? b.ticker : b.symbol
+        const id = `${b.chain}.${symbolPart}`
+        return id.toLowerCase() === assetFrom.identifier.toLowerCase()
+      }
 
       if (assetFrom.chain === Chain.Near) {
         const balances = await getAssetBalance(assetFrom.chain, wallet.address, assetFrom.identifier)
