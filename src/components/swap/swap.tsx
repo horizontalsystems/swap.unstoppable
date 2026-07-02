@@ -13,6 +13,7 @@ import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapLimit } from '@/components/swap/swap-limit'
 import { SwapQuoteTimer } from '@/components/swap/swap-quote-timer'
 import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
+import { BarterPromotion } from '@/components/promotion/barter-promotion'
 import { useMemolessAssets } from '@/hooks/use-memoless-assets'
 import { useQuote } from '@/hooks/use-quote'
 import { useSwapRates } from '@/hooks/use-rates'
@@ -87,6 +88,8 @@ export const Swap = () => {
 
         <SwapButton instantSwapSupported={instantSwapSupported} instantSwapAvailable={!memolessError} />
         <SwapDetails />
+
+        <BarterPromotion />
       </div>
     </div>
   )

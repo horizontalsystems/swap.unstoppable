@@ -7,6 +7,7 @@ import { Icon } from '@/components/icons'
 import { RiskLevelBadge } from '@/components/risk-level/risk-level-badge'
 import { RiskLevelInfo } from '@/components/risk-level/risk-level-info'
 import { SwapProvider } from '@/components/swap/swap-provider'
+import { BarterPointsBadge } from '@/components/promotion/barter-points-badge'
 import { useProviders } from '@/hooks/use-providers'
 import { useSwapRates } from '@/hooks/use-rates'
 import { formatExpiration } from '@/lib/swap-helpers'
@@ -57,7 +58,10 @@ export function SwapRouteCard({
       <div className="flex items-center justify-between gap-2 p-4">
         <div className={cn('flex min-w-0 items-center gap-2', { 'w-full justify-between': !showRiskLevel })}>
           {providerAction || <SwapProvider provider={route.providers[0]} />}
-          {badge}
+          <span>
+            {badge}
+            <BarterPointsBadge provider={route.providers[0]} />
+          </span>
         </div>
         {riskLevel && (
           <RiskLevelBadge
