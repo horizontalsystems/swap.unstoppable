@@ -65,14 +65,6 @@ export const Swap = () => {
       <div className="w-full max-w-md">
         <div className="mb-3 flex items-center justify-between">
           <h1 className="text-leah text-xl font-medium">{t('title')}</h1>
-          {/*<div className="bg-blade rounded-full">*/}
-          {/*  <ThemeButton variant={isLimitSwap ? 'secondarySmall' : 'primarySmall'} onClick={() => setIsLimitSwap(false)}>*/}
-          {/*    Market*/}
-          {/*  </ThemeButton>*/}
-          {/*  <ThemeButton variant={isLimitSwap ? 'primarySmall' : 'secondarySmall'} onClick={() => setIsLimitSwap(true)}>*/}
-          {/*    Limit Order*/}
-          {/*  </ThemeButton>*/}
-          {/*</div>*/}
           <div className="flex items-center gap-4">
             <SwapQuoteTimer quote={quote} isLoading={isLoading} refetch={refetch} />
             <SwapAddressFrom />
