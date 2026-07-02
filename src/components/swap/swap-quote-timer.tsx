@@ -83,7 +83,7 @@ export const SwapQuoteTimer = ({ quote, isLoading, refetch }: SwapQuoteTimerProp
 
   return (
     <Tooltip content={t('refresh')}>
-      <div className="relative cursor-pointer" onClick={() => refetch()}>
+      <div className="relative h-8 cursor-pointer" onClick={() => refetch()}>
         <svg width="32" height="32" viewBox="0 0 28 28" className="-rotate-90">
           <circle cx="14" cy="14" r="12" fill="none" strokeWidth="2" className="stroke-blade" />
           <circle
