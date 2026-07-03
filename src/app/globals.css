@@ -197,6 +197,12 @@
     --brand-second: #ff7a1f;
     --brand-third: #ee4d00;
   }
+
+  [data-brand="thorxmr"] {
+    --brand-first: #FD7503;
+    --brand-second: #ff7a1f;
+    --brand-third: #ee4d00;
+  }
 }
 
 @layer base {

@@ -1,8 +1,10 @@
 import { JSX } from 'react'
 import { HeaderLogoText } from '@/components/header/header-logo-text'
 import { XmrtradeLogoText } from '@/components/header/xmrtrade-logo-text'
+import { ThorxmrLogo } from '@/components/header/thorxmr-logo'
+import { ThorxmrLogoText } from '@/components/header/thorxmr-logo-text'
 
-type AppKey = 'unstoppable' | 'xmrtrade'
+type AppKey = 'unstoppable' | 'xmrtrade' | 'thorxmr'
 type App = {
   id: AppKey
   title: string
@@ -15,6 +17,7 @@ type App = {
   ogImage: string
   logo: string
   logoWidth?: number
+  Logo?: () => JSX.Element
   LogoText?: () => JSX.Element
   defaultLocale: string
   supportEmail: string
@@ -57,6 +60,23 @@ const apps: Record<AppKey, App> = {
     LogoText: XmrtradeLogoText,
     defaultLocale: 'zh',
     supportEmail: 'support@xmrtrade.com'
+  },
+  thorxmr: {
+    id: 'thorxmr',
+    title: 'ThorXMR | Cross-Chain Crypto & Token Swaps',
+    name: 'ThorXMR',
+    shortName: 'ThorXMR',
+    description:
+      'Swap Monero, Bitcoin, Ethereum, and hundreds of tokens across chains with the best rates from THORChain, Near, 1inch, and more — non-custodial, no sign-up, no limits.',
+    baseUrl: 'https://thorxmr.com',
+    favicon: '/apps/thorxmr.ico',
+    appIcon: '/apps/thorxmr_apple_touch_icon.png',
+    ogImage: '/apps/thorxmr_og_image.png',
+    logo: '/apps/thorxmr_logo.svg',
+    Logo: ThorxmrLogo,
+    LogoText: ThorxmrLogoText,
+    defaultLocale: 'en',
+    supportEmail: 'support@thorxmr.com'
   }
 }
 
