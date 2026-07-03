@@ -50,8 +50,8 @@ export const useUrlParams = () => {
     if (!assets?.length || !hasHydrated || initialized.current) return
 
     const { sell, buy } = parsePath(pathname)
-    const sellAsset = resolveAsset(assets, sell, DEFAULT_SELL)
-    const buyAsset = resolveAsset(assets, buy, DEFAULT_BUY)
+    const sellAsset = resolveAsset(assets, sell, DEFAULT_SELL) ?? assets[0]
+    const buyAsset = resolveAsset(assets, buy, DEFAULT_BUY) ?? assets.find(a => a.identifier !== sellAsset?.identifier)
 
     if (sellAsset) setAssetFrom(sellAsset)
     if (buyAsset && buyAsset.identifier !== sellAsset?.identifier) setAssetTo(buyAsset)

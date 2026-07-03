@@ -1,7 +1,7 @@
 import { AssetValue, Chain, getChainConfig } from '@uswap/core'
 import { BalanceResponse, QuoteRequest, USwapApi } from '@uswap/helpers/api'
 import axios from 'axios'
-import { Provider, QuoteResponse } from '@/types'
+import { Provider, ProviderName, QuoteResponse } from '@/types'
 import { normalizeThorBankDenom } from '@/lib/swap-helpers'
 
 const uSwap = axios.create({
@@ -163,6 +163,23 @@ export const getAssetBalance = async (chain: Chain, address: string, identifier:
 
 export const getTokenList = async (provider: string) => {
   return uSwap.get(`/tokens?provider=${provider}`).then(res => res.data)
+}
+
+export const getProviderTokens = async (providerNames: ProviderName[]) => {
+  const lists = await Promise.all(providerNames.map(getTokenList))
+  const merged = new Map<string, any>()
+  lists.forEach((list, i) => {
+    for (const token of list.tokens ?? []) {
+      const key = `${token.chain}-${token.identifier}`.toLowerCase()
+      const existing = merged.get(key)
+      if (existing) {
+        existing.providers.push(providerNames[i])
+      } else {
+        merged.set(key, { ...token, providers: [providerNames[i]] })
+      }
+    }
+  })
+  return Array.from(merged.values())
 }
 
 export const getAllTokens = async () => {

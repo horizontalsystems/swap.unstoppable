@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { getChainConfig } from '@uswap/helpers'
 import { Asset } from '@/components/swap/asset'
-import { getAllTokens, getProviders } from '@/lib/api'
+import { AppConfig } from '@/config'
+import { getAllTokens, getProviders, getProviderTokens } from '@/lib/api'
 import { ProviderName } from '@/types'
 
 const EXTRA_CHAINS = new Set(['XMR', 'XLM'])
@@ -11,7 +12,8 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
   const { data, isLoading } = useQuery({
     queryKey: ['assets'],
     queryFn: async () => {
-      const [tokens, providers] = await Promise.all([getAllTokens(), getProviders()])
+      const appProviders = AppConfig.providers
+      const [tokens, providers] = await Promise.all([appProviders ? getProviderTokens(appProviders) : getAllTokens(), getProviders()])
       const assets = new Map<string, Asset>()
       const geckoMap = new Map<string, string>()
 
@@ -25,11 +27,16 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
           continue
         }
 
-        const providerNames: ProviderName[] = [...(token.providers ?? [])]
+        let providerNames: ProviderName[] = [...(token.providers ?? [])]
         for (const { name, chainIds } of manualProviderChains) {
           if (chainIds.has(token.chainId) && !providerNames.includes(name)) {
             providerNames.push(name)
           }
+        }
+
+        if (appProviders) {
+          providerNames = providerNames.filter(p => appProviders.includes(p))
+          if (!providerNames.length) continue
         }
 
         const key = `${token.chain}-${token.identifier}`.toLowerCase()
