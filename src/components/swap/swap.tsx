@@ -11,7 +11,6 @@ import { SwapError } from '@/components/swap/swap-error'
 import { SwapInputFrom } from '@/components/swap/swap-input-from'
 import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapLimit } from '@/components/swap/swap-limit'
-import { SwapQuoteTimer } from '@/components/swap/swap-quote-timer'
 import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
 import { BarterPromotion } from '@/components/promotion/barter-promotion'
 import { useMemolessAssets } from '@/hooks/use-memoless-assets'
@@ -31,7 +30,7 @@ export const Swap = () => {
   const selectedAccount = useSelectedAccount()
   const isLimitSwap = useIsLimitSwap()
   const { valueFrom } = useSwap()
-  const { quote, isLoading, refetch } = useQuote()
+  const { quote } = useQuote()
   const { assets: memolessAssets } = useMemolessAssets()
   const { rateFrom, rateTo } = useSwapRates()
 
@@ -67,17 +66,20 @@ export const Swap = () => {
         <div className="mb-3 flex items-center justify-between">
           <h1 className="text-leah h-8 text-xl font-medium">{t('title')}</h1>
           <div className="flex items-center gap-4">
-            <SwapQuoteTimer quote={quote} isLoading={isLoading} refetch={refetch} />
             <SwapAddressFrom />
             {/*<SwapSettings />*/}
           </div>
         </div>
 
-        <div className="bg-lawrence rounded-3xl border">
-          <SwapInputFrom />
+        <div className="flex flex-col gap-0.5">
+          <div className="bg-lawrence rounded-4xl border">
+            <SwapInputFrom />
+          </div>
           <SwapToggleAssets />
-          <SwapInputTo priceImpact={priceImpact} />
-          {isLimitSwap && <SwapLimit quote={quote} />}
+          <div className="bg-lawrence rounded-4xl border">
+            <SwapInputTo priceImpact={priceImpact} />
+            {isLimitSwap && <SwapLimit quote={quote} />}
+          </div>
         </div>
 
         {memolessError && (

@@ -78,18 +78,18 @@ export const SwapQuoteTimer = ({ quote, isLoading, refetch }: SwapQuoteTimerProp
   }
 
   const seconds = Math.ceil(timeRemaining / 1000)
-  const strokeDasharray = 2 * Math.PI * 12
+  const strokeDasharray = 2 * Math.PI * 10
   const strokeDashoffset = strokeDasharray - (strokeDasharray * progress) / 100
 
   return (
     <Tooltip content={t('refresh')}>
-      <div className="relative h-8 cursor-pointer" onClick={() => refetch()}>
-        <svg width="32" height="32" viewBox="0 0 28 28" className="-rotate-90">
-          <circle cx="14" cy="14" r="12" fill="none" strokeWidth="2" className="stroke-blade" />
+      <div className="relative h-6 cursor-pointer" onClick={() => refetch()}>
+        <svg width="24" height="24" viewBox="0 0 24 24" className="-rotate-90">
+          <circle cx="12" cy="12" r="10" fill="none" strokeWidth="2" className="stroke-blade" />
           <circle
-            cx="14"
-            cy="14"
-            r="12"
+            cx="12"
+            cy="12"
+            r="10"
             fill="none"
             strokeWidth="2"
             strokeDasharray={strokeDasharray}
@@ -98,7 +98,7 @@ export const SwapQuoteTimer = ({ quote, isLoading, refetch }: SwapQuoteTimerProp
             className="stroke-andy transition-all duration-100"
           />
         </svg>
-        <span className="text-thor-gray absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform text-[12px] font-semibold">
+        <span className="text-thor-gray absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform text-[10px] font-semibold">
           {seconds}
         </span>
       </div>

@@ -7,6 +7,7 @@ import { DecimalInput } from '@/components/decimal/decimal-input'
 import { useDialog } from '@/components/global-dialog'
 import { Icon } from '@/components/icons'
 import { PriceImpact } from '@/components/swap/price-impact'
+import { SwapQuoteTimer } from '@/components/swap/swap-quote-timer'
 import { SwapSelectAsset } from '@/components/swap/swap-select-asset'
 import { Tooltip } from '@/components/tooltip'
 import { useQuote } from '@/hooks/use-quote'
@@ -18,7 +19,7 @@ export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
   const t = useTranslations('swap.input')
   const assetTo = useAssetTo()
   const setAssetTo = useSetAssetTo()
-  const { quote } = useQuote()
+  const { quote, isLoading, refetch } = useQuote()
   const { openDialog } = useDialog()
   const { rateTo } = useSwapRates()
   const isLimitSwap = useIsLimitSwap()
@@ -38,8 +39,11 @@ export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
     })
 
   return (
-    <div className="px-6 pt-2 pb-6">
-      <div className="text-thor-gray mb-3 font-semibold">{t('buy')}</div>
+    <div className="px-6 pt-7 pb-6">
+      <div className="mb-4 flex items-center justify-between">
+        <div className="text-thor-gray">{t('buy')}</div>
+        <SwapQuoteTimer quote={quote} isLoading={isLoading} refetch={refetch} />
+      </div>
 
       <div className="flex items-center justify-between">
         <div className="flex-1">
@@ -63,11 +67,11 @@ export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
         </div>
         <div className="flex cursor-pointer items-center gap-2" onClick={onClick}>
           <AssetIcon asset={assetTo} />
-          <div className="flex w-16 flex-col items-start">
-            <span className="text-leah inline-block w-full truncate text-base font-semibold">
+          <div className="flex w-18 flex-col items-start">
+            <span className="text-leah inline-block w-full truncate text-lg font-semibold">
               {assetTo ? assetTo.ticker : <Skeleton className="mb-0.5 h-6 w-12" />}
             </span>
-            <span className="text-thor-gray inline-block w-full truncate text-xs">
+            <span className="text-thor-gray inline-block w-full truncate text-sm">
               {assetTo?.chain ? chainLabel(assetTo.chain) : <Skeleton className="mt-0.5 h-3 w-16" />}
             </span>
           </div>

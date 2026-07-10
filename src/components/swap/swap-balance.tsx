@@ -15,7 +15,11 @@ export const SwapBalance = () => {
     }
 
     if (balance) {
-      return <DecimalText amount={balance.spendable.toSignificant()} symbol={assetFrom?.ticker} />
+      return (
+        <span className="underline underline-offset-2">
+          <DecimalText amount={balance.spendable.toSignificant()} symbol={assetFrom?.ticker} />
+        </span>
+      )
     }
 
     return null
@@ -26,7 +30,7 @@ export const SwapBalance = () => {
   if (!balanceContent) return null
 
   return (
-    <div className="text-thor-gray flex gap-1 text-[10px]">
+    <div className="text-thor-gray flex items-center gap-1 text-xs">
       <span>{t('balance')}</span>
       {balanceContent}
     </div>
