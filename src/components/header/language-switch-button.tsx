@@ -1,12 +1,13 @@
 'use client'
 
 import { useTransition } from 'react'
+import Image from 'next/image'
 import { useLocale, useTranslations } from 'next-intl'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Icon } from '@/components/icons'
 import { ThemeButton } from '@/components/theme-button'
-import { defaultLocale, isLocale, type Locale, localeNames, locales } from '@/i18n/config'
+import { defaultLocale, isLocale, type Locale, localeFlags, localeNames, locales } from '@/i18n/config'
 import { setUserLocale } from '@/i18n/locale'
 import { cn } from '@/lib/utils'
 
@@ -27,12 +28,13 @@ export const LanguageSwitchButton = () => {
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <ThemeButton variant="secondarySmall" aria-label={t('language')} className="uppercase">
+          <Image src={localeFlags[current]} alt="" width={16} height={16} className="size-4 shrink-0" />
           <span className="sm:hidden">{current}</span>
           <span className="hidden sm:inline">{localeNames[current]}</span>
         </ThemeButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="rounded-xl">
-        <ScrollArea className="h-80">
+        <ScrollArea className="h-80" type="always">
           {locales.map(locale => (
             <DropdownMenuItem
               key={locale}
@@ -41,7 +43,10 @@ export const LanguageSwitchButton = () => {
               aria-current={locale === current}
               onSelect={() => onSelect(locale)}
             >
-              <span className={cn('text-xs font-semibold', { 'text-brand-first': locale === current })}>{localeNames[locale]}</span>
+              <span className="flex items-center gap-2.5">
+                <Image src={localeFlags[locale]} alt="" width={20} height={20} className="size-4 shrink-0" />
+                <span className={cn('text-xs font-semibold', { 'text-brand-first': locale === current })}>{localeNames[locale]}</span>
+              </span>
               {locale === current && <Icon name="check" className="text-brand-first size-4" />}
             </DropdownMenuItem>
           ))}

@@ -63,6 +63,32 @@ export const localeNames: Record<Locale, string> = {
   th: 'ไทย'
 }
 
+export const localeFlags: Record<Locale, string> = {
+  en: '/flags/us.svg',
+  zh: '/flags/cn.svg',
+  'zh-Hant': '/flags/tw.svg',
+  ko: '/flags/kr.svg',
+  ru: '/flags/ru.svg',
+  es: '/flags/es.svg',
+  fa: '/flags/ir.svg',
+  tr: '/flags/tr.svg',
+  hi: '/flags/in.svg',
+  ar: '/flags/sa.svg',
+  fr: '/flags/fr.svg',
+  bn: '/flags/bd.svg',
+  pt: '/flags/pt.svg',
+  ja: '/flags/jp.svg',
+  lah: '/flags/pk.svg',
+  ur: '/flags/pk.svg',
+  id: '/flags/id.svg',
+  de: '/flags/de.svg',
+  it: '/flags/it.svg',
+  pcm: '/flags/ng.svg',
+  arz: '/flags/eg.svg',
+  vi: '/flags/vn.svg',
+  th: '/flags/th.svg'
+}
+
 // Right-to-left locales need dir="rtl" on the <html> element.
 const rtlLocales: Locale[] = ['fa', 'ar', 'arz', 'ur', 'lah']
 
