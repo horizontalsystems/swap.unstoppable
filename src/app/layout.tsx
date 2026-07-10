@@ -83,7 +83,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <WalletStoreHydration />
         <ReactQueryProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
-            <ThemeProvider defaultTheme="light" attribute="class">
+            <ThemeProvider defaultTheme="light" attribute="class" disableTransitionOnChange>
               {children}
             </ThemeProvider>
           </NextIntlClientProvider>
