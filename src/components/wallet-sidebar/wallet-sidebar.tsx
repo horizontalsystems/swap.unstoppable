@@ -124,6 +124,10 @@ export function WalletSidebar({ isOpen, onOpenChange }: WalletSidebarProps) {
             </div>
           </div>
 
+          <ThemeButton onClick={handleConnectWallet} disabled={externalWalletMode} variant="primaryMedium" className="w-full">
+            {tc('connectWallet')}
+          </ThemeButton>
+
           {externalWalletMode && (
             <div className="border-jacob flex items-center gap-3 rounded-xl border p-4">
               <Icon name="warning" className="text-jacob size-6 shrink-0" />
@@ -156,12 +160,6 @@ export function WalletSidebar({ isOpen, onOpenChange }: WalletSidebarProps) {
               })}
             </div>
           )}
-        </div>
-
-        <div className="py-4">
-          <ThemeButton onClick={handleConnectWallet} disabled={externalWalletMode} variant="primaryMedium" className="w-full">
-            {tc('connectWallet')}
-          </ThemeButton>
         </div>
       </DrawerContent>
     </Drawer>
