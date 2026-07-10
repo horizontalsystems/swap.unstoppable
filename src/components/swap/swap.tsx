@@ -64,7 +64,7 @@ export const Swap = () => {
     <div className="flex flex-col items-center justify-center px-4 pt-4 pb-4 md:pb-20">
       <div className="w-full max-w-md">
         <div className="mb-3 flex items-center justify-between">
-          <h1 className="text-leah h-8 text-xl font-medium">{t('title')}</h1>
+          <h1 className="text-leah h-8 text-xl font-semibold">{t('title')}</h1>
           <div className="flex items-center gap-4">
             <SwapAddressFrom />
             {/*<SwapSettings />*/}

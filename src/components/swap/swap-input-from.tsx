@@ -42,7 +42,7 @@ export const SwapInputFrom = () => {
 
   return (
     <div className="px-6 pt-7 pb-6">
-      <div className="text-thor-gray mb-4">{t('sell')}</div>
+      <div className="text-thor-gray mb-4 font-semibold">{t('sell')}</div>
 
       <div className="flex items-center justify-between">
         <div className="flex-1">

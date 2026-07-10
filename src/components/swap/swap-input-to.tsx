@@ -41,7 +41,7 @@ export const SwapInputTo = ({ priceImpact }: { priceImpact?: USwapNumber }) => {
   return (
     <div className="px-6 pt-7 pb-6">
       <div className="mb-4 flex items-center justify-between">
-        <div className="text-thor-gray">{t('buy')}</div>
+        <div className="text-thor-gray font-semibold">{t('buy')}</div>
         <SwapQuoteTimer quote={quote} isLoading={isLoading} refetch={refetch} />
       </div>
 
