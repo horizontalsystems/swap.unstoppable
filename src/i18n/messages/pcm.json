@@ -55,7 +55,7 @@
       "targetAmountTooltip": "Di exact amount wey you go collect when your limit order execute for di price wey you set.",
       "minimumPayout": "Minimum Payout",
       "minimumPayoutTooltip": "Minimum amount wey dem guarantee base on your {slippage}% slippage tolerance. If market condition go give you less, dem go cancel di transaction automatically.",
-      "notProtected": "No Protection",
+      "notGuaranteed": "No Guarantee",
       "priceImpact": "Price Impact",
       "priceImpactTooltip": "Di difference between market price and your real swap rate because of how big di trade be. Bigger trades dey usually get higher price impact.",
       "txFee": "Tx Fee",

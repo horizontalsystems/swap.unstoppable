@@ -55,7 +55,7 @@
       "targetAmountTooltip": "The exact amount you will receive when your limit order executes at your specified price.",
       "minimumPayout": "Minimum Payout",
       "minimumPayoutTooltip": "Minimum guaranteed amount based on your {slippage}% slippage tolerance. If market conditions would give you less, the transaction will be canceled automatically.",
-      "notProtected": "Not Protected",
+      "notGuaranteed": "Not Guaranteed",
       "priceImpact": "Price Impact",
       "priceImpactTooltip": "The difference between the market price and your actual swap rate due to trade size. Larger trades typically have higher price impact.",
       "txFee": "Tx Fee",

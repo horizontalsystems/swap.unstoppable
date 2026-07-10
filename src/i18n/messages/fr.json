@@ -55,7 +55,7 @@
       "targetAmountTooltip": "Le montant exact que vous recevrez lorsque votre ordre à cours limité sera exécuté au prix spécifié.",
       "minimumPayout": "Paiement minimum",
       "minimumPayoutTooltip": "Montant minimum garanti selon votre tolérance au slippage de {slippage} %. Si les conditions du marché vous donnaient moins, la transaction sera annulée automatiquement.",
-      "notProtected": "Non protégé",
+      "notGuaranteed": "Non garanti",
       "priceImpact": "Impact sur le prix",
       "priceImpactTooltip": "La différence entre le prix du marché et votre taux d'échange réel due à la taille de la transaction. Les transactions plus importantes ont généralement un impact sur le prix plus élevé.",
       "txFee": "Frais de tx",

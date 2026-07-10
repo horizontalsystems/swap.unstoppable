@@ -55,7 +55,7 @@
       "targetAmountTooltip": "指値注文が指定した価格で約定した際に受け取る正確な金額です。",
       "minimumPayout": "最低受取額",
       "minimumPayoutTooltip": "{slippage}% のスリッページ許容範囲に基づく最低保証金額です。市場状況により受取額がこれを下回る場合、トランザクションは自動的にキャンセルされます。",
-      "notProtected": "保護されていません",
+      "notGuaranteed": "保証されません",
       "priceImpact": "価格への影響",
       "priceImpactTooltip": "取引規模による市場価格と実際のスワップレートとの差です。大きな取引ほど価格への影響が大きくなる傾向があります。",
       "txFee": "取引手数料",

@@ -55,7 +55,7 @@
       "targetAmountTooltip": "Limit emriniz belirttiğiniz fiyattan gerçekleştiğinde alacağınız kesin tutar.",
       "minimumPayout": "Asgari Ödeme",
       "minimumPayoutTooltip": "%{slippage} kayma toleransınıza göre garanti edilen asgari tutar. Piyasa koşulları size daha az verecekse işlem otomatik olarak iptal edilir.",
-      "notProtected": "Korumasız",
+      "notGuaranteed": "Garanti edilmez",
       "priceImpact": "Fiyat Etkisi",
       "priceImpactTooltip": "İşlem büyüklüğü nedeniyle piyasa fiyatı ile gerçek takas kurunuz arasındaki fark. Büyük işlemlerin fiyat etkisi genellikle daha yüksektir.",
       "txFee": "İşlem Ücreti",

@@ -172,7 +172,7 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                     {rateTo && <span className="font-medium">({expectedBuyAmountMaxSlippage.mul(rateTo).toCurrency()})</span>}
                   </div>
                 ) : (
-                  <span className="text-lucian font-semibold">{t('notProtected')}</span>
+                  <span className="text-lucian font-semibold">{t('notGuaranteed')}</span>
                 )}
               </div>
             )}

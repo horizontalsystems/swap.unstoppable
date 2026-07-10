@@ -55,7 +55,7 @@
       "targetAmountTooltip": "지정가 주문이 지정한 가격에 실행될 때 받게 될 정확한 금액입니다.",
       "minimumPayout": "최소 수령액",
       "minimumPayoutTooltip": "{slippage}% 슬리피지 허용 범위에 기반한 최소 보장 금액입니다. 시장 상황으로 인해 더 적게 받게 될 경우 트랜잭션이 자동으로 취소됩니다.",
-      "notProtected": "보호되지 않음",
+      "notGuaranteed": "보장되지 않음",
       "priceImpact": "가격 영향",
       "priceImpactTooltip": "거래 규모로 인한 시장 가격과 실제 스왑 환율 간의 차이입니다. 큰 거래일수록 일반적으로 가격 영향이 더 큽니다.",
       "txFee": "거래 수수료",

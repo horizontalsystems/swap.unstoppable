@@ -55,7 +55,7 @@
       "targetAmountTooltip": "Der genaue Betrag, den du erhältst, wenn deine Limit-Order zum angegebenen Preis ausgeführt wird.",
       "minimumPayout": "Mindestauszahlung",
       "minimumPayoutTooltip": "Garantierter Mindestbetrag basierend auf deiner Slippage-Toleranz von {slippage} %. Falls die Marktbedingungen dir weniger geben würden, wird die Transaktion automatisch abgebrochen.",
-      "notProtected": "Nicht geschützt",
+      "notGuaranteed": "Nicht garantiert",
       "priceImpact": "Preisauswirkung",
       "priceImpactTooltip": "Die Differenz zwischen dem Marktpreis und deinem tatsächlichen Swap-Kurs aufgrund der Handelsgröße. Größere Trades haben in der Regel eine höhere Preisauswirkung.",
       "txFee": "Tx-Gebühr",

@@ -55,7 +55,7 @@
       "targetAmountTooltip": "Số lượng chính xác bạn sẽ nhận được khi lệnh giới hạn được thực hiện ở mức giá bạn chỉ định.",
       "minimumPayout": "Khoản nhận tối thiểu",
       "minimumPayoutTooltip": "Số tiền tối thiểu được đảm bảo dựa trên mức trượt giá {slippage}% của bạn. Nếu điều kiện thị trường khiến bạn nhận ít hơn, giao dịch sẽ tự động bị hủy.",
-      "notProtected": "Không được bảo vệ",
+      "notGuaranteed": "Không được đảm bảo",
       "priceImpact": "Tác động giá",
       "priceImpactTooltip": "Chênh lệch giữa giá thị trường và tỷ giá hoán đổi thực tế của bạn do quy mô giao dịch. Giao dịch lớn hơn thường có tác động giá cao hơn.",
       "txFee": "Phí giao dịch",

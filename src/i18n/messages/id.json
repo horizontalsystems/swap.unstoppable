@@ -55,7 +55,7 @@
       "targetAmountTooltip": "Jumlah pasti yang akan Anda terima saat order limit Anda dieksekusi pada harga yang ditentukan.",
       "minimumPayout": "Pembayaran Minimum",
       "minimumPayoutTooltip": "Jumlah minimum yang dijamin berdasarkan toleransi slippage {slippage}% Anda. Jika kondisi pasar memberi Anda lebih sedikit, transaksi akan dibatalkan secara otomatis.",
-      "notProtected": "Tidak Terlindungi",
+      "notGuaranteed": "Tidak Dijamin",
       "priceImpact": "Dampak Harga",
       "priceImpactTooltip": "Selisih antara harga pasar dan kurs pertukaran aktual Anda akibat ukuran transaksi. Transaksi yang lebih besar biasanya memiliki dampak harga lebih tinggi.",
       "txFee": "Biaya Transaksi",

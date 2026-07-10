@@ -55,7 +55,7 @@
       "targetAmountTooltip": "El importe exacto que recibirás cuando tu orden límite se ejecute al precio especificado.",
       "minimumPayout": "Pago mínimo",
       "minimumPayoutTooltip": "Importe mínimo garantizado según tu tolerancia al deslizamiento del {slippage}%. Si las condiciones del mercado te dieran menos, la transacción se cancelará automáticamente.",
-      "notProtected": "Sin protección",
+      "notGuaranteed": "Sin garantía",
       "priceImpact": "Impacto en el precio",
       "priceImpactTooltip": "La diferencia entre el precio de mercado y tu tasa de intercambio real debido al tamaño de la operación. Las operaciones más grandes suelen tener un mayor impacto en el precio.",
       "txFee": "Comisión de tx",

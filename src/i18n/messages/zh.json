@@ -55,7 +55,7 @@
       "targetAmountTooltip": "当您的限价单以指定价格执行时您将收到的确切金额。",
       "minimumPayout": "最低收款",
       "minimumPayoutTooltip": "基于您 {slippage}% 滑点容差的最低保证金额。若市场状况会使您收到更少，交易将被自动取消。",
-      "notProtected": "未受保护",
+      "notGuaranteed": "不保证",
       "priceImpact": "价格影响",
       "priceImpactTooltip": "因交易规模导致的市场价格与您实际兑换汇率之间的差异。较大的交易通常具有更高的价格影响。",
       "txFee": "交易手续费",

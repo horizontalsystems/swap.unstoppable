@@ -55,7 +55,7 @@
       "targetAmountTooltip": "O valor exato que você receberá quando sua ordem limite for executada pelo preço especificado.",
       "minimumPayout": "Pagamento mínimo",
       "minimumPayoutTooltip": "Valor mínimo garantido com base na sua tolerância de slippage de {slippage}%. Se as condições de mercado lhe derem menos, a transação será cancelada automaticamente.",
-      "notProtected": "Não protegido",
+      "notGuaranteed": "Não garantido",
       "priceImpact": "Impacto no preço",
       "priceImpactTooltip": "A diferença entre o preço de mercado e sua taxa de troca real devido ao tamanho da operação. Operações maiores geralmente têm maior impacto no preço.",
       "txFee": "Taxa da tx",
