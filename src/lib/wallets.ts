@@ -2,7 +2,6 @@ import { Chain, getEIP6963Wallets, USwap, WalletOption } from '@uswap/core'
 import { EVMPlugin } from '@uswap/plugins/evm'
 import { NearPlugin } from '@uswap/plugins/near'
 import { P2PPlugin } from '@uswap/plugins/p2p'
-import { RadixPlugin } from '@uswap/plugins/radix'
 import { SolanaPlugin } from '@uswap/plugins/solana'
 import { MayachainPlugin, ThorchainPlugin } from '@uswap/plugins/thorchain'
 import { ctrlWallet } from '@uswap/wallets/ctrl'
@@ -20,7 +19,6 @@ const defaultPlugins = {
   ...EVMPlugin,
   ...MayachainPlugin,
   ...ThorchainPlugin,
-  ...RadixPlugin,
   ...SolanaPlugin,
   ...NearPlugin,
   ...P2PPlugin

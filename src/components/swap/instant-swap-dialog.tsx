@@ -11,7 +11,7 @@ import { SwapError } from '@/components/swap/swap-error'
 import { SwapRecipient } from '@/components/swap/swap-recipient'
 import { ThemeButton } from '@/components/theme-button'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
-import { QR_PROVIDERS } from '@/lib/swap-helpers'
+import { attachmentToTxExtra, getRouteMemo, QR_PROVIDERS } from '@/lib/swap-helpers'
 import { generateId } from '@/lib/utils'
 import { useSetTransaction } from '@/store/transaction-store'
 import { ProviderName, QuoteResponseRoute } from '@/types'
@@ -37,14 +37,21 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
   const { valueFrom } = useSwap()
   const setTransaction = useSetTransaction()
 
-  const [quote, setQuote] = useState<(QuoteResponseRoute & { qrCodeDataURL?: string }) | undefined>(undefined)
+  const [quote, setQuote] = useState<QuoteResponseRoute | undefined>(undefined)
   const [channel, setChannel] = useState<DepositChannel | undefined>(undefined)
   const [creatingChannel, setCreatingChannel] = useState(false)
   const [error, setError] = useState<Error | undefined>()
 
   if (!assetFrom || !assetTo) return null
 
-  const createChannel = (quote: QuoteResponseRoute, qrCodeData: string, address: string, value: string, expiration?: number, txExtraAttribute?: any) => {
+  const createChannel = (
+    quote: QuoteResponseRoute,
+    qrCodeData: string,
+    address: string,
+    value: string,
+    expiration?: number,
+    txExtraAttribute?: any
+  ) => {
     setChannel({
       qrCodeData,
       address,
@@ -56,7 +63,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
     setTransaction({
       uid: generateId(),
       provider,
-      providerSwapId: quote.providerSwapId,
+      uuid: quote.uuid,
       chainId: getChainConfig(assetFrom.chain).chainId,
       timestamp: new Date(),
       estimatedTime: quote.estimatedTime?.total,
@@ -77,14 +84,26 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
     if (!quote || !assetFrom) return
 
     if (QR_PROVIDERS.includes(provider)) {
-      if (!quote.inboundAddress || !quote.qrCodeDataURL) return
+      const execution = quote.execution
+      if (execution?.method !== 'transfer' || !execution.qr) {
+        setError(new Error(t('errDepositUnavailable')))
+        return
+      }
 
-      createChannel(quote, quote.qrCodeDataURL, quote.inboundAddress, quote.sellAmount, quote.expiration ? Number(quote.expiration) : undefined, quote.txExtraAttribute)
+      createChannel(
+        quote,
+        execution.qr.dataURL,
+        execution.depositAddress,
+        execution.amount,
+        quote.expiresAt ? quote.expiresAt / 1000 : undefined,
+        attachmentToTxExtra(execution.attachment)
+      )
 
       return
     }
 
-    if (!quote.memo) {
+    const memo = getRouteMemo(quote)
+    if (!memo) {
       setError(new Error(t('errMemoMissing')))
       return
     }
@@ -95,7 +114,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
     USwapApi.registerMemoless(
       {
         asset: assetFrom.identifier,
-        memo: quote.memo,
+        memo,
         requested_in_asset_amount: valueFrom.toSignificant()
       },
       {

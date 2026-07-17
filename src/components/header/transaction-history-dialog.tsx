@@ -145,6 +145,8 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                             <ClockFading className="text-thor-gray" size={16} />
                           ) : status === 'pending' || status === 'swapping' ? (
                             <LoaderCircle className="animate-spin" size={16} />
+                          ) : status === 'action_required' ? (
+                            <CircleAlert className="text-jacob" size={16} />
                           ) : status === 'completed' ? (
                             <Check className="text-brand-first" size={16} />
                           ) : status === 'failed' ? (
@@ -230,20 +232,24 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                             </div>
                           )}
 
-                          <div className="text-thor-gray flex items-center justify-between">
-                            <span>{tc('address.destination')}</span>
-                            <div className="flex items-center gap-2">
-                              <span className="text-leah">{truncate(details.toAddress)}</span>
-                              <CopyButton text={details.toAddress} />
+                          {details.toAddress && (
+                            <div className="text-thor-gray flex items-center justify-between">
+                              <span>{tc('address.destination')}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-leah">{truncate(details.toAddress)}</span>
+                                <CopyButton text={details.toAddress} />
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
 
-                        <div className="space-y-4 border-t p-4 text-xs font-semibold">
-                          {details.legs.map((legTx: any, i: number) => {
-                            return <div key={i}>{renderLeg(tx, legTx, t)}</div>
-                          })}
-                        </div>
+                        {details.legs?.length > 0 && (
+                          <div className="space-y-4 border-t p-4 text-xs font-semibold">
+                            {details.legs.map((legTx: any, i: number) => {
+                              return <div key={i}>{renderLeg(tx, legTx, t)}</div>
+                            })}
+                          </div>
+                        )}
                       </>
                     )}
                     {isExpanded && tx.provider === ProviderName.THORCHAIN && tx.hash && (

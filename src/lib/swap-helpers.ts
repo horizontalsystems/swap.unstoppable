@@ -1,9 +1,27 @@
 import { assetFromString, Chain, USwapNumber } from '@uswap/core'
+import { TransferAttachment } from '@uswap/helpers/api'
 import { intervalToDuration } from 'date-fns'
 import { AssetRateMap } from '@/hooks/use-rates'
 import { QuoteResponseRoute } from '@/types'
 
 export const QR_PROVIDERS = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'CCE', 'PEGASUS']
+
+export const getRouteMemo = (route: QuoteResponseRoute): string | undefined => {
+  return route.execution?.method === 'thorchain_deposit' ? route.execution.memo : undefined
+}
+
+export const getRouteDepositAddress = (route: QuoteResponseRoute): string | undefined => {
+  const execution = route.execution
+  if (execution?.method === 'transfer') return execution.depositAddress
+  if (execution?.method === 'thorchain_deposit') return execution.inboundAddress
+  return undefined
+}
+
+// maps a transfer attachment onto the { destinationTag | memo } shape persisted in transaction-store
+export const attachmentToTxExtra = (attachment?: TransferAttachment): { destinationTag?: string; memo?: string } | undefined => {
+  if (!attachment) return undefined
+  return attachment.type === 'destination_tag' ? { destinationTag: attachment.value } : { memo: attachment.value }
+}
 
 export type FeeData = {
   amount: USwapNumber

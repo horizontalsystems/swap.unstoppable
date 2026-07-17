@@ -9,13 +9,13 @@ import { chainLabel } from '@/components/connect-wallet/config'
 import { DecimalText } from '@/components/decimal/decimal-text'
 import { Icon } from '@/components/icons'
 import { useRates } from '@/hooks/use-rates'
-import { getTrack } from '@/lib/api'
+import { getTrack, getTrackEvm, getTrackThorchain } from '@/lib/api'
 import { cn, truncate } from '@/lib/utils'
 import { isTxPending, isTxTerminal, TxStatus } from '@/store/transaction-store'
 
 export interface TrackParams {
+  uuid?: string
   provider: string
-  providerSwapId?: string
   hash?: string
   chainId: string
   fromAsset: string
@@ -28,14 +28,49 @@ export interface TrackParams {
   refundAddress?: string
 }
 
+// tracks by uuid; legacy links without one fall back to the stateless on-chain trackers
+function fetchTrackStatus(params: TrackParams) {
+  if (params.uuid) {
+    return getTrack({ uuid: params.uuid, inboundTxHash: params.hash })
+  }
+
+  if (params.provider === 'THORCHAIN' || params.provider === 'MAYACHAIN') {
+    return getTrackThorchain({
+      provider: params.provider,
+      fromAsset: params.fromAsset,
+      toAsset: params.toAsset,
+      toAddress: params.toAddress,
+      inboundTxHash: params.hash,
+      depositAddress: params.depositAddress,
+      chainId: params.chainId || undefined,
+      fromAmount: params.fromAmount || undefined,
+      toAmount: params.toAmount || undefined,
+      fromAddress: params.fromAddress
+    })
+  }
+
+  if (params.provider === 'ONEINCH' || params.provider === 'BARTER') {
+    return getTrackEvm({
+      provider: params.provider,
+      hash: params.hash,
+      chainId: params.chainId,
+      fromAsset: params.fromAsset,
+      toAsset: params.toAsset,
+      toAddress: params.toAddress
+    })
+  }
+
+  throw new Error('Swap is not trackable: missing uuid')
+}
+
 export function TrackStatus({ params }: { params: TrackParams }) {
   const t = useTranslations('tx')
   const tc = useTranslations('common')
   const { data, isPending, isError } = useQuery({
     queryKey: ['track', params],
-    queryFn: () => getTrack(params),
+    queryFn: () => fetchTrackStatus(params),
     refetchInterval: query => {
-      const status: TxStatus = query.state.data?.status
+      const status: TxStatus | undefined = query.state.data?.status
       if (!status) return 10_000
       if (isTxPending(status) || (!query.state.data && !isTxTerminal(status))) return 10_000
       return false
@@ -50,7 +85,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
   const fromAddress = data?.fromAddress || params.fromAddress
   const toAddress = data?.toAddress || params.toAddress
   const depositAddress = params.depositAddress
-  const refundAddress = data?.refundAddress || params.refundAddress
+  const refundAddress = params.refundAddress
 
   const assetFrom = fromAssetId ? assetFromString(fromAssetId) : null
   const assetTo = toAssetId ? assetFromString(toAssetId) : null
@@ -140,9 +175,9 @@ export function TrackStatus({ params }: { params: TrackParams }) {
         </div>
       )}
 
-      {!isPending && !isError && data?.legs?.length > 0 && (
+      {!isPending && !isError && !!data?.legs?.length && (
         <div className="space-y-4 border-t px-4 py-4">
-          {data.legs.map((leg: any, i: number) => (
+          {data.legs!.map((leg: any, i: number) => (
             <LegRow key={i} leg={leg} txFromAsset={fromAssetId} />
           ))}
         </div>
@@ -154,6 +189,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
 function StatusIcon({ status }: { status: TxStatus }) {
   if (status === 'not_started') return <ClockFading className="text-thor-gray" size={16} />
   if (status === 'pending' || status === 'swapping') return <LoaderCircle className="animate-spin" size={16} />
+  if (status === 'action_required') return <CircleAlert className="text-jacob" size={16} />
   if (status === 'completed') return <Check className="text-brand-first" size={16} />
   if (status === 'failed') return <X className="text-lucian" size={16} />
   if (status === 'expired') return <ClockFading className="text-lucian" size={16} />

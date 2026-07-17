@@ -9,6 +9,8 @@ import { SwapRecipient } from '@/components/swap/swap-recipient'
 import { ThemeButton } from '@/components/theme-button'
 import { useBalance } from '@/hooks/use-balance'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
+import { getTrack } from '@/lib/api'
+import { getRouteDepositAddress, getRouteMemo } from '@/lib/swap-helpers'
 import { generateId } from '@/lib/utils'
 import { getUSwap } from '@/lib/wallets'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
@@ -42,14 +44,14 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
 
     const broadcast = uSwap
       .swap({
-        route: quote as any,
+        route: quote,
         feeOptionKey: FeeOption.Fast
       })
       .then((hash: string) => {
         setTransaction({
           uid: generateId(),
           provider: provider,
-          providerSwapId: quote.providerSwapId,
+          uuid: quote.uuid,
           chainId: getChainConfig(assetFrom.chain).chainId,
           hash: hash,
           timestamp: new Date(),
@@ -60,10 +62,15 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
           amountTo: new USwapNumber(quote.expectedBuyAmount).toSignificant(),
           addressFrom: quote.sourceAddress,
           addressTo: quote.destinationAddress || '',
-          addressDeposit: quote.inboundAddress,
+          addressDeposit: getRouteDepositAddress(quote),
           status: 'pending',
-          limitSwapMemo: isLimitSwap ? quote.memo : undefined
+          limitSwapMemo: isLimitSwap ? getRouteMemo(quote) : undefined
         })
+
+        // register the broadcast hash for tracking; the sync loop re-sends it on every poll
+        if (quote.uuid) {
+          getTrack({ uuid: quote.uuid, inboundTxHash: hash }).catch(() => {})
+        }
 
         setAmountFrom('')
         refetchBalance()

@@ -162,7 +162,8 @@
       "confirm": "Confirm",
       "errMemoMissing": "Memo is missing",
       "errCalcAmount": "Failed to calculate suggested amount",
-      "errPreflight": "Failed to preflight request"
+      "errPreflight": "Failed to preflight request",
+      "errDepositUnavailable": "Deposit details are unavailable. Please try again."
     },
     "error": {
       "minAmountNoWallet": "Minimum swap amount without a connected wallet is {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "Deposit Pending",
       "pending": "Pending",
       "swapping": "Swapping",
+      "action_required": "Action Required",
       "completed": "Completed",
       "failed": "Failed",
       "expired": "Expired",

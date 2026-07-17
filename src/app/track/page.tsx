@@ -24,8 +24,8 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
   }
 
   const trackParams: TrackParams = {
+    uuid: getString('uuid'),
     provider: getString('provider') ?? '',
-    providerSwapId: getString('providerSwapId'),
     hash: getString('hash'),
     chainId: getString('chainId') ?? '',
     fromAsset: getString('fromAsset') ?? '',

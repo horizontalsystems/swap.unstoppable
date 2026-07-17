@@ -1,15 +1,16 @@
-import { ProviderName } from '@/types'
+import { ProviderName, TrackResponse, TxStatus } from '@/types'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useShallow } from 'zustand/react/shallow'
 import { Asset } from '@/components/swap/asset'
 
-export type TxStatus = 'not_started' | 'pending' | 'swapping' | 'completed' | 'failed' | 'expired' | 'refunded' | 'unknown'
+export type { TxStatus }
 
 export interface Transaction {
   uid: string
   provider: ProviderName
-  providerSwapId?: string
+  // the /swap route uuid used for tracking; absent on pre-v2 records
+  uuid?: string
   chainId: string
   hash?: string
   timestamp: Date
@@ -32,7 +33,7 @@ export interface Transaction {
 interface TransactionStore {
   transactions: Transaction[]
   setTransaction: (tx: Transaction) => void
-  setTransactionDetails: (uid: string, data: any) => void
+  setTransactionDetails: (uid: string, data: TrackResponse) => void
   setTransactionStatus: (uid: string, status: TxStatus) => void
 }
 
@@ -53,7 +54,7 @@ export const transactionStore = create<TransactionStore>()(
         })
       },
 
-      setTransactionDetails: (uid, data: any) => {
+      setTransactionDetails: (uid, data: TrackResponse) => {
         set(state => {
           return {
             transactions: state.transactions.map(item => {
@@ -64,14 +65,14 @@ export const transactionStore = create<TransactionStore>()(
               const tx = {
                 ...item,
                 status: data.status,
-                hash: data.hash,
-                addressFrom: data.fromAddress,
+                hash: data.hash ?? item.hash,
+                addressFrom: data.fromAddress ?? item.addressFrom,
                 details: data
               }
 
               if (data.status === 'completed') {
-                tx.amountFrom = data.fromAmount
-                tx.amountTo = data.toAmount
+                tx.amountFrom = data.fromAmount ?? tx.amountFrom
+                tx.amountTo = data.toAmount ?? tx.amountTo
               }
 
               return tx
@@ -113,7 +114,9 @@ export const useSetTransactionStatus = () => transactionStore(state => state.set
 export const useTransactions = () => transactionStore(sortedTransactions)
 export const useHasTransactions = () => transactionStore(state => state.transactions.length > 0)
 
-export const isTxPending = (status: string) => status === 'not_started' || status === 'swapping' || status === 'pending'
+// action_required is non-terminal — the provider may still resolve it, keep polling
+export const isTxPending = (status: string) =>
+  status === 'not_started' || status === 'swapping' || status === 'pending' || status === 'action_required'
 export const isTxTerminal = (status: string) => status === 'completed' || status === 'failed' || status === 'expired' || status === 'refunded'
 
 export const usePendingTransactions = () =>

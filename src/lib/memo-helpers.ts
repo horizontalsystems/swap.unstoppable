@@ -1,7 +1,17 @@
 import { EstimatedTime } from '@uswap/helpers/api'
-import type { Asset } from '@/components/swap/asset'
+import { getRouteMemo } from '@/lib/swap-helpers'
 import { TwapMode } from '@/store/swap-store'
 import { QuoteResponseRoute } from '@/types'
+import type { Asset } from '@/components/swap/asset'
+
+function withMemo(quote: QuoteResponseRoute, memo: string): QuoteResponseRoute {
+  if (quote.execution?.method !== 'thorchain_deposit') return quote
+
+  return {
+    ...quote,
+    execution: { ...quote.execution, memo }
+  }
+}
 
 export const THORCHAIN_BLOCK_TIME_SECONDS = 6
 
@@ -57,12 +67,10 @@ export function modifyMemoForLimitSwap(memo: string, priceAtomic: string, expiry
 }
 
 export function prepareQuoteForLimitSwap(quote: QuoteResponseRoute, limitBuyAmount?: string, expiryBlocks?: number): QuoteResponseRoute {
-  if (!quote.memo || !limitBuyAmount) return quote
+  const memo = getRouteMemo(quote)
+  if (!memo || !limitBuyAmount) return quote
 
-  return {
-    ...quote,
-    memo: modifyMemoForLimitSwap(quote.memo, limitBuyAmount, expiryBlocks)
-  }
+  return withMemo(quote, modifyMemoForLimitSwap(memo, limitBuyAmount, expiryBlocks))
 }
 
 export function modifyMemoForStreaming(memo: string, interval: number, quantity: number): string {
@@ -150,7 +158,8 @@ export function prepareQuoteForStreaming(
   customInterval: number,
   customQuantity: number
 ): QuoteResponseRoute {
-  if (!quote.memo) return quote
+  const memo = getRouteMemo(quote)
+  if (!memo) return quote
 
   if (twapMode === 'bestPrice') {
     return quote
@@ -158,8 +167,7 @@ export function prepareQuoteForStreaming(
 
   if (twapMode === 'bestTime') {
     return {
-      ...quote,
-      memo: stripStreamingParams(quote.memo),
+      ...withMemo(quote, stripStreamingParams(memo)),
       estimatedTime: recalculateEstimatedTime(quote.estimatedTime, 0)
     }
   }
@@ -167,8 +175,7 @@ export function prepareQuoteForStreaming(
   // Custom: use user-specified values
   const swapSeconds = customInterval * customQuantity * THORCHAIN_BLOCK_TIME_SECONDS
   return {
-    ...quote,
-    memo: modifyMemoForStreaming(quote.memo, customInterval, customQuantity),
+    ...withMemo(quote, modifyMemoForStreaming(memo, customInterval, customQuantity)),
     estimatedTime: recalculateEstimatedTime(quote.estimatedTime, swapSeconds)
   }
 }

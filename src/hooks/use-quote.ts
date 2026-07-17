@@ -1,9 +1,8 @@
 import { RefetchOptions, useQuery } from '@tanstack/react-query'
 import { USwapNumber } from '@uswap/core'
-import { USwapError } from '@uswap/helpers'
 import { AppConfig } from '@/config'
 import { useAssetFrom, useAssetTo, useSlippage, useSwap } from '@/hooks/use-swap'
-import { getQuotes } from '@/lib/api'
+import { getRate, parseApiError } from '@/lib/api'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
 import { useQuoteStore } from '@/store/quote-store'
 import { ProviderName, QuoteResponseRoute } from '@/types'
@@ -57,7 +56,7 @@ export const useQuote = (): UseQuote => {
       if (valueFrom.eqValue(0)) return
       if (!assetFrom?.identifier || !assetTo?.identifier) return
 
-      return getQuotes(
+      return getRate(
         {
           buyAsset: assetTo.identifier,
           sellAsset: assetFrom.identifier,
@@ -80,16 +79,7 @@ export const useQuote = (): UseQuote => {
     refetchOnMount: false
   })
 
-  let newError = error
-  if (error instanceof USwapError) {
-    const cause = error.cause as any
-    const errors = cause.errorData?.providerErrors
-    if (errors && errors.length) {
-      newError = new Error(errors[0]?.message || errors[0]?.error)
-    } else if (cause.errorData?.error) {
-      newError = new Error(cause.errorData?.error)
-    }
-  }
+  const newError = error && parseApiError(error)
 
   const ready = !(isLoading || isRefetching || error)
   const allQuotes = ready && quotes ? quotes : []
@@ -104,15 +94,4 @@ export const useQuote = (): UseQuote => {
     setSelectedIndex,
     error: newError
   }
-}
-
-function createAbortController(signal: AbortSignal) {
-  const controller = new AbortController()
-  if (signal.aborted) {
-    controller.abort()
-  } else {
-    signal.addEventListener('abort', () => controller.abort(), { once: true })
-  }
-
-  return controller
 }

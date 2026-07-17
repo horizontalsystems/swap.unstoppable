@@ -1,5 +1,4 @@
 import { useQueries } from '@tanstack/react-query'
-import { getChainConfig } from '@uswap/core'
 import { AxiosError } from 'axios'
 import { getTrack } from '@/lib/api'
 import { isTxPending, isTxTerminal, usePendingTransactions, useSetTransactionDetails, useSetTransactionStatus } from '@/store/transaction-store'
@@ -21,27 +20,26 @@ export const useSyncTransactions = () => {
           return null
         }
 
-        return getTrack({
-          provider: tx.provider,
-          providerSwapId: tx.providerSwapId,
-          hash: tx.hash,
-          chainId: getChainConfig(tx.assetFrom.chain).chainId,
-          fromAsset: tx.assetFrom.identifier,
-          fromAddress: tx.addressFrom || '',
-          fromAmount: tx.amountFrom,
-          toAsset: tx.assetTo.identifier,
-          toAddress: tx.addressTo,
-          toAmount: tx.amountTo,
-          depositAddress: tx.addressDeposit
-        })
+        // pre-v2 records have no uuid and can no longer be tracked
+        if (!tx.uuid) {
+          setTransactionDetails(tx.uid, { status: 'unknown' })
+          return null
+        }
+
+        return getTrack({ uuid: tx.uuid, inboundTxHash: tx.hash })
           .then(data => {
             setTransactionDetails(tx.uid, data)
             return data
           })
           .catch(error => {
-            if (error instanceof AxiosError && error.response?.data?.error === 'txLogsParsingError') {
-              setTransactionStatus(tx.uid, 'unknown')
-              return null
+            if (error instanceof AxiosError) {
+              // 409 — not trackable yet, keep polling
+              if (error.response?.status === 409) return null
+
+              if (error.response?.data?.error === 'txLogsParsingError') {
+                setTransactionStatus(tx.uid, 'unknown')
+                return null
+              }
             }
 
             throw error

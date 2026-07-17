@@ -1,7 +1,7 @@
+import axios, { AxiosError } from 'axios'
 import { AssetValue, Chain, getChainConfig } from '@uswap/core'
-import { BalanceResponse, QuoteRequest, USwapApi } from '@uswap/helpers/api'
-import axios from 'axios'
-import { Provider, ProviderName, QuoteResponse } from '@/types'
+import { BalanceResponse, QuoteRequest, QuoteResponse, SwapRequest, USwapApi } from '@uswap/helpers/api'
+import { Provider, ProviderName, QuoteResponseRoute, TrackResponse } from '@/types'
 import { normalizeThorBankDenom } from '@/lib/swap-helpers'
 
 const uSwap = axios.create({
@@ -186,15 +186,40 @@ export const getAllTokens = async () => {
   return uSwap.get('/tokens/all').then(res => res.data)
 }
 
-export const getQuotes = async (json: QuoteRequest, signal?: AbortSignal) => {
+export const getRate = async (json: QuoteRequest, signal?: AbortSignal): Promise<QuoteResponseRoute[]> => {
   return uSwap
-    .post(`/quote`, json, { signal })
+    .post('/rate', json, { signal })
     .then(res => res.data)
-    .then((data: QuoteResponse) => data.routes)
+    .then((data: QuoteResponse) => data.routes as QuoteResponseRoute[])
 }
 
-export const getTrack = async (data: Record<string, any>) => {
+// commits the order with a single provider; returns one route (no { routes } wrapper)
+export const createSwap = async (json: SwapRequest): Promise<QuoteResponseRoute> => {
+  return uSwap.post('/swap', json).then(res => res.data as QuoteResponseRoute)
+}
+
+export const getTrack = async (data: { uuid: string; inboundTxHash?: string }): Promise<TrackResponse> => {
   return uSwap.post('/track', data).then(res => res.data)
+}
+
+// stateless on-chain trackers for swaps without a uuid (legacy /track page links)
+export const getTrackThorchain = async (data: Record<string, any>): Promise<TrackResponse> => {
+  return uSwap.post('/track/thorchain', data).then(res => res.data)
+}
+
+export const getTrackEvm = async (data: Record<string, any>): Promise<TrackResponse> => {
+  return uSwap.post('/track/evm', data).then(res => res.data)
+}
+
+export const parseApiError = (error: unknown): Error => {
+  if (error instanceof AxiosError) {
+    const data = error.response?.data
+    const providerError = data?.providerErrors?.[0]
+    const message = providerError?.message || providerError?.error || data?.error || data?.message
+    if (message) return new Error(message)
+  }
+
+  return error instanceof Error ? error : new Error(String(error))
 }
 
 export const getMimir = async (): Promise<Record<string, number>> => {

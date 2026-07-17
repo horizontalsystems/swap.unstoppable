@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { USwapError } from '@uswap/helpers'
 import { getAddressValidator } from '@uswap/toolboxes'
 import { LoaderCircle } from 'lucide-react'
 import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
@@ -16,8 +15,9 @@ import { ThemeButton } from '@/components/theme-button'
 import { Tooltip } from '@/components/tooltip'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSlippage, useSwap, useTwapMode } from '@/hooks/use-swap'
+import { useProviders } from '@/hooks/use-providers'
 import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
-import { getQuotes } from '@/lib/api'
+import { createSwap, parseApiError } from '@/lib/api'
 import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/memo-helpers'
 import { QR_PROVIDERS } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
@@ -52,6 +52,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const limitSwapBuyAmount = useLimitSwapBuyAmount()
   const limitSwapExpiry = useLimitSwapExpiry()
 
+  const { getProvider } = useProviders()
   const { valueFrom } = useSwap()
   const [quoting, setQuoting] = useState(false)
   const [quoteError, setQuoteError] = useState<Error | undefined>()
@@ -66,6 +67,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   if (!assetFrom || !assetTo) return null
 
   const refundRequired = !selectedAccount && [...QR_PROVIDERS, 'THORCHAIN'].includes(provider)
+  const requiresSourceAddress = getProvider(provider)?.executionType === 'signed_transaction'
   const options = accounts.filter(a => a.network === assetTo.chain)
 
   useEffect(() => {
@@ -97,19 +99,23 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const fetchQuote = () => {
     setQuoting(true)
 
-    getQuotes({
+    const sourceAddress = selectedAccount?.address
+    const resolvedRefundAddress = refundRequired ? refundAddress : provider === 'MAYACHAIN' ? undefined : selectedAccount?.address
+
+    createSwap({
       buyAsset: assetTo.identifier,
       sellAsset: assetFrom.identifier,
       sellAmount: valueFrom.toSignificant(),
-      sourceAddress: selectedAccount?.address,
-      destinationAddress: destinationAddress,
-      refundAddress: refundRequired ? refundAddress : provider === 'MAYACHAIN' ? undefined : selectedAccount?.address,
-      dry: !(refundRequired || selectedAccount),
+      // sourceAddress makes the server build an unsignedTx
+      sourceAddress: requiresSourceAddress ? sourceAddress : undefined,
+      destinationAddress,
+      refundAddress: resolvedRefundAddress,
       slippage: isLimitSwap ? 0 : (slippage ?? 99),
-      providers: [provider]
+      provider
     })
-      .then(quotes => {
-        let quote = quotes[0]
+      .then(route => {
+        // the API doesn't echo the request addresses — the confirm screen and plugins need them
+        let quote: QuoteResponseRoute = { ...route, sourceAddress, destinationAddress, refundAddress: resolvedRefundAddress }
 
         // For THORChain limit orders, modify the memo to use limit order format
         if (isLimitSwap && (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING')) {
@@ -120,20 +126,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
         onFetchQuote(quote)
       })
-      .catch(error => {
-        let newError = error
-        if (error instanceof USwapError) {
-          const cause = error.cause as any
-          const errors = cause.errorData?.providerErrors
-          if (errors && errors.length) {
-            newError = new Error(errors[0]?.message || errors[0]?.error)
-          } else if (cause.errorData?.error) {
-            newError = new Error(cause.errorData?.error)
-          }
-        }
-
-        setQuoteError(newError)
-      })
+      .catch(error => setQuoteError(parseApiError(error)))
       .finally(() => setQuoting(false))
   }
 

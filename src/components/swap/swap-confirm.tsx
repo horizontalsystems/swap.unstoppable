@@ -14,7 +14,7 @@ import { SwapProvider } from '@/components/swap/swap-provider'
 import { InfoTooltip } from '@/components/tooltip'
 import { useRates, useSwapRates } from '@/hooks/use-rates'
 import { useAssetFrom, useAssetTo, useSlippage } from '@/hooks/use-swap'
-import { resolveFees, resolvePriceImpact } from '@/lib/swap-helpers'
+import { getRouteMemo, resolveFees, resolvePriceImpact } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
 import { useIsLimitSwap, useLimitSwapBuyAmount } from '@/store/limit-swap-store'
 import { QuoteResponseRoute } from '@/types'
@@ -42,7 +42,9 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
 
   const sellAmount = new USwapNumber(quote.sellAmount)
   const expectedBuyAmount = new USwapNumber(quote.expectedBuyAmount)
-  const expectedBuyAmountMaxSlippage = quote.expectedBuyAmountMaxSlippage && new USwapNumber(quote.expectedBuyAmountMaxSlippage)
+  // null = floating-rate estimate, shown as "not guaranteed"
+  const minBuyAmount = quote.minBuyAmount ? new USwapNumber(quote.minBuyAmount) : undefined
+  const memo = getRouteMemo(quote)
 
   const { inbound } = resolveFees(quote, rates)
 
@@ -164,12 +166,12 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                   )}
                   <InfoTooltip>{t('minimumPayoutTooltip', { slippage: slippage ?? 0 })}</InfoTooltip>
                 </div>
-                {slippage && expectedBuyAmountMaxSlippage ? (
+                {slippage && minBuyAmount ? (
                   <div className="flex gap-2">
                     <span className="text-leah font-semibold">
-                      <DecimalText amount={expectedBuyAmountMaxSlippage.toSignificant()} symbol={assetTo.ticker} />
+                      <DecimalText amount={minBuyAmount.toSignificant()} symbol={assetTo.ticker} />
                     </span>
-                    {rateTo && <span className="font-medium">({expectedBuyAmountMaxSlippage.mul(rateTo).toCurrency()})</span>}
+                    {rateTo && <span className="font-medium">({minBuyAmount.mul(rateTo).toCurrency()})</span>}
                   </div>
                 ) : (
                   <span className="text-lucian font-semibold">{t('notGuaranteed')}</span>
@@ -247,10 +249,10 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
             </div>
           </div>
 
-          {quote.memo && (
+          {memo && (
             <div className="text-thor-gray flex items-center justify-between gap-6 border-t p-4 text-sm">
               <span>{t('memo')}</span>
-              <p className="text-leah text-right font-semibold text-balance break-all">{quote.memo}</p>
+              <p className="text-leah text-right font-semibold text-balance break-all">{memo}</p>
             </div>
           )}
         </div>
