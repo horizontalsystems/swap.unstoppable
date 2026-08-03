@@ -162,7 +162,8 @@
       "confirm": "تأیید",
       "errMemoMissing": "یادداشت موجود نیست",
       "errCalcAmount": "محاسبه مقدار پیشنهادی ناموفق بود",
-      "errPreflight": "درخواست بررسی اولیه ناموفق بود"
+      "errPreflight": "درخواست بررسی اولیه ناموفق بود",
+      "errDepositUnavailable": "جزئیات واریز در دسترس نیست. لطفاً دوباره تلاش کنید."
     },
     "error": {
       "minAmountNoWallet": "حداقل مقدار تبادل بدون کیف پول متصل {amount} {ticker} است",
@@ -273,6 +274,7 @@
       "not_started": "واریز در انتظار",
       "pending": "در انتظار",
       "swapping": "در حال تبادل",
+      "action_required": "نیاز به اقدام",
       "completed": "تکمیل‌شده",
       "failed": "ناموفق",
       "expired": "منقضی‌شده",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "پیگیری تراکنش"
+  },
+  "promotion": {
+    "barter": {
+      "title": "امتیازهای Barter کسب کنید",
+      "description": "از طریق Barter در اتریوم سواپ کنید و امتیاز Barter کسب کنید",
+      "info": "اطلاعات"
+    }
   }
 }

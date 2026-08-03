@@ -162,7 +162,8 @@
       "confirm": "Xác nhận",
       "errMemoMissing": "Thiếu memo",
       "errCalcAmount": "Không thể tính số lượng đề xuất",
-      "errPreflight": "Không thể thực hiện yêu cầu kiểm tra trước"
+      "errPreflight": "Không thể thực hiện yêu cầu kiểm tra trước",
+      "errDepositUnavailable": "Không có thông tin nạp tiền. Vui lòng thử lại."
     },
     "error": {
       "minAmountNoWallet": "Số lượng hoán đổi tối thiểu khi chưa kết nối ví là {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "Chờ nạp tiền",
       "pending": "Đang chờ",
       "swapping": "Đang hoán đổi",
+      "action_required": "Cần thao tác",
       "completed": "Hoàn tất",
       "failed": "Thất bại",
       "expired": "Hết hạn",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "Theo dõi giao dịch"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Nhận điểm Barter",
+      "description": "Swap qua Barter trên Ethereum và nhận điểm Barter",
+      "info": "Thông tin"
+    }
   }
 }

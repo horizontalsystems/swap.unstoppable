@@ -162,7 +162,8 @@
       "confirm": "Confirm",
       "errMemoMissing": "Memo no dey",
       "errCalcAmount": "E no fit calculate di suggested amount",
-      "errPreflight": "E no fit preflight request"
+      "errPreflight": "E no fit preflight request",
+      "errDepositUnavailable": "Deposit details no dey available. Abeg try again."
     },
     "error": {
       "minAmountNoWallet": "Minimum swap amount wey you fit do without wallet wey connect na {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "Deposit Dey Pending",
       "pending": "Pending",
       "swapping": "Dey Swap",
+      "action_required": "Action Dey Needed",
       "completed": "Completed",
       "failed": "Failed",
       "expired": "Expired",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "Track Transaction"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Earn Barter Points",
+      "description": "Swap through Barter on Ethereum make you earn Barter points",
+      "info": "Info"
+    }
   }
 }

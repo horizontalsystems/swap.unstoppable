@@ -162,7 +162,8 @@
       "confirm": "ยืนยัน",
       "errMemoMissing": "ไม่มีบันทึก",
       "errCalcAmount": "ไม่สามารถคำนวณจำนวนที่แนะนำได้",
-      "errPreflight": "คำขอ preflight ล้มเหลว"
+      "errPreflight": "คำขอ preflight ล้มเหลว",
+      "errDepositUnavailable": "ไม่พบข้อมูลการฝาก โปรดลองอีกครั้ง"
     },
     "error": {
       "minAmountNoWallet": "จำนวนแลกเปลี่ยนขั้นต่ำเมื่อไม่ได้เชื่อมต่อกระเป๋าเงินคือ {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "รอการฝาก",
       "pending": "รอดำเนินการ",
       "swapping": "กำลังแลกเปลี่ยน",
+      "action_required": "ต้องดำเนินการ",
       "completed": "เสร็จสมบูรณ์",
       "failed": "ล้มเหลว",
       "expired": "หมดอายุ",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "ติดตามธุรกรรม"
+  },
+  "promotion": {
+    "barter": {
+      "title": "รับคะแนน Barter",
+      "description": "สวอปผ่าน Barter บน Ethereum และรับคะแนน Barter",
+      "info": "ข้อมูล"
+    }
   }
 }

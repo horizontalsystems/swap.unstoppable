@@ -162,7 +162,8 @@
       "confirm": "Confirmar",
       "errMemoMissing": "O memo está faltando",
       "errCalcAmount": "Falha ao calcular o valor sugerido",
-      "errPreflight": "Falha na solicitação de pré-verificação"
+      "errPreflight": "Falha na solicitação de pré-verificação",
+      "errDepositUnavailable": "Os detalhes do depósito não estão disponíveis. Tente novamente."
     },
     "error": {
       "minAmountNoWallet": "O valor mínimo de troca sem uma carteira conectada é {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "Depósito pendente",
       "pending": "Pendente",
       "swapping": "Trocando",
+      "action_required": "Ação necessária",
       "completed": "Concluído",
       "failed": "Falhou",
       "expired": "Expirado",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "Rastrear transação"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Ganhe pontos Barter",
+      "description": "Faça swaps via Barter na Ethereum e ganhe pontos Barter",
+      "info": "Informações"
+    }
   }
 }

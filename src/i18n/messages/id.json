@@ -162,7 +162,8 @@
       "confirm": "Konfirmasi",
       "errMemoMissing": "Memo tidak ada",
       "errCalcAmount": "Gagal menghitung jumlah yang disarankan",
-      "errPreflight": "Gagal melakukan permintaan preflight"
+      "errPreflight": "Gagal melakukan permintaan preflight",
+      "errDepositUnavailable": "Detail deposit tidak tersedia. Silakan coba lagi."
     },
     "error": {
       "minAmountNoWallet": "Jumlah pertukaran minimum tanpa dompet terhubung adalah {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "Menunggu Setoran",
       "pending": "Tertunda",
       "swapping": "Menukar",
+      "action_required": "Tindakan Diperlukan",
       "completed": "Selesai",
       "failed": "Gagal",
       "expired": "Kedaluwarsa",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "Lacak Transaksi"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Dapatkan Poin Barter",
+      "description": "Swap melalui Barter di Ethereum dan dapatkan poin Barter",
+      "info": "Info"
+    }
   }
 }

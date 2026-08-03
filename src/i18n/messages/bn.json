@@ -162,7 +162,8 @@
       "confirm": "নিশ্চিত করুন",
       "errMemoMissing": "মেমো অনুপস্থিত",
       "errCalcAmount": "প্রস্তাবিত পরিমাণ গণনা করতে ব্যর্থ",
-      "errPreflight": "প্রিফ্লাইট অনুরোধ ব্যর্থ"
+      "errPreflight": "প্রিফ্লাইট অনুরোধ ব্যর্থ",
+      "errDepositUnavailable": "ডিপোজিটের বিবরণ পাওয়া যাচ্ছে না। অনুগ্রহ করে আবার চেষ্টা করুন।"
     },
     "error": {
       "minAmountNoWallet": "সংযুক্ত ওয়ালেট ছাড়া ন্যূনতম সোয়াপ পরিমাণ {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "জমা মুলতুবি",
       "pending": "মুলতুবি",
       "swapping": "সোয়াপ হচ্ছে",
+      "action_required": "পদক্ষেপ প্রয়োজন",
       "completed": "সম্পন্ন",
       "failed": "ব্যর্থ",
       "expired": "মেয়াদোত্তীর্ণ",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "লেনদেন ট্র্যাক করুন"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Barter পয়েন্ট অর্জন করুন",
+      "description": "Ethereum-এ Barter-এর মাধ্যমে সোয়াপ করুন এবং Barter পয়েন্ট অর্জন করুন",
+      "info": "তথ্য"
+    }
   }
 }

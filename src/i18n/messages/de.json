@@ -162,7 +162,8 @@
       "confirm": "Bestätigen",
       "errMemoMissing": "Memo fehlt",
       "errCalcAmount": "Vorgeschlagener Betrag konnte nicht berechnet werden",
-      "errPreflight": "Preflight-Anfrage fehlgeschlagen"
+      "errPreflight": "Preflight-Anfrage fehlgeschlagen",
+      "errDepositUnavailable": "Einzahlungsdetails sind nicht verfügbar. Bitte versuche es erneut."
     },
     "error": {
       "minAmountNoWallet": "Der Mindest-Swap-Betrag ohne verbundene Wallet beträgt {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "Einzahlung ausstehend",
       "pending": "Ausstehend",
       "swapping": "Swap läuft",
+      "action_required": "Aktion erforderlich",
       "completed": "Abgeschlossen",
       "failed": "Fehlgeschlagen",
       "expired": "Abgelaufen",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "Transaktion verfolgen"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Verdiene Barter-Punkte",
+      "description": "Swappe über Barter auf Ethereum und verdiene Barter-Punkte",
+      "info": "Info"
+    }
   }
 }

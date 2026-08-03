@@ -162,7 +162,8 @@
       "confirm": "أكّد",
       "errMemoMissing": "المذكرة ناقصة",
       "errCalcAmount": "فشل حساب المبلغ المقترح",
-      "errPreflight": "فشل طلب التحقّق المسبق"
+      "errPreflight": "فشل طلب التحقّق المسبق",
+      "errDepositUnavailable": "تفاصيل الإيداع مش متاحة. حاول تاني."
     },
     "error": {
       "minAmountNoWallet": "أقل مبلغ تبديل من غير محفظة متوصّلة هو {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "الإيداع قيد الانتظار",
       "pending": "قيد الانتظار",
       "swapping": "بنبدّل",
+      "action_required": "مطلوب إجراء",
       "completed": "اكتمل",
       "failed": "فشل",
       "expired": "خلصت صلاحيته",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "تتبّع المعاملة"
+  },
+  "promotion": {
+    "barter": {
+      "title": "اكسب نقط Barter",
+      "description": "بدّل عن طريق Barter على Ethereum واكسب نقط Barter",
+      "info": "معلومات"
+    }
   }
 }

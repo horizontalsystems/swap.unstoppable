@@ -162,7 +162,8 @@
       "confirm": "確認",
       "errMemoMissing": "メモがありません",
       "errCalcAmount": "推奨金額の計算に失敗しました",
-      "errPreflight": "プリフライトリクエストに失敗しました"
+      "errPreflight": "プリフライトリクエストに失敗しました",
+      "errDepositUnavailable": "入金情報を取得できません。もう一度お試しください。"
     },
     "error": {
       "minAmountNoWallet": "ウォレットを接続していない場合の最低スワップ金額は {amount} {ticker} です",
@@ -273,6 +274,7 @@
       "not_started": "入金待ち",
       "pending": "保留中",
       "swapping": "スワップ中",
+      "action_required": "要対応",
       "completed": "完了",
       "failed": "失敗",
       "expired": "期限切れ",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "トランザクションを追跡"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Barterポイントを獲得",
+      "description": "EthereumでBarterを使ってスワップし、Barterポイントを獲得しましょう",
+      "info": "情報"
+    }
   }
 }

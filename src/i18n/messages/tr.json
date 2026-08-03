@@ -162,7 +162,8 @@
       "confirm": "Onayla",
       "errMemoMissing": "Memo eksik",
       "errCalcAmount": "Önerilen tutar hesaplanamadı",
-      "errPreflight": "Ön kontrol isteği başarısız oldu"
+      "errPreflight": "Ön kontrol isteği başarısız oldu",
+      "errDepositUnavailable": "Yatırma bilgileri alınamadı. Lütfen tekrar deneyin."
     },
     "error": {
       "minAmountNoWallet": "Cüzdan bağlamadan asgari takas tutarı {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "Yatırma Bekleniyor",
       "pending": "Beklemede",
       "swapping": "Takas Ediliyor",
+      "action_required": "İşlem Gerekli",
       "completed": "Tamamlandı",
       "failed": "Başarısız",
       "expired": "Süresi Doldu",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "İşlemi Takip Et"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Barter Puanları Kazanın",
+      "description": "Ethereum üzerinde Barter ile takas yapın ve Barter puanları kazanın",
+      "info": "Bilgi"
+    }
   }
 }

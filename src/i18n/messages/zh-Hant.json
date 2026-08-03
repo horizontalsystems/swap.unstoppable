@@ -162,7 +162,8 @@
       "confirm": "確認",
       "errMemoMissing": "備註缺失",
       "errCalcAmount": "計算建議金額失敗",
-      "errPreflight": "預檢請求失敗"
+      "errPreflight": "預檢請求失敗",
+      "errDepositUnavailable": "無法取得入金資訊,請再試一次。"
     },
     "error": {
       "minAmountNoWallet": "未連接錢包時的最低兌換金額為 {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "充值待處理",
       "pending": "待處理",
       "swapping": "兌換中",
+      "action_required": "需要操作",
       "completed": "已完成",
       "failed": "失敗",
       "expired": "已過期",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "追蹤交易"
+  },
+  "promotion": {
+    "barter": {
+      "title": "賺取 Barter 點數",
+      "description": "在以太坊上透過 Barter 兌換並賺取 Barter 點數",
+      "info": "資訊"
+    }
   }
 }

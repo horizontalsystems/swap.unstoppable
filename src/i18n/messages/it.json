@@ -162,7 +162,8 @@
       "confirm": "Conferma",
       "errMemoMissing": "Memo mancante",
       "errCalcAmount": "Impossibile calcolare l'importo suggerito",
-      "errPreflight": "Impossibile eseguire la richiesta di pre-verifica"
+      "errPreflight": "Impossibile eseguire la richiesta di pre-verifica",
+      "errDepositUnavailable": "I dettagli del deposito non sono disponibili. Riprova."
     },
     "error": {
       "minAmountNoWallet": "L'importo minimo di scambio senza un wallet connesso è {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "Deposito in sospeso",
       "pending": "In sospeso",
       "swapping": "Scambio in corso",
+      "action_required": "Azione richiesta",
       "completed": "Completato",
       "failed": "Fallito",
       "expired": "Scaduto",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "Traccia transazione"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Guadagna punti Barter",
+      "description": "Scambia tramite Barter su Ethereum e guadagna punti Barter",
+      "info": "Info"
+    }
   }
 }

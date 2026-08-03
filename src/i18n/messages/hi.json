@@ -162,7 +162,8 @@
       "confirm": "पुष्टि करें",
       "errMemoMissing": "मेमो गायब है",
       "errCalcAmount": "सुझाई गई राशि की गणना करने में विफल",
-      "errPreflight": "प्रीफ़्लाइट अनुरोध में विफल"
+      "errPreflight": "प्रीफ़्लाइट अनुरोध में विफल",
+      "errDepositUnavailable": "डिपॉज़िट विवरण उपलब्ध नहीं हैं। कृपया फिर से प्रयास करें।"
     },
     "error": {
       "minAmountNoWallet": "बिना कनेक्टेड वॉलेट के न्यूनतम स्वैप राशि {amount} {ticker} है",
@@ -273,6 +274,7 @@
       "not_started": "जमा लंबित",
       "pending": "लंबित",
       "swapping": "स्वैप हो रहा है",
+      "action_required": "कार्रवाई आवश्यक",
       "completed": "पूर्ण",
       "failed": "विफल",
       "expired": "समाप्त",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "लेनदेन ट्रैक करें"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Barter पॉइंट कमाएँ",
+      "description": "Ethereum पर Barter के ज़रिए स्वैप करें और Barter पॉइंट कमाएँ",
+      "info": "जानकारी"
+    }
   }
 }

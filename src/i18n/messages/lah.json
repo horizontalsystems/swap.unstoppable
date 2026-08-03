@@ -162,7 +162,8 @@
       "confirm": "تصدیق کرو",
       "errMemoMissing": "میمو غائب اے",
       "errCalcAmount": "تجویز کیتی رقم دا حساب لاوݨ وچ ناکامی",
-      "errPreflight": "پری فلائٹ درخواست ناکام"
+      "errPreflight": "پری فلائٹ درخواست ناکام",
+      "errDepositUnavailable": "ڈپازٹ دیاں تفصیلاں دستیاب نہیں۔ مہربانی کر کے فیر کوشش کرو۔"
     },
     "error": {
       "minAmountNoWallet": "جُڑے والیٹ دے بغیر گھٹ توں گھٹ سویپ رقم {amount} {ticker} اے",
@@ -273,6 +274,7 @@
       "not_started": "ڈپازٹ زیر التواء",
       "pending": "زیر التواء",
       "swapping": "سویپ تھیندا پئے",
+      "action_required": "کارروائی درکار",
       "completed": "مکمل",
       "failed": "ناکام",
       "expired": "میعاد ختم",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "ٹرانزیکشن ٹریک کرو"
+  },
+  "promotion": {
+    "barter": {
+      "title": "Barter پوائنٹ کماؤ",
+      "description": "Ethereum اُتے Barter راہیں سویپ کرو تے Barter پوائنٹ کماؤ",
+      "info": "معلومات"
+    }
   }
 }

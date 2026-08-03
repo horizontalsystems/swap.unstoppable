@@ -162,7 +162,8 @@
       "confirm": "确认",
       "errMemoMissing": "备注缺失",
       "errCalcAmount": "计算建议金额失败",
-      "errPreflight": "预检请求失败"
+      "errPreflight": "预检请求失败",
+      "errDepositUnavailable": "无法获取充值信息,请重试。"
     },
     "error": {
       "minAmountNoWallet": "未连接钱包时的最低兑换金额为 {amount} {ticker}",
@@ -273,6 +274,7 @@
       "not_started": "充值待处理",
       "pending": "待处理",
       "swapping": "兑换中",
+      "action_required": "需要操作",
       "completed": "已完成",
       "failed": "失败",
       "expired": "已过期",
@@ -287,5 +289,12 @@
   },
   "track": {
     "title": "追踪交易"
+  },
+  "promotion": {
+    "barter": {
+      "title": "赚取 Barter 积分",
+      "description": "在以太坊上通过 Barter 兑换并赚取 Barter 积分",
+      "info": "信息"
+    }
   }
 }
