@@ -150,8 +150,8 @@
     "route": {
       "chooseRoute": "Pilih Rute",
       "price": "1 {from} = {price} {to}",
-      "bestPrice": "HARGA TERBAIK",
-      "faster": "LEBIH CEPAT"
+      "bestPrice": "Harga Terbaik",
+      "faster": "Lebih cepat"
     },
     "instant": {
       "sendTitle": "Kirim {asset}",
@@ -249,16 +249,6 @@
       "externalWalletModeDescription": "Masukkan order Anda, klik tombol Tukar, dan ikuti petunjuknya",
       "externalWalletInfo": "Jika suatu aset tidak didukung dalam mode Dompet Eksternal, Anda akan diminta untuk menghubungkan dompet dalam browser"
     }
-  },
-  "riskLevel": {
-    "excellent": "Sangat Baik",
-    "good": "Baik",
-    "fair": "Cukup",
-    "title": "Tingkat Risiko Penyedia",
-    "description": "Tingkat ini menunjukkan bagaimana penyedia menangani pertukaran dan pemeriksaan transaksi.",
-    "excellentInfo": "Eksekusi on-chain langsung. Tanpa pemeriksaan atau pembekuan penyedia. Pengembalian otomatis jika pertukaran gagal.",
-    "goodInfo": "Penyedia memeriksa transaksi secara otomatis sebelum selesai. Jika masalah terdeteksi, pertukaran ditolak dan dana dikembalikan.",
-    "fairInfo": "Verifikasi tambahan mungkin diperlukan untuk beberapa transaksi. Jika masalah terdeteksi, dana biasanya dikembalikan secara otomatis."
   },
   "tx": {
     "title": "Riwayat",

@@ -150,8 +150,8 @@
     "route": {
       "chooseRoute": "Choose Route",
       "price": "1 {from} = {price} {to}",
-      "bestPrice": "BEST PRICE",
-      "faster": "FASTER"
+      "bestPrice": "Best price",
+      "faster": "Faster"
     },
     "instant": {
       "sendTitle": "Send {asset}",
@@ -249,16 +249,6 @@
       "externalWalletModeDescription": "Enter your order, click di Swap button, and follow di instructions",
       "externalWalletInfo": "If dem no support one asset for External Wallet mode, dem go ask you to connect in-browser wallet"
     }
-  },
-  "riskLevel": {
-    "excellent": "Excellent",
-    "good": "Good",
-    "fair": "Fair",
-    "title": "Provider Risk Levels",
-    "description": "Dis levels dey show how providers dey handle swaps and transaction checks.",
-    "excellentInfo": "Direct on-chain execution. No provider checks or freeze. Automatic refund if swap fail.",
-    "goodInfo": "Provider dey check transactions automatically before e finish. If dem detect problem, dem go reject di swap and refund di funds.",
-    "fairInfo": "Some transactions fit need extra verification. If dem detect problem, dem usually refund di funds automatically."
   },
   "tx": {
     "title": "History",

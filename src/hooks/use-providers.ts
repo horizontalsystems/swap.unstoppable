@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { getProviders } from '@/lib/api'
-import { Provider, ProviderName, RiskLevel } from '@/types'
+import { Provider, ProviderName } from '@/types'
 
 const STREAMING_TO_BASE: Record<string, string> = {
   THORCHAIN_STREAMING: 'THORCHAIN',
@@ -27,9 +27,5 @@ export const useProviders = () => {
     return byProvider.get(base)
   }
 
-  const getRiskLevel = (name: ProviderName | string): RiskLevel | undefined => {
-    return getProvider(name)?.amlPolicy
-  }
-
-  return { providers, getProvider, getRiskLevel, isLoading }
+  return { providers, getProvider, isLoading }
 }

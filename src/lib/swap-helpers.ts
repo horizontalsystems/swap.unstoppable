@@ -86,6 +86,15 @@ export const findFasterIndex = (quotes: QuoteResponseRoute[]): number => {
   return min === Infinity ? -1 : times.indexOf(min) + 1
 }
 
+// The API returns a single point estimate (estimatedTime.total in seconds); the UI shows an ETA
+// range, so we bracket it with a ±25% band. Sub-hour estimates render as "low–high min".
+export const formatEtaRange = (seconds: number): string => {
+  const low = Math.max(1, Math.floor((seconds * 0.75) / 60))
+  const high = Math.max(low + 1, Math.ceil((seconds * 1.25) / 60))
+  if (high < 60) return `${low}–${high} min`
+  return `${formatExpiration(low * 60)}–${formatExpiration(high * 60)}`
+}
+
 export const formatExpiration = (seconds: number) => {
   const duration = intervalToDuration({ start: 0, end: seconds * 1000 })
   const parts = []

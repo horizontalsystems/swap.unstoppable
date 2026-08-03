@@ -9,10 +9,10 @@ export const SwapRouteBadge = ({ index, fasterIndex }: SwapRouteBadgeProps) => {
   const t = useTranslations('swap.route')
 
   if (index === 0) {
-    return <span className="text-remus border-remus rounded-lg border px-1.5 text-[10px] font-semibold">{t('bestPrice')}</span>
+    return <span className="text-remus text-xs font-semibold">{t('bestPrice')}</span>
   }
   if (index === fasterIndex) {
-    return <span className="text-jacob border-jacob rounded-lg border px-1.5 text-[10px] font-semibold">{t('faster')}</span>
+    return <span className="text-jacob text-xs font-semibold">{t('faster')}</span>
   }
   return null
 }

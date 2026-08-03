@@ -150,8 +150,8 @@
     "route": {
       "chooseRoute": "Scegli percorso",
       "price": "1 {from} = {price} {to}",
-      "bestPrice": "PREZZO MIGLIORE",
-      "faster": "PIÙ VELOCE"
+      "bestPrice": "Prezzo migliore",
+      "faster": "Più veloce"
     },
     "instant": {
       "sendTitle": "Invia {asset}",
@@ -249,16 +249,6 @@
       "externalWalletModeDescription": "Inserisci il tuo ordine, fai clic sul pulsante Scambia e segui le istruzioni",
       "externalWalletInfo": "Se un asset non è supportato in modalità wallet esterno, ti verrà chiesto di connettere un wallet nel browser"
     }
-  },
-  "riskLevel": {
-    "excellent": "Eccellente",
-    "good": "Buono",
-    "fair": "Discreto",
-    "title": "Livelli di rischio del provider",
-    "description": "Questi livelli mostrano come i provider gestiscono gli scambi e i controlli delle transazioni.",
-    "excellentInfo": "Esecuzione diretta on-chain. Nessun controllo o blocco del provider. Rimborsi automatici se lo scambio fallisce.",
-    "goodInfo": "Il provider controlla automaticamente le transazioni prima del completamento. Se vengono rilevati problemi, lo scambio viene rifiutato e i fondi vengono rimborsati.",
-    "fairInfo": "Per alcune transazioni potrebbe essere richiesta una verifica aggiuntiva. Se vengono rilevati problemi, i fondi vengono solitamente rimborsati automaticamente."
   },
   "tx": {
     "title": "Cronologia",

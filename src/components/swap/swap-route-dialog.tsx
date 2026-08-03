@@ -7,7 +7,6 @@ import { SwapRouteCard } from '@/components/swap/swap-route-card'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { findFasterIndex } from '@/lib/swap-helpers'
-import { cn } from '@/lib/utils'
 
 interface SwapRouteDialogProps {
   isOpen: boolean
@@ -41,12 +40,11 @@ export const SwapRouteDialog = ({ isOpen, onOpenChange }: SwapRouteDialogProps) 
                 valueFrom={valueFrom}
                 assetFromTicker={assetFrom.ticker}
                 assetToTicker={assetTo.ticker}
-                estimatedTime={route.estimatedTime}
                 badge={<SwapRouteBadge index={index} fasterIndex={fasterIndex} />}
-                showRiskLevel
                 showAmount
-                className={cn('cursor-pointer transition-colors', index === selectedIndex && 'border-remus')}
-                onClick={() => {
+                selected={index === selectedIndex}
+                className="cursor-pointer transition-colors"
+                onSelect={() => {
                   setSelectedIndex(index)
                   onOpenChange(false)
                 }}

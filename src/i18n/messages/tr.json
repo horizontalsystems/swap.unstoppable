@@ -150,8 +150,8 @@
     "route": {
       "chooseRoute": "Rota Seçin",
       "price": "1 {from} = {price} {to}",
-      "bestPrice": "EN İYİ FİYAT",
-      "faster": "DAHA HIZLI"
+      "bestPrice": "En İyi Fiyat",
+      "faster": "Daha hızlı"
     },
     "instant": {
       "sendTitle": "{asset} Gönder",
@@ -249,16 +249,6 @@
       "externalWalletModeDescription": "Emrinizi girin, Takas Et düğmesine tıklayın ve talimatları izleyin",
       "externalWalletInfo": "Bir varlık Harici Cüzdan modunda desteklenmiyorsa, tarayıcı içi bir cüzdan bağlamanız istenir"
     }
-  },
-  "riskLevel": {
-    "excellent": "Mükemmel",
-    "good": "İyi",
-    "fair": "Orta",
-    "title": "Sağlayıcı Risk Seviyeleri",
-    "description": "Bu seviyeler, sağlayıcıların takasları ve işlem kontrollerini nasıl ele aldığını gösterir.",
-    "excellentInfo": "Doğrudan zincir üzerinde gerçekleşme. Sağlayıcı kontrolü veya dondurma yok. Takas başarısız olursa otomatik iade.",
-    "goodInfo": "Sağlayıcı, tamamlanmadan önce işlemleri otomatik olarak kontrol eder. Sorun tespit edilirse takas reddedilir ve fonlar iade edilir.",
-    "fairInfo": "Bazı işlemler için ek doğrulama gerekebilir. Sorun tespit edilirse fonlar genellikle otomatik olarak iade edilir."
   },
   "tx": {
     "title": "Geçmiş",

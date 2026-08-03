@@ -30,7 +30,7 @@ export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' }) =
 
   return (
     <div className="flex items-center gap-2">
-      <Image src={`/providers/${icon.toLowerCase()}.svg`} alt="" width="16" height="16" />
+      <Image src={`/providers/${icon.toLowerCase()}.svg`} alt="" width="16" height="16" className="rounded-full" />
       <span className="text-leah">{title}</span>
     </div>
   )

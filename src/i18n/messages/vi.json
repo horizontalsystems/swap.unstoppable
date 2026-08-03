@@ -150,8 +150,8 @@
     "route": {
       "chooseRoute": "Chọn tuyến đường",
       "price": "1 {from} = {price} {to}",
-      "bestPrice": "GIÁ TỐT NHẤT",
-      "faster": "NHANH HƠN"
+      "bestPrice": "Giá tốt nhất",
+      "faster": "Nhanh hơn"
     },
     "instant": {
       "sendTitle": "Gửi {asset}",
@@ -249,16 +249,6 @@
       "externalWalletModeDescription": "Nhập lệnh của bạn, nhấn nút Hoán đổi và làm theo hướng dẫn",
       "externalWalletInfo": "Nếu một tài sản không được hỗ trợ trong chế độ ví ngoài, bạn sẽ được nhắc kết nối ví trong trình duyệt"
     }
-  },
-  "riskLevel": {
-    "excellent": "Xuất sắc",
-    "good": "Tốt",
-    "fair": "Khá",
-    "title": "Mức độ rủi ro của nhà cung cấp",
-    "description": "Các mức này cho thấy cách nhà cung cấp xử lý hoán đổi và kiểm tra giao dịch.",
-    "excellentInfo": "Thực hiện trực tiếp on-chain. Không có kiểm tra hay đóng băng từ nhà cung cấp. Tự động hoàn tiền nếu hoán đổi thất bại.",
-    "goodInfo": "Nhà cung cấp tự động kiểm tra giao dịch trước khi hoàn tất. Nếu phát hiện vấn đề, hoán đổi bị từ chối và tiền được hoàn lại.",
-    "fairInfo": "Một số giao dịch có thể cần xác minh bổ sung. Nếu phát hiện vấn đề, tiền thường được hoàn lại tự động."
   },
   "tx": {
     "title": "Lịch sử",

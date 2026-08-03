@@ -150,8 +150,8 @@
     "route": {
       "chooseRoute": "Route wählen",
       "price": "1 {from} = {price} {to}",
-      "bestPrice": "BESTER PREIS",
-      "faster": "SCHNELLER"
+      "bestPrice": "Bester Preis",
+      "faster": "Schneller"
     },
     "instant": {
       "sendTitle": "{asset} senden",
@@ -249,16 +249,6 @@
       "externalWalletModeDescription": "Gib deine Order ein, klicke auf die Swap-Schaltfläche und folge den Anweisungen",
       "externalWalletInfo": "Falls ein Asset im externen Wallet-Modus nicht unterstützt wird, wirst du aufgefordert, eine In-Browser-Wallet zu verbinden"
     }
-  },
-  "riskLevel": {
-    "excellent": "Ausgezeichnet",
-    "good": "Gut",
-    "fair": "Ausreichend",
-    "title": "Risikostufen der Anbieter",
-    "description": "Diese Stufen zeigen, wie Anbieter mit Swaps und Transaktionsprüfungen umgehen.",
-    "excellentInfo": "Direkte On-Chain-Ausführung. Keine Anbieterprüfungen oder -sperren. Automatische Rückerstattungen, falls der Swap fehlschlägt.",
-    "goodInfo": "Der Anbieter prüft Transaktionen automatisch vor Abschluss. Werden Probleme erkannt, wird der Swap abgelehnt und die Gelder werden zurückerstattet.",
-    "fairInfo": "Für einige Transaktionen kann eine zusätzliche Überprüfung erforderlich sein. Werden Probleme erkannt, werden die Gelder in der Regel automatisch zurückerstattet."
   },
   "tx": {
     "title": "Verlauf",
