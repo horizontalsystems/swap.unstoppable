@@ -10,6 +10,7 @@ import { SwapConfirm } from '@/components/swap/swap-confirm'
 import { SwapError } from '@/components/swap/swap-error'
 import { SwapRecipient } from '@/components/swap/swap-recipient'
 import { ThemeButton } from '@/components/theme-button'
+import { useAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { attachmentToTxExtra, getRouteMemo, QR_PROVIDERS } from '@/lib/swap-helpers'
 import { generateId } from '@/lib/utils'
@@ -41,6 +42,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
   const [channel, setChannel] = useState<DepositChannel | undefined>(undefined)
   const [creatingChannel, setCreatingChannel] = useState(false)
   const [error, setError] = useState<Error | undefined>()
+  const aml = useAmlPrecheck(quote)
 
   if (!assetFrom || !assetTo) return null
 
@@ -81,7 +83,7 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
   }
 
   const onConfirm = () => {
-    if (!quote || !assetFrom) return
+    if (!quote || !assetFrom || aml.blocked) return
 
     if (QR_PROVIDERS.includes(provider)) {
       const execution = quote.execution
@@ -185,9 +187,9 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
                 variant={channel ? 'secondaryMedium' : 'primaryMedium'}
                 className="w-full"
                 onClick={() => onConfirm()}
-                disabled={creatingChannel}
+                disabled={creatingChannel || aml.blocked}
               >
-                {creatingChannel && <LoaderCircle size={20} className="animate-spin" />}
+                {(creatingChannel || aml.status === 'checking') && <LoaderCircle size={20} className="animate-spin" />}
                 <span>{creatingChannel ? t('confirming') : t('confirm')}</span>
               </ThemeButton>
             </div>

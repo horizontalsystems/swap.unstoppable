@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { useQueryClient } from '@tanstack/react-query'
 import { getAddressValidator } from '@uswap/toolboxes'
 import { LoaderCircle } from 'lucide-react'
 import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
@@ -15,6 +16,7 @@ import { ThemeButton } from '@/components/theme-button'
 import { Tooltip } from '@/components/tooltip'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSlippage, useSwap, useTwapMode } from '@/hooks/use-swap'
+import { ensureAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useProviders } from '@/hooks/use-providers'
 import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
 import { createSwap, parseApiError } from '@/lib/api'
@@ -54,6 +56,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
   const { getProvider } = useProviders()
   const { valueFrom } = useSwap()
+  const queryClient = useQueryClient()
   const [quoting, setQuoting] = useState(false)
   const [quoteError, setQuoteError] = useState<Error | undefined>()
 
@@ -113,7 +116,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
       slippage: isLimitSwap ? 0 : (slippage ?? 99),
       provider
     })
-      .then(route => {
+      .then(async route => {
         // the API doesn't echo the request addresses — the confirm screen and plugins need them
         let quote: QuoteResponseRoute = { ...route, sourceAddress, destinationAddress, refundAddress: resolvedRefundAddress }
 
@@ -123,6 +126,9 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
         } else if (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING') {
           quote = prepareQuoteForStreaming(quote, twapMode, customInterval, customQuantity)
         }
+
+        // run the AML precheck (QUICKEX) and wait for the verdict before navigating to the confirm screen
+        await ensureAmlPrecheck(queryClient, provider, { sourceAddress, refundAddress: resolvedRefundAddress, destinationAddress })
 
         onFetchQuote(quote)
       })

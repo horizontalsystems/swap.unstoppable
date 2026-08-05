@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { AssetValue, Chain, getChainConfig } from '@uswap/core'
 import { BalanceResponse, QuoteRequest, QuoteResponse, SwapRequest, USwapApi } from '@uswap/helpers/api'
-import { Provider, ProviderName, QuoteResponseRoute, TrackResponse } from '@/types'
+import { AmlCheckResponse, Provider, ProviderName, QuoteResponseRoute, TrackResponse } from '@/types'
 import { normalizeThorBankDenom } from '@/lib/swap-helpers'
 
 const uSwap = axios.create({
@@ -232,4 +232,9 @@ export const getInboundAddresses = () => {
 
 export const getProviders = async (): Promise<Provider[]> => {
   return uSwap.get('/providers').then(res => res.data)
+}
+
+// AML address precheck (QUICKEX only) — run before the user sends funds
+export const checkAddresses = async (addresses: string[]): Promise<AmlCheckResponse> => {
+  return uSwap.get('/check-addresses', { params: { addresses: addresses.join(',') } }).then(res => res.data)
 }

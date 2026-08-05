@@ -7,6 +7,7 @@ import { Credenza, CredenzaContent } from '@/components/ui/credenza'
 import { SwapConfirm } from '@/components/swap/swap-confirm'
 import { SwapRecipient } from '@/components/swap/swap-recipient'
 import { ThemeButton } from '@/components/theme-button'
+import { useAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useBalance } from '@/hooks/use-balance'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { getTrack } from '@/lib/api'
@@ -36,9 +37,10 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
   const isLimitSwap = useIsLimitSwap()
 
   const [quote, setQuote] = useState<QuoteResponseRoute | undefined>(undefined)
+  const aml = useAmlPrecheck(quote)
 
   const onConfirm = () => {
-    if (!quote || !assetFrom || !assetTo) return
+    if (!quote || !assetFrom || !assetTo || aml.blocked) return
 
     setSubmitting(true)
 
@@ -101,8 +103,17 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
             <SwapConfirm quote={quote} />
 
             <div className="p-4 pt-2 md:p-8 md:pt-2">
-              <ThemeButton variant="primaryMedium" className="w-full" onClick={() => onConfirm()} disabled={!quote || submitting}>
-                {submitting ? <LoaderCircle size={20} className="animate-spin" /> : <span>{t2('confirm')}</span>}
+              <ThemeButton
+                variant="primaryMedium"
+                className="w-full"
+                onClick={() => onConfirm()}
+                disabled={!quote || submitting || aml.blocked}
+              >
+                {submitting || aml.status === 'checking' ? (
+                  <LoaderCircle size={20} className="animate-spin" />
+                ) : (
+                  <span>{t2('confirm')}</span>
+                )}
               </ThemeButton>
             </div>
           </>

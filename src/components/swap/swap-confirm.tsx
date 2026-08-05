@@ -12,6 +12,7 @@ import { Icon } from '@/components/icons'
 import { PriceImpact } from '@/components/swap/price-impact'
 import { SwapProvider } from '@/components/swap/swap-provider'
 import { InfoTooltip } from '@/components/tooltip'
+import { useAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useRates, useSwapRates } from '@/hooks/use-rates'
 import { useAssetFrom, useAssetTo, useSlippage } from '@/hooks/use-swap'
 import { getRouteMemo, resolveFees, resolvePriceImpact } from '@/lib/swap-helpers'
@@ -27,14 +28,40 @@ interface SwapConfirmProps {
 
 export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
   const t = useTranslations('swap.confirm')
+  const ta = useTranslations('swap.aml')
   const tc = useTranslations('common')
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const slippage = useSlippage()
   const isLimitSwap = useIsLimitSwap()
   const limitSwapBuyAmount = useLimitSwapBuyAmount()
+  const aml = useAmlPrecheck(quote)
 
   if (!assetFrom || !assetTo) return null
+
+  const showSource = !!quote.sourceAddress && quote.sourceAddress !== '{sourceAddress}'
+  const showRefund = !!quote.refundAddress && quote.sourceAddress !== quote.refundAddress
+  const hasAddresses = showSource || !!quote.destinationAddress || showRefund
+
+  const addressRow = (label: string, address: string) => {
+    const flagged = aml.isFlagged(address)
+    return (
+      <div className="text-thor-gray flex justify-between text-sm">
+        <span>{label}</span>
+        <div className="flex items-center gap-2">
+          <span className={cn('font-semibold', flagged ? 'text-lucian' : 'text-leah')}>{truncate(address)}</span>
+          <CopyButton text={address} className={flagged ? 'text-lucian' : undefined} />
+        </div>
+      </div>
+    )
+  }
+
+  const amlBanner = aml.status === 'failed' && (
+    <div className="bg-lucian/10 flex items-center gap-3 rounded-xl px-4 py-3">
+      <Icon name="warning-filled" className="text-lucian size-6 shrink-0" />
+      <span className="text-lucian text-sm font-medium">{ta('flagged')}</span>
+    </div>
+  )
 
   const identifiers = useMemo(() => quote.fees.map(f => f.asset).sort(), [quote.fees])
   const { rates } = useRates(identifiers)
@@ -112,6 +139,15 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
             </div>
           </div>
 
+          {hasAddresses && (
+            <div className="space-y-4 border-t p-4">
+              {showSource && addressRow(tc('address.source'), quote.sourceAddress!)}
+              {quote.destinationAddress && addressRow(tc('address.destination'), quote.destinationAddress)}
+              {showRefund && addressRow(tc('address.refund'), quote.refundAddress!)}
+              {amlBanner}
+            </div>
+          )}
+
           <div className="space-y-4 border-t p-4">
             {isLimitSwap && limitPricePerUnit ? (
               <>
@@ -176,36 +212,6 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
                 ) : (
                   <span className="text-lucian font-semibold">{t('notGuaranteed')}</span>
                 )}
-              </div>
-            )}
-
-            {quote.sourceAddress && quote.sourceAddress !== '{sourceAddress}' && (
-              <div className="text-thor-gray flex justify-between text-sm">
-                <span>{tc('address.source')}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-leah font-semibold">{truncate(quote.sourceAddress)}</span>
-                  <CopyButton text={quote.sourceAddress} />
-                </div>
-              </div>
-            )}
-
-            {quote.destinationAddress && (
-              <div className="text-thor-gray flex justify-between text-sm">
-                <span>{tc('address.destination')}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-leah font-semibold">{truncate(quote.destinationAddress)}</span>
-                  <CopyButton text={quote.destinationAddress} />
-                </div>
-              </div>
-            )}
-
-            {quote.refundAddress && quote.sourceAddress != quote.refundAddress && (
-              <div className="text-thor-gray flex justify-between text-sm">
-                <span>{tc('address.refund')}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-leah font-semibold">{truncate(quote.refundAddress)}</span>
-                  <CopyButton text={quote.refundAddress} />
-                </div>
               </div>
             )}
 

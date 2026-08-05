@@ -29,6 +29,18 @@ export interface TrackResponse extends TrackLeg {
   meta?: { sellAmountUsd?: string; pauseReason?: string }
 }
 
+export interface AmlCheckResult {
+  address: string
+  passed: boolean
+  completed: boolean
+}
+
+export interface AmlCheckResponse {
+  // true = all passed, false = at least one failed, null = inconclusive
+  passedAmlCheck: boolean | null
+  results: AmlCheckResult[]
+}
+
 export type RiskLevel = 'excellent' | 'good' | 'fair'
 
 export type ProviderExecutionType = 'transfer' | 'signed_transaction' | 'thorchain_deposit'

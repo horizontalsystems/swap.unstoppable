@@ -90,6 +90,9 @@
       "sendExact": "I understand that I must send exactly the specified amount from a self-custody wallet. I understand that sending from a smart contract wallet, exchange address, delegated address, or an EIP 7702 wallet, will result in",
       "lossOfFunds": "loss of funds."
     },
+    "aml": {
+      "flagged": "The address used in this swap is flagged as high-risk by a third-party compliance provider (Elliptic)."
+    },
     "selectAsset": {
       "title": "Select coin",
       "allChains": "All Chains",
