@@ -90,6 +90,9 @@
       "sendExact": "Entendo que devo enviar exatamente o valor especificado de uma carteira de autocustódia. Entendo que enviar de uma carteira de contrato inteligente, endereço de exchange, endereço delegado ou uma carteira EIP 7702 resultará em",
       "lossOfFunds": "perda de fundos."
     },
+    "aml": {
+      "flagged": "O endereço usado nesta troca foi sinalizado como de alto risco por um provedor de conformidade terceirizado (Elliptic)."
+    },
     "selectAsset": {
       "title": "Selecionar moeda",
       "allChains": "Todas as cadeias",

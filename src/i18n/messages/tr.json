@@ -90,6 +90,9 @@
       "sendExact": "Belirtilen tutarı tam olarak saklamasız bir cüzdandan göndermem gerektiğini anlıyorum. Akıllı sözleşme cüzdanı, borsa adresi, yetkilendirilmiş adres veya EIP 7702 cüzdanından göndermenin şu sonuca yol açacağını anlıyorum:",
       "lossOfFunds": "fon kaybı."
     },
+    "aml": {
+      "flagged": "Bu takasta kullanılan adres, üçüncü taraf bir uyum sağlayıcı (Elliptic) tarafından yüksek riskli olarak işaretlendi."
+    },
     "selectAsset": {
       "title": "Coin seçin",
       "allChains": "Tüm Zincirler",

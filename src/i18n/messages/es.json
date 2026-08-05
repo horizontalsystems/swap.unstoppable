@@ -90,6 +90,9 @@
       "sendExact": "Entiendo que debo enviar exactamente el importe especificado desde una billetera de autocustodia. Entiendo que enviar desde una billetera de contrato inteligente, una dirección de exchange, una dirección delegada o una billetera EIP 7702 resultará en",
       "lossOfFunds": "pérdida de fondos."
     },
+    "aml": {
+      "flagged": "La dirección utilizada en este intercambio ha sido marcada como de alto riesgo por un proveedor de cumplimiento externo (Elliptic)."
+    },
     "selectAsset": {
       "title": "Seleccionar moneda",
       "allChains": "Todas las cadenas",

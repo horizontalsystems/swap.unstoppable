@@ -90,6 +90,9 @@
       "sendExact": "Tôi hiểu rằng tôi phải gửi chính xác số lượng đã chỉ định từ ví tự giám hộ. Tôi hiểu rằng việc gửi từ ví hợp đồng thông minh, địa chỉ sàn giao dịch, địa chỉ được ủy quyền hoặc ví EIP 7702 sẽ dẫn đến",
       "lossOfFunds": "mất tiền."
     },
+    "aml": {
+      "flagged": "Địa chỉ được sử dụng trong giao dịch hoán đổi này đã bị một nhà cung cấp tuân thủ bên thứ ba (Elliptic) gắn cờ là rủi ro cao."
+    },
     "selectAsset": {
       "title": "Chọn đồng coin",
       "allChains": "Tất cả chuỗi",

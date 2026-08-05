@@ -90,6 +90,9 @@
       "sendExact": "Je comprends que je dois envoyer exactement le montant spécifié depuis un portefeuille auto-hébergé. Je comprends qu'envoyer depuis un portefeuille à contrat intelligent, une adresse d'échange, une adresse déléguée ou un portefeuille EIP 7702 entraînera une",
       "lossOfFunds": "perte de fonds."
     },
+    "aml": {
+      "flagged": "L'adresse utilisée dans cet échange a été signalée comme à haut risque par un prestataire de conformité tiers (Elliptic)."
+    },
     "selectAsset": {
       "title": "Sélectionner une pièce",
       "allChains": "Toutes les chaînes",

@@ -90,6 +90,9 @@
       "sendExact": "Saya memahami bahwa saya harus mengirim tepat sejumlah yang ditentukan dari dompet self-custody. Saya memahami bahwa mengirim dari dompet smart contract, alamat bursa, alamat terdelegasi, atau dompet EIP 7702 akan mengakibatkan",
       "lossOfFunds": "hilangnya dana."
     },
+    "aml": {
+      "flagged": "Alamat yang digunakan dalam swap ini ditandai sebagai berisiko tinggi oleh penyedia kepatuhan pihak ketiga (Elliptic)."
+    },
     "selectAsset": {
       "title": "Pilih koin",
       "allChains": "Semua Rantai",

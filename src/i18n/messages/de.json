@@ -90,6 +90,9 @@
       "sendExact": "Ich verstehe, dass ich genau den angegebenen Betrag von einer selbstverwahrenden Wallet senden muss. Ich verstehe, dass das Senden von einer Smart-Contract-Wallet, einer Börsenadresse, einer delegierten Adresse oder einer EIP 7702-Wallet zum",
       "lossOfFunds": "Verlust der Gelder führt."
     },
+    "aml": {
+      "flagged": "Die in diesem Swap verwendete Adresse wurde von einem externen Compliance-Anbieter (Elliptic) als hochriskant eingestuft."
+    },
     "selectAsset": {
       "title": "Coin auswählen",
       "allChains": "Alle Chains",
