@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "Theo dõi giao dịch"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Nhận điểm Barter",
-      "description": "Swap qua Barter trên Ethereum và nhận điểm Barter",
-      "info": "Thông tin"
-    }
   }
 }

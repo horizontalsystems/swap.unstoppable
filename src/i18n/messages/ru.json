@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "Отследить транзакцию"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Зарабатывайте баллы Barter",
-      "description": "Обменивайте через Barter в сети Ethereum и зарабатывайте баллы Barter",
-      "info": "Информация"
-    }
   }
 }

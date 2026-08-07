@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "トランザクションを追跡"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Barterポイントを獲得",
-      "description": "EthereumでBarterを使ってスワップし、Barterポイントを獲得しましょう",
-      "info": "情報"
-    }
   }
 }

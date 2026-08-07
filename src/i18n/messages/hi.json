@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "लेनदेन ट्रैक करें"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Barter पॉइंट कमाएँ",
-      "description": "Ethereum पर Barter के ज़रिए स्वैप करें और Barter पॉइंट कमाएँ",
-      "info": "जानकारी"
-    }
   }
 }

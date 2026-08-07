@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "ٹرانزیکشن ٹریک کریں"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Barter پوائنٹس کمائیں",
-      "description": "Ethereum پر Barter کے ذریعے سویپ کریں اور Barter پوائنٹس کمائیں",
-      "info": "معلومات"
-    }
   }
 }

@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "লেনদেন ট্র্যাক করুন"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Barter পয়েন্ট অর্জন করুন",
-      "description": "Ethereum-এ Barter-এর মাধ্যমে সোয়াপ করুন এবং Barter পয়েন্ট অর্জন করুন",
-      "info": "তথ্য"
-    }
   }
 }

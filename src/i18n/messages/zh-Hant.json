@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "追蹤交易"
-  },
-  "promotion": {
-    "barter": {
-      "title": "賺取 Barter 點數",
-      "description": "在以太坊上透過 Barter 兌換並賺取 Barter 點數",
-      "info": "資訊"
-    }
   }
 }

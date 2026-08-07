@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "트랜잭션 추적"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Barter 포인트 적립",
-      "description": "이더리움에서 Barter를 통해 스왑하고 Barter 포인트를 적립하세요",
-      "info": "정보"
-    }
   }
 }

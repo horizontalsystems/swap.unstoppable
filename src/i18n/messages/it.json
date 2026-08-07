@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "Traccia transazione"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Guadagna punti Barter",
-      "description": "Scambia tramite Barter su Ethereum e guadagna punti Barter",
-      "info": "Info"
-    }
   }
 }

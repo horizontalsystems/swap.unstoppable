@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "İşlemi Takip Et"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Barter Puanları Kazanın",
-      "description": "Ethereum üzerinde Barter ile takas yapın ve Barter puanları kazanın",
-      "info": "Bilgi"
-    }
   }
 }

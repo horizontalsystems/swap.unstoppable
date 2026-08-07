@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "تتبّع المعاملة"
-  },
-  "promotion": {
-    "barter": {
-      "title": "اكسب نقاط Barter",
-      "description": "بدّل عبر Barter على Ethereum واكسب نقاط Barter",
-      "info": "معلومات"
-    }
   }
 }

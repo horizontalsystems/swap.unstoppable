@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "Lacak Transaksi"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Dapatkan Poin Barter",
-      "description": "Swap melalui Barter di Ethereum dan dapatkan poin Barter",
-      "info": "Info"
-    }
   }
 }

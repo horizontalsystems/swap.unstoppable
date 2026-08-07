@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "ติดตามธุรกรรม"
-  },
-  "promotion": {
-    "barter": {
-      "title": "รับคะแนน Barter",
-      "description": "สวอปผ่าน Barter บน Ethereum และรับคะแนน Barter",
-      "info": "ข้อมูล"
-    }
   }
 }

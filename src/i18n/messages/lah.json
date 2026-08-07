@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "ٹرانزیکشن ٹریک کرو"
-  },
-  "promotion": {
-    "barter": {
-      "title": "Barter پوائنٹ کماؤ",
-      "description": "Ethereum اُتے Barter راہیں سویپ کرو تے Barter پوائنٹ کماؤ",
-      "info": "معلومات"
-    }
   }
 }

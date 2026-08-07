@@ -282,12 +282,5 @@
   },
   "track": {
     "title": "پیگیری تراکنش"
-  },
-  "promotion": {
-    "barter": {
-      "title": "امتیازهای Barter کسب کنید",
-      "description": "از طریق Barter در اتریوم سواپ کنید و امتیاز Barter کسب کنید",
-      "info": "اطلاعات"
-    }
   }
 }
