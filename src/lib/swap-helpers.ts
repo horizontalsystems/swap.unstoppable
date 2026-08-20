@@ -4,7 +4,7 @@ import { intervalToDuration } from 'date-fns'
 import { AssetRateMap } from '@/hooks/use-rates'
 import { QuoteResponseRoute } from '@/types'
 
-export const QR_PROVIDERS = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'CCE', 'PEGASUS']
+export const QR_PROVIDERS = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'CCE', 'PEGASUS', 'LIZEX']
 
 export const getRouteMemo = (route: QuoteResponseRoute): string | undefined => {
   return route.execution?.method === 'thorchain_deposit' ? route.execution.memo : undefined

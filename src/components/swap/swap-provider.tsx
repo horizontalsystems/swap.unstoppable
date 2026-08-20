@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { ProviderName } from '@/types'
 
-export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' }) => {
+export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' | 'LIZEX' }) => {
   let title: string = provider
   let icon = title
 
@@ -27,6 +27,8 @@ export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' }) =
   } else if (provider === 'LIFI') {
     title = 'LI.FI'
     icon = 'lifi'
+  } else if (provider === 'LIZEX') {
+    title = 'Lizex'
   } else if (provider === 'CCE') {
     title = 'CCE Cash'
   }
