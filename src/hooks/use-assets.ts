@@ -1,12 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
-import { getChainConfig } from '@uswap/helpers'
+import { EVMChain, EVMChains, getChainConfig } from '@uswap/helpers'
 import { Asset } from '@/components/swap/asset'
 import { AppConfig } from '@/config'
 import { getAllTokens, getProviders, getProviderTokens } from '@/lib/api'
 import { ProviderName } from '@/types'
 
 const EXTRA_CHAINS = new Set(['XMR', 'XLM'])
-const MANUAL_PROVIDERS: ProviderName[] = [ProviderName.BARTER, ProviderName.ONEINCH]
+
+// aggregators quote every token on the chains they support, so /tokens carries no list for them —
+// they are attached to each token by chain instead
+const MANUAL_PROVIDERS: ProviderName[] = [ProviderName.BARTER, ProviderName.ONEINCH, ProviderName.LIFI]
+
+// LI.FI also quotes Solana and Tron, but a committed signed_transaction route only carries a target
+// address on EVM (see flattenSwapRoute), so the p2p plugin cannot execute the other chains
+const EVM_ONLY_PROVIDERS = new Set<ProviderName>([ProviderName.LIFI])
 
 export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>; isLoading: boolean } => {
   const { data, isLoading } = useQuery({
@@ -27,11 +34,13 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
           continue
         }
 
+        const isEvm = EVMChains.includes(token.chain as EVMChain)
+
         let providerNames: ProviderName[] = [...(token.providers ?? [])]
         for (const { name, chainIds } of manualProviderChains) {
-          if (chainIds.has(token.chainId) && !providerNames.includes(name)) {
-            providerNames.push(name)
-          }
+          if (!chainIds.has(token.chainId) || providerNames.includes(name)) continue
+          if (!isEvm && EVM_ONLY_PROVIDERS.has(name)) continue
+          providerNames.push(name)
         }
 
         if (appProviders) {

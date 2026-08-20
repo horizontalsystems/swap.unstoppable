@@ -24,6 +24,9 @@ export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' }) =
     title = 'Swapuz'
   } else if (provider === 'EXOLIX') {
     title = 'Exolix'
+  } else if (provider === 'LIFI') {
+    title = 'LI.FI'
+    icon = 'lifi'
   } else if (provider === 'CCE') {
     title = 'CCE Cash'
   }
