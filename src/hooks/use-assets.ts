@@ -11,6 +11,10 @@ const EXTRA_CHAINS = new Set(['XMR', 'XLM'])
 // they are attached to each token by chain instead
 const MANUAL_PROVIDERS: ProviderName[] = [ProviderName.BARTER, ProviderName.ONEINCH, ProviderName.LIFI]
 
+// temporarily disabled — /tokens still tags them, so they are stripped off every asset here,
+// which keeps them out of the providers list /rate is asked for
+const DISABLED_PROVIDERS = new Set<string>(['NEAR_CONFIDENTIAL', 'NEAR_CONFIDENTIAL_ADVANCED'])
+
 // LI.FI also quotes Solana and Tron, but a committed signed_transaction route only carries a target
 // address on EVM (see flattenSwapRoute), so the p2p plugin cannot execute the other chains
 const EVM_ONLY_PROVIDERS = new Set<ProviderName>([ProviderName.LIFI])
@@ -36,7 +40,7 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
 
         const isEvm = EVMChains.includes(token.chain as EVMChain)
 
-        let providerNames: ProviderName[] = [...(token.providers ?? [])]
+        let providerNames: ProviderName[] = (token.providers ?? []).filter((p: ProviderName) => !DISABLED_PROVIDERS.has(p))
         for (const { name, chainIds } of manualProviderChains) {
           if (!chainIds.has(token.chainId) || providerNames.includes(name)) continue
           if (!isEvm && EVM_ONLY_PROVIDERS.has(name)) continue
