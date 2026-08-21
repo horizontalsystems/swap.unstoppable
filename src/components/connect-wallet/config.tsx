@@ -67,14 +67,6 @@ export const WALLETS: WalletParams[] = [
     supportedChains: supportedChains[WalletOption.PHANTOM]
   },
   {
-    key: 'ctrl',
-    type: WalletType.browser,
-    label: 'Ctrl',
-    option: WalletOption.CTRL,
-    link: 'https://ctrl.xyz',
-    supportedChains: supportedChains[WalletOption.CTRL]
-  },
-  {
     key: 'keplr',
     type: WalletType.browser,
     label: 'Keplr',
@@ -126,7 +118,6 @@ export const isWalletAvailable = (option: WalletOption) => {
     case WalletOption.METAMASK: return window?.ethereum && !window.ethereum?.isBraveWallet
     case WalletOption.VULTISIG: return window?.vultisig
     case WalletOption.PHANTOM: return window?.phantom
-    case WalletOption.CTRL: return window?.xfi || window?.ethereum?.__XDEFI
     case WalletOption.KEPLR: return window?.keplr
     case WalletOption.OKX: return window?.okxwallet
     case WalletOption.TRONLINK: return window?.tronLink || window?.tronWeb

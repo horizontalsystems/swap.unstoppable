@@ -4,7 +4,6 @@ import { NearPlugin } from '@uswap/plugins/near'
 import { P2PPlugin } from '@uswap/plugins/p2p'
 import { SolanaPlugin } from '@uswap/plugins/solana'
 import { MayachainPlugin, ThorchainPlugin } from '@uswap/plugins/thorchain'
-import { ctrlWallet } from '@uswap/wallets/ctrl'
 import { evmWallet } from '@uswap/wallets/evm-extensions'
 import { keplrWallet } from '@uswap/wallets/keplr'
 import { keystoreWallet } from '@uswap/wallets/keystore'
@@ -25,7 +24,6 @@ const defaultPlugins = {
 }
 
 const defaultWallets = {
-  ...ctrlWallet,
   ...evmWallet,
   ...keplrWallet,
   ...keystoreWallet,
@@ -94,8 +92,6 @@ export async function connectWallet(option: WalletOption, chains: Chain[], confi
       return connectEach(c => uSwap.connectPhantom(c))
     case WalletOption.KEPLR:
       return connectEach(c => uSwap.connectKeplr(c))
-    case WalletOption.CTRL:
-      return connectEach(c => uSwap.connectCtrl(c))
     case WalletOption.OKX:
     case WalletOption.OKX_MOBILE:
       return connectEach(c => uSwap.connectOkx(c))
@@ -134,7 +130,6 @@ export async function getAccounts(
 export const supportedChains: Record<WalletOption, Chain[]> = {
   [WalletOption.BRAVE]: evmWallet.connectEVMWallet.supportedChains,
   [WalletOption.COINBASE_WEB]: evmWallet.connectEVMWallet.supportedChains,
-  [WalletOption.CTRL]: ctrlWallet.connectCtrl.supportedChains,
   [WalletOption.EIP6963]: evmWallet.connectEVMWallet.supportedChains,
   [WalletOption.KEPLR]: keplrWallet.connectKeplr.supportedChains,
   [WalletOption.KEYSTORE]: keystoreWallet.connectKeystore.supportedChains,
@@ -150,6 +145,7 @@ export const supportedChains: Record<WalletOption, Chain[]> = {
   [WalletOption.VULTISIG]: vultisigWallet.connectVultisig.supportedChains,
   [WalletOption.WALLET_SELECTOR]: [Chain.Near],
   [WalletOption.BITGET]: [],
+  [WalletOption.CTRL]: [],
   [WalletOption.COINBASE_MOBILE]: [],
   [WalletOption.COSMOSTATION]: [],
   [WalletOption.EXODUS]: [],
