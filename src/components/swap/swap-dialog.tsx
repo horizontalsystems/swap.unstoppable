@@ -11,7 +11,7 @@ import { useAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useBalance } from '@/hooks/use-balance'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { getTrack } from '@/lib/api'
-import { getRouteDepositAddress, getRouteMemo } from '@/lib/swap-helpers'
+import { getRouteDepositAddress, getRouteMemo, P2P_FALLBACK_PROVIDERS } from '@/lib/swap-helpers'
 import { generateId } from '@/lib/utils'
 import { getUSwap } from '@/lib/wallets'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
@@ -47,7 +47,8 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
     const broadcast = uSwap
       .swap({
         route: quote,
-        feeOptionKey: FeeOption.Fast
+        feeOptionKey: FeeOption.Fast,
+        pluginName: P2P_FALLBACK_PROVIDERS.includes(provider) ? 'p2p' : undefined
       })
       .then((hash: string) => {
         setTransaction({

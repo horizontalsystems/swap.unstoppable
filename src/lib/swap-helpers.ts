@@ -4,7 +4,12 @@ import { intervalToDuration } from 'date-fns'
 import { AssetRateMap } from '@/hooks/use-rates'
 import { QuoteResponseRoute } from '@/types'
 
-export const QR_PROVIDERS = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'CCE', 'PEGASUS', 'LIZEX']
+export const QR_PROVIDERS = ['NEAR', 'LETSEXCHANGE', 'QUICKEX', 'STEALTHEX', 'SWAPUZ', 'EXOLIX', 'CCE', 'PEGASUS', 'LIZEX', 'BITANIA']
+
+// deposit-address providers the aggregator serves but @uswap/plugins doesn't list yet — their routes
+// are plain transfers, so the p2p plugin executes them once we name it instead of letting the SDK
+// look the provider up and fail with core_plugin_not_found
+export const P2P_FALLBACK_PROVIDERS = ['LIZEX', 'BITANIA']
 
 export const getRouteMemo = (route: QuoteResponseRoute): string | undefined => {
   return route.execution?.method === 'thorchain_deposit' ? route.execution.memo : undefined

@@ -9,7 +9,7 @@ const EXTRA_CHAINS = new Set(['XMR', 'XLM'])
 
 // aggregators quote every token on the chains they support, so /tokens carries no list for them —
 // they are attached to each token by chain instead
-const MANUAL_PROVIDERS: ProviderName[] = [ProviderName.BARTER, ProviderName.ONEINCH, ProviderName.LIFI]
+const MANUAL_PROVIDERS: ProviderName[] = [ProviderName.BARTER, ProviderName.ONEINCH, ProviderName.LIFI, ProviderName.JUPITER]
 
 // temporarily disabled — /tokens still tags them, so they are stripped off every asset here,
 // which keeps them out of the providers list /rate is asked for
