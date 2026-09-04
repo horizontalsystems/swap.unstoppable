@@ -35,7 +35,10 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
     toAddress: getString('toAddress') ?? '',
     toAmount: getString('toAmount') ?? '',
     depositAddress: getString('depositAddress'),
-    refundAddress: getString('refundAddress')
+    refundAddress: getString('refundAddress'),
+    depositMemo: getString('depositMemo'),
+    fromChain: getString('fromChain'),
+    toChain: getString('toChain')
   }
 
   return (

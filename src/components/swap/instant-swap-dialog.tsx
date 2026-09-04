@@ -15,10 +15,10 @@ import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { attachmentToTxExtra, getRouteMemo, QR_PROVIDERS } from '@/lib/swap-helpers'
 import { generateId } from '@/lib/utils'
 import { useSetTransaction } from '@/store/transaction-store'
-import { ProviderName, QuoteResponseRoute } from '@/types'
+import { AppProviderName, ProviderName, QuoteResponseRoute } from '@/types'
 
 interface InstantSwapDialogProps {
-  provider: ProviderName
+  provider: AppProviderName
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
 }

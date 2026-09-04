@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { ProviderName } from '@/types'
+import { AppProviderName, ProviderName } from '@/types'
 import { HeaderLogoText } from '@/components/header/header-logo-text'
 import { XmrtradeLogoText } from '@/components/header/xmrtrade-logo-text'
 import { ThorxmrLogo } from '@/components/header/thorxmr-logo'
@@ -25,7 +25,7 @@ type App = {
   gtag?: string
   discordLink?: string
   telegramLink?: string
-  providers?: ProviderName[]
+  providers?: AppProviderName[]
 }
 
 const apps: Record<AppKey, App> = {

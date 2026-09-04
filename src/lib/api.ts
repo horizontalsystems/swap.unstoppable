@@ -186,11 +186,47 @@ export const getAllTokens = async () => {
   return uSwap.get('/tokens/all').then(res => res.data)
 }
 
-export const getRate = async (json: QuoteRequest, signal?: AbortSignal): Promise<QuoteResponseRoute[]> => {
-  return uSwap
-    .post('/rate', json, { signal })
-    .then(res => res.data)
-    .then((data: QuoteResponse) => data.routes as QuoteResponseRoute[])
+export interface RateProviderError {
+  provider?: string
+  error?: string
+  errorCode?: string
+  message?: string
+  minimumAmount?: number
+  maximumAmount?: number
+}
+
+export interface RateResult {
+  routes: QuoteResponseRoute[]
+  /** Providers that declined, and why. Empty routes with entries here is a valid answer. */
+  providerErrors: RateProviderError[]
+}
+
+/**
+ * Fetch aggregator routes.
+ *
+ * A provider declining is NOT a transport failure, even though the API answers 4xx for it — the
+ * body carries `providerErrors` explaining which venues said no. Those are settled answers:
+ * `pairNotSupported` will say the same thing every time it is asked. Throwing on them made the
+ * quote look broken and left the query in an error state that kept getting re-fetched, so they are
+ * returned as an empty route list instead and cached like any other result.
+ *
+ * Genuine failures — network, auth, 5xx, a body with no `providerErrors` — still throw.
+ */
+export const getRate = async (json: QuoteRequest, signal?: AbortSignal): Promise<RateResult> => {
+  try {
+    const { data } = await uSwap.post('/rate', json, { signal })
+    const response = data as QuoteResponse
+    return {
+      routes: (response.routes ?? []) as QuoteResponseRoute[],
+      providerErrors: (response.providerErrors ?? []) as RateProviderError[]
+    }
+  } catch (error) {
+    const data = error instanceof AxiosError ? error.response?.data : undefined
+    if (data && Array.isArray(data.providerErrors)) {
+      return { routes: [], providerErrors: data.providerErrors as RateProviderError[] }
+    }
+    throw error
+  }
 }
 
 // commits the order with a single provider; returns one route (no { routes } wrapper)

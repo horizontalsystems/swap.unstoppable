@@ -1,6 +1,7 @@
 import { useMemo, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ProviderName, USwapNumber } from '@uswap/core'
+import { AppProviderName } from '@/types'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
 import { useAssets } from '@/hooks/use-assets'
@@ -21,13 +22,13 @@ const CACAO_IDENTIFIER = 'MAYA.CACAO'
 
 type PriceSource = 'thor' | 'maya' | 'gecko'
 
-const rateSource = (provider?: ProviderName): PriceSource => {
+const rateSource = (provider?: AppProviderName): PriceSource => {
   if (provider === ProviderName.THORCHAIN) return 'thor'
   if (provider === ProviderName.MAYACHAIN) return 'maya'
   return 'gecko'
 }
 
-export const useRates = (identifiers: string[], provider?: ProviderName): { rates: AssetRateMap; logos: AssetLogoMap; isLoading: boolean } => {
+export const useRates = (identifiers: string[], provider?: AppProviderName): { rates: AssetRateMap; logos: AssetLogoMap; isLoading: boolean } => {
   const { geckoMap } = useAssets()
 
   const { data: midgardData, isLoading: midgardLoading } = useQuery({
@@ -186,7 +187,7 @@ export const useSwapRates = () => {
   // Keep the resolved provider for the current pair so the rate source stays put while a new
   // quote loads, instead of switching source each time the quote resolves.
   const pairKey = identifiers.join(',')
-  const providerRef = useRef<{ pairKey: string; provider?: ProviderName }>({ pairKey })
+  const providerRef = useRef<{ pairKey: string; provider?: AppProviderName }>({ pairKey })
   if (providerRef.current.pairKey !== pairKey) providerRef.current = { pairKey }
   if (quote?.providers[0]) providerRef.current.provider = quote.providers[0]
   const provider = providerRef.current.provider

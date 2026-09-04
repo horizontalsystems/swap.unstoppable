@@ -23,6 +23,7 @@ import { SendSelectToken } from '@/components/send/send-select-token'
 import { TokenBalance, useWalletBalances } from '@/hooks/use-wallet-balances'
 import { useAccounts } from '@/hooks/use-wallets'
 import { useRates } from '@/hooks/use-rates'
+import { uSwapWalletOption } from '@/types'
 import { getUSwap } from '@/lib/wallets'
 import { WalletAccount } from '@/store/wallets-store'
 import { DecimalText } from '@/components/decimal/decimal-text'
@@ -66,6 +67,10 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
   const { rates } = useRates([assetIdentifierStr(selectedToken.balance)])
   const rate = rates[assetIdentifierStr(selectedToken.balance)]
 
+  // USwap cannot send from a Stellar account — it has no Stellar wallet adapter. Both paths below
+  // already handle a missing wallet, so this resolves to undefined and they take that branch.
+  const uSwapProvider = uSwapWalletOption(selectedAccount.provider)
+
   const numericAmount = parseFloat(amount) || 0
   const fiatValue = rate ? rate.mul(numericAmount) : new USwapNumber(0)
 
@@ -92,7 +97,7 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
       try {
         if (EVMChains.includes(chain as EVMChain)) {
           const gasLimit = 21_000n
-          const evmWallet = uSwap.getWallet<EVMChain>(selectedAccount.provider, chain as EVMChain)
+          const evmWallet = uSwapProvider && uSwap.getWallet<EVMChain>(uSwapProvider, chain as EVMChain)
           if (!evmWallet) return
           const estimateFn = evmWallet.estimateGasPrices
           const gasPrices = await (typeof estimateFn === 'function' ? estimateFn() : estimateFn)
@@ -105,7 +110,7 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
           }
           setTxFee({ amount: fee, ticker: balance.ticker })
         } else if (UTXOChains.includes(chain as UTXOChain)) {
-          const utxoWallet = uSwap.getWallet<UTXOChain>(selectedAccount.provider, chain as UTXOChain)
+          const utxoWallet = uSwapProvider && uSwap.getWallet<UTXOChain>(uSwapProvider, chain as UTXOChain)
           if (!utxoWallet) return
           const feeValue = await utxoWallet.estimateTransactionFee({
             recipient: selectedAccount.address,
@@ -139,7 +144,7 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
     const assetValue = selectedToken.balance.set(numericAmount)
     setSubmitting(true)
 
-    const wallet = uSwap.getWallet(selectedAccount.provider, selectedToken.balance.chain)
+    const wallet = uSwapProvider && uSwap.getWallet(uSwapProvider, selectedToken.balance.chain)
     if (!wallet) {
       setSubmitting(false)
       toast.error(t('toast.walletNotConnected'))
@@ -203,7 +208,9 @@ export function Send({ isOpen, onOpenChange, initialToken, account }: SendDialog
                     onAmountChange={v => setAmount(v)}
                     autoComplete="off"
                   />
-                  <div className="text-txt-label-small text-sm font-medium">{toCurrencyFixed(fiatValue.toCurrency('$', { trimTrailingZeros: false }))}</div>
+                  <div className="text-txt-label-small text-sm font-medium">
+                    {toCurrencyFixed(fiatValue.toCurrency('$', { trimTrailingZeros: false }))}
+                  </div>
                 </div>
 
                 <div className={cn('flex items-center gap-2', totalTokenCount > 1 ? 'cursor-pointer' : 'cursor-default')} onClick={openTokenSelector}>

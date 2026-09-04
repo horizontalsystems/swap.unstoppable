@@ -33,6 +33,15 @@ export const useSwap = () => {
     amountFrom: amount,
     setAmountFrom,
     valueFrom: useMemo(() => new USwapNumber(amount), [amount]),
+    /**
+     * The sell amount for quoting and committing, at full precision.
+     *
+     * NOT `toSignificant()`, which rounds to 6 significant digits — `1234.5678901` becomes
+     * `1234.56` and `123456789.1234567` becomes `123456000`. That is fine for display but wrong to
+     * send: it swaps a different amount than the user typed. Stellar is 7 dp natively and the
+     * aggregator takes a decimal string, so both are given the exact value.
+     */
+    exactAmountFrom: useMemo(() => new USwapNumber(amount).getValue('string'), [amount]),
     setValueFrom: (value: USwapNumber | NumberPrimitives) => {
       setAmountFrom(new USwapNumber(value).toSignificant())
     },

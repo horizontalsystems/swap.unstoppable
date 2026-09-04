@@ -5,8 +5,11 @@ import { useAssets } from '@/hooks/use-assets'
 import { useRates } from '@/hooks/use-rates'
 import { useAccounts, useHasHydrated } from '@/hooks/use-wallets'
 import { getAlchemyTokenBalances, getThorBankBalances } from '@/lib/api'
+import { isStellarChain, STELLAR_DECIMALS } from '@/lib/stellar/asset-list'
+import { getStellarBalances } from '@/lib/stellar/balance'
 import { getUSwap } from '@/lib/wallets'
 import { WalletAccount } from '@/store/wallets-store'
+import { uSwapWalletOption } from '@/types'
 
 const ETH_RPC_URL = process.env.NEXT_PUBLIC_ALCHEMY_ETH_RPC_URL || 'https://eth.llamarpc.com'
 
@@ -58,7 +61,28 @@ export const useWalletBalances = () => {
     queryFn: async () => {
       const results = await Promise.allSettled(
         accounts.map(async account => {
-          const wallet = uSwap.getWallet(account.provider, account.network)
+          // Stellar has no USwap wallet to ask, so its balances come from Horizon. Without this the
+          // sidebar lists a connected Freighter account with nothing in it.
+          if (isStellarChain(account.network)) {
+            const lines = await queryClient.ensureQueryData({
+              queryKey: ['account-balance', account.network, account.address],
+              queryFn: () => getStellarBalances(account.address),
+              staleTime: 30_000
+            })
+            const balances = lines.flatMap(line => {
+              try {
+                // Stellar is fixed 7-dp. Base units + an explicit decimal means the amount does
+                // not rely on USwap's decimal fallback for a token it has no static entry for.
+                return [AssetValue.from({ asset: line.identifier, fromBaseDecimal: STELLAR_DECIMALS, value: line.baseAmount })]
+              } catch {
+                return []
+              }
+            })
+            return { account, balances, alchemyLogoMap: new Map<string, string>() }
+          }
+
+          const provider = uSwapWalletOption(account.provider)
+          const wallet = provider && uSwap.getWallet(provider, account.network)
           if (!wallet || !('getBalance' in wallet)) return { account, balances: [] as AssetValue[], alchemyLogoMap: new Map<string, string>() }
           const rawBalances = await queryClient.ensureQueryData({
             queryKey: ['account-balance', account.network, account.address],
@@ -85,9 +109,7 @@ export const useWalletBalances = () => {
           const alchemyLogoMap = new Map<string, string>()
           if (account.network === Chain.Ethereum) {
             const alchemyBalances = await getAlchemyTokenBalances(wallet.address, ETH_RPC_URL)
-            const existingAddresses = new Set(
-              balances.map(b => b.address?.toLowerCase()).filter(Boolean)
-            )
+            const existingAddresses = new Set(balances.map(b => b.address?.toLowerCase()).filter(Boolean))
             for (const t of alchemyBalances) {
               const addr = t.contractAddress.toLowerCase()
               if (t.logo) alchemyLogoMap.set(addr, t.logo)

@@ -1,5 +1,5 @@
 import { Chain } from '@uswap/core'
-import { ProviderName } from '@/types'
+import { AppProviderName } from '@/types'
 
 export interface Asset {
   address?: string
@@ -12,5 +12,5 @@ export interface Asset {
   name?: string
   shortCode?: string
   ticker: string
-  providers: ProviderName[]
+  providers: AppProviderName[]
 }

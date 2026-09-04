@@ -62,7 +62,17 @@
       "estimatedTime": "Estimated Time",
       "provider": "Provider",
       "memo": "Memo",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "brokerPhase": {
+        "connecting": "Connecting…",
+        "quoting": "Getting live price…",
+        "trading": "Trading…",
+        "settling": "Settling…"
+      },
+      "executionPath": "Execution path",
+      "executionPathTooltip": "The venue filling this swap, and any assets it routes through on the way.",
+      "routeSpent": "Route already used",
+      "routeSpentHint": "Part of this swap was already signed, so it cannot be run again. Close this and request a new quote — your balance will reflect whatever settled."
     },
     "feeDialog": {
       "title": "Fees Included in the Rate",
@@ -82,7 +92,11 @@
       "enterRefundAddress": "Enter refund address:",
       "enterReceivingAddress": "Enter receiving address:",
       "preparingSwap": "Preparing Swap",
-      "next": "Next"
+      "next": "Next",
+      "addTrustline": "Add {ticker} trustline",
+      "trustlineRequired": "Your account must hold a {ticker} trustline before it can receive this asset. This is a one-off Stellar transaction and reserves 0.5 XLM.",
+      "trustlineThirdParty": "The recipient account cannot receive {ticker} — it has no trustline for it, and only the account holder can add one.",
+      "recipientNotSupported": "This route settles to your own account and cannot pay a different address. Choose a {providers} route to send to someone else."
     },
     "warning": {
       "selfCustody": "I understand that I must use a self-custody wallet. I understand that using a smart contract wallet, exchange address, delegated address, or an EIP 7702 wallet, will result in",
@@ -154,7 +168,9 @@
       "chooseRoute": "Choose Route",
       "price": "1 {from} = {price} {to}",
       "bestPrice": "Best price",
-      "faster": "Fastest"
+      "faster": "Fastest",
+      "noFloor": "Estimate",
+      "noFloorTooltip": "This venue re-quotes live while the swap runs, so it has no guaranteed minimum. Other routes enforce theirs on-chain."
     },
     "instant": {
       "sendTitle": "Send {asset}",

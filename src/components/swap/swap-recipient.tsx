@@ -25,7 +25,10 @@ import { QR_PROVIDERS } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
 import { useIsLimitSwap, useLimitSwapBuyAmount, useLimitSwapExpiry } from '@/store/limit-swap-store'
 import { WalletAccount } from '@/store/wallets-store'
-import { ProviderName, QuoteResponseRoute } from '@/types'
+import type { CommittedRoute } from 'stellar-web-sdk'
+import { providersForPairKind } from '@/lib/stellar/adapt'
+import { activateStellarTrustline, checkStellarTrustline, commitStellarRoute } from '@/lib/stellar/execute'
+import { AppProviderName, isStellarSdkProvider, ProviderName, QuoteResponseRoute } from '@/types'
 
 const EXTRA_CHAIN_VALIDATORS: Record<string, (address: string) => boolean> = {
   XMR: address => /^[48][1-9A-HJ-NP-Za-km-z]{94}$/.test(address) || /^[48][1-9A-HJ-NP-Za-km-z]{105}$/.test(address),
@@ -33,8 +36,10 @@ const EXTRA_CHAIN_VALIDATORS: Record<string, (address: string) => boolean> = {
 }
 
 interface SwapRecipientProps {
-  provider: ProviderName
-  onFetchQuote: (quote: QuoteResponseRoute) => void
+  provider: AppProviderName
+  // `committed` is the SDK's own route object, carried alongside the rendered copy because
+  // execute() and track() need it rather than the adapted one.
+  onFetchQuote: (quote: QuoteResponseRoute, committed?: CommittedRoute) => void
 }
 
 export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) => {
@@ -55,7 +60,8 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const limitSwapExpiry = useLimitSwapExpiry()
 
   const { getProvider } = useProviders()
-  const { valueFrom } = useSwap()
+  const recipientCapableProviders = providersForPairKind('in_chain', true, true)
+  const { valueFrom, exactAmountFrom } = useSwap()
   const queryClient = useQueryClient()
   const [quoting, setQuoting] = useState(false)
   const [quoteError, setQuoteError] = useState<Error | undefined>()
@@ -65,6 +71,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const [isValidDestination, setIsValidDestination] = useState(true)
   const [isValidRefund, setIsValidRefund] = useState(true)
   const [warningChecked, setWarningChecked] = useState(false)
+  const [trustlineNeeded, setTrustlineNeeded] = useState(false)
   const [warningCheckedLTC, setWarningCheckedLTC] = useState(false)
 
   if (!assetFrom || !assetTo) return null
@@ -99,8 +106,68 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
       .catch(() => setIsValidRefund(false))
   }, [refundAddress])
 
+  const fetchStellarQuote = async () => {
+    if (!assetFrom || !assetTo || !selectedAccount) return
+
+    const sourceAddress = selectedAccount.address
+
+    // STELLARBROKER and AQUARIUS settle on the trader's own account and cannot pay a third party at
+    // all — a hard capability limit, not a preference. Committing would fail with
+    // recipient_not_supported after a trustline round-trip, so refuse up front and name the venues
+    // that can, rather than leaving the user to guess.
+    if (destinationAddress !== sourceAddress && !recipientCapableProviders.includes(provider)) {
+      throw new Error(t('recipientNotSupported', { providers: recipientCapableProviders.join(', ') }))
+    }
+
+    // Buying a classic asset the recipient does not trust fails on-chain, so gate before
+    // committing. Only the holder can create its own trustline — for a third-party recipient we
+    // can report the problem but not fix it.
+    const trustline = await checkStellarTrustline(destinationAddress, assetTo, sourceAddress)
+    if (trustline.required) {
+      if (!trustline.activatable) {
+        throw new Error(t('trustlineThirdParty', { ticker: assetTo.ticker }))
+      }
+      setTrustlineNeeded(true)
+      return
+    }
+
+    const { route, committed } = await commitStellarRoute({
+      assetFrom,
+      assetTo,
+      sellAmount: exactAmountFrom,
+      slippage: slippage ?? 99,
+      sourceAddress,
+      destinationAddress,
+      provider
+    })
+
+    onFetchQuote(route, committed)
+  }
+
+  const addTrustline = () => {
+    if (!assetTo || !selectedAccount) return
+    setQuoting(true)
+    setQuoteError(undefined)
+
+    activateStellarTrustline(selectedAccount.address, assetTo)
+      .then(() => {
+        setTrustlineNeeded(false)
+        return fetchStellarQuote()
+      })
+      .catch(error => setQuoteError(parseApiError(error)))
+      .finally(() => setQuoting(false))
+  }
+
   const fetchQuote = () => {
     setQuoting(true)
+    setQuoteError(undefined)
+
+    if (isStellarSdkProvider(provider)) {
+      fetchStellarQuote()
+        .catch(error => setQuoteError(parseApiError(error)))
+        .finally(() => setQuoting(false))
+      return
+    }
 
     const sourceAddress = selectedAccount?.address
     const resolvedRefundAddress = refundRequired ? refundAddress : provider === 'MAYACHAIN' ? undefined : selectedAccount?.address
@@ -108,13 +175,13 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
     createSwap({
       buyAsset: assetTo.identifier,
       sellAsset: assetFrom.identifier,
-      sellAmount: valueFrom.toSignificant(),
+      sellAmount: exactAmountFrom,
       // sourceAddress makes the server build an unsignedTx
       sourceAddress: requiresSourceAddress ? sourceAddress : undefined,
       destinationAddress,
       refundAddress: resolvedRefundAddress,
       slippage: isLimitSwap ? 0 : (slippage ?? 99),
-      provider
+      provider: provider as ProviderName
     })
       .then(async route => {
         // the API doesn't echo the request addresses — the confirm screen and plugins need them
@@ -244,6 +311,10 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
             )}
           </div>
 
+          {trustlineNeeded && (
+            <div className="text-thor-gray bg-blade/40 rounded-xl px-4 py-3 text-sm">{t('trustlineRequired', { ticker: assetTo.ticker })}</div>
+          )}
+
           {quoteError && <SwapError error={quoteError} />}
         </div>
 
@@ -254,11 +325,11 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
         <ThemeButton
           variant="primaryMedium"
           className="w-full"
-          onClick={fetchQuote}
+          onClick={trustlineNeeded ? addTrustline : fetchQuote}
           disabled={!buttonEnabled || !warningChecked || (isLTC && !warningCheckedLTC)}
         >
           {quoting && <LoaderCircle size={20} className="animate-spin" />}
-          <span>{quoting ? t('preparingSwap') : t('next')}</span>
+          <span>{quoting ? t('preparingSwap') : trustlineNeeded ? t('addTrustline', { ticker: assetTo.ticker }) : t('next')}</span>
         </ThemeButton>
       </div>
     </>

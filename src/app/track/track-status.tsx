@@ -10,6 +10,8 @@ import { DecimalText } from '@/components/decimal/decimal-text'
 import { Icon } from '@/components/icons'
 import { useRates } from '@/hooks/use-rates'
 import { getTrack, getTrackEvm, getTrackThorchain } from '@/lib/api'
+import { trackStellarRoute } from '@/lib/stellar/execute'
+import { isStellarSdkProvider } from '@/types'
 import { cn, truncate } from '@/lib/utils'
 import { isTxPending, isTxTerminal, TxStatus } from '@/store/transaction-store'
 
@@ -26,6 +28,11 @@ export interface TrackParams {
   toAmount: string
   depositAddress?: string
   refundAddress?: string
+  // Stellar (stellar-web-sdk) tracking extras — the memo a deposit is keyed by, and the two chain
+  // codes an Axelar bridge transfer runs between.
+  depositMemo?: string
+  fromChain?: string
+  toChain?: string
 }
 
 // tracks by uuid; legacy links without one fall back to the stateless on-chain trackers
@@ -47,6 +54,26 @@ function fetchTrackStatus(params: TrackParams) {
       toAmount: params.toAmount || undefined,
       fromAddress: params.fromAddress
     })
+  }
+
+  // Stellar swaps never reached the aggregator, so /track has no record of them. Everything the
+  // SDK needs to read the outcome from Horizon (or Axelarscan) is in the link itself.
+  if (isStellarSdkProvider(params.provider)) {
+    return trackStellarRoute(
+      {
+        provider: params.provider,
+        fromAsset: params.fromAsset,
+        toAsset: params.toAsset,
+        toAddress: params.toAddress,
+        fromAddress: params.fromAddress,
+        fromAmount: params.fromAmount || undefined,
+        depositAddress: params.depositAddress,
+        depositMemo: params.depositMemo,
+        fromChain: params.fromChain,
+        toChain: params.toChain
+      },
+      params.hash
+    )
   }
 
   if (params.provider === 'ONEINCH' || params.provider === 'BARTER') {

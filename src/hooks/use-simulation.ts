@@ -6,6 +6,7 @@ import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useSwap } from '@/hooks/use-swap'
 import { useWallets } from '@/hooks/use-wallets'
 import { getUSwap } from '@/lib/wallets'
+import { uSwapWalletOption } from '@/types'
 
 type UseSimulation = {
   approveData?: {
@@ -48,7 +49,8 @@ export const useSimulation = (): UseSimulation => {
 
       const approvalSpender = quote.approvalSpender
       if (!assetValue.isGasAsset && assetValue.address && approvalSpender) {
-        const wallet = uSwap.getWallet<EVMChain>(selected.provider, selected.network as EVMChain)
+        const provider = uSwapWalletOption(selected.provider)
+        const wallet = provider && uSwap.getWallet<EVMChain>(provider, selected.network as EVMChain)
         const approved = await wallet?.isApproved({
           assetAddress: assetValue.address,
           spenderAddress: approvalSpender,

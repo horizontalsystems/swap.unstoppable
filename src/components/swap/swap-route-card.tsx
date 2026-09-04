@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { USwapNumber } from '@uswap/core'
 import { Separator } from '@/components/ui/separator'
+import { Tooltip } from '@/components/tooltip'
 import { Icon } from '@/components/icons'
 import { SwapProvider } from '@/components/swap/swap-provider'
 import { BarterPointsBadge } from '@/components/promotion/barter-points-badge'
@@ -46,10 +47,7 @@ export function SwapRouteCard({
   const price = priceDirect ? valueTo.div(valueFrom) : valueFrom.div(valueTo)
 
   return (
-    <div
-      className={cn('rounded-2xl border text-xs font-semibold', selected ? 'border-brand-first' : 'border-blade', className)}
-      onClick={onSelect}
-    >
+    <div className={cn('rounded-2xl border text-xs font-semibold', selected ? 'border-brand-first' : 'border-blade', className)} onClick={onSelect}>
       <div
         className={cn('flex items-center gap-3 p-4', onOpenList && 'cursor-pointer')}
         onClick={
@@ -62,6 +60,14 @@ export function SwapRouteCard({
       >
         <SwapProvider provider={route.providers[0]} />
         <BarterPointsBadge provider={route.providers[0]} />
+        {/* An explicit null means the amount is an estimate with no on-chain floor — the venue
+            re-quotes live. It can top the list by a hair while being the only route that can
+            under-deliver, so the list has to say so, not just the confirm screen. */}
+        {route.minBuyAmount === null && (
+          <Tooltip content={t('noFloorTooltip')}>
+            <span className="text-jacob border-jacob rounded-lg border px-1.5 text-[10px] font-semibold">{t('noFloor')}</span>
+          </Tooltip>
+        )}
         <div className="flex-1" />
         <div className="text-leah flex items-center gap-3">
           {badge}

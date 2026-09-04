@@ -1,7 +1,11 @@
 import Image from 'next/image'
-import { ProviderName } from '@/types'
+import { AppProviderName } from '@/types'
 
-export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' | 'LIZEX' | 'BITANIA' }) => {
+// NOTE: the five Stellar venues currently use placeholder monogram icons in /public/providers
+// (stellarbroker, soroswap, aquarius, stellar_dex, axelar_its). Swap them for the real brand
+// assets before launch.
+
+export const SwapProvider = ({ provider }: { provider: AppProviderName | 'LIZEX' | 'BITANIA' }) => {
   let title: string = provider
   let icon = title
 
@@ -35,6 +39,18 @@ export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' | 'L
     title = 'Bitania'
   } else if (provider === 'CCE') {
     title = 'CCE Cash'
+  } else if (provider === 'STELLARBROKER') {
+    title = 'StellarBroker'
+  } else if (provider === 'SOROSWAP') {
+    title = 'Soroswap'
+  } else if (provider === 'AQUARIUS') {
+    title = 'Aquarius'
+  } else if (provider === 'STELLAR_DEX') {
+    title = 'Stellar DEX'
+    icon = 'stellar_dex'
+  } else if (provider === 'AXELAR_ITS') {
+    title = 'Axelar ITS'
+    icon = 'axelar_its'
   }
 
   return (

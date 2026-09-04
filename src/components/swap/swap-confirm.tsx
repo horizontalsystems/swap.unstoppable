@@ -11,6 +11,7 @@ import { DecimalText } from '@/components/decimal/decimal-text'
 import { Icon } from '@/components/icons'
 import { PriceImpact } from '@/components/swap/price-impact'
 import { SwapProvider } from '@/components/swap/swap-provider'
+import { SwapRoutePath } from '@/components/swap/swap-route-path'
 import { InfoTooltip } from '@/components/tooltip'
 import { useAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useRates, useSwapRates } from '@/hooks/use-rates'
@@ -253,6 +254,8 @@ export const SwapConfirm = ({ quote }: SwapConfirmProps) => {
               <span className="font-normal">{t('provider')}</span>
               <SwapProvider provider={quote.providers[0]} />
             </div>
+
+            <SwapRoutePath quote={quote} fromTicker={assetFrom.ticker} toTicker={assetTo.ticker} />
           </div>
 
           {memo && (

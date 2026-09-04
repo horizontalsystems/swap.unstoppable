@@ -12,6 +12,8 @@ import { okxWallet } from '@uswap/wallets/okx'
 import { phantomWallet } from '@uswap/wallets/phantom'
 import { tronlinkWallet } from '@uswap/wallets/tronlink'
 import { vultisigWallet } from '@uswap/wallets/vultisig'
+import { connectFreighter } from '@/lib/stellar/wallet'
+import { AppWalletOption, isStellarWallet, uSwapWalletOption } from '@/types'
 import { useWalletStore } from '@/store/wallets-store'
 
 const defaultPlugins = {
@@ -39,7 +41,10 @@ function createUSwap(config: Parameters<typeof USwap>[0] = {}) {
     ...config,
     plugins: defaultPlugins,
     wallets: defaultWallets,
-    getActiveWallet: () => useWalletStore.getState().selected?.provider
+    getActiveWallet: () => {
+      const selected = useWalletStore.getState().selected?.provider
+      return selected && uSwapWalletOption(selected)
+    }
   })
 }
 
@@ -68,7 +73,13 @@ export function getUSwap() {
   return instance
 }
 
-export async function connectWallet(option: WalletOption, chains: Chain[], config?: any): Promise<boolean> {
+export async function connectWallet(option: AppWalletOption, chains: Chain[], config?: any): Promise<boolean> {
+  // USwap has no Stellar plugin or wallet adapter, so these connect entirely outside it.
+  if (isStellarWallet(option)) {
+    await connectFreighter()
+    return true
+  }
+
   const uSwap = getUSwap()
   const connectEach = async (connect: (chain: Chain[]) => Promise<boolean>) => {
     let successCount = 0
@@ -110,10 +121,15 @@ export async function connectWallet(option: WalletOption, chains: Chain[], confi
 }
 
 export async function getAccounts(
-  option: WalletOption,
+  option: AppWalletOption,
   chains: Chain[],
   config?: any
-): Promise<{ address: string; network: Chain; provider: WalletOption }[]> {
+): Promise<{ address: string; network: Chain; provider: AppWalletOption }[]> {
+  if (isStellarWallet(option)) {
+    const address = await connectFreighter()
+    return [{ address, network: Chain.Stellar, provider: option }]
+  }
+
   const uSwap = getUSwap()
 
   const connected = await connectWallet(option, chains, config)
@@ -127,7 +143,8 @@ export async function getAccounts(
     .filter(acc => acc !== null)
 }
 
-export const supportedChains: Record<WalletOption, Chain[]> = {
+export const supportedChains: Record<AppWalletOption, Chain[]> = {
+  FREIGHTER: [Chain.Stellar],
   [WalletOption.BRAVE]: evmWallet.connectEVMWallet.supportedChains,
   [WalletOption.COINBASE_WEB]: evmWallet.connectEVMWallet.supportedChains,
   [WalletOption.EIP6963]: evmWallet.connectEVMWallet.supportedChains,

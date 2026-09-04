@@ -1,6 +1,7 @@
 import { Chain, okxMobileEnabled, WalletOption } from '@uswap/core'
 import { getChainConfig } from '@uswap/helpers'
 import { supportedChains } from '@/lib/wallets'
+import { AppWalletOption, isStellarWallet } from '@/types'
 
 export enum WalletType {
   browser,
@@ -11,7 +12,7 @@ export type WalletParams = {
   key: string
   type: WalletType
   label: string
-  option: WalletOption
+  option: AppWalletOption
   link: string
   supportedChains: Chain[]
 }
@@ -33,6 +34,7 @@ export const ALL_CHAINS = [
   Chain.Optimism,
   Chain.Polygon,
   Chain.Solana,
+  Chain.Stellar,
   Chain.THORChain,
   Chain.Tron,
   Chain.Zcash,
@@ -42,6 +44,15 @@ export const ALL_CHAINS = [
 export const COMING_SOON_CHAINS: string[] = []
 
 export const WALLETS: WalletParams[] = [
+  {
+    // Placeholder icon in /public/wallets/freighter.svg — swap for the real brand asset.
+    key: 'freighter',
+    type: WalletType.browser,
+    label: 'Freighter',
+    option: 'FREIGHTER',
+    link: 'https://www.freighter.app',
+    supportedChains: supportedChains.FREIGHTER
+  },
   {
     key: 'metamask',
     label: 'MetaMask',
@@ -108,13 +119,19 @@ export const WALLETS: WalletParams[] = [
   }
 ]
 
-export const wallet = (option: WalletOption) => {
+export const wallet = (option: AppWalletOption) => {
   return WALLETS.find(w => w.option === option)
 }
 
-export const isWalletAvailable = (option: WalletOption) => {
+export const isWalletAvailable = (option: AppWalletOption) => {
+  // Freighter is the exception: it announces itself over a postMessage handshake rather than a
+  // global, so presence can only be resolved asynchronously. useFreighterInstalled() answers it and
+  // the connect dialog folds that in — see isInstalled() there.
+  if (isStellarWallet(option)) return false
+
   // prettier-ignore
   switch (option) {
+
     case WalletOption.METAMASK: return window?.ethereum && !window.ethereum?.isBraveWallet
     case WalletOption.VULTISIG: return window?.vultisig
     case WalletOption.PHANTOM: return window?.phantom

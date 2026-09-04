@@ -1,9 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
+import { Chain } from '@uswap/core'
 import { EVMChain, EVMChains, getChainConfig } from '@uswap/helpers'
 import { Asset } from '@/components/swap/asset'
 import { AppConfig } from '@/config'
 import { getAllTokens, getProviders, getProviderTokens } from '@/lib/api'
-import { ProviderName } from '@/types'
+import {
+  SDK_QUOTED_PROVIDERS,
+  STELLAR_ASSETS,
+  STELLAR_CHAIN_ID,
+  STELLAR_DECIMALS,
+  stellarIdentifier,
+  stellarProvidersFor
+} from '@/lib/stellar/asset-list'
+import { AppProviderName, ProviderName } from '@/types'
 
 const EXTRA_CHAINS = new Set(['XMR', 'XLM'])
 
@@ -24,7 +33,13 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
     queryKey: ['assets'],
     queryFn: async () => {
       const appProviders = AppConfig.providers
-      const [tokens, providers] = await Promise.all([appProviders ? getProviderTokens(appProviders) : getAllTokens(), getProviders()])
+      // /tokens only knows the aggregator's own providers; the Stellar venues are added below from
+      // the curated list instead.
+      const aggregatorProviders = appProviders?.filter((p): p is ProviderName => !SDK_QUOTED_PROVIDERS.has(p))
+      const [tokens, providers] = await Promise.all([
+        aggregatorProviders?.length ? getProviderTokens(aggregatorProviders) : getAllTokens(),
+        getProviders()
+      ])
       const assets = new Map<string, Asset>()
       const geckoMap = new Map<string, string>()
 
@@ -40,7 +55,7 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
 
         const isEvm = EVMChains.includes(token.chain as EVMChain)
 
-        let providerNames: ProviderName[] = (token.providers ?? []).filter((p: ProviderName) => !DISABLED_PROVIDERS.has(p))
+        let providerNames: AppProviderName[] = (token.providers ?? []).filter((p: ProviderName) => !DISABLED_PROVIDERS.has(p))
         for (const { name, chainIds } of manualProviderChains) {
           if (!chainIds.has(token.chainId) || providerNames.includes(name)) continue
           if (!isEvm && EVM_ONLY_PROVIDERS.has(name)) continue
@@ -69,6 +84,40 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
 
         if (token.coingeckoId) {
           geckoMap.set(token.identifier.toLowerCase(), token.coingeckoId)
+        }
+      }
+
+      // The Stellar venues are quoted client-side by stellar-web-sdk, so they are absent from
+      // /tokens. Union them onto the aggregator's own XLM entries (XLM.XLM and SHX) rather than
+      // overwriting — those already carry a logo, a coingeckoId, and the instant-exchange
+      // providers that also serve Stellar.
+      for (const entry of STELLAR_ASSETS) {
+        const identifier = stellarIdentifier(entry)
+        const providerNames = stellarProvidersFor(entry)
+        const key = `XLM-${identifier}`.toLowerCase()
+        const existing = assets.get(key)
+
+        if (existing) {
+          existing.providers = Array.from(new Set([...existing.providers, ...providerNames]))
+          continue
+        }
+
+        if (appProviders && !providerNames.some(p => appProviders.includes(p))) continue
+
+        assets.set(key, {
+          chain: Chain.Stellar,
+          chainId: STELLAR_CHAIN_ID,
+          coingeckoId: entry.coingeckoId,
+          decimals: STELLAR_DECIMALS,
+          identifier,
+          logoURI: entry.logoURI,
+          name: entry.name,
+          ticker: entry.code,
+          providers: providerNames
+        })
+
+        if (entry.coingeckoId) {
+          geckoMap.set(identifier.toLowerCase(), entry.coingeckoId)
         }
       }
 

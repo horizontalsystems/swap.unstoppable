@@ -15,7 +15,7 @@ import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { useSelectedAccount } from '@/hooks/use-wallets'
 import { getUSwap } from '@/lib/wallets'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
-import { QuoteResponseRoute } from '@/types'
+import { AppProviderName, QuoteResponseRoute, uSwapWalletOption } from '@/types'
 
 interface SwapButtonProps {
   instantSwapSupported: boolean
@@ -90,7 +90,10 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
         spinner: false,
         accent: false,
         onClick: async () => {
-          const wallet = uSwap.getWallet<EVMChain>(selectedAccount.provider, selectedAccount.network as EVMChain)
+          // ERC-20 approval is a USwap path; a Stellar account never reaches it (approvals are
+          // an EVM concept and Stellar routes carry no approveData).
+          const provider = uSwapWalletOption(selectedAccount.provider)
+          const wallet = provider && uSwap.getWallet<EVMChain>(provider, selectedAccount.network as EVMChain)
           if (!wallet) return
           const promise = wallet
             .approve({

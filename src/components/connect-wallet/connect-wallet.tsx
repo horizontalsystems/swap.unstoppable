@@ -9,8 +9,10 @@ import { ALL_CHAINS, chainLabel, COMING_SOON_CHAINS, isWalletAvailable, WalletPa
 import { Keystore } from '@/components/connect-wallet/keystore/keystore'
 import { Ledger } from '@/components/connect-wallet/ledger'
 import { Icon } from '@/components/icons'
+import { useFreighterInstalled } from '@/hooks/use-freighter'
 import { useWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
+import { AppWalletOption, isStellarWallet } from '@/types'
 
 interface ConnectWalletProps {
   isOpen: boolean
@@ -24,6 +26,15 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
   const [selectedWallet, setSelectedWallet] = useState<WalletParams | undefined>(undefined)
   const [selectedChain, setSelectedChain] = useState<Chain | undefined>(chain)
   const { connectedWallets } = useWallets()
+  const freighterInstalled = useFreighterInstalled()
+
+  // isWalletAvailable answers every wallet that exposes a window global. Freighter does not — it
+  // answers a postMessage handshake instead — so its answer arrives separately and is merged here.
+  const isInstalled = (option: AppWalletOption) => (isStellarWallet(option) ? !!freighterInstalled : isWalletAvailable(option))
+
+  // Freighter's handshake self-resolves to false after 2s. Until it settles we do not know, and
+  // telling someone to install an extension they already have is the worse of the two mistakes.
+  const isChecking = (option: AppWalletOption) => isStellarWallet(option) && freighterInstalled === undefined
 
   const chains = useMemo(
     () =>
@@ -38,7 +49,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
     const others: WalletParams[] = []
 
     WALLETS.forEach(wallet => {
-      if (isWalletAvailable(wallet.option)) {
+      if (isInstalled(wallet.option)) {
         installed.push(wallet)
       } else {
         others.push(wallet)
@@ -51,7 +62,8 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
     others.sort(sortByLabel)
 
     return [...installed, ...others]
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [freighterInstalled])
 
   const onSelectWallet = (wallet: WalletParams) => {
     setSelectedWallet(prev => (prev === wallet ? undefined : wallet))
@@ -62,7 +74,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
     setSelectedChain(prev => (prev === chain ? undefined : chain))
   }
 
-  const isWalletHighlighted = (walletOption: WalletOption) => {
+  const isWalletHighlighted = (walletOption: AppWalletOption) => {
     if (!selectedChain) return true
 
     const wallet = WALLETS.find(w => w.option === walletOption)
@@ -72,7 +84,8 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
   const walletList = (wallets: WalletParams[]) => {
     return wallets.map((wallet, index) => {
       const isConnected = connectedWallets.find(w => w === wallet.option)
-      const isInstalled = isWalletAvailable(wallet.option)
+      const installed = isInstalled(wallet.option)
+      const checking = isChecking(wallet.option)
       const isSelected = wallet === selectedWallet
       const isHighlighted = isWalletHighlighted(wallet.option)
 
@@ -82,11 +95,11 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
           className={cn('mb-1 flex items-center space-x-3 rounded-2xl border-1 border-transparent p-3', {
             'border-brand-second': isSelected,
             'opacity-25': !isHighlighted,
-            'hover:bg-blade/50 cursor-pointer': isInstalled && !isConnected && isHighlighted,
+            'hover:bg-blade/50 cursor-pointer': installed && !isConnected && isHighlighted,
             'mb-4 md:mb-8': index === wallets.length - 1
           })}
           onClick={() => {
-            if (isConnected || !isInstalled || !isHighlighted) return
+            if (isConnected || !installed || !isHighlighted || checking) return
             onSelectWallet(wallet)
           }}
         >
@@ -94,7 +107,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
           <div className="flex-1">
             <div className="text-leah font-medium">{wallet.label}</div>
             <div className="text-xs">
-              {isInstalled ? (
+              {installed || checking ? (
                 isConnected ? (
                   <span className="text-brand-first">{t('connected')}</span>
                 ) : (

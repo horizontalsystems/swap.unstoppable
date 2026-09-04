@@ -1,6 +1,5 @@
 'use client'
 
-import { WalletOption } from '@uswap/core'
 import { CheckIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { WalletIcon } from '@/components/wallet-icon'
@@ -10,6 +9,7 @@ import { wallet, WALLETS } from '@/components/connect-wallet/config'
 import { tokenToAsset } from '@/components/send/send-helpers'
 import { TokenBalance, useWalletBalances } from '@/hooks/use-wallet-balances'
 import { WalletAccount } from '@/store/wallets-store'
+import { AppWalletOption } from '@/types'
 import { DecimalText } from '@/components/decimal/decimal-text'
 import { toCurrencyFixed } from '@/lib/utils'
 
@@ -26,7 +26,7 @@ export function SendSelectToken({ isOpen, onOpenChange, selected, selectedAccoun
   const t = useTranslations('send')
   const { walletData } = useWalletBalances()
 
-  const byProvider = walletData.reduce<Map<WalletOption, { account: WalletAccount; token: TokenBalance }[]>>((map, { account, tokens }) => {
+  const byProvider = walletData.reduce<Map<AppWalletOption, { account: WalletAccount; token: TokenBalance }[]>>((map, { account, tokens }) => {
     const entries = tokens.filter(t => t.amount > 0 && (!filter || filter(t))).map(token => ({ account, token }))
     if (!entries.length) return map
     const existing = map.get(account.provider) ?? []

@@ -16,6 +16,7 @@ import { useAccounts, useConnectedWallets, useDisconnect, useExternalWalletMode,
 import { cn } from '@/lib/utils'
 import { WalletAccount } from '@/store/wallets-store'
 import { ThemeButton } from '@/components/theme-button'
+import { AppWalletOption } from '@/types'
 
 interface WalletSidebarProps {
   isOpen: boolean
@@ -51,7 +52,7 @@ export function WalletSidebar({ isOpen, onOpenChange }: WalletSidebarProps) {
     })
   }
 
-  const accountsByProvider = connectedWallets.reduce<Map<WalletOption, WalletAccount[]>>((map, provider) => {
+  const accountsByProvider = connectedWallets.reduce<Map<AppWalletOption, WalletAccount[]>>((map, provider) => {
     const providerAccounts = accounts.filter(a => a.provider === provider)
     if (providerAccounts.length > 0) map.set(provider, providerAccounts)
     return map
@@ -111,16 +112,9 @@ export function WalletSidebar({ isOpen, onOpenChange }: WalletSidebarProps) {
             <div className="flex items-center justify-between gap-3">
               <div className="flex-1">
                 <div className="text-txt-high-contrast text-sm font-semibold">{t('externalWalletMode')}</div>
-                <div className="text-txt-label-small mt-0.5 text-xs leading-relaxed">
-                  {t('externalWalletModeDescription')}
-                </div>
+                <div className="text-txt-label-small mt-0.5 text-xs leading-relaxed">{t('externalWalletModeDescription')}</div>
               </div>
-              <Switch
-                checked={externalWalletMode}
-                onCheckedChange={setExternalWalletMode}
-                size="md"
-                className="data-[state=checked]:bg-jacob"
-              />
+              <Switch checked={externalWalletMode} onCheckedChange={setExternalWalletMode} size="md" className="data-[state=checked]:bg-jacob" />
             </div>
           </div>
 
@@ -131,9 +125,7 @@ export function WalletSidebar({ isOpen, onOpenChange }: WalletSidebarProps) {
           {externalWalletMode && (
             <div className="border-jacob flex items-center gap-3 rounded-xl border p-4">
               <Icon name="warning" className="text-jacob size-6 shrink-0" />
-              <div className="text-txt-text-modal text-sm">
-                {t('externalWalletInfo')}
-              </div>
+              <div className="text-txt-text-modal text-sm">{t('externalWalletInfo')}</div>
             </div>
           )}
 

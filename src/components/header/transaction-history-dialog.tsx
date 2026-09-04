@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, USwapNumber } from '@uswap/core'
+import { assetFromString, ChainId, ChainIdToChain, USwapNumber } from '@uswap/core'
 import { format, formatDuration, intervalToDuration, isSameDay, isToday, isYesterday } from 'date-fns'
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
 import { toast } from 'sonner'
@@ -20,6 +20,7 @@ import { SwapLimitCancel } from '@/components/swap/swap-limit-cancel'
 import { ThemeButton } from '@/components/theme-button'
 import { useRates } from '@/hooks/use-rates'
 import { useSyncTransactions } from '@/hooks/use-sync-transactions'
+import { ExplorerLink, explorerTxLink } from '@/lib/explorer'
 import { useSelectedAccount } from '@/hooks/use-wallets'
 import { formatExpiration } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
@@ -252,15 +253,10 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         )}
                       </>
                     )}
-                    {isExpanded && tx.provider === ProviderName.THORCHAIN && tx.hash && (
-                      <a
-                        href={`https://thorchain.net/tx/${tx.hash}`}
-                        className="flex justify-end px-4 py-3"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
+                    {isExpanded && txExplorer(tx) && (
+                      <a href={txExplorer(tx)!.url} className="flex justify-end px-4 py-3" rel="noopener noreferrer" target="_blank">
                         <ThemeButton variant="secondarySmall">
-                          <Icon name="globe" className="size-5" /> thorchain.net
+                          <Icon name="globe" className="size-5" /> {txExplorer(tx)!.label}
                         </ThemeButton>
                       </a>
                     )}
@@ -273,6 +269,16 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
       </CredenzaContent>
     </Credenza>
   )
+}
+
+/**
+ * Where to view the swap's own transaction. THORCHAIN keeps thorchain.net, which shows the whole
+ * swap rather than just the inbound transfer; everything else goes to its chain's explorer.
+ */
+function txExplorer(tx: Transaction): ExplorerLink | undefined {
+  if (!tx.hash) return undefined
+  if (tx.provider === ProviderName.THORCHAIN) return { url: `https://thorchain.net/tx/${tx.hash}`, label: 'thorchain.net' }
+  return explorerTxLink({ hash: tx.hash, chainId: tx.chainId, provider: tx.provider })
 }
 
 function RemainingTime({ startTime, estimatedTime, fallback }: { startTime: number; estimatedTime: number; fallback: string }) {
@@ -303,7 +309,7 @@ function renderLeg(tx: any, legTx: any, t: ReturnType<typeof useTranslations>) {
       : t('leg.swap', { from: from.ticker ?? '', to: to.ticker ?? '' })
 
   const chain = ChainIdToChain[legTx.chainId as ChainId]
-  const explorerUrl = legTx.hash && getExplorerTxUrl({ chain: chain, txHash: legTx.hash })
+  const explorer = explorerTxLink({ hash: legTx.hash, chainId: legTx.chainId, chain, provider: tx.provider })
 
   return (
     <div className="text-thor-gray flex justify-between">
@@ -320,7 +326,11 @@ function renderLeg(tx: any, legTx: any, t: ReturnType<typeof useTranslations>) {
       <div className="flex items-center gap-2">
         <span>{chainLabel(chain)}</span>
 
-        {explorerUrl && <Icon name="globe" className="size-5 cursor-pointer" onClick={() => window.open(explorerUrl, '_blank')} />}
+        {explorer && (
+          <a href={explorer.url} rel="noopener noreferrer" target="_blank" aria-label={explorer.label} title={explorer.label}>
+            <Icon name="globe" className="size-5 cursor-pointer" />
+          </a>
+        )}
       </div>
     </div>
   )

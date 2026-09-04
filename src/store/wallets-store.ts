@@ -1,25 +1,26 @@
-import { Chain, WalletOption } from '@uswap/core'
+import { Chain } from '@uswap/core'
 import { toast } from 'sonner'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { getAccounts, getUSwap, supportedChains } from '@/lib/wallets'
+import { AppWalletOption, isStellarWallet } from '@/types'
 
 export interface WalletAccount {
   address: string
   network: Chain
-  provider: WalletOption
+  provider: AppWalletOption
 }
 
 interface WalletState {
   accounts: WalletAccount[]
   selected?: WalletAccount
-  connectedWallets: WalletOption[]
+  connectedWallets: AppWalletOption[]
   hasHydrated: boolean
   externalWalletMode: boolean
 
   select: (account?: WalletAccount) => void
-  connect: (wallet: WalletOption, chains: Chain[], config?: any) => Promise<void>
-  disconnect: (wallet: WalletOption) => void
+  connect: (wallet: AppWalletOption, chains: Chain[], config?: any) => Promise<void>
+  disconnect: (wallet: AppWalletOption) => void
   setExternalWalletMode: (enabled: boolean) => void
 }
 
@@ -36,7 +37,7 @@ export const useWalletStore = create<WalletState>()(
         set({ selected: account })
       },
 
-      connect: async (wallet: WalletOption, chains: Chain[], config?: any) => {
+      connect: async (wallet: AppWalletOption, chains: Chain[], config?: any) => {
         try {
           const newAccounts = await getAccounts(wallet, chains, config)
           if (!newAccounts.length) {
@@ -62,11 +63,15 @@ export const useWalletStore = create<WalletState>()(
         set({ externalWalletMode: enabled })
       },
 
-      disconnect: (wallet: WalletOption) => {
-        const uSwap = getUSwap()
-        supportedChains[wallet].forEach(chain => {
-          uSwap.disconnectChain(chain)
-        })
+      disconnect: (wallet: AppWalletOption) => {
+        // A Stellar wallet was never registered with USwap, so there is no chain to disconnect —
+        // dropping the stored accounts below is the whole of it.
+        if (!isStellarWallet(wallet)) {
+          const uSwap = getUSwap()
+          supportedChains[wallet].forEach(chain => {
+            uSwap.disconnectChain(chain)
+          })
+        }
 
         set(state => {
           const accounts = state.accounts.filter(acc => acc.provider !== wallet)

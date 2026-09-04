@@ -7,20 +7,29 @@ import { chainLabel, wallet, WALLETS } from '@/components/connect-wallet/config'
 import { ChainWalletData } from '@/hooks/use-wallet-balances'
 import { WalletChain } from '@/components/wallet-sidebar/wallet-chain'
 import { cn } from '@/lib/utils'
+import { AppWalletOption } from '@/types'
 
 export type WalletSortBy = 'name' | 'balance'
 
 export interface WalletProviderGroupProps {
-  provider: WalletOption
+  provider: AppWalletOption
   chainDataList: ChainWalletData[]
   expandedChains: Set<string>
   onToggleChain: (key: string) => void
-  onDisconnect: (provider: WalletOption) => void
+  onDisconnect: (provider: AppWalletOption) => void
   disabled: boolean
   sortBy: WalletSortBy
 }
 
-export function WalletProviderGroup({ provider, chainDataList, expandedChains, onToggleChain, onDisconnect, disabled, sortBy }: WalletProviderGroupProps) {
+export function WalletProviderGroup({
+  provider,
+  chainDataList,
+  expandedChains,
+  onToggleChain,
+  onDisconnect,
+  disabled,
+  sortBy
+}: WalletProviderGroupProps) {
   const t = useTranslations('wallet')
   const walletInfo = wallet(provider) || WALLETS.find(w => w.option === provider)
   const walletKey = walletInfo?.key || provider.toLowerCase()

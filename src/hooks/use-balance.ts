@@ -17,7 +17,10 @@ import { getProvider } from '@uswap/toolboxes/evm'
 import { useAssetFrom } from '@/hooks/use-swap'
 import { useWallets } from '@/hooks/use-wallets'
 import { getAssetBalance } from '@/lib/api'
+import { isStellarChain } from '@/lib/stellar/asset-list'
+import { getStellarBalance } from '@/lib/stellar/balance'
 import { getUSwap } from '@/lib/wallets'
+import { uSwapWalletOption } from '@/types'
 
 type UseBalance = {
   balance?: {
@@ -47,7 +50,14 @@ export const useBalance = (): UseBalance => {
         return null
       }
 
-      const wallet = uSwap.getWallet(selected.provider, assetFrom.chain)
+      // Stellar is read from Horizon directly — USwap has no Stellar toolbox to ask.
+      if (isStellarChain(assetFrom.chain)) {
+        const { total, spendable } = await getStellarBalance(selected.address, assetFrom)
+        return { total, spendable }
+      }
+
+      const provider = uSwapWalletOption(selected.provider)
+      const wallet = provider && uSwap.getWallet(provider, assetFrom.chain)
 
       if (!wallet) {
         return null
@@ -98,7 +108,7 @@ export const useBalance = (): UseBalance => {
 
             return new USwapNumber(0)
           } else if (UTXOChains.includes(assetFrom.chain as UTXOChain)) {
-            const utxoWallet = uSwap.getWallet<UTXOChain>(selected.provider, assetFrom.chain as UTXOChain)
+            const utxoWallet = uSwap.getWallet<UTXOChain>(provider, assetFrom.chain as UTXOChain)
             return await utxoWallet.estimateTransactionFee({
               recipient: selected.address,
               sender: selected.address,
