@@ -44,7 +44,11 @@ export function SwapRouteCard({
   const valueTo = new USwapNumber(route.expectedBuyAmount)
   const fiatValueTo = (rateTo && valueTo.mul(rateTo)) || new USwapNumber(0)
   const priceDirect = priceInverted ? valueTo.lt(valueFrom) : valueTo.gt(valueFrom)
-  const price = priceDirect ? valueTo.div(valueFrom) : valueFrom.div(valueTo)
+  // Either side can be zero — an amount cleared while this list is still mounted, or a provider
+  // quoting nothing — and USwapNumber throws on division by zero rather than returning Infinity.
+  // A missing price is worth hiding; it is not worth taking the page down for.
+  const hasPrice = !valueFrom.eqValue(0) && !valueTo.eqValue(0)
+  const price = hasPrice ? (priceDirect ? valueTo.div(valueFrom) : valueFrom.div(valueTo)) : undefined
 
   return (
     <div className={cn('rounded-2xl border text-xs font-semibold', selected ? 'border-brand-first' : 'border-blade', className)} onClick={onSelect}>
@@ -93,17 +97,20 @@ export function SwapRouteCard({
           </div>
         ) : (
           <span
-            className="cursor-pointer"
+            className={cn(price && 'cursor-pointer')}
             onClick={e => {
+              if (!price) return
               e.stopPropagation()
               setPriceInverted(!priceInverted)
             }}
           >
-            {t('price', {
-              from: priceDirect ? assetFromTicker : assetToTicker,
-              price: price.toSignificant(),
-              to: priceDirect ? assetToTicker : assetFromTicker
-            })}
+            {price
+              ? t('price', {
+                  from: priceDirect ? assetFromTicker : assetToTicker,
+                  price: price.toSignificant(),
+                  to: priceDirect ? assetToTicker : assetFromTicker
+                })
+              : '—'}
           </span>
         )}
       </div>

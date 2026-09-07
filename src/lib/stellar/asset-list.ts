@@ -121,10 +121,24 @@ export const SDK_QUOTED_PROVIDERS = new Set<string>(['STELLARBROKER', 'SOROSWAP'
 export const aggregatorExcludedProviders = (sellAssetChain?: string, sellAssetTicker?: string): Set<string> => {
   const excluded = new Set<string>(SDK_QUOTED_PROVIDERS)
 
+  // Everything below is scoped to a Stellar SELL asset, because that is exactly the set the SDK
+  // claims: a Stellar-origin swap is signed by the connected Stellar wallet and submitted by the
+  // SDK. A non-Stellar origin stays with the aggregator whatever the destination.
+  if (!isStellarChain(sellAssetChain)) return excluded
+
+  // NEAR is deliberately NOT withheld, unlike AXELAR_ITS. The SDK serves Stellar → any other chain
+  // through 1Click, but its dry quote needs a destination address for EVM and Solana destinations
+  // ("recipient is not valid") and the app has none until the confirm dialog — whereas the
+  // aggregator's NEAR quotes those fine. Withholding it would silently drop those routes.
+  //
+  // So both sources quote NEAR for a Stellar origin and the venue-dedupe in use-quote keeps
+  // whichever pays more. Either is executable: the SDK's route is marked `stellarSdk` and signed by
+  // the connected Stellar wallet, the aggregator's runs its usual deposit flow.
+
   // Withhold AXELAR_ITS only for a ticker the SDK actually bridges. Its coverage is a static list,
   // so if the aggregator ever adds a third ITS token, withholding unconditionally would leave that
   // token's Stellar → Ethereum direction with no route from either source.
-  if (isStellarChain(sellAssetChain) && (!sellAssetTicker || AXELAR_BRIDGED_TICKERS.has(sellAssetTicker))) {
+  if (!sellAssetTicker || AXELAR_BRIDGED_TICKERS.has(sellAssetTicker)) {
     excluded.add('AXELAR_ITS')
   }
 

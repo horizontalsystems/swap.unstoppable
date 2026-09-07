@@ -12,6 +12,7 @@ import { SwapInputFrom } from '@/components/swap/swap-input-from'
 import { SwapInputTo } from '@/components/swap/swap-input-to'
 import { SwapLimit } from '@/components/swap/swap-limit'
 import { SwapToggleAssets } from '@/components/swap/swap-toggle-assets'
+import { isStellarSdkRoute } from '@/lib/stellar/adapt'
 import { useMemolessAssets } from '@/hooks/use-memoless-assets'
 import { useQuote } from '@/hooks/use-quote'
 import { useSwapRates } from '@/hooks/use-rates'
@@ -49,11 +50,14 @@ export const Swap = () => {
   const memolessError: Error | undefined = useMemo(() => {
     if (selectedAccount || !memolessAsset || !assetFrom) return
     const minAmount = new USwapNumber(10 ** -(memolessAsset.decimals - 5))
-    if (valueFrom.lt(minAmount))
-      return new Error(te('minAmountNoWallet', { amount: minAmount.toSignificant(), ticker: assetFrom.ticker }))
+    if (valueFrom.lt(minAmount)) return new Error(te('minAmountNoWallet', { amount: minAmount.toSignificant(), ticker: assetFrom.ticker }))
   }, [memolessAsset, selectedAccount, valueFrom])
 
-  const instantSwapSupported = !!memolessAsset || QR_PROVIDERS.includes(quote?.providers[0] as string)
+  // A route stellar-web-sdk produced is signed and submitted by the connected Stellar wallet, so it
+  // has no deposit-address flow — even when its provider name (NEAR) is one that does have one
+  // through the aggregator. Offering instant swap here would quote from the SDK and execute
+  // through the aggregator, at a different price.
+  const instantSwapSupported = !(quote && isStellarSdkRoute(quote)) && (!!memolessAsset || QR_PROVIDERS.includes(quote?.providers[0] as string))
 
   const priceImpact = useMemo(() => {
     return resolvePriceImpact(quote, rateFrom, rateTo)

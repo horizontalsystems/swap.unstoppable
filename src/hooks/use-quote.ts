@@ -109,6 +109,10 @@ export const useQuote = (): UseQuote => {
 
     const bestByVenue = new Map<string, QuoteResponseRoute>()
     for (const route of [...aggregatorQuotes, ...stellarQuotes]) {
+      // A route that returns nothing is not a route. Dropping it here also keeps a zero out of the
+      // price ratio the route card computes, which divides by it.
+      if (!(Number(route.expectedBuyAmount) > 0)) continue
+
       // Keyed on providers[0] to match how the route list renders rows — deduping on the joined
       // array would let two multi-provider routes sharing a lead venue collide there instead.
       const venue = route.providers[0]
@@ -129,10 +133,20 @@ export const useQuote = (): UseQuote => {
   const noRoutes = !isLoadingAny && !allQuotes.length
 
   // With no routes anywhere, the provider's own reason is the useful message — "Pair not
-  // supported" says more than a generic failure. It is only surfaced here, never when some other
-  // venue did answer.
+  // supported" says more than a generic failure. Only surfaced here, never when a venue answered.
   const declined = rate?.providerErrors?.find(e => e.message || e.error)
   const declinedError = declined && new Error(declined.message || declined.error)
+
+  // The same for the SDK side, and it matters more there: a Stellar-native pair built from the
+  // curated asset list has no aggregator providers to ask at all, so if every Stellar venue
+  // declines this is the ONLY explanation that exists. A declining provider is absent from
+  // `allRoutes` rather than erroring, so without this the user just sees "no quotes".
+  // Prefer a reason about the pair over one about our own configuration: a missing Soroswap key
+  // reports as `invalidParams` and would otherwise be the message a user sees, when what they need
+  // to know is that no venue has a path for these two assets.
+  const stellarDeclines = stellar.providerErrors.filter(e => e.error)
+  const stellarDeclined = stellarDeclines.find(e => e.errorCode !== 'invalidParams') ?? stellarDeclines[0]
+  const stellarDeclinedError = stellarDeclined && new Error(`${stellarDeclined.provider}: ${stellarDeclined.error}`)
 
   return {
     isLoading: isLoadingAny,
@@ -141,6 +155,6 @@ export const useQuote = (): UseQuote => {
     quotes: allQuotes,
     selectedIndex: index,
     setSelectedIndex,
-    error: noRoutes ? (aggregatorError ?? declinedError ?? stellarError ?? null) : null
+    error: noRoutes ? (aggregatorError ?? declinedError ?? stellarError ?? stellarDeclinedError ?? null) : null
   }
 }

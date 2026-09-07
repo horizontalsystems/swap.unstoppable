@@ -50,7 +50,10 @@ export const adaptStellarRoute = (route: SdkRoute, ctx: AdaptRouteContext = {}):
   amlPolicy: route.amlPolicy,
   accuracy: route.accuracy,
   amlErrors: route.amlErrors,
-  meta: route.meta as QuoteResponseRoute['meta'],
+  // Marks the route as one this SDK produced and must execute. It matters for NEAR: that provider
+  // name also comes from the aggregator, where it is a deposit-address flow needing no wallet,
+  // whereas here it is signed and submitted by the connected Stellar wallet.
+  meta: { ...(route.meta as object), stellarSdk: true } as QuoteResponseRoute['meta'],
   expiresAt: route.expiresAt,
   execution: route.execution as QuoteResponseRoute['execution'],
   uuid: route.uuid,
@@ -58,6 +61,10 @@ export const adaptStellarRoute = (route: SdkRoute, ctx: AdaptRouteContext = {}):
   destinationAddress: ctx.destinationAddress,
   refundAddress: ctx.refundAddress
 })
+
+/** True for a route produced by stellar-web-sdk, which the SDK must also be the one to execute. */
+export const isStellarSdkRoute = (route: Pick<QuoteResponseRoute, 'meta'>): boolean =>
+  (route.meta as { stellarSdk?: boolean } | undefined)?.stellarSdk === true
 
 /** Map the SDK's tracking read onto the app's `TrackResponse`. */
 export const adaptStellarTrack = (track: SdkTrackResponse): TrackResponse => ({
@@ -76,13 +83,20 @@ export const adaptStellarTrack = (track: SdkTrackResponse): TrackResponse => ({
 /**
  * Which SDK fan-out, if any, serves this pair.
  *
+ * The dividing line is the **sell** asset, not "either leg". A Stellar-origin swap is one the
+ * connected Stellar wallet signs and the SDK submits; anything else needs an origin-chain wallet,
+ * an origin-chain refund address, and a deposit-address flow that the aggregator already provides.
+ *
  * `in_chain` — both legs on Stellar; the four Stellar venues compete on price.
- * `axelar`   — the same token bridged Stellar ↔ Ethereum (XLM↔XLM, SHX↔SHX).
- * `none`     — anything else, including a Stellar leg paired with another chain. Those are
- *              cross-chain routes the aggregator already serves via NEAR and the instant
- *              exchanges, and asking the SDK for them too would list one venue twice.
+ * `axelar`   — the same token bridged Stellar → Ethereum (XLM→XLM, SHX→SHX).
+ * `near`     — Stellar → any other chain, via 1Click. The SDK builds and submits the Stellar-side
+ *              deposit itself, so this needs no deposit UI of its own.
+ * `none`     — everything else, the aggregator's. Notably every NON-Stellar origin, including the
+ *              Ethereum → Stellar half of an Axelar pair: `isAxelarPair` is symmetric, but the SDK
+ *              builds an EVM transaction for that direction and then refuses to sign it, so
+ *              claiming it here would surface a route that cannot be executed.
  */
-export type StellarPairKind = 'in_chain' | 'axelar' | 'none'
+export type StellarPairKind = 'in_chain' | 'axelar' | 'near' | 'none'
 
 export const stellarPairKind = (from: Asset | undefined, to: Asset | undefined, isAxelarPair: (a: string, b: string) => boolean): StellarPairKind => {
   if (!from || !to) return 'none'
@@ -92,11 +106,13 @@ export const stellarPairKind = (from: Asset | undefined, to: Asset | undefined, 
   // Stellar SDK builds but explicitly refuses to sign, so claiming it here would surface a route
   // that cannot be executed. That direction stays with the aggregator, which reaches it through
   // the EVM wallet — see aggregatorExcludedProviders.
-  if (isStellarChain(from.chain) && !isStellarChain(to.chain) && isAxelarPair(from.identifier, to.identifier)) {
-    return 'axelar'
-  }
+  // Non-Stellar origin is the aggregator's, whatever the destination.
+  if (!isStellarChain(from.chain)) return 'none'
 
-  return 'none'
+  // Checked before the NEAR fallback: an ITS pair is also cross-chain, and NEAR cannot bridge it 1:1.
+  if (isAxelarPair(from.identifier, to.identifier)) return 'axelar'
+
+  return 'near'
 }
 
 /**
@@ -113,6 +129,7 @@ export const stellarPairKind = (from: Asset | undefined, to: Asset | undefined, 
  */
 export const providersForPairKind = (kind: StellarPairKind, canSignAuthEntries: boolean, hasThirdPartyRecipient = false): AppProviderName[] => {
   if (kind === 'axelar') return ['AXELAR_ITS']
+  if (kind === 'near') return [ProviderName.NEAR]
   if (kind !== 'in_chain') return []
 
   // Mirrors the SDK's own RECIPIENT_CAPABLE_PROVIDERS.

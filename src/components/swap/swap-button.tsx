@@ -13,6 +13,7 @@ import { useQuote } from '@/hooks/use-quote'
 import { useSimulation } from '@/hooks/use-simulation'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { useSelectedAccount } from '@/hooks/use-wallets'
+import { isStellarSdkRoute } from '@/lib/stellar/adapt'
 import { getUSwap } from '@/lib/wallets'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
 import { AppProviderName, QuoteResponseRoute, uSwapWalletOption } from '@/types'
@@ -45,7 +46,10 @@ export const SwapButton = ({ instantSwapSupported, instantSwapAvailable }: SwapB
   const { openDialog } = useDialog()
 
   const onSwap = (quote: QuoteResponseRoute) => {
-    openDialog(SwapDialog, { provider: quote.providers[0] })
+    // Provider name alone cannot decide the execution path: NEAR is both an SDK route (Stellar
+    // origin, signed by the connected wallet) and an aggregator route (deposit address). The
+    // route itself is the only thing that knows which produced it.
+    openDialog(SwapDialog, { provider: quote.providers[0], stellarSdk: isStellarSdkRoute(quote) })
   }
 
   const onInstantSwap = (quote: QuoteResponseRoute) => {

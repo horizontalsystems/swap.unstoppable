@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { AXELAR_STALL_MS, isStellarTrackingStalled, isTxPending, isTxTerminal, STELLAR_STALL_MS } from '@/store/transaction-store'
+import { CROSS_CHAIN_STALL_MS, isStellarTrackingStalled, isTxPending, isTxTerminal, STELLAR_STALL_MS } from '@/store/transaction-store'
 
 const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
 const agoMs = (ms: number) => new Date(NOW - ms)
@@ -22,7 +22,7 @@ describe('isStellarTrackingStalled', () => {
     // hide a swap that still needs attention.
     for (const status of ['swapping', 'action_required']) {
       expect(isStellarTrackingStalled(status, agoMs(STELLAR_STALL_MS * 100), undefined, NOW)).toBe(false)
-      expect(isStellarTrackingStalled(status, agoMs(AXELAR_STALL_MS * 100), 'AXELAR_ITS', NOW)).toBe(false)
+      expect(isStellarTrackingStalled(status, agoMs(CROSS_CHAIN_STALL_MS * 100), 'AXELAR_ITS', NOW)).toBe(false)
     }
   })
 
@@ -31,7 +31,7 @@ describe('isStellarTrackingStalled', () => {
     const wellPastStellar = agoMs(STELLAR_STALL_MS + 60_000)
     expect(isStellarTrackingStalled('pending', wellPastStellar, 'STELLAR_DEX', NOW)).toBe(true)
     expect(isStellarTrackingStalled('pending', wellPastStellar, 'AXELAR_ITS', NOW)).toBe(false)
-    expect(isStellarTrackingStalled('pending', agoMs(AXELAR_STALL_MS + 1), 'AXELAR_ITS', NOW)).toBe(true)
+    expect(isStellarTrackingStalled('pending', agoMs(CROSS_CHAIN_STALL_MS + 1), 'AXELAR_ITS', NOW)).toBe(true)
   })
 
   it('never overrides a status the chain already settled', () => {

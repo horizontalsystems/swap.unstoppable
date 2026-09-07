@@ -37,9 +37,17 @@ describe('stellarPairKind', () => {
     expect(stellarPairKind(ETH_XLM, XLM, isAxelarPair)).toBe('none')
   })
 
-  it('leaves a Stellar leg paired with another chain to the aggregator', () => {
-    expect(stellarPairKind(XLM, BTC, isAxelarPair)).toBe('none')
+  it('routes a Stellar-origin cross-chain pair to NEAR', () => {
+    expect(stellarPairKind(XLM, BTC, isAxelarPair)).toBe('near')
+  })
+
+  it('leaves every non-Stellar origin to the aggregator', () => {
+    // The SDK can only sign a Stellar-origin swap. Anything else needs an origin-chain wallet and
+    // an origin-chain refund address, which is the aggregator's deposit flow.
     expect(stellarPairKind(BTC, XLM, isAxelarPair)).toBe('none')
+    // Including the Ethereum half of an Axelar pair: isAxelarPair is symmetric, but the SDK builds
+    // an EVM transaction for that direction and then refuses to sign it.
+    expect(stellarPairKind(ETH_XLM, XLM, isAxelarPair)).toBe('none')
   })
 
   it('claims nothing without both assets', () => {
@@ -60,8 +68,9 @@ describe('providersForPairKind', () => {
     }
   })
 
-  it('fans out to Axelar alone for a bridge pair, and to nothing otherwise', () => {
+  it('fans out to a single venue for each cross-chain kind, and to nothing otherwise', () => {
     expect(providersForPairKind('axelar', true)).toEqual(['AXELAR_ITS'])
+    expect(providersForPairKind('near', true)).toEqual(['NEAR'])
     expect(providersForPairKind('none', true)).toEqual([])
   })
 })
@@ -201,5 +210,48 @@ describe('aggregatorExcludedProviders — Axelar ticker drift', () => {
   it('leaves it to the aggregator for a ticker the SDK does not bridge', () => {
     // Otherwise a third ITS token added server-side would lose both sources at once.
     expect(aggregatorExcludedProviders('XLM', 'USDC').has('AXELAR_ITS')).toBe(false)
+  })
+})
+
+describe('aggregatorExcludedProviders — NEAR', () => {
+  it('never withholds NEAR, so both sources quote it and the dedupe picks', () => {
+    // The SDK's NEAR dry quote needs a destination address for EVM/Solana destinations, which the
+    // app has none of at quote time; the aggregator's does not. Withholding would drop those
+    // routes entirely, so both quote and the better price wins.
+    expect(aggregatorExcludedProviders('XLM', 'XLM').has('NEAR')).toBe(false)
+    expect(aggregatorExcludedProviders('BTC', 'BTC').has('NEAR')).toBe(false)
+  })
+
+  it('still withholds the in-chain venues and the Axelar direction the SDK owns', () => {
+    const stellarOrigin = aggregatorExcludedProviders('XLM', 'XLM')
+    expect(stellarOrigin.has('STELLARBROKER')).toBe(true)
+    expect(stellarOrigin.has('AXELAR_ITS')).toBe(true)
+    expect(aggregatorExcludedProviders('ETH', 'XLM').has('AXELAR_ITS')).toBe(false)
+  })
+})
+
+describe('zero-output routes', () => {
+  // A provider quoting nothing put a zero into the route card's price ratio, and USwapNumber
+  // throws RangeError on division by zero rather than returning Infinity — so one such route from
+  // any source took down the whole page.
+  const merge = (routes: { providers: string[]; expectedBuyAmount: string }[]) => routes.filter(r => Number(r.expectedBuyAmount) > 0)
+
+  it('drops a route that returns nothing', () => {
+    const kept = merge([
+      { providers: ['SOROSWAP'], expectedBuyAmount: '18.5' },
+      { providers: ['EXOLIX'], expectedBuyAmount: '0' },
+      { providers: ['QUICKEX'], expectedBuyAmount: '0.0000000' }
+    ])
+    expect(kept.map(r => r.providers[0])).toEqual(['SOROSWAP'])
+  })
+
+  it('drops a route whose amount is not a number at all', () => {
+    expect(merge([{ providers: ['X'], expectedBuyAmount: '' }])).toEqual([])
+    expect(merge([{ providers: ['X'], expectedBuyAmount: 'nonsense' }])).toEqual([])
+  })
+
+  it('keeps a genuinely tiny amount', () => {
+    // Stellar is 7dp; one stroop is a real quote, not a zero.
+    expect(merge([{ providers: ['STELLAR_DEX'], expectedBuyAmount: '0.0000001' }])).toHaveLength(1)
   })
 })

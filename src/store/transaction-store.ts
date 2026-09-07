@@ -158,11 +158,15 @@ export const isTxPending = (status: string) =>
 export const STELLAR_STALL_MS = 3 * 60_000
 
 /**
- * The same for AXELAR_ITS, which is a different kind of wait entirely: funds leave Stellar and two
- * Axelar hub hops have to execute before they arrive. Routinely minutes, and legitimately longer
- * when the network is congested — so it gets hours, not minutes.
+ * The same for the cross-chain providers, which are a different kind of wait entirely: funds leave
+ * Stellar and the destination chain has to settle before they arrive — two Axelar hub hops, or a
+ * 1Click fill. Routinely minutes, and legitimately longer when a network is congested, so these
+ * get hours rather than minutes.
  */
-export const AXELAR_STALL_MS = 6 * 60 * 60_000
+export const CROSS_CHAIN_STALL_MS = 6 * 60 * 60_000
+
+/** Providers whose swaps settle on another chain, and so cannot be judged by Stellar's clock. */
+const CROSS_CHAIN_PROVIDERS = new Set(['AXELAR_ITS', 'NEAR'])
 
 /**
  * Statuses that mean "we cannot see this on-chain at all". Only these can stall out.
@@ -177,7 +181,7 @@ const STALLABLE_STATUSES = new Set(['pending', 'not_started'])
 /** True when a Stellar swap has gone unfindable for long enough that it is not coming. */
 export const isStellarTrackingStalled = (status: string, timestamp: Date | string | number, provider?: string, now = Date.now()): boolean => {
   if (!STALLABLE_STATUSES.has(status)) return false
-  const budget = provider === 'AXELAR_ITS' ? AXELAR_STALL_MS : STELLAR_STALL_MS
+  const budget = provider && CROSS_CHAIN_PROVIDERS.has(provider) ? CROSS_CHAIN_STALL_MS : STELLAR_STALL_MS
   return now - new Date(timestamp).getTime() > budget
 }
 

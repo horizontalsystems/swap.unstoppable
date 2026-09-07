@@ -19,15 +19,17 @@ import { useSetTransaction } from '@/store/transaction-store'
 import type { BrokerSessionPhase, CommittedRoute, RouteTracking } from 'stellar-web-sdk'
 import { executeStellarRoute } from '@/lib/stellar/execute'
 import { logExecution } from '@/lib/stellar/log'
-import { AppProviderName, isStellarSdkProvider, QuoteResponseRoute } from '@/types'
+import { AppProviderName, QuoteResponseRoute } from '@/types'
 
 interface SwapDialogProps {
   provider: AppProviderName
+  /** True when stellar-web-sdk produced this route and must be the one to execute it. */
+  stellarSdk: boolean
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
 }
 
-export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) => {
+export const SwapDialog = ({ provider, stellarSdk, isOpen, onOpenChange }: SwapDialogProps) => {
   const t = useTranslations('swap.toast')
   const t2 = useTranslations('swap.confirm')
   const uSwap = getUSwap()
@@ -138,7 +140,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
   const onConfirm = () => {
     if (!quote || !assetFrom || !assetTo || aml.blocked) return
 
-    if (isStellarSdkProvider(provider)) return onConfirmStellar()
+    if (stellarSdk) return onConfirmStellar()
 
     setSubmitting(true)
 
@@ -226,6 +228,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
         ) : (
           <SwapRecipient
             provider={provider}
+            stellarSdk={stellarSdk}
             onFetchQuote={(quote, committed) => {
               setQuote(quote)
               setCommitted(committed)

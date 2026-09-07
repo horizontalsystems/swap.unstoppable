@@ -27,8 +27,9 @@ import { useIsLimitSwap, useLimitSwapBuyAmount, useLimitSwapExpiry } from '@/sto
 import { WalletAccount } from '@/store/wallets-store'
 import type { CommittedRoute } from 'stellar-web-sdk'
 import { providersForPairKind } from '@/lib/stellar/adapt'
+import { isStellarChain } from '@/lib/stellar/asset-list'
 import { activateStellarTrustline, checkStellarTrustline, commitStellarRoute } from '@/lib/stellar/execute'
-import { AppProviderName, isStellarSdkProvider, ProviderName, QuoteResponseRoute } from '@/types'
+import { AppProviderName, ProviderName, QuoteResponseRoute } from '@/types'
 
 const EXTRA_CHAIN_VALIDATORS: Record<string, (address: string) => boolean> = {
   XMR: address => /^[48][1-9A-HJ-NP-Za-km-z]{94}$/.test(address) || /^[48][1-9A-HJ-NP-Za-km-z]{105}$/.test(address),
@@ -37,12 +38,14 @@ const EXTRA_CHAIN_VALIDATORS: Record<string, (address: string) => boolean> = {
 
 interface SwapRecipientProps {
   provider: AppProviderName
+  /** True when stellar-web-sdk produced this route and must be the one to commit it. */
+  stellarSdk: boolean
   // `committed` is the SDK's own route object, carried alongside the rendered copy because
   // execute() and track() need it rather than the adapted one.
   onFetchQuote: (quote: QuoteResponseRoute, committed?: CommittedRoute) => void
 }
 
-export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) => {
+export const SwapRecipient = ({ provider, stellarSdk, onFetchQuote }: SwapRecipientProps) => {
   const t = useTranslations('swap.recipient')
   const tc = useTranslations('common')
   const tw = useTranslations('swap.warning')
@@ -111,24 +114,30 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
     const sourceAddress = selectedAccount.address
 
+    // Both gates below are about settling ON Stellar. A cross-chain route pays out on another
+    // chain, where a different destination is the whole point and there is no trustline to hold.
+    const settlesOnStellar = isStellarChain(assetTo.chain)
+
     // STELLARBROKER and AQUARIUS settle on the trader's own account and cannot pay a third party at
     // all — a hard capability limit, not a preference. Committing would fail with
     // recipient_not_supported after a trustline round-trip, so refuse up front and name the venues
     // that can, rather than leaving the user to guess.
-    if (destinationAddress !== sourceAddress && !recipientCapableProviders.includes(provider)) {
+    if (settlesOnStellar && destinationAddress !== sourceAddress && !recipientCapableProviders.includes(provider)) {
       throw new Error(t('recipientNotSupported', { providers: recipientCapableProviders.join(', ') }))
     }
 
     // Buying a classic asset the recipient does not trust fails on-chain, so gate before
     // committing. Only the holder can create its own trustline — for a third-party recipient we
     // can report the problem but not fix it.
-    const trustline = await checkStellarTrustline(destinationAddress, assetTo, sourceAddress)
-    if (trustline.required) {
-      if (!trustline.activatable) {
-        throw new Error(t('trustlineThirdParty', { ticker: assetTo.ticker }))
+    if (settlesOnStellar) {
+      const trustline = await checkStellarTrustline(destinationAddress, assetTo, sourceAddress)
+      if (trustline.required) {
+        if (!trustline.activatable) {
+          throw new Error(t('trustlineThirdParty', { ticker: assetTo.ticker }))
+        }
+        setTrustlineNeeded(true)
+        return
       }
-      setTrustlineNeeded(true)
-      return
     }
 
     const { route, committed } = await commitStellarRoute({
@@ -162,7 +171,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
     setQuoting(true)
     setQuoteError(undefined)
 
-    if (isStellarSdkProvider(provider)) {
+    if (stellarSdk) {
       fetchStellarQuote()
         .catch(error => setQuoteError(parseApiError(error)))
         .finally(() => setQuoting(false))

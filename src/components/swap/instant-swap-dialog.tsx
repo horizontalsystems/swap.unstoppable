@@ -195,7 +195,9 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
             </div>
           </>
         ) : (
-          <SwapRecipient provider={provider} onFetchQuote={quote => setQuote(quote)} />
+          // stellarSdk={false}: this is the aggregator's deposit-address flow. SDK routes never
+          // reach it — swap.tsx excludes them, since they are signed by the connected Stellar wallet.
+          <SwapRecipient provider={provider} stellarSdk={false} onFetchQuote={quote => setQuote(quote)} />
         )}
       </CredenzaContent>
     </Credenza>
