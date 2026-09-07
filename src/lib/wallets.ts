@@ -12,6 +12,7 @@ import { okxWallet } from '@uswap/wallets/okx'
 import { phantomWallet } from '@uswap/wallets/phantom'
 import { tronlinkWallet } from '@uswap/wallets/tronlink'
 import { vultisigWallet } from '@uswap/wallets/vultisig'
+import { AppConfig } from '@/config'
 import { useWalletStore } from '@/store/wallets-store'
 
 const defaultPlugins = {
@@ -45,14 +46,22 @@ function createUSwap(config: Parameters<typeof USwap>[0] = {}) {
 
 let instance: ReturnType<typeof createUSwap> | undefined = undefined
 
+// The Blockchair API key stays on the server, so the UTXO toolbox talks to our
+// own proxy (src/app/api/blockchair) instead of api.blockchair.com. The SDK's
+// request client builds a `new URL(...)`, so this has to be absolute.
+function blockchairProxyUrl() {
+  const origin = typeof window === 'undefined' ? AppConfig.baseUrl : window.location.origin
+  return `${origin}/api/blockchair`
+}
+
 export function getUSwap() {
   if (instance) return instance
 
   instance = createUSwap({
     config: {
       apiKeys: {
-        blockchair: process.env.NEXT_PUBLIC_BLOCKCHAIR_API_KEY,
-        uSwap: process.env.NEXT_PUBLIC_USWAP_API_KEY
+        uSwap: process.env.NEXT_PUBLIC_USWAP_API_KEY,
+        blockchair: 'uws' // fake key to just avoid logs like: No Blockchair API key found
       },
       rpcUrls: {
         [Chain.Ethereum]: ['https://ethereum-rpc.publicnode.com', 'https://eth.llamarpc.com'],
@@ -60,6 +69,7 @@ export function getUSwap() {
       },
       envs: {
         apiUrl: process.env.NEXT_PUBLIC_USWAP_API_URL,
+        blockchairApiUrl: blockchairProxyUrl(),
         memolessApiUrl: process.env.NEXT_PUBLIC_MEMOLESS_API
       }
     }
