@@ -5,6 +5,8 @@ import { useAssets } from '@/hooks/use-assets'
 import { useRates } from '@/hooks/use-rates'
 import { useAccounts, useHasHydrated } from '@/hooks/use-wallets'
 import { getAlchemyTokenBalances, getThorBankBalances } from '@/lib/api'
+import { isRobinhoodChain } from '@/lib/robinhood/asset-list'
+import { getRobinhoodAccountBalances } from '@/lib/robinhood/balance'
 import { getUSwap } from '@/lib/wallets'
 import { WalletAccount } from '@/store/wallets-store'
 
@@ -58,6 +60,17 @@ export const useWalletBalances = () => {
     queryFn: async () => {
       const results = await Promise.allSettled(
         accounts.map(async account => {
+          // Robinhood Chain balances come from its own RPC — the aggregator's /balance, which every
+          // USwap EVM wallet asks, answers "Chain ROBINHOOD is not supported".
+          if (isRobinhoodChain(account.network)) {
+            const balances = await queryClient.ensureQueryData({
+              queryKey: ['account-balance', account.network, account.address],
+              queryFn: () => getRobinhoodAccountBalances(account.address),
+              staleTime: 30_000
+            })
+            return { account, balances, alchemyLogoMap: new Map<string, string>() }
+          }
+
           const wallet = uSwap.getWallet(account.provider, account.network)
           if (!wallet || !('getBalance' in wallet)) return { account, balances: [] as AssetValue[], alchemyLogoMap: new Map<string, string>() }
           const rawBalances = await queryClient.ensureQueryData({

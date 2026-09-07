@@ -32,6 +32,7 @@ export const ALL_CHAINS = [
   Chain.Near,
   Chain.Optimism,
   Chain.Polygon,
+  Chain.Robinhood,
   Chain.Solana,
   Chain.THORChain,
   Chain.Tron,

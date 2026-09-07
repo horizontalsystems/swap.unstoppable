@@ -3,6 +3,7 @@ import { EVMChain, EVMChains, getChainConfig } from '@uswap/helpers'
 import { Asset } from '@/components/swap/asset'
 import { AppConfig } from '@/config'
 import { getAllTokens, getProviders, getProviderTokens } from '@/lib/api'
+import { fetchRobinhoodTokens } from '@/lib/robinhood/asset-list'
 import { ProviderName } from '@/types'
 
 const EXTRA_CHAINS = new Set(['XMR', 'XLM'])
@@ -24,7 +25,15 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
     queryKey: ['assets'],
     queryFn: async () => {
       const appProviders = AppConfig.providers
-      const [tokens, providers] = await Promise.all([appProviders ? getProviderTokens(appProviders) : getAllTokens(), getProviders()])
+      // Robinhood Chain is quoted by the aggregator but absent from its catalog, so its tokens are
+      // fetched separately and appended — they then go through the same loop as everything else,
+      // which is what attaches ONEINCH and LIFI to them by chain id.
+      const [aggregatorTokens, providers, robinhoodTokens] = await Promise.all([
+        appProviders ? getProviderTokens(appProviders) : getAllTokens(),
+        getProviders(),
+        fetchRobinhoodTokens().catch(() => [])
+      ])
+      const tokens = [...aggregatorTokens, ...robinhoodTokens]
       const assets = new Map<string, Asset>()
       const geckoMap = new Map<string, string>()
 
