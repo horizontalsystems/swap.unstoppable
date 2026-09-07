@@ -4,6 +4,7 @@ import { EVMChain, EVMChains, getChainConfig } from '@uswap/helpers'
 import { Asset } from '@/components/swap/asset'
 import { AppConfig } from '@/config'
 import { getAllTokens, getProviders, getProviderTokens } from '@/lib/api'
+import { fetchRobinhoodTokens } from '@/lib/robinhood/asset-list'
 import {
   SDK_QUOTED_PROVIDERS,
   STELLAR_ASSETS,
@@ -36,10 +37,15 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
       // /tokens only knows the aggregator's own providers; the Stellar venues are added below from
       // the curated list instead.
       const aggregatorProviders = appProviders?.filter((p): p is ProviderName => !SDK_QUOTED_PROVIDERS.has(p))
-      const [tokens, providers] = await Promise.all([
+      // Robinhood Chain is quoted by the aggregator but absent from its catalog, so its tokens are
+      // fetched separately and appended — they then go through the same loop as everything else,
+      // which is what attaches ONEINCH and LIFI to them by chain id.
+      const [aggregatorTokens, providers, robinhoodTokens] = await Promise.all([
         aggregatorProviders?.length ? getProviderTokens(aggregatorProviders) : getAllTokens(),
-        getProviders()
+        getProviders(),
+        fetchRobinhoodTokens().catch(() => [])
       ])
+      const tokens = [...aggregatorTokens, ...robinhoodTokens]
       const assets = new Map<string, Asset>()
       const geckoMap = new Map<string, string>()
 

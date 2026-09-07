@@ -1,11 +1,12 @@
 import { useMemo, useRef } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import { ProviderName, USwapNumber } from '@uswap/core'
 import { AppProviderName } from '@/types'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useAssetTo } from '@/hooks/use-swap'
 import { useAssets } from '@/hooks/use-assets'
 import {
+  DexScreenerChain,
   getBlocksDecodedPrices,
   getDexScreenerTokens,
   getMayaMidgardCacaoPrice,
@@ -16,6 +17,16 @@ import {
 
 export type AssetRateMap = Record<string, USwapNumber>
 export type AssetLogoMap = Record<string, string>
+
+/** Chain handle -> DexScreener's own slug, for the chains it is asked about. */
+const DEX_SCREENER_CHAINS: Record<string, DexScreenerChain | undefined> = {
+  SOL: 'solana',
+  ETH: 'ethereum',
+  ROBINHOOD: 'robinhood'
+}
+
+/** Fixed order, so each chain keeps the same slot in the `useQueries` result across renders. */
+const DEX_SCREENER_QUERY_CHAINS: DexScreenerChain[] = ['solana', 'ethereum', 'robinhood']
 
 const RUNE_IDENTIFIER = 'THOR.RUNE'
 const CACAO_IDENTIFIER = 'MAYA.CACAO'
@@ -85,37 +96,31 @@ export const useRates = (identifiers: string[], provider?: AppProviderName): { r
     retry: false
   })
 
-  // SOL/ETH token addresses (mint or contract) for DexScreener lookups, split by chain
+  // Token addresses (mint or contract) for DexScreener lookups, split by chain. Robinhood Chain is
+  // here for a different reason than the other two: it supplements them, but it is the ONLY price
+  // source for 4663 — the aggregator publishes no catalog for it, so its assets carry no
+  // coingeckoId and never reach the BlocksDecoded lookup below.
   const dexTokens = useMemo(() => {
-    const sol: string[] = []
-    const eth: string[] = []
+    const byChain: Record<DexScreenerChain, string[]> = { solana: [], ethereum: [], robinhood: [] }
     for (const id of identifiers) {
       if (!id.includes('-')) continue
       const addr = id.split('-').pop()!
-      if (id.toUpperCase().startsWith('SOL.')) sol.push(addr)
-      else if (id.toUpperCase().startsWith('ETH.')) eth.push(addr.toLowerCase())
+      const chain = DEX_SCREENER_CHAINS[id.slice(0, id.indexOf('.')).toUpperCase()]
+      if (chain) byChain[chain].push(chain === 'solana' ? addr : addr.toLowerCase())
     }
-    return { sol, eth }
+    return byChain
   }, [identifiers])
 
-  const { data: dexScreenerData, isLoading: dexScreenerLoading } = useQuery({
-    queryKey: ['dexscreener-tokens-sol', dexTokens.sol.slice().sort().join(',')],
-    queryFn: () => getDexScreenerTokens(dexTokens.sol, 'solana'),
-    enabled: dexTokens.sol.length > 0,
-    staleTime: 3 * 60_000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false
-  })
-
-  const { data: dexScreenerEthData, isLoading: dexScreenerEthLoading } = useQuery({
-    queryKey: ['dexscreener-tokens-eth', dexTokens.eth.slice().sort().join(',')],
-    queryFn: () => getDexScreenerTokens(dexTokens.eth, 'ethereum'),
-    enabled: dexTokens.eth.length > 0,
-    staleTime: 3 * 60_000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false
+  const dexQueries = useQueries({
+    queries: DEX_SCREENER_QUERY_CHAINS.map(chain => ({
+      queryKey: ['dexscreener-tokens', chain, dexTokens[chain].slice().sort().join(',')],
+      queryFn: () => getDexScreenerTokens(dexTokens[chain], chain),
+      enabled: dexTokens[chain].length > 0,
+      staleTime: 3 * 60_000,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      retry: false
+    }))
   })
 
   const geckoTargets = useMemo(() => {
@@ -159,14 +164,16 @@ export const useRates = (identifiers: string[], provider?: AppProviderName): { r
     if (price) rates[id] = price
   }
 
-  // DexScreener supplements prices/logos for SOL & ETH tokens not covered above
-  const dexData = { ...dexScreenerData, ...dexScreenerEthData }
+  // DexScreener fills in prices and logos the sources above did not cover. Kept per-chain rather
+  // than merged into one map, because two chains can host the same contract address.
   for (const id of identifiers) {
-    const upper = id.toUpperCase()
-    const isEth = upper.startsWith('ETH.')
-    if ((!isEth && !upper.startsWith('SOL.')) || !id.includes('-')) continue
+    if (!id.includes('-')) continue
+    const chain = DEX_SCREENER_CHAINS[id.slice(0, id.indexOf('.')).toUpperCase()]
+    if (!chain) continue
+
     const addr = id.split('-').pop()!
-    const info = dexData[isEth ? addr.toLowerCase() : addr]
+    const data = dexQueries[DEX_SCREENER_QUERY_CHAINS.indexOf(chain)]?.data
+    const info = data?.[chain === 'solana' ? addr : addr.toLowerCase()]
     if (info?.price && !rates[id]) rates[id] = new USwapNumber(info.price)
     if (info?.logo) logos[id] = info.logo
   }
@@ -174,7 +181,7 @@ export const useRates = (identifiers: string[], provider?: AppProviderName): { r
   return {
     rates,
     logos,
-    isLoading: midgardLoading || dexScreenerLoading || dexScreenerEthLoading || geckoLoading || identifiers.length === 0
+    isLoading: midgardLoading || dexQueries.some(q => q.isLoading) || geckoLoading || identifiers.length === 0
   }
 }
 

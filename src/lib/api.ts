@@ -3,6 +3,7 @@ import { AssetValue, Chain, getChainConfig } from '@uswap/core'
 import { BalanceResponse, QuoteRequest, QuoteResponse, SwapRequest, USwapApi } from '@uswap/helpers/api'
 import { AmlCheckResponse, Provider, ProviderName, QuoteResponseRoute, TrackResponse } from '@/types'
 import { normalizeThorBankDenom } from '@/lib/swap-helpers'
+import { toAggregatorIdentifier } from '@/lib/robinhood/asset-list'
 
 const uSwap = axios.create({
   baseURL: process.env.NEXT_PUBLIC_USWAP_API_URL,
@@ -15,9 +16,12 @@ const thornode = axios.create({ baseURL: 'https://gateway.liquify.com/chain/thor
 const midgard = axios.create({ baseURL: 'https://gateway.liquify.com/chain/thorchain_midgard' })
 const mayaMidgard = axios.create({ baseURL: 'https://midgard.mayachain.info' })
 
+/** DexScreener's own chain slugs, for the chains this app looks up prices on. */
+export type DexScreenerChain = 'solana' | 'ethereum' | 'robinhood'
+
 export const getDexScreenerTokens = async (
   tokenAddresses: string[],
-  chainId: 'solana' | 'ethereum' = 'solana'
+  chainId: DexScreenerChain = 'solana'
 ): Promise<Record<string, { price?: number; logo?: string }>> => {
   if (tokenAddresses.length === 0) return {}
   const addresses = tokenAddresses.join(',')
@@ -27,7 +31,7 @@ export const getDexScreenerTokens = async (
     for (const pair of res.data || []) {
       const addr = pair?.baseToken?.address
       if (!addr) continue
-      const key = chainId === 'ethereum' ? addr.toLowerCase() : addr
+      const key = chainId === 'solana' ? addr : addr.toLowerCase()
       const existing = result[key] ?? {}
       if (existing.price == null && pair?.priceUsd != null) {
         existing.price = parseFloat(pair.priceUsd)
@@ -186,6 +190,18 @@ export const getAllTokens = async () => {
   return uSwap.get('/tokens/all').then(res => res.data)
 }
 
+/**
+ * Rewrites the asset pair into the spelling the aggregator accepts.
+ *
+ * Only Robinhood Chain needs this, and only for its gas asset — see `toAggregatorIdentifier`. Every
+ * other identifier passes through untouched, so this is safe to run over every request.
+ */
+const forAggregator = <T extends { sellAsset: string; buyAsset: string }>(json: T): T => ({
+  ...json,
+  buyAsset: toAggregatorIdentifier(json.buyAsset),
+  sellAsset: toAggregatorIdentifier(json.sellAsset)
+})
+
 export interface RateProviderError {
   provider?: string
   error?: string
@@ -214,7 +230,7 @@ export interface RateResult {
  */
 export const getRate = async (json: QuoteRequest, signal?: AbortSignal): Promise<RateResult> => {
   try {
-    const { data } = await uSwap.post('/rate', json, { signal })
+    const { data } = await uSwap.post('/rate', forAggregator(json), { signal })
     const response = data as QuoteResponse
     return {
       routes: (response.routes ?? []) as QuoteResponseRoute[],
@@ -231,7 +247,7 @@ export const getRate = async (json: QuoteRequest, signal?: AbortSignal): Promise
 
 // commits the order with a single provider; returns one route (no { routes } wrapper)
 export const createSwap = async (json: SwapRequest): Promise<QuoteResponseRoute> => {
-  return uSwap.post('/swap', json).then(res => res.data as QuoteResponseRoute)
+  return uSwap.post('/swap', forAggregator(json)).then(res => res.data as QuoteResponseRoute)
 }
 
 export const getTrack = async (data: { uuid: string; inboundTxHash?: string }): Promise<TrackResponse> => {

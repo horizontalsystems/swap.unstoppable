@@ -5,6 +5,7 @@ import { useBalance } from '@/hooks/use-balance'
 import { useQuote } from '@/hooks/use-quote'
 import { useAssetFrom, useSwap } from '@/hooks/use-swap'
 import { useWallets } from '@/hooks/use-wallets'
+import { isNativeSentinel } from '@/lib/robinhood/asset-list'
 import { getUSwap } from '@/lib/wallets'
 import { uSwapWalletOption } from '@/types'
 
@@ -48,7 +49,12 @@ export const useSimulation = (): UseSimulation => {
       })
 
       const approvalSpender = quote.approvalSpender
-      if (!assetValue.isGasAsset && assetValue.address && approvalSpender) {
+      // `isGasAsset` is not enough on Robinhood Chain: the aggregator addresses its native coin by
+      // the EIP-7528 sentinel and echoes the route back as `ROBINHOOD.UNKNOWN-0XEEEE…`, which parses
+      // as a token with an address. Approving it would call `allowance` on an address that holds no
+      // contract, and LI.FI returns an `approvalSpender` on native sells too, so this is reached.
+      const isNative = assetValue.isGasAsset || isNativeSentinel(assetValue.address)
+      if (!isNative && assetValue.address && approvalSpender) {
         const provider = uSwapWalletOption(selected.provider)
         const wallet = provider && uSwap.getWallet<EVMChain>(provider, selected.network as EVMChain)
         const approved = await wallet?.isApproved({
