@@ -21,6 +21,12 @@ import { AppProviderName } from '@/types'
  * issuer itself publishes — and USDC's 2.38M trustlines. Re-check by hand in a browser if in doubt.
  *
  * Adding an asset here means repeating both checks. Do not paste an issuer from memory.
+ *
+ * `coingeckoId` is looked up against BlocksDecoded (`/v1/coins?uids=`), not CoinGecko itself, and it
+ * does not carry every id CoinGecko has. Verified: `stellar`, `usd-coin`, `euro-coin`, `aquarius`,
+ * `stronghold-token` and `paypal-usd` resolve; the `ultracapital-*` and `etherfuse-*` ids do not, so
+ * those assets show no fiat value until BlocksDecoded lists them. The ids are recorded anyway — they
+ * are correct, and pricing starts working with no code change once the feed catches up.
  */
 
 /** Stellar's fixed precision — every classic asset is 7 decimal places. */
@@ -78,10 +84,32 @@ export const STELLAR_ASSETS: StellarAssetEntry[] = [
     coingeckoId: 'stronghold-token',
     axelar: true
   },
-  { code: 'yXLM', issuer: 'GARDNV3Q7YGT4AKSDF25LT32YSCCW4EV22Y2TV3I2PU2MMXJTEDL5T55', name: 'Ultra Stellar XLM' },
-  { code: 'yUSDC', issuer: 'GDGTVWSM4MGS4T7Z6W4RPWOCHE2I6RDFCIFZGS3DOA63LWQTRNZNTTFF', name: 'Ultra Stellar USDC' },
-  { code: 'yBTC', issuer: 'GBUVRNH4RW4VLHP4C5MOF46RRIRZLAVHYGX45MVSTKA2F6TMR7E7L6NW', name: 'Ultra Stellar BTC' },
-  { code: 'yETH', issuer: 'GDYQNEF2UWTK4L6HITMT53MZ6F5QWO3Q4UVE6SCGC4OMEQIZQQDERQFD', name: 'Ultra Stellar ETH' }
+  {
+    code: 'PYUSD',
+    issuer: 'GDQE7IXJ4HUHV6RQHIUPRJSEZE4DRS5WY577O2FY6YQ5LVWZ7JZTU2V5',
+    name: 'PayPal USD',
+    coingeckoId: 'paypal-usd',
+    logoURI: 'https://assets.coingecko.com/coins/images/31212/large/PYUSD_Logo.png'
+  },
+  // Etherfuse stablebonds — CETES (Mexican) and TESOURO (Brazilian) share one issuer.
+  { code: 'CETES', issuer: 'GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC', name: 'Etherfuse CETES', coingeckoId: 'etherfuse-cetes' },
+  {
+    code: 'TESOURO',
+    issuer: 'GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC',
+    name: 'Etherfuse Tesouro',
+    coingeckoId: 'etherfuse-tesouro'
+  },
+  // The `y*` wrappers carry CoinGecko ids, but the price feed does not resolve them today — see
+  // the note above STELLAR_ASSETS. They are recorded so pricing starts working the moment it does.
+  { code: 'yXLM', issuer: 'GARDNV3Q7YGT4AKSDF25LT32YSCCW4EV22Y2TV3I2PU2MMXJTEDL5T55', name: 'Ultra Stellar XLM', coingeckoId: 'ultracapital-yxlm' },
+  {
+    code: 'yUSDC',
+    issuer: 'GDGTVWSM4MGS4T7Z6W4RPWOCHE2I6RDFCIFZGS3DOA63LWQTRNZNTTFF',
+    name: 'Ultra Stellar USDC',
+    coingeckoId: 'ultracapital-yusdc'
+  },
+  { code: 'yBTC', issuer: 'GBUVRNH4RW4VLHP4C5MOF46RRIRZLAVHYGX45MVSTKA2F6TMR7E7L6NW', name: 'Ultra Stellar BTC', coingeckoId: 'ultracapital-ybtc' },
+  { code: 'yETH', issuer: 'GDYQNEF2UWTK4L6HITMT53MZ6F5QWO3Q4UVE6SCGC4OMEQIZQQDERQFD', name: 'Ultra Stellar ETH', coingeckoId: 'ultracapital-yeth' }
 ]
 
 /** The SDK's canonical identifier: `XLM.XLM` for native, `XLM.CODE-GISSUER…` for a classic asset. */
