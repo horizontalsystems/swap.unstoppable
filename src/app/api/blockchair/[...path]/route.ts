@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { apiError, methodNotAllowed } from '@/lib/api-error'
 import { rateLimit } from '@/lib/rate-limit'
+import { isSameOrigin } from '@/lib/same-origin'
 
 // Server-side proxy for the Blockchair calls the UTXO toolbox makes, so the
 // paid API key stays on the server instead of shipping in the client bundle.
 // The client points `envs.blockchairApiUrl` here (see src/lib/wallets.ts) and
 // sends no key of its own; this route appends it.
 const UPSTREAM = 'https://api.blockchair.com'
+
+// A stalled upstream would otherwise hold the handler open indefinitely.
+const UPSTREAM_TIMEOUT_MS = 15_000
 
 // Chain slugs the toolbox derives from the UTXO chain (getUtxoApi -> baseUrl).
 const CHAINS = new Set(['bitcoin', 'bitcoin-cash', 'litecoin', 'dash', 'dogecoin', 'zcash'])
@@ -44,6 +48,15 @@ function badPath() {
 }
 
 async function forward(req: NextRequest, path: string[], endpoints: string[], body?: string) {
+  if (!isSameOrigin(req)) {
+    return apiError(
+      403,
+      'forbidden',
+      'Cross-origin requests are not allowed',
+      'This proxy only serves the Unstoppable Swap frontend. Query api.blockchair.com directly with your own API key instead.'
+    )
+  }
+
   const retryAfter = rateLimit(req, 'blockchair', 300)
   if (retryAfter !== null) {
     return apiError(429, 'rate_limited', 'Too many requests', `Retry after ${retryAfter} seconds (see the Retry-After header).`, {
@@ -69,7 +82,8 @@ async function forward(req: NextRequest, path: string[], endpoints: string[], bo
     method: body === undefined ? 'GET' : 'POST',
     headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
     body,
-    cache: 'no-store'
+    cache: 'no-store',
+    signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
   }).catch(() => null)
 
   if (!upstream) {
