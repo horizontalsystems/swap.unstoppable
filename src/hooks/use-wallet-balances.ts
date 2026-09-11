@@ -10,7 +10,9 @@ import { getRobinhoodAccountBalances } from '@/lib/robinhood/balance'
 import { getUSwap } from '@/lib/wallets'
 import { WalletAccount } from '@/store/wallets-store'
 
-const ETH_RPC_URL = process.env.NEXT_PUBLIC_ALCHEMY_ETH_RPC_URL || 'https://eth.llamarpc.com'
+// ERC-20 discovery uses Alchemy-only methods, so a public RPC is no fallback. The key stays
+// on the server behind our own proxy (src/app/api/alchemy); the hook only runs in the browser.
+const ALCHEMY_PROXY_URL = '/api/alchemy'
 
 const ETH_SCAM_TICKERS = new Set(['HEX', 'AICC'])
 
@@ -97,10 +99,8 @@ export const useWalletBalances = () => {
           // For Ethereum, supplement with Alchemy to discover meme coins not in the curated API list
           const alchemyLogoMap = new Map<string, string>()
           if (account.network === Chain.Ethereum) {
-            const alchemyBalances = await getAlchemyTokenBalances(wallet.address, ETH_RPC_URL)
-            const existingAddresses = new Set(
-              balances.map(b => b.address?.toLowerCase()).filter(Boolean)
-            )
+            const alchemyBalances = await getAlchemyTokenBalances(wallet.address, ALCHEMY_PROXY_URL)
+            const existingAddresses = new Set(balances.map(b => b.address?.toLowerCase()).filter(Boolean))
             for (const t of alchemyBalances) {
               const addr = t.contractAddress.toLowerCase()
               if (t.logo) alchemyLogoMap.set(addr, t.logo)
