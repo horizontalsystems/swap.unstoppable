@@ -59,6 +59,14 @@ function blockchairProxyUrl() {
   return `${origin}/api/blockchair`
 }
 
+// Solana has no free endpoint a browser can use: api.mainnet-beta.solana.com 403s anything sending
+// an `Origin` header, and publicnode blocks the token-account call half of a balance needs. So the
+// toolbox talks to our own proxy (src/app/api/solana) instead, the same arrangement Blockchair has.
+function solanaProxyUrl() {
+  const origin = typeof window === 'undefined' ? AppConfig.baseUrl : window.location.origin
+  return `${origin}/api/solana`
+}
+
 export function getUSwap() {
   if (instance) return instance
 
@@ -70,7 +78,7 @@ export function getUSwap() {
       },
       rpcUrls: {
         [Chain.Ethereum]: ['https://ethereum-rpc.publicnode.com', 'https://eth.llamarpc.com'],
-        [Chain.Solana]: ['https://solana-mainnet.g.alchemy.com/v2/IBi7xnfvpuwGkBEFaAlm0']
+        [Chain.Solana]: [solanaProxyUrl()]
       },
       envs: {
         apiUrl: process.env.NEXT_PUBLIC_USWAP_API_URL,
