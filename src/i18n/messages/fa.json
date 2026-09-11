@@ -237,6 +237,13 @@
     "typeSeedPhrase": "عبارت بازیابی خود را تایپ کنید",
     "invalidFileType": "نوع فایل نامعتبر است. لطفاً یک فایل JSON یا TXT بارگذاری کنید.",
     "noTokensFound": "هیچ توکنی یافت نشد",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "این حساب از نوع {type} است. بیت‌کوین برای هر نوع آدرس موجودی جداگانه‌ای نگه می‌دارد، بنابراین دارایی‌هایی که روی نوع دیگری نگهداری می‌شوند اینجا نمایش داده نمی‌شوند — نوع آدرس را در کیف پول خود تغییر دهید یا با مسیر مشتق‌سازی (derivation path) دیگری دوباره متصل شوید.",
     "copyAddress": "کپی آدرس",
     "addressCopied": "آدرس کپی شد",
     "disconnectWallet": "قطع اتصال {name}",

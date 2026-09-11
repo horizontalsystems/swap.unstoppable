@@ -237,6 +237,13 @@
     "typeSeedPhrase": "اپݨا سیڈ فریز ٹائپ کرو",
     "invalidFileType": "غلط فائل دی قسم۔ مہربانی کر کے ہک JSON یا TXT فائل اپ لوڈ کرو۔",
     "noTokensFound": "کوئی ٹوکن نہ ملیا",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "ایہہ اکاؤنٹ {type} اے۔ Bitcoin ہر ایڈریس ٹائپ لئی وکھو وکھ بیلنس رکھدا اے، تے ایس لئی کسے ہور ٹائپ تے پئے سکے ایتھے نظر نئیں آؤن گے — اپنے والٹ وچ ایڈریس ٹائپ بدلو، یا کسے ہور derivation path تے دوبارہ کنیکٹ کرو۔",
     "copyAddress": "ایڈریس کاپی کرو",
     "addressCopied": "ایڈریس کاپی تھی گیا",
     "disconnectWallet": "{name} منقطع کرو",

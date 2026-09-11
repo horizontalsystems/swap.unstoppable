@@ -237,6 +237,13 @@
     "typeSeedPhrase": "اپنا سیڈ فریز ٹائپ کریں",
     "invalidFileType": "غلط فائل کی قسم۔ براہ کرم ایک JSON یا TXT فائل اپ لوڈ کریں۔",
     "noTokensFound": "کوئی ٹوکن نہیں ملا",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "یہ اکاؤنٹ {type} ہے۔ Bitcoin ہر ایڈریس ٹائپ کے لیے الگ بیلنس رکھتا ہے، اس لیے کسی دوسری ٹائپ پر موجود کوائنز یہاں نظر نہیں آئیں گے — اپنے والیٹ میں ایڈریس ٹائپ تبدیل کریں، یا کسی مختلف ڈیریویشن پاتھ پر دوبارہ کنیکٹ کریں۔",
     "copyAddress": "ایڈریس کاپی کریں",
     "addressCopied": "ایڈریس کاپی ہو گیا",
     "disconnectWallet": "{name} منقطع کریں",

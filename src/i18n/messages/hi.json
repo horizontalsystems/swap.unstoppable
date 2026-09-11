@@ -237,6 +237,13 @@
     "typeSeedPhrase": "अपना सीड फ़्रेज़ टाइप करें",
     "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया एक JSON या TXT फ़ाइल अपलोड करें।",
     "noTokensFound": "कोई टोकन नहीं मिला",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "यह खाता {type} है। Bitcoin हर एड्रेस टाइप के लिए अलग बैलेंस रखता है, इसलिए किसी दूसरे टाइप पर रखे गए कॉइन यहाँ नहीं दिखेंगे — अपने वॉलेट में एड्रेस टाइप बदलें, या किसी अन्य derivation path पर दोबारा कनेक्ट करें।",
     "copyAddress": "पता कॉपी करें",
     "addressCopied": "पता कॉपी हुआ",
     "disconnectWallet": "{name} डिस्कनेक्ट करें",

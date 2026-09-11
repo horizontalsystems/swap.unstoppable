@@ -237,6 +237,13 @@
     "typeSeedPhrase": "Escribe tu frase semilla",
     "invalidFileType": "Tipo de archivo no válido. Sube un archivo JSON o TXT.",
     "noTokensFound": "No se encontraron tokens",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "Esta cuenta es {type}. Bitcoin mantiene un saldo distinto para cada tipo de dirección, por lo que las monedas que estén en otro tipo no aparecerán aquí: cambia el tipo de dirección en tu monedero o vuelve a conectar con otra ruta de derivación.",
     "copyAddress": "Copiar dirección",
     "addressCopied": "Dirección copiada",
     "disconnectWallet": "Desconectar {name}",

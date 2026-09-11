@@ -237,6 +237,13 @@
     "typeSeedPhrase": "اكتب عبارة الاسترداد",
     "invalidFileType": "نوع ملف مش صالح. من فضلك ارفع ملف JSON أو TXT.",
     "noTokensFound": "مفيش توكنات",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "الحساب ده من نوع {type}. البيتكوين بيحتفظ برصيد منفصل لكل نوع عنوان، يعني العملات اللى على نوع تانى مش هتظهر هنا — غيّر نوع العنوان من المحفظة بتاعتك، أو اتوصل من تانى بمسار اشتقاق مختلف.",
     "copyAddress": "انسخ العنوان",
     "addressCopied": "اتنسخ العنوان",
     "disconnectWallet": "افصل {name}",

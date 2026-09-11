@@ -237,6 +237,13 @@
     "typeSeedPhrase": "シードフレーズを入力してください",
     "invalidFileType": "無効なファイルタイプです。JSON または TXT ファイルをアップロードしてください。",
     "noTokensFound": "トークンが見つかりません",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "このアカウントは {type} です。Bitcoin はアドレスタイプごとに残高を別々に管理するため、別のタイプで保有しているコインはここには表示されません。ウォレットでアドレスタイプを切り替えるか、別の導出パスで再接続してください。",
     "copyAddress": "アドレスをコピー",
     "addressCopied": "アドレスをコピーしました",
     "disconnectWallet": "{name} を切断",

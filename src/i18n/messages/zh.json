@@ -237,6 +237,13 @@
     "typeSeedPhrase": "输入您的助记词",
     "invalidFileType": "无效的文件类型。请上传 JSON 或 TXT 文件。",
     "noTokensFound": "未找到代币",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "此账户为 {type} 类型。比特币为每种地址类型分别记录余额，因此存放在其他类型地址中的资产不会显示在这里 — 请在钱包中切换地址类型，或使用其他派生路径重新连接。",
     "copyAddress": "复制地址",
     "addressCopied": "地址已复制",
     "disconnectWallet": "断开 {name}",

@@ -237,6 +237,13 @@
     "typeSeedPhrase": "Gib deine Seed-Phrase ein",
     "invalidFileType": "Ungültiger Dateityp. Bitte lade eine JSON- oder TXT-Datei hoch.",
     "noTokensFound": "Keine Tokens gefunden",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "Dieses Konto verwendet {type}. Bitcoin führt für jeden Adresstyp ein separates Guthaben, daher werden Coins eines anderen Typs hier nicht angezeigt — wechsle den Adresstyp in deiner Wallet oder verbinde dich erneut über einen anderen Ableitungspfad.",
     "copyAddress": "Adresse kopieren",
     "addressCopied": "Adresse kopiert",
     "disconnectWallet": "{name} trennen",
