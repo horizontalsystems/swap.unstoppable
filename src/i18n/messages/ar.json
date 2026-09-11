@@ -237,6 +237,13 @@
     "typeSeedPhrase": "اكتب عبارة الاسترداد",
     "invalidFileType": "نوع ملف غير صالح. يرجى رفع ملف JSON أو TXT.",
     "noTokensFound": "لم يتم العثور على رموز",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "هذا الحساب من نوع {type}. يحتفظ Bitcoin برصيد منفصل لكل نوع عنوان، لذا لن تظهر هنا العملات المحفوظة على نوع آخر — قم بتبديل نوع العنوان في محفظتك، أو أعد الاتصال عبر مسار اشتقاق مختلف.",
     "copyAddress": "نسخ العنوان",
     "addressCopied": "تم نسخ العنوان",
     "disconnectWallet": "فصل {name}",

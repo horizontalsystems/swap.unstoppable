@@ -237,6 +237,13 @@
     "typeSeedPhrase": "আপনার সিড ফ্রেজ টাইপ করুন",
     "invalidFileType": "অবৈধ ফাইলের ধরন। অনুগ্রহ করে একটি JSON বা TXT ফাইল আপলোড করুন।",
     "noTokensFound": "কোনো টোকেন পাওয়া যায়নি",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "এই অ্যাকাউন্টটি {type}। Bitcoin প্রতিটি অ্যাড্রেস টাইপের জন্য আলাদা ব্যালেন্স রাখে, তাই অন্য কোনো টাইপে রাখা কয়েন এখানে দেখা যাবে না — আপনার ওয়ালেটে অ্যাড্রেস টাইপ পরিবর্তন করুন, অথবা ভিন্ন ডেরিভেশন পাথে পুনরায় সংযোগ করুন।",
     "copyAddress": "ঠিকানা কপি করুন",
     "addressCopied": "ঠিকানা কপি হয়েছে",
     "disconnectWallet": "{name} সংযোগ বিচ্ছিন্ন করুন",

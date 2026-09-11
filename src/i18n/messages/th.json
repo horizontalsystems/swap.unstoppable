@@ -237,6 +237,13 @@
     "typeSeedPhrase": "พิมพ์วลีกู้คืนของคุณ",
     "invalidFileType": "ประเภทไฟล์ไม่ถูกต้อง โปรดอัปโหลดไฟล์ JSON หรือ TXT",
     "noTokensFound": "ไม่พบโทเค็น",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "บัญชีนี้เป็นแบบ {type} — Bitcoin จะแยกยอดคงเหลือตามประเภทที่อยู่ ดังนั้นเหรียญที่เก็บไว้ในที่อยู่ประเภทอื่นจะไม่แสดงที่นี่ กรุณาสลับประเภทที่อยู่ในกระเป๋าของคุณ หรือเชื่อมต่อใหม่ด้วย derivation path อื่น",
     "copyAddress": "คัดลอกที่อยู่",
     "addressCopied": "คัดลอกที่อยู่แล้ว",
     "disconnectWallet": "ตัดการเชื่อมต่อ {name}",

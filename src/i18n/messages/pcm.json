@@ -237,6 +237,13 @@
     "typeSeedPhrase": "Type your seed phrase",
     "invalidFileType": "Invalid file type. Abeg upload JSON or TXT file.",
     "noTokensFound": "No token dey",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "Dis account na {type}. Bitcoin dey keep separate balance for every address type, so coin wey dey anoda type no go show here — change di address type for your wallet, or connect again with anoda derivation path.",
     "copyAddress": "Copy Address",
     "addressCopied": "Dem don copy address",
     "disconnectWallet": "Disconnect {name}",

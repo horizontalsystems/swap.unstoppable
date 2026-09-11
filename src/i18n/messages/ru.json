@@ -237,6 +237,13 @@
     "typeSeedPhrase": "Введите свою сид-фразу",
     "invalidFileType": "Неверный тип файла. Пожалуйста, загрузите файл JSON или TXT.",
     "noTokensFound": "Токены не найдены",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "Этот аккаунт — {type}. Bitcoin хранит отдельный баланс для каждого типа адреса, поэтому монеты на адресе другого типа здесь не отобразятся — измените тип адреса в кошельке или переподключитесь по другому пути деривации.",
     "copyAddress": "Копировать адрес",
     "addressCopied": "Адрес скопирован",
     "disconnectWallet": "Отключить {name}",

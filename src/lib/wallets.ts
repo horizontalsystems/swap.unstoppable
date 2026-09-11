@@ -14,6 +14,7 @@ import { tronlinkWallet } from '@uswap/wallets/tronlink'
 import { vultisigWallet } from '@uswap/wallets/vultisig'
 import { AppConfig } from '@/config'
 import { useWalletStore } from '@/store/wallets-store'
+import { BTC_PURPOSE_ADDRESS_TYPE, btcAddressType } from '@/lib/swap-helpers'
 
 const defaultPlugins = {
   ...EVMPlugin,
@@ -140,10 +141,41 @@ export async function getAccounts(
   return chains
     .map(chain => {
       const address = uSwap.getAddress(chain)
-      return address ? { address, network: chain, provider: option } : null
+      if (!address) return null
+      const mismatch = btcPathMismatch(chain, address, config?.derivationPath)
+      if (mismatch) {
+        uSwap.disconnectChain(chain)
+        throw new Error(mismatch)
+      }
+      return { address, network: chain, provider: option }
     })
     .filter(acc => acc !== null)
 }
+
+// A device asked for a BIP-86 path has to answer with a Taproot (bc1p…) address. Ledger
+// firmware that predates Taproot instead derives a Native SegWit address from the Taproot
+// key: a valid-looking bc1q… address holding none of the user's coins. Fail loudly rather
+// than connect an account whose balance will always read zero.
+function btcPathMismatch(chain: Chain, address: string, derivationPath?: number[]): string | null {
+  if (chain !== Chain.Bitcoin || !derivationPath) return null
+
+  const expected = BTC_PURPOSE_ADDRESS_TYPE[derivationPath[0]]
+  const actual = btcAddressType(address)
+
+  if (!expected || !actual || expected === actual) return null
+
+  return (
+    `Your wallet returned a ${BTC_ADDRESS_TYPE_LABEL[actual]} address for the ${BTC_ADDRESS_TYPE_LABEL[expected]} derivation path. ` +
+    `Update your device's Bitcoin app to the latest version, or connect using ${BTC_ADDRESS_TYPE_LABEL[actual]} instead.`
+  )
+}
+
+const BTC_ADDRESS_TYPE_LABEL = {
+  taproot: 'Taproot',
+  nativeSegwit: 'Native SegWit',
+  nestedSegwit: 'Nested SegWit',
+  legacy: 'Legacy'
+} as const
 
 export const supportedChains: Record<WalletOption, Chain[]> = {
   [WalletOption.BRAVE]: evmWallet.connectEVMWallet.supportedChains,

@@ -237,6 +237,13 @@
     "typeSeedPhrase": "Tohum ifadenizi yazın",
     "invalidFileType": "Geçersiz dosya türü. Lütfen bir JSON veya TXT dosyası yükleyin.",
     "noTokensFound": "Token bulunamadı",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "Bu hesap {type} türündedir. Bitcoin her adres türü için ayrı bir bakiye tutar; bu nedenle başka bir türde tutulan coinler burada görünmez — cüzdanınızdan adres türünü değiştirin veya farklı bir türetme yolu (derivation path) ile yeniden bağlanın.",
     "copyAddress": "Adresi Kopyala",
     "addressCopied": "Adres kopyalandı",
     "disconnectWallet": "{name} Bağlantısını Kes",

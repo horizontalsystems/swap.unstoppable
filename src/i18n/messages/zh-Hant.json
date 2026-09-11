@@ -237,6 +237,13 @@
     "typeSeedPhrase": "輸入您的助記詞",
     "invalidFileType": "無效的檔案類型。請上傳 JSON 或 TXT 檔案。",
     "noTokensFound": "未找到代幣",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "此帳戶為 {type}。Bitcoin 會為每種位址類型分別記錄餘額，因此存放在其他位址類型的比特幣不會顯示在這裡 — 請在您的錢包中切換位址類型，或以不同的衍生路徑重新連接。",
     "copyAddress": "複製地址",
     "addressCopied": "地址已複製",
     "disconnectWallet": "斷開 {name}",
