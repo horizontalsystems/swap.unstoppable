@@ -44,7 +44,9 @@
       "approvalTransaction": "Approval Transaction",
       "errorSubmitting": "Error Submitting Transaction",
       "submittingTransaction": "Submitting Transaction",
-      "transactionSubmitted": "Transaction submitted"
+      "transactionSubmitted": "Transaction submitted",
+      "mediatorSweepFailed": "The swap completed, but returning funds from the temporary swap account failed. It will be retried automatically next time you connect this wallet.",
+      "mediatorRecovered": "Funds from an unfinished swap were returned to your wallet."
     },
     "confirm": {
       "titleSwap": "Confirm Swap",
@@ -64,11 +66,13 @@
       "memo": "Memo",
       "confirm": "Confirm",
       "brokerPhase": {
+        "funding": "Confirm in your wallet…",
         "connecting": "Connecting…",
         "quoting": "Getting live price…",
         "trading": "Trading…",
         "settling": "Settling…"
       },
+      "mediatorHint": "Runs on a temporary account: one wallet signature funds it, and it merges back when the swap ends. About {reserve} XLM is held for fees and reserves and returned with the proceeds.",
       "executionPath": "Execution path",
       "executionPathTooltip": "The venue filling this swap, and any assets it routes through on the way.",
       "routeSpent": "Route already used",

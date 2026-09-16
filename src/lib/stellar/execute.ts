@@ -1,6 +1,7 @@
 import type { BrokerSessionCallbacks, CommittedRoute, ExecutionResult, RouteTracking } from 'stellar-web-sdk'
 import { Asset } from '@/components/swap/asset'
 import { adaptStellarRoute, adaptStellarTrack } from '@/lib/stellar/adapt'
+import { forgetMediator, persistMediator, releaseMediator } from '@/lib/stellar/mediator'
 import { getStellarSdk } from '@/lib/stellar/sdk'
 import { freighterSigner } from '@/lib/stellar/wallet'
 import { AppProviderName, QuoteResponseRoute, TrackResponse } from '@/types'
@@ -117,6 +118,20 @@ export const activateStellarTrustline = async (address: string, asset: Asset): P
 export interface StellarExecuteOptions {
   callbacks?: BrokerSessionCallbacks
   signal?: AbortSignal
+  /** StellarBroker only: the wallet is about to be asked to fund the mediator account. */
+  onFunding?: () => void
+}
+
+export interface StellarMediator {
+  address: string
+  fundingHash: string
+  /** The merge back into the wallet. Absent when it failed — see `sweepFailed`. */
+  disposeHash?: string
+  /**
+   * The swap may well have completed, but its proceeds are still on the mediator account. The
+   * handle stays persisted and `recoverMediators` brings them back on a later visit.
+   */
+  sweepFailed?: Error
 }
 
 export interface StellarExecution {
@@ -127,16 +142,28 @@ export interface StellarExecution {
   /** Why the broker session failed, when it did. */
   error?: Error
   result: ExecutionResult
+  /**
+   * The handle to track `hash` with. For a StellarBroker swap this points at the mediator account,
+   * which is the account the broker credited; the route's own handle would read zero.
+   */
+  tracking: RouteTracking
+  /** Present for StellarBroker routes, which run through a mediator account. */
+  mediator?: StellarMediator
 }
 
 /**
  * Sign and broadcast a committed route.
  *
- * A failed StellarBroker session is **returned, not thrown** — `sdk.execute` hands back
+ * A StellarBroker route goes through a mediator account (`sdk.executeViaMediator`): Freighter
+ * signs one transaction that funds a throwaway account, an in-page key drives the session at the
+ * speed the broker's ~15 s envelope windows demand, and the account merges back afterwards. The
+ * mediator's key is persisted before Freighter is asked to sign, and cleared once the merge lands.
+ *
+ * A failed StellarBroker session is **returned, not thrown** — the SDK hands back
  * `brokerSession.status === 'failed'` with the last signed hash attached. That distinction matters:
- * the broker fills across up to five transactions, so a failed session may already have moved
- * value, and treating it as a plain throw would drop the hash and leave a real swap untracked.
- * The caller records the transaction whenever `hash` is present, whatever `succeeded` says.
+ * the broker fills across several transactions, so a failed session may already have moved value,
+ * and treating it as a plain throw would drop the hash and leave a real swap untracked. The caller
+ * records the transaction whenever `hash` is present, whatever `succeeded` says.
  */
 export const executeStellarRoute = async (
   committed: CommittedRoute,
@@ -146,14 +173,43 @@ export const executeStellarRoute = async (
   const sdk = await getStellarSdk()
   const signer = await freighterSigner(sourceAddress)
 
-  const result = await sdk.execute(committed, signer, opts)
-  const session = result.brokerSession
+  if (committed.execution.method !== 'stellar_broker') {
+    const result = await sdk.execute(committed, signer, { callbacks: opts.callbacks, signal: opts.signal })
+    return { hash: result.inboundTxHash, succeeded: true, result, tracking: committed.tracking }
+  }
 
-  return {
-    hash: result.inboundTxHash,
-    succeeded: session ? session.status === 'success' : true,
-    error: session?.error,
-    result
+  let mediatorAddress: string | undefined
+  try {
+    opts.onFunding?.()
+    const result = await sdk.executeViaMediator(committed, signer, {
+      callbacks: opts.callbacks,
+      signal: opts.signal,
+      onMediator: handle => {
+        mediatorAddress = handle.address
+        persistMediator(handle)
+      }
+    })
+
+    if (result.disposeHash) forgetMediator(result.mediator.address)
+
+    const session = result.brokerSession
+    return {
+      hash: result.inboundTxHash,
+      succeeded: session.status === 'success',
+      error: session.error,
+      result,
+      tracking: result.tracking,
+      mediator: {
+        address: result.mediator.address,
+        fundingHash: result.fundingHash,
+        disposeHash: result.disposeHash,
+        sweepFailed: result.disposeError
+      }
+    }
+  } finally {
+    // Whatever happened, no session owns this mediator any more. If the funding transaction never
+    // landed the persisted handle points at an account that does not exist, and recovery drops it.
+    if (mediatorAddress) releaseMediator(mediatorAddress)
   }
 }
 

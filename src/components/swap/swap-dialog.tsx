@@ -18,6 +18,7 @@ import { useIsLimitSwap } from '@/store/limit-swap-store'
 import { useSetTransaction } from '@/store/transaction-store'
 import type { BrokerSessionPhase, CommittedRoute, RouteTracking } from 'stellar-web-sdk'
 import { executeStellarRoute } from '@/lib/stellar/execute'
+import { MEDIATOR_RESERVE_XLM } from '@/lib/stellar/mediator'
 import { logExecution } from '@/lib/stellar/log'
 import { AppProviderName, QuoteResponseRoute } from '@/types'
 
@@ -44,8 +45,9 @@ export const SwapDialog = ({ provider, stellarSdk, isOpen, onOpenChange }: SwapD
   const [quote, setQuote] = useState<QuoteResponseRoute | undefined>(undefined)
   const [committed, setCommitted] = useState<CommittedRoute | undefined>(undefined)
   // StellarBroker re-quotes live inside the session and signs several transactions, so the confirm
-  // screen has to show what the session is doing rather than a frozen snapshot.
-  const [brokerPhase, setBrokerPhase] = useState<BrokerSessionPhase | undefined>(undefined)
+  // screen has to show what the session is doing rather than a frozen snapshot. `funding` is the
+  // app's own step before the session: the one wallet prompt, which funds the mediator account.
+  const [brokerPhase, setBrokerPhase] = useState<BrokerSessionPhase | 'funding' | undefined>(undefined)
   // Set once anything has been signed against this committed route. Signing is not idempotent —
   // a StellarBroker session fills across up to five transactions and may fail having landed some —
   // so re-running the same route would sell the full amount a second time on top of what filled.
@@ -90,7 +92,8 @@ export const SwapDialog = ({ provider, stellarSdk, isOpen, onOpenChange }: SwapD
     // response was lost. Re-running either could spend the balance twice. Recovery here is the
     // user re-quoting from a balance that now reflects whatever did settle.
     const broadcast = executeStellarRoute(committed, quote.sourceAddress, {
-      callbacks: { onPhase: setBrokerPhase }
+      callbacks: { onPhase: setBrokerPhase },
+      onFunding: () => setBrokerPhase('funding')
     }).then(execution => {
       const signedHashes = execution.result.brokerSession?.signedHashes ?? []
 
@@ -98,7 +101,13 @@ export const SwapDialog = ({ provider, stellarSdk, isOpen, onOpenChange }: SwapD
       // filled partially across the transactions it did sign, and dropping the hash would leave a
       // swap that moved real value untracked. Every signed hash is kept, not just the tracked one —
       // the tracked hash is the LAST signed, which is precisely the one least likely to have landed.
-      if (execution.hash) recordTransaction(execution.hash, quote, committed.tracking, signedHashes)
+      // The handle is the execution's, not the route's: a broker swap credits the mediator account.
+      if (execution.hash) recordTransaction(execution.hash, quote, execution.tracking, signedHashes)
+
+      // The swap itself is done either way; this is the merge back into the wallet failing. The
+      // handle stays persisted and recovery retries it on the next visit, but the user should
+      // know their balance will lag until then.
+      if (execution.mediator?.sweepFailed) toast.warning(t('mediatorSweepFailed'))
 
       // Anything signed spends the route, success or not.
       if (execution.hash || signedHashes.length) setRouteSpent(true)
@@ -110,7 +119,13 @@ export const SwapDialog = ({ provider, stellarSdk, isOpen, onOpenChange }: SwapD
         outcome: execution.succeeded ? 'submitted' : 'failed',
         hash: execution.hash,
         error: execution.error && { code: (execution.error as { code?: string }).code, message: execution.error.message },
-        signedCount: execution.result.brokerSession?.signedHashes.length
+        signedCount: execution.result.brokerSession?.signedHashes.length,
+        mediator: execution.mediator && {
+          address: execution.mediator.address,
+          fundingHash: execution.mediator.fundingHash,
+          disposeHash: execution.mediator.disposeHash,
+          sweepError: execution.mediator.sweepFailed?.message
+        }
       })
 
       if (!execution.succeeded) {
@@ -206,6 +221,9 @@ export const SwapDialog = ({ provider, stellarSdk, isOpen, onOpenChange }: SwapD
             <SwapConfirm quote={quote} />
 
             {routeSpent && <div className="text-thor-gray px-4 text-sm md:px-8">{t2('routeSpentHint')}</div>}
+            {stellarSdk && provider === 'STELLARBROKER' && !routeSpent && (
+              <div className="text-thor-gray px-4 text-sm md:px-8">{t2('mediatorHint', { reserve: MEDIATOR_RESERVE_XLM })}</div>
+            )}
 
             <div className="p-4 pt-2 md:p-8 md:pt-2">
               <ThemeButton

@@ -30,6 +30,8 @@ type StellarLogEvent =
       error?: string
       /** StellarBroker signs up to five transactions per session; this is how many it signed. */
       signedCount?: number
+      /** StellarBroker runs on a mediator account; `sweepError` means its funds are still there. */
+      mediator?: { address: string; fundingHash: string; disposeHash?: string; sweepError?: string }
     }
   | {
       kind: 'tracking'
@@ -88,6 +90,7 @@ export const logExecution = (args: {
   hash?: string
   error?: { code?: string; message?: string }
   signedCount?: number
+  mediator?: { address: string; fundingHash: string; disposeHash?: string; sweepError?: string }
 }): void =>
   send({
     kind: 'execution',
@@ -97,7 +100,8 @@ export const logExecution = (args: {
     hash: args.hash,
     errorCode: args.error?.code,
     error: args.error?.message,
-    signedCount: args.signedCount
+    signedCount: args.signedCount,
+    mediator: args.mediator
   })
 
 /** Each observed status change, so a swap's progress and failures are visible after the fact. */

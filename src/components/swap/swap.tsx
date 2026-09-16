@@ -20,6 +20,7 @@ import { useResolveSource } from '@/hooks/use-resolve-source'
 import { useAssetFrom, useSwap } from '@/hooks/use-swap'
 import { useUrlParams } from '@/hooks/use-url-params'
 import { useSelectedAccount } from '@/hooks/use-wallets'
+import { useMediatorRecovery } from '@/hooks/use-mediator-recovery'
 import { QR_PROVIDERS, resolvePriceImpact } from '@/lib/swap-helpers'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
 
@@ -33,6 +34,7 @@ export const Swap = () => {
   const { quote } = useQuote()
   const { assets: memolessAssets } = useMemolessAssets()
   const { rateFrom, rateTo } = useSwapRates()
+  useMediatorRecovery()
 
   useUrlParams()
   useResolveSource()
