@@ -161,7 +161,8 @@ export const aggregatorExcludedProviders = (sellAssetChain?: string, sellAssetTi
   //
   // So both sources quote NEAR for a Stellar origin and the venue-dedupe in use-quote keeps
   // whichever pays more. Either is executable: the SDK's route is marked `stellarSdk` and signed by
-  // the connected Stellar wallet, the aggregator's runs its usual deposit flow.
+  // the connected Stellar wallet; the aggregator's is a `transfer` deposit that swap-dialog also
+  // signs with the Stellar wallet (executeStellarDeposit) — USwap itself has no Stellar wallet.
 
   // Withhold AXELAR_ITS only for a ticker the SDK actually bridges. Its coverage is a static list,
   // so if the aggregator ever adds a third ITS token, withholding unconditionally would leave that

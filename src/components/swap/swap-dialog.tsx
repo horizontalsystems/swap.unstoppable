@@ -17,7 +17,8 @@ import { getUSwap } from '@/lib/wallets'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
 import { useSetTransaction } from '@/store/transaction-store'
 import type { BrokerSessionPhase, CommittedRoute, RouteTracking } from 'stellar-web-sdk'
-import { executeStellarRoute } from '@/lib/stellar/execute'
+import { executeStellarDeposit, executeStellarRoute } from '@/lib/stellar/execute'
+import { isStellarChain } from '@/lib/stellar/asset-list'
 import { MEDIATOR_RESERVE_XLM } from '@/lib/stellar/mediator'
 import { logExecution } from '@/lib/stellar/log'
 import { AppProviderName, QuoteResponseRoute } from '@/types'
@@ -159,14 +160,20 @@ export const SwapDialog = ({ provider, stellarSdk, isOpen, onOpenChange }: SwapD
 
     setSubmitting(true)
 
-    const broadcast = uSwap
-      .swap({
-        // Stellar routes never reach here — swap-dialog branches on the provider before this
-        // point (Phase 4). The cast covers the provider names the aggregator's own type predates.
-        route: quote as Parameters<typeof uSwap.swap>[0]['route'],
-        feeOptionKey: FeeOption.Fast,
-        pluginName: P2P_FALLBACK_PROVIDERS.includes(provider) ? 'p2p' : undefined
-      })
+    // An aggregator route selling from Stellar (its NEAR quote) is a plain deposit, but USwap has
+    // no Stellar wallet to make it with — the SDK builds and Freighter signs it instead.
+    const stellarOrigin = isStellarChain(assetFrom.chain) && !!quote.sourceAddress
+    const send = stellarOrigin
+      ? executeStellarDeposit(quote, quote.sourceAddress!)
+      : uSwap.swap({
+          // SDK-owned Stellar routes never reach here — onConfirmStellar above takes them. The cast
+          // covers the provider names the aggregator's own type predates.
+          route: quote as Parameters<typeof uSwap.swap>[0]['route'],
+          feeOptionKey: FeeOption.Fast,
+          pluginName: P2P_FALLBACK_PROVIDERS.includes(provider) ? 'p2p' : undefined
+        })
+
+    const broadcast = send
       .then((hash: string) => {
         setTransaction({
           uid: generateId(),

@@ -214,6 +214,37 @@ export const executeStellarRoute = async (
 }
 
 /**
+ * Send the deposit for an AGGREGATOR route that sells from Stellar — the NEAR routes the aggregator
+ * quotes alongside the SDK's own (see aggregatorExcludedProviders for why both are asked).
+ *
+ * These routes are not `stellarSdk`-marked, so swap-dialog would otherwise hand them to
+ * `uSwap.swap()`, which resolves the sell-chain wallet through USwap — and USwap has no Stellar
+ * wallet, so a Freighter account fails there with "Unknown connected chain: XLM". The SDK's
+ * `TransferExecutor` builds the same payment (+ text memo) from the aggregator's `transfer` block,
+ * which is shape-identical to the SDK's own, and signs it with Freighter.
+ *
+ * Tracking then goes through the aggregator's `/track` by uuid + this hash, exactly as for any
+ * other aggregator route — nothing Stellar-specific to persist.
+ */
+export const executeStellarDeposit = async (route: QuoteResponseRoute, sourceAddress: string): Promise<string> => {
+  if (route.execution?.method !== 'transfer') {
+    throw new Error(`Stellar deposit needs a transfer route, got ${route.execution?.method ?? 'none'}`)
+  }
+
+  const sdk = await getStellarSdk()
+  const { TransferExecutor } = await import('stellar-web-sdk')
+  const signer = await freighterSigner(sourceAddress)
+
+  // Only `execution` is read; the rest of CommittedRoute is the SDK's bookkeeping.
+  const result = await new TransferExecutor(sdk.config).execute({ execution: route.execution } as unknown as CommittedRoute, signer)
+  if (!result.submitted || !result.inboundTxHash) {
+    throw new Error('Stellar deposit was not submitted')
+  }
+
+  return result.inboundTxHash
+}
+
+/**
  * Read a committed Stellar swap's current outcome.
  *
  * Takes the `RouteTracking` block rather than the whole route, because that is genuinely all the

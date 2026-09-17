@@ -36,7 +36,7 @@
     "@tanstack/react-virtual": "^3.13.12",
     "@uswap/core": "^4.1.22",
     "@uswap/helpers": "^4.5.20",
-    "@uswap/plugins": "^4.2.20",
+    "@uswap/plugins": "^4.2.21",
     "@uswap/toolboxes": "^4.3.20",
     "@uswap/wallets": "^4.3.22",
     "axios": "^1.12.2",
