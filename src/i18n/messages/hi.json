@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "द्वारा निर्मित",
     "reportBugsTo": "बग्स यहाँ रिपोर्ट करें",
-    "gotQuestions": "कोई प्रश्न है?"
+    "gotQuestions": "कोई प्रश्न है?",
+    "privacyPolicy": "गोपनीयता नीति"
   },
   "swap": {
     "title": "स्वैप",

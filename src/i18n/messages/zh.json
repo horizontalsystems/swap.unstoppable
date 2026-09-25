@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "开发者",
     "reportBugsTo": "问题反馈至",
-    "gotQuestions": "有疑问？"
+    "gotQuestions": "有疑问？",
+    "privacyPolicy": "隐私政策"
   },
   "swap": {
     "title": "兑换",

@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "Создано",
     "reportBugsTo": "Сообщить об ошибках",
-    "gotQuestions": "Есть вопросы?"
+    "gotQuestions": "Есть вопросы?",
+    "privacyPolicy": "Политика конфиденциальности"
   },
   "swap": {
     "title": "Обмен",

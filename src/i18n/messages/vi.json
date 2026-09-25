@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "Phát triển bởi",
     "reportBugsTo": "Báo lỗi tới",
-    "gotQuestions": "Có thắc mắc?"
+    "gotQuestions": "Có thắc mắc?",
+    "privacyPolicy": "Chính sách quyền riêng tư"
   },
   "swap": {
     "title": "Hoán đổi",

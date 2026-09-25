@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "নির্মাণ করেছে",
     "reportBugsTo": "বাগ রিপোর্ট করুন এখানে",
-    "gotQuestions": "প্রশ্ন আছে?"
+    "gotQuestions": "প্রশ্ন আছে?",
+    "privacyPolicy": "গোপনীয়তা নীতি"
   },
   "swap": {
     "title": "সোয়াপ",

@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "Dem build am by",
     "reportBugsTo": "Report bugs to",
-    "gotQuestions": "You get question?"
+    "gotQuestions": "You get question?",
+    "privacyPolicy": "Privacy Policy"
   },
   "swap": {
     "title": "Swap",

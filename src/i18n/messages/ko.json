@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "개발",
     "reportBugsTo": "버그 신고",
-    "gotQuestions": "궁금한 점이 있으신가요?"
+    "gotQuestions": "궁금한 점이 있으신가요?",
+    "privacyPolicy": "개인정보 처리방침"
   },
   "swap": {
     "title": "스왑",

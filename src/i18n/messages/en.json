@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "Built by",
     "reportBugsTo": "Report bugs to",
-    "gotQuestions": "Got questions?"
+    "gotQuestions": "Got questions?",
+    "privacyPolicy": "Privacy Policy"
   },
   "swap": {
     "title": "Swap",

@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "Geliştiren",
     "reportBugsTo": "Hataları bildirin",
-    "gotQuestions": "Sorularınız mı var?"
+    "gotQuestions": "Sorularınız mı var?",
+    "privacyPolicy": "Gizlilik Politikası"
   },
   "swap": {
     "title": "Takas",
