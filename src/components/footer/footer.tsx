@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { Icon } from '@/components/icons'
 import { AppConfig } from '@/config'
@@ -14,6 +15,10 @@ export function Footer() {
             <a className="underline" href="https://x.com/unstoppablebyhs" rel="noopener noreferrer" target="_blank">
               Unstoppable Wallet
             </a>
+            <span className="mx-1">·</span>
+            <Link className="underline" href="/privacy-policy">
+              {t('privacyPolicy')}
+            </Link>
           </div>
 
           <div className="text-thor-gray flex items-center gap-3 text-xs">

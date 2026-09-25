@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "Conçu par",
     "reportBugsTo": "Signaler les bugs à",
-    "gotQuestions": "Des questions ?"
+    "gotQuestions": "Des questions ?",
+    "privacyPolicy": "Politique de confidentialité"
   },
   "swap": {
     "title": "Échanger",

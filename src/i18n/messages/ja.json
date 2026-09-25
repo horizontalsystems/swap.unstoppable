@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "開発者",
     "reportBugsTo": "バグ報告先",
-    "gotQuestions": "ご質問がありますか？"
+    "gotQuestions": "ご質問がありますか？",
+    "privacyPolicy": "プライバシーポリシー"
   },
   "swap": {
     "title": "スワップ",

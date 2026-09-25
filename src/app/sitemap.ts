@@ -32,6 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${AppConfig.baseUrl}/sell-${sell}-buy-${buy}`,
       changeFrequency: 'daily' as const,
       priority: 0.8
-    }))
+    })),
+    { url: `${AppConfig.baseUrl}/privacy-policy`, changeFrequency: 'yearly', priority: 0.1 }
   ]
 }

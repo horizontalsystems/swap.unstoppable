@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "Dibuat oleh",
     "reportBugsTo": "Laporkan bug ke",
-    "gotQuestions": "Ada pertanyaan?"
+    "gotQuestions": "Ada pertanyaan?",
+    "privacyPolicy": "Kebijakan Privasi"
   },
   "swap": {
     "title": "Tukar",

@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "พัฒนาโดย",
     "reportBugsTo": "รายงานข้อบกพร่องที่",
-    "gotQuestions": "มีคำถาม?"
+    "gotQuestions": "มีคำถาม?",
+    "privacyPolicy": "นโยบายความเป็นส่วนตัว"
   },
   "swap": {
     "title": "แลกเปลี่ยน",
