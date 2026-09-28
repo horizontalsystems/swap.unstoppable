@@ -27,9 +27,10 @@ const popularPairs = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    { url: AppConfig.baseUrl, changeFrequency: 'daily', priority: 1 },
+    { url: AppConfig.baseUrl, changeFrequency: 'weekly', priority: 1 },
+    { url: `${AppConfig.baseUrl}/app`, changeFrequency: 'daily', priority: 0.9 },
     ...popularPairs.map(([sell, buy]) => ({
-      url: `${AppConfig.baseUrl}/sell-${sell}-buy-${buy}`,
+      url: `${AppConfig.baseUrl}/app/sell-${sell}-buy-${buy}`,
       changeFrequency: 'daily' as const,
       priority: 0.8
     }))
