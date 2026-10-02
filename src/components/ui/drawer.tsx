@@ -4,8 +4,37 @@ import * as React from 'react'
 import { Drawer as DrawerPrimitive } from 'vaul'
 import { cn } from '@/lib/utils'
 
+// Vaul's `repositionInputs` pushes the header off-screen when the keyboard opens; DrawerContent handles it instead.
 function Drawer({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
-  return <DrawerPrimitive.Root data-slot="drawer" {...props} />
+  return <DrawerPrimitive.Root data-slot="drawer" repositionInputs={false} {...props} />
+}
+
+// How far the keyboard covers a `bottom: 0` fixed element. `pageTop - scrollY` rather than `offsetTop`: iOS scrolls the page
+// for the keyboard and leaves `offsetTop` stale.
+function useKeyboardInset() {
+  const [viewport, setViewport] = React.useState<{ inset: number; height: number }>({ inset: 0, height: 0 })
+
+  React.useEffect(() => {
+    const visual = window.visualViewport
+    if (!visual) return
+
+    const update = () => {
+      const inset = Math.max(0, Math.round(window.innerHeight - visual.height - (visual.pageTop - window.scrollY)))
+      setViewport(prev => (prev.inset === inset && prev.height === visual.height ? prev : { inset, height: visual.height }))
+    }
+
+    update()
+    visual.addEventListener('resize', update)
+    visual.addEventListener('scroll', update)
+    window.addEventListener('scroll', update)
+    return () => {
+      visual.removeEventListener('resize', update)
+      visual.removeEventListener('scroll', update)
+      window.removeEventListener('scroll', update)
+    }
+  }, [])
+
+  return viewport
 }
 
 function DrawerTrigger({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Trigger>) {
@@ -33,7 +62,10 @@ function DrawerOverlay({ className, ...props }: React.ComponentProps<typeof Draw
   )
 }
 
-function DrawerContent({ className, children, ...props }: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+function DrawerContent({ className, children, style, ...props }: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+  const keyboard = useKeyboardInset()
+  const keyboardStyle: React.CSSProperties | undefined = keyboard.inset > 0 ? { bottom: keyboard.inset, maxHeight: keyboard.height - 16 } : undefined
+
   return (
     <DrawerPortal data-slot="drawer-portal">
       <DrawerOverlay />
@@ -47,6 +79,7 @@ function DrawerContent({ className, children, ...props }: React.ComponentProps<t
           'data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=left]:sm:max-w-sm',
           className
         )}
+        style={{ ...style, ...keyboardStyle }}
         {...props}
       >
         <div className="bg-muted mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />

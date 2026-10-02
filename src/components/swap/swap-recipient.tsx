@@ -76,6 +76,8 @@ export const SwapRecipient = ({ provider, stellarSdk, onFetchQuote }: SwapRecipi
   const [warningChecked, setWarningChecked] = useState(false)
   const [trustlineNeeded, setTrustlineNeeded] = useState(false)
   const [warningCheckedLTC, setWarningCheckedLTC] = useState(false)
+  // Read-only on mobile until touched: focus gets moved into the field (e.g. by ticking the warning) and raises the keyboard.
+  const [editingField, setEditingField] = useState<'refund' | 'destination'>()
 
   if (!assetFrom || !assetTo) return null
 
@@ -215,17 +217,28 @@ export const SwapRecipient = ({ provider, stellarSdk, onFetchQuote }: SwapRecipi
   const isLTC = assetTo.ticker === 'LTC'
   const buttonEnabled = isValidDestination && destinationAddress.length && !quoting && (refundRequired ? isValidRefund && refundAddress.length : true)
 
-  const addressInput = (asset: Asset, address: string, setAddress: (address: string) => void, isValid: boolean, options: WalletAccount[] = []) => {
+  const addressInput = (
+    field: 'refund' | 'destination',
+    asset: Asset,
+    address: string,
+    setAddress: (address: string) => void,
+    isValid: boolean,
+    options: WalletAccount[] = []
+  ) => {
     const currentOption = options.find(a => a.address.toLowerCase() === address.toLowerCase())
 
     return (
       <>
         <div className="relative">
           <Textarea
-            placeholder={isMobile ? undefined : t('addressPlaceholder', { chain: chainLabel(asset.chain) })}
+            placeholder={t('addressPlaceholder', { chain: chainLabel(asset.chain) })}
             value={address}
             aria-invalid={!isValid}
             onChange={e => setAddress(e.target.value)}
+            enterKeyHint="done"
+            readOnly={isMobile && editingField !== field}
+            onPointerDown={() => setEditingField(field)}
+            onBlur={() => setEditingField(undefined)}
             className={cn('max-h-21 pr-15', { 'pl-13': currentOption })}
             tabIndex={isMobile ? -1 : 0}
           />
@@ -280,6 +293,18 @@ export const SwapRecipient = ({ provider, stellarSdk, onFetchQuote }: SwapRecipi
     )
   }
 
+  const nextButton = (
+    <ThemeButton
+      variant="primaryMedium"
+      className="w-full"
+      onClick={trustlineNeeded ? addTrustline : fetchQuote}
+      disabled={!buttonEnabled || !warningChecked || (isLTC && !warningCheckedLTC)}
+    >
+      {quoting && <LoaderCircle size={20} className="animate-spin" />}
+      <span>{quoting ? t('preparingSwap') : trustlineNeeded ? t('addTrustline', { ticker: assetTo.ticker }) : t('next')}</span>
+    </ThemeButton>
+  )
+
   return (
     <>
       <CredenzaHeader>
@@ -293,13 +318,13 @@ export const SwapRecipient = ({ provider, stellarSdk, onFetchQuote }: SwapRecipi
               {refundRequired && (
                 <div className="flex flex-col gap-3">
                   <div className="text-thor-gray text-sm font-semibold">{t('enterRefundAddress')}</div>
-                  {addressInput(assetFrom, refundAddress, setRefundAddress, isValidRefund)}
+                  {addressInput('refund', assetFrom, refundAddress, setRefundAddress, isValidRefund)}
                 </div>
               )}
 
               <div className="flex flex-col gap-3">
                 {refundRequired && <div className="text-thor-gray text-sm font-semibold">{t('enterReceivingAddress')}</div>}
-                {addressInput(assetTo, destinationAddress, setDestinationAddress, isValidDestination, options)}
+                {addressInput('destination', assetTo, destinationAddress, setDestinationAddress, isValidDestination, options)}
               </div>
             </div>
 
@@ -327,20 +352,12 @@ export const SwapRecipient = ({ provider, stellarSdk, onFetchQuote }: SwapRecipi
           {quoteError && <SwapError error={quoteError} />}
         </div>
 
+        {isMobile && <div className="pb-4">{nextButton}</div>}
+
         <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-px h-4 bg-linear-to-t to-transparent" />
       </ScrollArea>
 
-      <div className="p-4 pt-2 md:p-8 md:pt-2">
-        <ThemeButton
-          variant="primaryMedium"
-          className="w-full"
-          onClick={trustlineNeeded ? addTrustline : fetchQuote}
-          disabled={!buttonEnabled || !warningChecked || (isLTC && !warningCheckedLTC)}
-        >
-          {quoting && <LoaderCircle size={20} className="animate-spin" />}
-          <span>{quoting ? t('preparingSwap') : trustlineNeeded ? t('addTrustline', { ticker: assetTo.ticker }) : t('next')}</span>
-        </ThemeButton>
-      </div>
+      {!isMobile && <div className="p-8 pt-2">{nextButton}</div>}
     </>
   )
 }
