@@ -5,7 +5,7 @@ import { AppProviderName } from '@/types'
 // (stellarbroker, soroswap, aquarius, stellar_dex, axelar_its). Swap them for the real brand
 // assets before launch.
 
-export const SwapProvider = ({ provider }: { provider: AppProviderName | 'LIZEX' | 'BITANIA' }) => {
+export const SwapProvider = ({ provider }: { provider: AppProviderName | 'LIZEX' | 'BITANIA' | 'XSWAP' }) => {
   let title: string = provider
   let icon = title
 
@@ -37,6 +37,8 @@ export const SwapProvider = ({ provider }: { provider: AppProviderName | 'LIZEX'
     title = 'Lizex'
   } else if (provider === 'BITANIA') {
     title = 'Bitania'
+  } else if (provider === 'XSWAP') {
+    title = 'XSwap'
   } else if (provider === 'CCE') {
     title = 'CCE Cash'
   } else if (provider === 'STELLARBROKER') {
