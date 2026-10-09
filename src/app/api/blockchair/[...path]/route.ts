@@ -20,6 +20,11 @@ const CHAINS = new Set(['bitcoin', 'bitcoin-cash', 'litecoin', 'dash', 'dogecoin
 const GET_ENDPOINTS = ['dashboards/address/', 'raw/transaction/', 'outputs']
 const POST_ENDPOINTS = ['push/transaction']
 
+// Per client per the limiter's 10-minute window. The toolbox's getUtxos makes one raw/transaction
+// call per UTXO, and keystore balances refresh every UTXO chain at once, so a wallet with a few
+// hundred UTXOs legitimately needs this many. The paid key's quota is the real ceiling.
+const RATE_LIMIT = 3000
+
 function resolveUpstream(path: string[], endpoints: string[]) {
   const [chain, ...rest] = path
   if (!CHAINS.has(chain)) return null
@@ -57,7 +62,7 @@ async function forward(req: NextRequest, path: string[], endpoints: string[], bo
     )
   }
 
-  const retryAfter = rateLimit(req, 'blockchair', 300)
+  const retryAfter = rateLimit(req, 'blockchair', RATE_LIMIT)
   if (retryAfter !== null) {
     return apiError(429, 'rate_limited', 'Too many requests', `Retry after ${retryAfter} seconds (see the Retry-After header).`, {
       'Retry-After': String(retryAfter)
