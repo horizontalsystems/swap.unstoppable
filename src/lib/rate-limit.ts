@@ -5,24 +5,30 @@ const MAX_TRACKED_CLIENTS = 10_000
 
 const hits = new Map<string, number[]>()
 
+// How many proxies sit in front of the app, each appending the address it received the request
+// from to `x-forwarded-for`. Behind LB -> nginx the last hop is the load balancer, not the client,
+// so the client is `TRUSTED_PROXY_HOPS` entries from the end. Next fills the header with the socket
+// address when nothing in front set it, which the default of 1 also covers.
+const TRUSTED_PROXY_HOPS = Math.max(1, Number(process.env.TRUSTED_PROXY_HOPS) || 1)
+
 /**
- * The caller's IP as seen by the proxy in front of this app.
+ * The caller's IP as seen by the proxies in front of this app.
  *
  * Never the *first* `x-forwarded-for` hop: Cloudflare appends the real client
  * IP to whatever the caller sent, so the leftmost entry is attacker-controlled
  * and rotating it hands out an unlimited number of buckets. `cf-connecting-ip`
- * is set by the edge and overwrites any client-supplied copy; the last
- * forwarded hop is the equivalent fallback for any other single proxy.
+ * is set by the edge and overwrites any client-supplied copy; counting back
+ * `TRUSTED_PROXY_HOPS` forwarded hops is the equivalent for any other proxies.
  */
 function clientKey(req: NextRequest) {
   const edgeIp = req.headers.get('cf-connecting-ip')?.trim()
   if (edgeIp) return edgeIp
 
   const forwarded = req.headers.get('x-forwarded-for')
-  if (!forwarded) return 'unknown'
+  if (!forwarded) return null
 
   const hops = forwarded.split(',')
-  return hops[hops.length - 1].trim() || 'unknown'
+  return hops[Math.max(0, hops.length - TRUSTED_PROXY_HOPS)].trim() || null
 }
 
 function sweep(now: number) {
@@ -40,7 +46,12 @@ export function rateLimit(req: NextRequest, scope: string, limit: number): numbe
   const now = Date.now()
   if (hits.size > MAX_TRACKED_CLIENTS) sweep(now)
 
-  const key = `${scope}:${clientKey(req)}`
+  // Without a client address every caller would share one bucket and the limit would become a
+  // site-wide cap, so such requests are let through rather than throttling all users together.
+  const client = clientKey(req)
+  if (!client) return null
+
+  const key = `${scope}:${client}`
   const recent = (hits.get(key) ?? []).filter(ts => ts > now - WINDOW_MS)
 
   if (recent.length >= limit) {
