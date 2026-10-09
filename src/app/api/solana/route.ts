@@ -9,7 +9,23 @@ import { isSameOrigin } from '@/lib/same-origin'
 // publicnode blocks `getTokenAccountsByOwner` (half of what a balance asks
 // for), and the rest want a key. Coming from our own origin sidesteps both, and
 // keeps the key server-side when SOLANA_RPC_URL points at a paid endpoint.
-const UPSTREAM = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com'
+//
+// SOLANA_RPC_URL takes a comma-separated list, tried in order. The public endpoint is only the
+// fallback: every user's traffic leaves from this server's single IP, so on its own it gets
+// rate-limited for everyone at once.
+const PUBLIC_UPSTREAM = 'https://api.mainnet-beta.solana.com'
+const CONFIGURED_UPSTREAMS = (process.env.SOLANA_RPC_URL ?? '')
+  .split(',')
+  .map(url => url.trim())
+  .filter(Boolean)
+const UPSTREAMS = [...new Set([...CONFIGURED_UPSTREAMS, PUBLIC_UPSTREAM])]
+
+if (!CONFIGURED_UPSTREAMS.length && process.env.NODE_ENV === 'production') {
+  console.warn('SOLANA_RPC_URL is not set: the Solana proxy is using the rate-limited public endpoint for all users.')
+}
+
+// A stalled upstream would otherwise hold the handler open indefinitely.
+const UPSTREAM_TIMEOUT_MS = 15_000
 
 // A batch of balance calls is a few KB; anything beyond this is not the toolbox.
 const MAX_BODY_BYTES = 100_000
@@ -56,12 +72,19 @@ export async function POST(req: NextRequest) {
     return apiError(400, 'bad_request', 'Invalid JSON-RPC request', 'The body must be a JSON-RPC request object, or an array of them.')
   }
 
-  const upstream = await fetch(UPSTREAM, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body,
-    cache: 'no-store'
-  }).catch(() => null)
+  // Fail over on anything the next endpoint might answer differently: no response, a rate limit or
+  // a server error. The last endpoint's answer is returned as-is.
+  let upstream: Response | null = null
+  for (const url of UPSTREAMS) {
+    upstream = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      cache: 'no-store',
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
+    }).catch(() => null)
+    if (upstream && upstream.status !== 429 && upstream.status < 500) break
+  }
 
   if (!upstream) {
     return apiError(502, 'upstream_unreachable', 'The Solana RPC is unreachable', 'The upstream node did not respond. Retry in a moment.')
