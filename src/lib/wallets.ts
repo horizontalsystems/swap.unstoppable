@@ -5,6 +5,7 @@ import { P2PPlugin } from '@uswap/plugins/p2p'
 import { SolanaPlugin } from '@uswap/plugins/solana'
 import { MayachainPlugin, ThorchainPlugin } from '@uswap/plugins/thorchain'
 import { evmWallet } from '@uswap/wallets/evm-extensions'
+import { freighterWallet } from '@uswap/wallets/freighter'
 import { keplrWallet } from '@uswap/wallets/keplr'
 import { keystoreWallet } from '@uswap/wallets/keystore'
 import { ledgerWallet } from '@uswap/wallets/ledger'
@@ -27,6 +28,7 @@ const defaultPlugins = {
 
 const defaultWallets = {
   ...evmWallet,
+  ...freighterWallet,
   ...keplrWallet,
   ...keystoreWallet,
   ...ledgerWallet,
@@ -118,6 +120,8 @@ export async function connectWallet(option: WalletOption, chains: Chain[], confi
       return connectEach(c => uSwap.connectVultisig(c))
     case WalletOption.TRONLINK:
       return connectEach(c => uSwap.connectTronLink(c))
+    case WalletOption.FREIGHTER:
+      return uSwap.connectFreighter(chains, { silent: config?.silent })
     case WalletOption.KEYSTORE:
       return uSwap.connectKeystore(chains, config?.phrase, config?.derivationPath)
     case WalletOption.LEDGER:
@@ -181,6 +185,7 @@ export const supportedChains: Record<WalletOption, Chain[]> = {
   [WalletOption.BRAVE]: evmWallet.connectEVMWallet.supportedChains,
   [WalletOption.COINBASE_WEB]: evmWallet.connectEVMWallet.supportedChains,
   [WalletOption.EIP6963]: evmWallet.connectEVMWallet.supportedChains,
+  [WalletOption.FREIGHTER]: freighterWallet.connectFreighter.supportedChains,
   [WalletOption.KEPLR]: keplrWallet.connectKeplr.supportedChains,
   [WalletOption.KEYSTORE]: keystoreWallet.connectKeystore.supportedChains,
   [WalletOption.LEAP]: keplrWallet.connectKeplr.supportedChains,

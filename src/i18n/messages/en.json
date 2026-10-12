@@ -162,6 +162,8 @@
       "sendDescription": "Send exactly {amount} {ticker} to the address below from a self custody wallet.",
       "destinationTag": "destination tag",
       "memo": "memo",
+      "memoText": "memo (type: Text)",
+      "memoId": "memo (type: ID)",
       "confirming": "Confirming",
       "confirm": "Confirm",
       "errMemoMissing": "Memo is missing",

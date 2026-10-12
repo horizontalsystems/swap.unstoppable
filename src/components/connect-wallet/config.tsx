@@ -34,6 +34,7 @@ export const ALL_CHAINS = [
   Chain.Polygon,
   Chain.Robinhood,
   Chain.Solana,
+  Chain.Stellar,
   Chain.THORChain,
   Chain.Tron,
   Chain.Zcash,
@@ -43,6 +44,15 @@ export const ALL_CHAINS = [
 export const COMING_SOON_CHAINS: string[] = []
 
 export const WALLETS: WalletParams[] = [
+  {
+    // TODO: placeholder icon
+    key: 'freighter',
+    type: WalletType.browser,
+    label: 'Freighter',
+    option: WalletOption.FREIGHTER,
+    link: 'https://www.freighter.app',
+    supportedChains: supportedChains[WalletOption.FREIGHTER]
+  },
   {
     key: 'metamask',
     label: 'MetaMask',
@@ -122,6 +132,8 @@ export const isWalletAvailable = (option: WalletOption) => {
     case WalletOption.KEPLR: return window?.keplr
     case WalletOption.OKX: return window?.okxwallet
     case WalletOption.TRONLINK: return window?.tronLink || window?.tronWeb
+    // detected asynchronously by useFreighterInstalled
+    case WalletOption.FREIGHTER: return false
     case WalletOption.LEDGER:
     case WalletOption.KEYSTORE: return true
 

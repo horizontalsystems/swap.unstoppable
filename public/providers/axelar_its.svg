@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="AX">
+  <circle cx="16" cy="16" r="16" fill="#2A2438"/>
+  <text x="16" y="16" fill="#C7A6FF" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif"
+        font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="central">AX</text>
+</svg>

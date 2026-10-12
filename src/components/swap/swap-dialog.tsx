@@ -91,7 +91,10 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
       success: () => t('transactionSubmitted'),
       error: (err: any) => {
         console.log(err)
-        return t('errorSubmitting')
+        // show USwap's readable message, but not a raw library Error
+        const cause = err?.cause
+        const readable = cause && !(cause instanceof Error) && typeof cause.message === 'string' ? cause.message : undefined
+        return readable || t('errorSubmitting')
       }
     })
   }

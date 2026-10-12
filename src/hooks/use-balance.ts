@@ -63,6 +63,13 @@ export const useBalance = (): UseBalance => {
         return id.toLowerCase() === assetFrom.identifier.toLowerCase()
       }
 
+      // Stellar locks part of the balance (reserve, open offers); the toolbox returns what is spendable
+      if (assetFrom.chain === Chain.Stellar && 'getSpendableBalance' in wallet) {
+        const [balances, spendableBalances] = await Promise.all([wallet.getBalance(wallet.address), wallet.getSpendableBalance(wallet.address)])
+        const zero = AssetValue.from({ chain: assetFrom.chain, value: 0 })
+        return { total: balances.find(finder) ?? zero, spendable: spendableBalances.find(finder) ?? zero }
+      }
+
       // The aggregator's /balance has no Robinhood Chain, so its balances come from the chain's own
       // RPC. Gas is still estimated below like any other EVM chain.
       if (isRobinhoodChain(assetFrom.chain)) {

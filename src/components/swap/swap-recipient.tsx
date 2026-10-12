@@ -28,8 +28,7 @@ import { WalletAccount } from '@/store/wallets-store'
 import { ProviderName, QuoteResponseRoute } from '@/types'
 
 const EXTRA_CHAIN_VALIDATORS: Record<string, (address: string) => boolean> = {
-  XMR: address => /^[48][1-9A-HJ-NP-Za-km-z]{94}$/.test(address) || /^[48][1-9A-HJ-NP-Za-km-z]{105}$/.test(address),
-  XLM: address => /^G[A-Z2-7]{55}$/.test(address)
+  XMR: address => /^[48][1-9A-HJ-NP-Za-km-z]{94}$/.test(address) || /^[48][1-9A-HJ-NP-Za-km-z]{105}$/.test(address)
 }
 
 interface SwapRecipientProps {
