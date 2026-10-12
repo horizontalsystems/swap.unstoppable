@@ -7,8 +7,6 @@ import { fetchRobinhoodTokens } from '@/lib/robinhood/asset-list'
 import { EXCLUDED_STELLAR_PROVIDERS, STELLAR_DEX_PROVIDERS, stellarTokens } from '@/lib/stellar/asset-list'
 import { ProviderName } from '@/types'
 
-const EXTRA_CHAINS = new Set(['XMR'])
-
 // aggregators quote every token on the chains they support, so /tokens carries no list for them —
 // they are attached to each token by chain instead
 const MANUAL_PROVIDERS: ProviderName[] = [
@@ -51,7 +49,7 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
       }))
 
       for (const token of tokens) {
-        if (!token.chain || (!getChainConfig(token.chain).chain && !EXTRA_CHAINS.has(token.chain))) {
+        if (!token.chain || !getChainConfig(token.chain).chain) {
           continue
         }
 

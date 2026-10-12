@@ -1,11 +1,7 @@
 import Image from 'next/image'
 import { ProviderName } from '@/types'
 
-// TODO: placeholder icons for soroswap, aquarius, stellar_dex, axelar_its
-
-type ExtraProvider = 'CCE' | 'LIZEX' | 'BITANIA' | 'XSWAP'
-
-export const SwapProvider = ({ provider }: { provider: ProviderName | ExtraProvider }) => {
+export const SwapProvider = ({ provider }: { provider: ProviderName }) => {
   let title: string = provider
   let icon = title
 

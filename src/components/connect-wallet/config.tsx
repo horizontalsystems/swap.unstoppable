@@ -161,10 +161,6 @@ export const chainLabel = (c: Chain | string): string => {
       return 'BNB Chain'
     case Chain.BitcoinCash:
       return 'Bitcoin Cash'
-    case 'XMR':
-      return 'Monero'
-    case 'XLM':
-      return 'Stellar'
     default:
       return getChainConfig(c as Chain).name || c
   }

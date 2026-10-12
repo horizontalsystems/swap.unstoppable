@@ -1,12 +1,9 @@
+import { Chain, ChainId, getChainConfig } from '@uswap/core'
 import { ProviderName } from '@/types'
 
 // Curated Stellar classic assets: the Stellar venues publish no token list.
 // Verify every issuer on Horizon and in the issuer's stellar.toml before adding it — a wrong
 // issuer is a different asset with the same ticker.
-
-export const STELLAR_DECIMALS = 7
-
-export const STELLAR_CHAIN_ID = 'stellar'
 
 // Attached to every Stellar asset by chain id. STELLARBROKER is left out: its execution is an
 // interactive WebSocket session the app does not implement.
@@ -82,15 +79,13 @@ const STELLAR_ASSETS: StellarAssetEntry[] = [
 export const stellarTokens = () =>
   STELLAR_ASSETS.map(entry => ({
     address: entry.issuer,
-    chain: 'XLM',
-    chainId: STELLAR_CHAIN_ID,
+    chain: Chain.Stellar,
+    chainId: ChainId.Stellar,
     coingeckoId: entry.coingeckoId,
-    decimals: STELLAR_DECIMALS,
+    decimals: getChainConfig(Chain.Stellar).baseDecimal,
     identifier: `XLM.${entry.code}-${entry.issuer}`,
     logoURI: entry.logoURI,
     name: entry.name,
     ticker: entry.code,
     providers: [] as ProviderName[]
   }))
-
-export const isStellarChain = (chain?: string): boolean => chain === 'XLM'
