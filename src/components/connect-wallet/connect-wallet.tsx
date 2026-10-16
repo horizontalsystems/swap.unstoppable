@@ -135,7 +135,7 @@ export const ConnectWallet = ({ isOpen, onOpenChange, chain }: ConnectWalletProp
     }
 
     if (wallet.key === 'keystore') {
-      return <Keystore key={wallet.key} wallet={wallet} onConnect={onConnect} />
+      return <Keystore key={wallet.key} wallet={wallet} chains={chains} onConnect={onConnect} />
     }
 
     return null

@@ -1,17 +1,16 @@
 import { DragEvent, useRef, useState } from 'react'
-import { WalletOption } from '@uswap/core'
+import { Chain, WalletOption } from '@uswap/core'
 import { LoaderCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ALL_CHAINS } from '@/components/connect-wallet/config'
 import { Icon } from '@/components/icons'
 import { SwapError } from '@/components/swap/swap-error'
 import { ThemeButton } from '@/components/theme-button'
 import { useWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 
-export function ImportKeystore({ onBack, onConnect }: { onBack: () => void; onConnect: () => void }) {
+export function ImportKeystore({ chains, onBack, onConnect }: { chains: Chain[]; onBack: () => void; onConnect: () => void }) {
   const t = useTranslations('wallet')
   const tc = useTranslations('common')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -82,7 +81,7 @@ export function ImportKeystore({ onBack, onConnect }: { onBack: () => void; onCo
       .text()
       .then(text => decryptInWorker(JSON.parse(text), password))
       .then(phrase =>
-        connect(WalletOption.KEYSTORE, ALL_CHAINS, {
+        connect(WalletOption.KEYSTORE, chains, {
           phrase
         })
       )
