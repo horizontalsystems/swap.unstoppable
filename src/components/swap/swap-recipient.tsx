@@ -19,7 +19,7 @@ import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSlip
 import { ensureAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useProviders } from '@/hooks/use-providers'
 import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
-import { createSwap, parseApiError } from '@/lib/api'
+import { parseApiError, previewSwap } from '@/lib/api'
 import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/memo-helpers'
 import { QR_PROVIDERS } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
@@ -33,7 +33,8 @@ const EXTRA_CHAIN_VALIDATORS: Record<string, (address: string) => boolean> = {
 
 interface SwapRecipientProps {
   provider: ProviderName
-  onFetchQuote: (quote: QuoteResponseRoute) => void
+  // refresh re-runs the same preview (same addresses), e.g. after a commit was refused as stale
+  onFetchQuote: (quote: QuoteResponseRoute, refresh: () => Promise<QuoteResponseRoute>) => void
 }
 
 export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) => {
@@ -106,32 +107,41 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
     const sourceAddress = selectedAccount?.address
     const resolvedRefundAddress = refundRequired ? refundAddress : provider === 'MAYACHAIN' ? undefined : selectedAccount?.address
 
-    createSwap({
-      buyAsset: assetTo.identifier,
-      sellAsset: assetFrom.identifier,
-      sellAmount: valueFrom.toSignificant(),
-      // sourceAddress makes the server build an unsignedTx
-      sourceAddress: requiresSourceAddress ? sourceAddress : undefined,
-      destinationAddress,
-      refundAddress: resolvedRefundAddress,
-      slippage: isLimitSwap ? 0 : (slippage ?? 99),
-      provider
-    })
-      .then(async route => {
-        // the API doesn't echo the request addresses — the confirm screen and plugins need them
-        let quote: QuoteResponseRoute = { ...route, sourceAddress, destinationAddress, refundAddress: resolvedRefundAddress }
+    // previews are free — nothing is created until the user confirms (commit)
+    const preview = async () => {
+      const route = await previewSwap({
+        buyAsset: assetTo.identifier,
+        sellAsset: assetFrom.identifier,
+        sellAmount: valueFrom.toSignificant(),
+        // sourceAddress makes the server build an unsignedTx
+        sourceAddress: requiresSourceAddress ? sourceAddress : undefined,
+        destinationAddress,
+        refundAddress: resolvedRefundAddress,
+        slippage: isLimitSwap ? 0 : (slippage ?? 99),
+        provider,
+        // the deposit-address flow (no wallet) shows the commit's deposit QR
+        generateQR: !selectedAccount && QR_PROVIDERS.includes(provider) ? true : undefined
+      })
 
-        // For THORChain limit orders, modify the memo to use limit order format
-        if (isLimitSwap && (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING')) {
-          quote = prepareQuoteForLimitSwap(quote, limitSwapBuyAmount, limitSwapExpiry)
-        } else if (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING') {
-          quote = prepareQuoteForStreaming(quote, twapMode, customInterval, customQuantity)
-        }
+      // the API doesn't echo the request addresses — the confirm screen and plugins need them
+      let quote: QuoteResponseRoute = { ...route, sourceAddress, destinationAddress, refundAddress: resolvedRefundAddress }
 
+      // For THORChain limit orders, modify the memo to use limit order format
+      if (isLimitSwap && (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING')) {
+        quote = prepareQuoteForLimitSwap(quote, limitSwapBuyAmount, limitSwapExpiry)
+      } else if (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING') {
+        quote = prepareQuoteForStreaming(quote, twapMode, customInterval, customQuantity)
+      }
+
+      return quote
+    }
+
+    preview()
+      .then(async quote => {
         // run the AML precheck (QUICKEX) and wait for the verdict before navigating to the confirm screen
         await ensureAmlPrecheck(queryClient, provider, { sourceAddress, refundAddress: resolvedRefundAddress, destinationAddress })
 
-        onFetchQuote(quote)
+        onFetchQuote(quote, preview)
       })
       .catch(error => setQuoteError(parseApiError(error)))
       .finally(() => setQuoting(false))

@@ -5,9 +5,36 @@ export { ProviderName }
 
 export type QuoteResponseRoute = Omit<BaseQuoteResponseRoute, 'providers'> & {
   providers: ProviderName[]
+  // set by /preview; commit it to create the order (the uuid comes from /commit)
+  previewToken?: string
+  // transfer providers at preview: a ready-to-receive account on the sell chain, for fee estimation only — never send to it
+  stubDepositAddress?: string
 }
 
-export type TxStatus = 'not_started' | 'pending' | 'swapping' | 'action_required' | 'completed' | 'refunded' | 'failed' | 'expired' | 'unknown'
+export interface CommitResponse {
+  status: 'ok'
+  uuid: string
+  sellAmount: string
+  expectedBuyAmount: string
+  minBuyAmount?: string | null
+  expiresAt?: number
+  // only for transfer providers; the others keep the execution from the preview
+  execution?: QuoteResponseRoute['execution']
+  replayed: boolean
+}
+
+// signed: the inbound hash is reported but the deposit is not observed yet
+export type TxStatus =
+  | 'not_started'
+  | 'signed'
+  | 'pending'
+  | 'swapping'
+  | 'action_required'
+  | 'completed'
+  | 'refunded'
+  | 'failed'
+  | 'expired'
+  | 'unknown'
 
 export interface TrackLeg {
   chainId?: string

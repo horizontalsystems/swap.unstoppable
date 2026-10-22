@@ -45,7 +45,9 @@
       "approvalTransaction": "Approval Transaction",
       "errorSubmitting": "Error Submitting Transaction",
       "submittingTransaction": "Submitting Transaction",
-      "transactionSubmitted": "Transaction submitted"
+      "transactionSubmitted": "Transaction submitted",
+      "quoteExpired": "The quote expired. Review the updated quote and confirm again.",
+      "priceChanged": "The price moved. Review the updated quote and confirm again."
     },
     "confirm": {
       "titleSwap": "Confirm Swap",
@@ -275,6 +277,7 @@
     "loading": "loading",
     "status": {
       "not_started": "Deposit Pending",
+      "signed": "Awaiting Confirmation",
       "pending": "Pending",
       "swapping": "Swapping",
       "action_required": "Action Required",

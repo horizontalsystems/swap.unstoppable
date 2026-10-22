@@ -10,7 +10,7 @@ import { ThemeButton } from '@/components/theme-button'
 import { useAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useBalance } from '@/hooks/use-balance'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
-import { getTrack } from '@/lib/api'
+import { CommitError, commitRoute, reportSigned, StaleQuoteError } from '@/lib/api'
 import { getRouteDepositAddress, getRouteMemo } from '@/lib/swap-helpers'
 import { generateId } from '@/lib/utils'
 import { getUSwap } from '@/lib/wallets'
@@ -37,6 +37,7 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
   const isLimitSwap = useIsLimitSwap()
 
   const [quote, setQuote] = useState<QuoteResponseRoute | undefined>(undefined)
+  const [refreshQuote, setRefreshQuote] = useState<(() => Promise<QuoteResponseRoute>) | undefined>(undefined)
   const aml = useAmlPrecheck(quote)
 
   const onConfirm = () => {
@@ -44,34 +45,32 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
 
     setSubmitting(true)
 
-    const broadcast = uSwap
-      .swap({
-        route: quote,
-        feeOptionKey: FeeOption.Fast
-      })
-      .then((hash: string) => {
+    // commit creates the order (and, for transfer providers, the deposit address), then the wallet signs and broadcasts
+    const broadcast = commitRoute(quote)
+      .then(route => uSwap.swap({ route, feeOptionKey: FeeOption.Fast }).then((hash: string) => ({ route, hash })))
+      .then(({ route, hash }) => {
         setTransaction({
           uid: generateId(),
           provider: provider,
-          uuid: quote.uuid,
+          uuid: route.uuid,
           chainId: getChainConfig(assetFrom.chain).chainId,
           hash: hash,
           timestamp: new Date(),
-          estimatedTime: quote.estimatedTime?.total,
+          estimatedTime: route.estimatedTime?.total,
           assetFrom: assetFrom,
           assetTo: assetTo,
-          amountFrom: valueFrom.toSignificant(),
-          amountTo: new USwapNumber(quote.expectedBuyAmount).toSignificant(),
-          addressFrom: quote.sourceAddress,
-          addressTo: quote.destinationAddress || '',
-          addressDeposit: getRouteDepositAddress(quote),
+          amountFrom: new USwapNumber(route.sellAmount).toSignificant(),
+          amountTo: new USwapNumber(route.expectedBuyAmount).toSignificant(),
+          addressFrom: route.sourceAddress,
+          addressTo: route.destinationAddress || '',
+          addressDeposit: getRouteDepositAddress(route),
           status: 'pending',
-          limitSwapMemo: isLimitSwap ? getRouteMemo(quote) : undefined
+          limitSwapMemo: isLimitSwap ? getRouteMemo(route) : undefined
         })
 
         // register the broadcast hash for tracking; the sync loop re-sends it on every poll
-        if (quote.uuid) {
-          getTrack({ uuid: quote.uuid, inboundTxHash: hash }).catch(() => {})
+        if (route.uuid) {
+          reportSigned({ uuid: route.uuid, inboundTxHash: hash }).catch(() => {})
         }
 
         setAmountFrom('')
@@ -81,7 +80,16 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
       })
       .catch((err: any) => {
         console.log(err)
-        setSubmitting(false)
+        // the preview can't be committed any more: show a fresh one and let the user confirm again.
+        // Confirm stays disabled until it arrives, so the dead token isn't committed again meanwhile.
+        if (err instanceof StaleQuoteError && refreshQuote) {
+          refreshQuote()
+            .then(setQuote)
+            .catch(() => setQuote(undefined))
+            .finally(() => setSubmitting(false))
+        } else {
+          setSubmitting(false)
+        }
         throw err
       })
 
@@ -89,6 +97,8 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
       loading: t('submittingTransaction'),
       success: () => t('transactionSubmitted'),
       error: (err: any) => {
+        if (err instanceof StaleQuoteError) return err.reason === 'rate_changed' ? t('priceChanged') : t('quoteExpired')
+        if (err instanceof CommitError) return err.message
         console.log(err)
         // show USwap's readable message, but not a raw library Error
         const cause = err?.cause
@@ -106,22 +116,19 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
             <SwapConfirm quote={quote} />
 
             <div className="p-4 pt-2 md:p-8 md:pt-2">
-              <ThemeButton
-                variant="primaryMedium"
-                className="w-full"
-                onClick={() => onConfirm()}
-                disabled={!quote || submitting || aml.blocked}
-              >
-                {submitting || aml.status === 'checking' ? (
-                  <LoaderCircle size={20} className="animate-spin" />
-                ) : (
-                  <span>{t2('confirm')}</span>
-                )}
+              <ThemeButton variant="primaryMedium" className="w-full" onClick={() => onConfirm()} disabled={!quote || submitting || aml.blocked}>
+                {submitting || aml.status === 'checking' ? <LoaderCircle size={20} className="animate-spin" /> : <span>{t2('confirm')}</span>}
               </ThemeButton>
             </div>
           </>
         ) : (
-          <SwapRecipient provider={provider} onFetchQuote={quote => setQuote(quote)} />
+          <SwapRecipient
+            provider={provider}
+            onFetchQuote={(quote, refresh) => {
+              setQuote(quote)
+              setRefreshQuote(() => refresh)
+            }}
+          />
         )}
       </CredenzaContent>
     </Credenza>

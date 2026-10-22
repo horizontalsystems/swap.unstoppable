@@ -11,6 +11,7 @@ import { SwapError } from '@/components/swap/swap-error'
 import { SwapRecipient } from '@/components/swap/swap-recipient'
 import { ThemeButton } from '@/components/theme-button'
 import { useAmlPrecheck } from '@/hooks/use-aml-precheck'
+import { commitRoute, StaleQuoteError } from '@/lib/api'
 import { useAssetFrom, useAssetTo, useSwap } from '@/hooks/use-swap'
 import { attachmentToTxExtra, getRouteMemo, QR_PROVIDERS } from '@/lib/swap-helpers'
 import { generateId } from '@/lib/utils'
@@ -33,12 +34,14 @@ export interface DepositChannel {
 
 export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwapDialogProps) => {
   const t = useTranslations('swap.instant')
+  const tt = useTranslations('swap.toast')
   const assetFrom = useAssetFrom()
   const assetTo = useAssetTo()
   const { valueFrom } = useSwap()
   const setTransaction = useSetTransaction()
 
   const [quote, setQuote] = useState<QuoteResponseRoute | undefined>(undefined)
+  const [refreshQuote, setRefreshQuote] = useState<(() => Promise<QuoteResponseRoute>) | undefined>(undefined)
   const [channel, setChannel] = useState<DepositChannel | undefined>(undefined)
   const [creatingChannel, setCreatingChannel] = useState(false)
   const [error, setError] = useState<Error | undefined>()
@@ -85,35 +88,56 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
   const onConfirm = () => {
     if (!quote || !assetFrom || aml.blocked) return
 
-    if (QR_PROVIDERS.includes(provider)) {
-      const execution = quote.execution
-      if (execution?.method !== 'transfer' || !execution.qr) {
-        setError(new Error(t('errDepositUnavailable')))
-        return
-      }
-
-      createChannel(
-        quote,
-        execution.qr.dataURL,
-        execution.depositAddress,
-        execution.amount,
-        quote.expiresAt ? quote.expiresAt / 1000 : undefined,
-        attachmentToTxExtra(execution.attachment)
-      )
-
-      return
-    }
-
-    const memo = getRouteMemo(quote)
-    if (!memo) {
-      setError(new Error(t('errMemoMissing')))
-      return
-    }
-
     setCreatingChannel(true)
     setError(undefined)
 
-    USwapApi.registerMemoless(
+    // commit creates the order; for transfer providers it carries the deposit address the preview didn't have
+    commitRoute(quote)
+      .then(route => (QR_PROVIDERS.includes(provider) ? openDepositChannel(route) : openMemolessChannel(route)))
+      .catch(err => {
+        if (err instanceof StaleQuoteError) {
+          setError(new Error(err.reason === 'rate_changed' ? tt('priceChanged') : tt('quoteExpired')))
+          // the preview can't be committed any more: show a fresh one and let the user confirm again
+          return refreshQuote?.()
+            .then(setQuote)
+            .catch(() => setQuote(undefined))
+        }
+
+        if (err instanceof USwapError) {
+          const error = err.cause as any
+          setError(new Error(error?.errorData?.error?.message || err.message))
+        } else {
+          setError(err instanceof Error ? err : new Error(String(err)))
+        }
+      })
+      .finally(() => {
+        setCreatingChannel(false)
+      })
+  }
+
+  const openDepositChannel = (route: QuoteResponseRoute) => {
+    const execution = route.execution
+    if (execution?.method !== 'transfer' || !execution.qr) {
+      throw new Error(t('errDepositUnavailable'))
+    }
+
+    createChannel(
+      route,
+      execution.qr.dataURL,
+      execution.depositAddress,
+      execution.amount,
+      route.expiresAt ? route.expiresAt / 1000 : undefined,
+      attachmentToTxExtra(execution.attachment)
+    )
+  }
+
+  const openMemolessChannel = (route: QuoteResponseRoute) => {
+    const memo = getRouteMemo(route)
+    if (!memo) {
+      throw new Error(t('errMemoMissing'))
+    }
+
+    return USwapApi.registerMemoless(
       {
         asset: assetFrom.identifier,
         memo,
@@ -147,23 +171,12 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
         }
 
         createChannel(
-          quote,
+          route,
           preflight.data.qr_code_data_url,
           preflight.data.inbound_address,
           preflight.suggested_in_asset_amount,
           preflight.data.seconds_remaining ? new Date().getTime() / 1000 + preflight.data.seconds_remaining : undefined
         )
-      })
-      .catch(err => {
-        if (err instanceof USwapError) {
-          const error = err.cause as any
-          setError(new Error(error?.errorData?.error?.message || err.message))
-        } else {
-          setError(err)
-        }
-      })
-      .finally(() => {
-        setCreatingChannel(false)
       })
   }
 
@@ -195,7 +208,13 @@ export const InstantSwapDialog = ({ provider, isOpen, onOpenChange }: InstantSwa
             </div>
           </>
         ) : (
-          <SwapRecipient provider={provider} onFetchQuote={quote => setQuote(quote)} />
+          <SwapRecipient
+            provider={provider}
+            onFetchQuote={(quote, refresh) => {
+              setQuote(quote)
+              setRefreshQuote(() => refresh)
+            }}
+          />
         )}
       </CredenzaContent>
     </Credenza>

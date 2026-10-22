@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { AssetValue, Chain, getChainConfig } from '@uswap/core'
 import { BalanceResponse, QuoteRequest, QuoteResponse, SwapRequest, USwapApi } from '@uswap/helpers/api'
-import { AmlCheckResponse, Provider, ProviderName, QuoteResponseRoute, TrackResponse } from '@/types'
+import { AmlCheckResponse, CommitResponse, Provider, ProviderName, QuoteResponseRoute, TrackResponse } from '@/types'
 import { normalizeThorBankDenom } from '@/lib/swap-helpers'
 import { toAggregatorIdentifier } from '@/lib/robinhood/asset-list'
 
@@ -209,22 +209,76 @@ export const getRate = async (json: QuoteRequest, signal?: AbortSignal): Promise
     .then((data: QuoteResponse) => data.routes as QuoteResponseRoute[])
 }
 
-// commits the order with a single provider; returns one route (no { routes } wrapper)
-export const createSwap = async (json: SwapRequest): Promise<QuoteResponseRoute> => {
-  return uSwap.post('/swap', forAggregator(json)).then(res => res.data as QuoteResponseRoute)
+// builds the route for a single provider without creating anything; call it freely (refresh, address change)
+export const previewSwap = async (json: SwapRequest & { generateQR?: boolean }): Promise<QuoteResponseRoute> => {
+  return uSwap.post('/preview', forAggregator(json)).then(res => res.data as QuoteResponseRoute)
+}
+
+export type StaleCommitReason = 'refresh_required' | 'rate_changed'
+
+// the preview can no longer be committed (token expired, provider suspended, or the price moved beyond slippage) — preview again
+export class StaleQuoteError extends Error {
+  constructor(readonly reason: StaleCommitReason) {
+    super(reason)
+    this.name = 'StaleQuoteError'
+  }
+}
+
+// the order was refused (provider error, or commit kept failing) — carries the aggregator's message
+export class CommitError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'CommitError'
+  }
+}
+
+const COMMIT_ATTEMPTS = 4
+const COMMIT_RETRY_DELAY = 1500
+
+// Creates the order — the only call with side effects. A previewToken commits at most once (a resend replays the
+// first answer), so a double tap (in_progress) or an internal failure is retried with the same token, never a new preview.
+export const commitSwap = async (previewToken: string, inboundTxHash?: string): Promise<CommitResponse> => {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await uSwap.post('/commit', { previewToken, inboundTxHash }).then(res => res.data as CommitResponse)
+    } catch (error) {
+      const response = error instanceof AxiosError ? error.response : undefined
+      const status = response?.data?.status
+      if (status === 'refresh_required' || status === 'rate_changed') throw new StaleQuoteError(status)
+
+      const retryable = status === 'in_progress' || (!status && (!response || response.status >= 500))
+      if (!retryable || attempt === COMMIT_ATTEMPTS) throw new CommitError(parseApiError(error).message)
+
+      await new Promise(resolve => setTimeout(resolve, COMMIT_RETRY_DELAY))
+    }
+  }
+}
+
+// commits a previewed route and returns it with the order's uuid, amounts and (transfer providers) deposit execution
+export const commitRoute = async (route: QuoteResponseRoute): Promise<QuoteResponseRoute> => {
+  if (!route.previewToken) throw new StaleQuoteError('refresh_required')
+
+  const commit = await commitSwap(route.previewToken)
+  return {
+    ...route,
+    uuid: commit.uuid,
+    sellAmount: commit.sellAmount,
+    expectedBuyAmount: commit.expectedBuyAmount,
+    minBuyAmount: commit.minBuyAmount,
+    // a transfer order's deposit window is the commit's own; the preview's expiresAt only bounds the quote
+    expiresAt: commit.execution ? commit.expiresAt : (commit.expiresAt ?? route.expiresAt),
+    // routes with a transaction (thorchain_deposit, signed_transaction) keep the preview's — commit does not rebuild it
+    execution: commit.execution ?? route.execution
+  }
+}
+
+// reports the inbound tx hash; a different hash for the same uuid replaces the old one (speed-up / fee bump)
+export const reportSigned = async (data: { uuid: string; inboundTxHash: string }) => {
+  return uSwap.post('/signed', data).then(res => res.data)
 }
 
 export const getTrack = async (data: { uuid: string; inboundTxHash?: string }): Promise<TrackResponse> => {
   return uSwap.post('/track', data).then(res => res.data)
-}
-
-// stateless on-chain trackers for swaps without a uuid (legacy /track page links)
-export const getTrackThorchain = async (data: Record<string, any>): Promise<TrackResponse> => {
-  return uSwap.post('/track/thorchain', data).then(res => res.data)
-}
-
-export const getTrackEvm = async (data: Record<string, any>): Promise<TrackResponse> => {
-  return uSwap.post('/track/evm', data).then(res => res.data)
 }
 
 export const parseApiError = (error: unknown): Error => {

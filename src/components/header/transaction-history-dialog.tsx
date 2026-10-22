@@ -143,7 +143,7 @@ export const TransactionHistoryDialog = ({ isOpen, onOpenChange }: HistoryDialog
                         <span className="pb-2">
                           {status === 'not_started' ? (
                             <ClockFading className="text-thor-gray" size={16} />
-                          ) : status === 'pending' || status === 'swapping' ? (
+                          ) : status === 'signed' || status === 'pending' || status === 'swapping' ? (
                             <LoaderCircle className="animate-spin" size={16} />
                           ) : status === 'action_required' ? (
                             <CircleAlert className="text-jacob" size={16} />

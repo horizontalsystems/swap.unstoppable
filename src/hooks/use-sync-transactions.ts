@@ -15,7 +15,8 @@ export const useSyncTransactions = () => {
       refetchInterval: 5_000,
       refetchIntervalInBackground: false,
       queryFn: () => {
-        if (tx.qrCodeData && !tx.hash && tx.status === 'not_started' && (!tx.expiration || tx.expiration < new Date().getTime() / 1000)) {
+        // a deposit channel without an expiration stays open — keep tracking it
+        if (tx.qrCodeData && !tx.hash && tx.status === 'not_started' && tx.expiration && tx.expiration < new Date().getTime() / 1000) {
           setTransactionStatus(tx.uid, 'expired')
           return null
         }
@@ -32,14 +33,9 @@ export const useSyncTransactions = () => {
             return data
           })
           .catch(error => {
-            if (error instanceof AxiosError) {
-              // 409 — not trackable yet, keep polling
-              if (error.response?.status === 409) return null
-
-              if (error.response?.data?.error === 'txLogsParsingError') {
-                setTransactionStatus(tx.uid, 'unknown')
-                return null
-              }
+            if (error instanceof AxiosError && error.response?.data?.error === 'txLogsParsingError') {
+              setTransactionStatus(tx.uid, 'unknown')
+              return null
             }
 
             throw error

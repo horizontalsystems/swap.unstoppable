@@ -9,7 +9,7 @@ import { chainLabel } from '@/components/connect-wallet/config'
 import { DecimalText } from '@/components/decimal/decimal-text'
 import { Icon } from '@/components/icons'
 import { useRates } from '@/hooks/use-rates'
-import { getTrack, getTrackEvm, getTrackThorchain } from '@/lib/api'
+import { getTrack } from '@/lib/api'
 import { cn, truncate } from '@/lib/utils'
 import { isTxPending, isTxTerminal, TxStatus } from '@/store/transaction-store'
 
@@ -28,39 +28,11 @@ export interface TrackParams {
   refundAddress?: string
 }
 
-// tracks by uuid; legacy links without one fall back to the stateless on-chain trackers
+// every swap is committed through the aggregator and tracked by uuid; legacy links without one can't be tracked
 function fetchTrackStatus(params: TrackParams) {
-  if (params.uuid) {
-    return getTrack({ uuid: params.uuid, inboundTxHash: params.hash })
-  }
+  if (!params.uuid) throw new Error('Swap is not trackable: missing uuid')
 
-  if (params.provider === 'THORCHAIN' || params.provider === 'MAYACHAIN') {
-    return getTrackThorchain({
-      provider: params.provider,
-      fromAsset: params.fromAsset,
-      toAsset: params.toAsset,
-      toAddress: params.toAddress,
-      inboundTxHash: params.hash,
-      depositAddress: params.depositAddress,
-      chainId: params.chainId || undefined,
-      fromAmount: params.fromAmount || undefined,
-      toAmount: params.toAmount || undefined,
-      fromAddress: params.fromAddress
-    })
-  }
-
-  if (params.provider === 'ONEINCH' || params.provider === 'BARTER') {
-    return getTrackEvm({
-      provider: params.provider,
-      hash: params.hash,
-      chainId: params.chainId,
-      fromAsset: params.fromAsset,
-      toAsset: params.toAsset,
-      toAddress: params.toAddress
-    })
-  }
-
-  throw new Error('Swap is not trackable: missing uuid')
+  return getTrack({ uuid: params.uuid, inboundTxHash: params.hash })
 }
 
 export function TrackStatus({ params }: { params: TrackParams }) {
@@ -188,7 +160,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
 
 function StatusIcon({ status }: { status: TxStatus }) {
   if (status === 'not_started') return <ClockFading className="text-thor-gray" size={16} />
-  if (status === 'pending' || status === 'swapping') return <LoaderCircle className="animate-spin" size={16} />
+  if (status === 'signed' || status === 'pending' || status === 'swapping') return <LoaderCircle className="animate-spin" size={16} />
   if (status === 'action_required') return <CircleAlert className="text-jacob" size={16} />
   if (status === 'completed') return <Check className="text-brand-first" size={16} />
   if (status === 'failed') return <X className="text-lucian" size={16} />
