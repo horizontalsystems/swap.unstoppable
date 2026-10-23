@@ -119,7 +119,8 @@ main() {
 }
 
 # When this file is sourced for pack_build (deploy/pack.sh), nothing below runs.
-if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+# BASH_SOURCE is unset when the script arrives on stdin (`bash -s`), hence the default to $0.
+if [ "${BASH_SOURCE[0]:-$0}" = "$0" ]; then
   # Everything runs inside main() with stdin closed: when this script arrives over `bash -s`, bash
   # reads it from stdin incrementally, and any command that reads stdin would eat the rest of it.
   main "$@" </dev/null
