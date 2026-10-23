@@ -1,0 +1,101 @@
+# Builds the web client here and deploys the build to the dev server on every push to `develop`.
+#
+# Unlike the uswap-* services, the build does NOT run on the server: `next build` needs ~3 GB and
+# the dev box has 4. So the runner installs, builds, packs the Next.js standalone output
+# (deploy/pack.sh), copies the archive over SSH and runs deploy/deploy.sh there with ARCHIVE set,
+# which unpacks it into a release folder and reloads pm2. The same script run on the server
+# without ARCHIVE builds on the box instead (slow; it is the fallback).
+#
+# Secrets (repository → Settings → Environments → dev):
+#   DEV_SSH_HOST, DEV_SSH_USER, DEV_SSH_KEY, DEV_SSH_KNOWN_HOSTS  — as in uswap-server's workflow
+# Variables (same environment, "Variables" tab):
+#   NEXT_PUBLIC_USWAP_API_URL      required — e.g. https://swap-dev.unstoppable.money/api/v2
+#   NEXT_PUBLIC_MEMOLESS_API       required — e.g. https://swap-dev.unstoppable.money/memoless/api/v1
+#   NEXT_PUBLIC_USWAP_API_KEY      the uswap-server API key the site uses (public: it ships to browsers)
+#   NEXT_PUBLIC_BLOCKCHAIR_API_KEY optional
+#   NEXT_PUBLIC_ALCHEMY_ETH_RPC_URL optional
+#   NEXT_PUBLIC_APP_ID             optional
+#   DEV_SSH_PORT (default 22), DEV_RELEASES_DIR (default swap.unstoppable-releases, relative to the deploy
+#                                user's home; a leading ~ or $HOME is not expanded)
+# NEXT_PUBLIC_* values are inlined into the bundles at build time (that is what the prefix means in
+# Next.js), so a change to one of them needs a new build: edit the variable, then "Run workflow".
+# Keep them equal to the server's own .env, which the on-box fallback build reads.
+name: Deploy dev
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: 24
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Build
+        env:
+          NEXT_PUBLIC_USWAP_API_URL: ${{ vars.NEXT_PUBLIC_USWAP_API_URL }}
+          NEXT_PUBLIC_MEMOLESS_API: ${{ vars.NEXT_PUBLIC_MEMOLESS_API }}
+          NEXT_PUBLIC_USWAP_API_KEY: ${{ vars.NEXT_PUBLIC_USWAP_API_KEY }}
+          NEXT_PUBLIC_BLOCKCHAIR_API_KEY: ${{ vars.NEXT_PUBLIC_BLOCKCHAIR_API_KEY }}
+          NEXT_PUBLIC_ALCHEMY_ETH_RPC_URL: ${{ vars.NEXT_PUBLIC_ALCHEMY_ETH_RPC_URL }}
+          NEXT_PUBLIC_APP_ID: ${{ vars.NEXT_PUBLIC_APP_ID }}
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: |
+          for v in NEXT_PUBLIC_USWAP_API_URL NEXT_PUBLIC_MEMOLESS_API NEXT_PUBLIC_USWAP_API_KEY; do
+            if [ -z "${!v}" ]; then echo "environment variable $v is not set" >&2; exit 1; fi
+          done
+          npm run build
+
+      - name: Pack
+        run: bash deploy/pack.sh web.tgz && ls -la web.tgz
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.DEV_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEV_SSH_KNOWN_HOSTS }}
+        run: |
+          if [ -z "$KNOWN_HOSTS" ]; then
+            echo "DEV_SSH_KNOWN_HOSTS is not set; run 'ssh-keyscan -H <host>' and store its output" >&2
+            exit 1
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Upload and deploy
+        env:
+          SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+          SSH_USER: ${{ secrets.DEV_SSH_USER }}
+          SSH_PORT: ${{ vars.DEV_SSH_PORT }}
+          RELEASES: ${{ vars.DEV_RELEASES_DIR }}
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          releases="${RELEASES:-swap.unstoppable-releases}"
+          archive="$releases/incoming/web-${GIT_SHA:0:12}.tgz"
+          ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" -o BatchMode=yes "$SSH_USER@$SSH_HOST" \
+            "mkdir -p \"$releases/incoming\""
+          scp -i ~/.ssh/deploy_key -P "${SSH_PORT:-22}" -o BatchMode=yes web.tgz "$SSH_USER@$SSH_HOST:$archive"
+          # %q quotes each value for the remote shell, so no part of it is parsed as a command.
+          remote="$(printf 'ARCHIVE=%s RELEASES=%s bash -s' "$archive" "$releases")"
+          ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" -o BatchMode=yes "$SSH_USER@$SSH_HOST" \
+            "$remote" < deploy/deploy.sh
