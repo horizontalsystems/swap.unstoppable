@@ -80,7 +80,11 @@ apply_archive() {
 
   log "Restarting under pm2"
   ln -sfn "$release" "$RELEASES/current"
-  pm2 startOrReload "$release/ecosystem.config.js" --update-env
+  # Every release is its own directory, and a pm2 reload keeps an existing process on the directory
+  # it was started in, so the process is replaced rather than reloaded. Fork mode: a reload would be
+  # a stop + start anyway, so this costs no extra downtime.
+  pm2 delete swap-web >/dev/null 2>&1 || true
+  pm2 start "$release/ecosystem.config.js"
   pm2 save
 
   local port
