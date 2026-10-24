@@ -281,6 +281,12 @@ export const getTrack = async (data: { uuid: string; inboundTxHash?: string }): 
   return uSwap.post('/track', data).then(res => res.data)
 }
 
+// a split swap (one deposit, several outputs) as ONE swap in the /track shape: one deposit leg, then each
+// output's legs tagged meta.outputIndex; the status is the least-finished output's
+export const getSplitTrack = async (data: { splitUuid: string; inboundTxHash?: string }): Promise<TrackResponse> => {
+  return uSwap.post('/split/track', data).then(res => res.data)
+}
+
 export const parseApiError = (error: unknown): Error => {
   if (error instanceof AxiosError) {
     const data = error.response?.data

@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
+import { AxiosError } from 'axios'
 import { assetFromString, ChainId, ChainIdToChain, getExplorerTxUrl, USwapNumber } from '@uswap/core'
 import { Check, CircleAlert, CircleCheck, ClockFading, LoaderCircle, Undo2, X } from 'lucide-react'
 import { CopyButton } from '@/components/button-copy'
@@ -9,12 +10,15 @@ import { chainLabel } from '@/components/connect-wallet/config'
 import { DecimalText } from '@/components/decimal/decimal-text'
 import { Icon } from '@/components/icons'
 import { useRates } from '@/hooks/use-rates'
-import { getTrack } from '@/lib/api'
+import { getSplitTrack, getTrack } from '@/lib/api'
 import { cn, truncate } from '@/lib/utils'
 import { isTxPending, isTxTerminal, TxStatus } from '@/store/transaction-store'
+import { TrackLeg, TrackResponse } from '@/types'
 
 export interface TrackParams {
   uuid?: string
+  // a split swap: one deposit paid out to several destinations, tracked as a whole
+  splitUuid?: string
   provider: string
   hash?: string
   chainId: string
@@ -22,26 +26,52 @@ export interface TrackParams {
   fromAddress?: string
   fromAmount: string
   toAsset: string
+  // a split's destinations, comma-separated, until its payout legs name them
   toAddress: string
   toAmount: string
   depositAddress?: string
   refundAddress?: string
 }
 
-// every swap is committed through the aggregator and tracked by uuid; legacy links without one can't be tracked
-function fetchTrackStatus(params: TrackParams) {
-  if (!params.uuid) throw new Error('Swap is not trackable: missing uuid')
+// a legacy link without a uuid can't be tracked — retrying won't help
+class NotTrackableError extends Error {}
 
-  return getTrack({ uuid: params.uuid, inboundTxHash: params.hash })
+// every swap is committed through the aggregator and tracked by uuid (a split by its splitUuid); legacy links
+// without one can't be tracked
+async function fetchTrackStatus(params: TrackParams) {
+  if (!params.splitUuid && !params.uuid) throw new NotTrackableError('Swap is not trackable: missing uuid')
+
+  try {
+    return params.splitUuid
+      ? await getSplitTrack({ splitUuid: params.splitUuid, inboundTxHash: params.hash })
+      : await getTrack({ uuid: params.uuid!, inboundTxHash: params.hash })
+  } catch (error) {
+    // 404: the deposit hasn't been received yet — it can still arrive, so keep polling as a pending deposit
+    if (error instanceof AxiosError && error.response?.status === 404) return { status: 'not_started', legs: [] } as TrackResponse
+    throw error
+  }
+}
+
+// a split's destinations, one per output in output order (outputs may share an address): each payout leg names its
+// own once observed, the link carries them before
+function splitDestinations(legs: TrackLeg[] | undefined, linked: string): { index: number; address: string }[] {
+  const destinations = linked ? linked.split(',') : []
+  for (const leg of legs ?? []) {
+    const index = leg.meta?.outputIndex
+    if (index != null && !leg.meta?.refund && leg.toAddress) destinations[index] = leg.toAddress
+  }
+  return destinations.map((address, index) => ({ index, address })).filter(d => d.address)
 }
 
 export function TrackStatus({ params }: { params: TrackParams }) {
   const t = useTranslations('tx')
   const tc = useTranslations('common')
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending, isError, error } = useQuery({
     queryKey: ['track', params],
     queryFn: () => fetchTrackStatus(params),
+    retry: (failureCount, error) => !(error instanceof NotTrackableError) && failureCount < 3,
     refetchInterval: query => {
+      if (query.state.error instanceof NotTrackableError) return false
       const status: TxStatus | undefined = query.state.data?.status
       if (!status) return 10_000
       if (isTxPending(status) || (!query.state.data && !isTxTerminal(status))) return 10_000
@@ -55,7 +85,9 @@ export function TrackStatus({ params }: { params: TrackParams }) {
   const fromAmountStr = data?.fromAmount || params.fromAmount
   const toAmountStr = data?.toAmount || params.toAmount
   const fromAddress = data?.fromAddress || params.fromAddress
-  const toAddress = data?.toAddress || params.toAddress
+  // a split with several outputs lists one destination row per output, numbered like its legs below
+  const destinations = params.splitUuid ? splitDestinations(data?.legs, params.toAddress) : []
+  const toAddress = destinations.length > 1 ? undefined : data?.toAddress || destinations[0]?.address || params.toAddress
   const depositAddress = params.depositAddress
   const refundAddress = params.refundAddress
 
@@ -72,6 +104,8 @@ export function TrackStatus({ params }: { params: TrackParams }) {
 
   const status: TxStatus = data?.status ?? 'unknown'
   const statusTitle = t(`status.${status}`)
+  const notFound = error instanceof NotTrackableError
+  const loading = (isPending || isError) && !notFound
 
   return (
     <div className="bg-blade/25 rounded-xl border">
@@ -86,13 +120,21 @@ export function TrackStatus({ params }: { params: TrackParams }) {
         </div>
 
         <div className="flex flex-col items-center justify-center px-1">
-          <span className="pb-2">{isPending || isError ? <LoaderCircle className="animate-spin" size={16} /> : <StatusIcon status={status} />}</span>
+          <span className="pb-2">
+            {loading ? (
+              <LoaderCircle className="animate-spin" size={16} />
+            ) : notFound ? (
+              <CircleAlert className="text-lucian" size={16} />
+            ) : (
+              <StatusIcon status={status} />
+            )}
+          </span>
           <span
             className={cn('text-thor-gray text-[10px] font-semibold capitalize', {
-              'text-lucian': !isPending && !isError && (status === 'expired' || status === 'failed')
+              'text-lucian': notFound || (!loading && (status === 'expired' || status === 'failed'))
             })}
           >
-            {isPending || isError ? t('loading') : statusTitle}
+            {loading ? t('loading') : notFound ? t('notFound') : statusTitle}
           </span>
         </div>
 
@@ -106,7 +148,7 @@ export function TrackStatus({ params }: { params: TrackParams }) {
         </div>
       </div>
 
-      {(fromAddress || toAddress || depositAddress || refundAddress) && (
+      {(fromAddress || toAddress || destinations.length > 1 || depositAddress || refundAddress) && (
         <div className="space-y-3 border-t px-4 py-4 text-xs font-semibold">
           {fromAddress && (
             <div className="text-thor-gray flex items-center justify-between">
@@ -126,6 +168,18 @@ export function TrackStatus({ params }: { params: TrackParams }) {
               </div>
             </div>
           )}
+          {destinations.length > 1 &&
+            destinations.map(({ index, address }) => (
+              <div key={index} className="text-thor-gray flex items-center justify-between">
+                <span>
+                  {tc('address.destination')} #{index + 1}
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-leah">{truncate(address)}</span>
+                  <CopyButton text={address} />
+                </div>
+              </div>
+            ))}
           {depositAddress && (
             <div className="text-thor-gray flex items-center justify-between">
               <span>{tc('address.deposit')}</span>
@@ -180,6 +234,8 @@ function LegRow({ leg, txFromAsset }: { leg: any; txFromAsset: string }) {
         ? t('leg.deposit', { ticker: from.ticker ?? '' })
         : t('leg.send', { ticker: to.ticker ?? '' })
       : t('leg.swap', { from: from.ticker ?? '', to: to.ticker ?? '' })
+  // a split output's own legs carry its position: number them like the destinations above
+  const output = leg.meta?.outputIndex != null ? ` #${leg.meta.outputIndex + 1}` : ''
 
   const chain = ChainIdToChain[leg.chainId as ChainId]
   const explorerUrl = leg.hash && getExplorerTxUrl({ chain, txHash: leg.hash })
@@ -194,7 +250,10 @@ function LegRow({ leg, txFromAsset }: { leg: any; txFromAsset: string }) {
         ) : (
           <LoaderCircle className="animate-spin" size={16} />
         )}
-        <span>{text}</span>
+        <span>
+          {text}
+          {output}
+        </span>
       </div>
       <div className="flex items-center gap-2">
         <span>{chainLabel(chain)}</span>

@@ -275,6 +275,7 @@
     "cancelOrder": "Cancel Order",
     "remaining": "{time} remaining",
     "loading": "loading",
+    "notFound": "Not found",
     "status": {
       "not_started": "Deposit Pending",
       "signed": "Awaiting Confirmation",

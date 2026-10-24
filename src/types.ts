@@ -47,6 +47,8 @@ export interface TrackLeg {
   toAsset?: string
   toAmount?: string
   toAddress?: string
+  // split swaps: a payout or refund leg names the output it belongs to (its position in the order)
+  meta?: { outputIndex?: number; refund?: boolean; sellAmountUsd?: string; pauseReason?: string }
 }
 
 export interface TrackResponse extends TrackLeg {
