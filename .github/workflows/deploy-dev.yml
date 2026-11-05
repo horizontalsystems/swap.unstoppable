@@ -50,6 +50,10 @@ jobs:
       - name: Install
         run: npm ci --no-audit --no-fund
 
+      # deploy.sh's audit summary (it fails only at NPM_AUDIT_FAIL_LEVEL, unset here).
+      - name: Audit
+        run: bash -c '. deploy/deploy.sh && audit_dependencies'
+
       - name: Build
         env:
           NEXT_PUBLIC_USWAP_API_URL: ${{ vars.NEXT_PUBLIC_USWAP_API_URL }}
@@ -93,9 +97,9 @@ jobs:
           releases="${RELEASES:-swap.unstoppable-releases}"
           archive="$releases/incoming/web-${GIT_SHA:0:12}.tgz"
           ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" -o BatchMode=yes "$SSH_USER@$SSH_HOST" \
-            "mkdir -p \"$releases/incoming\""
+            "$(printf 'mkdir -p %q' "$releases/incoming")"
           scp -i ~/.ssh/deploy_key -P "${SSH_PORT:-22}" -o BatchMode=yes web.tgz "$SSH_USER@$SSH_HOST:$archive"
           # %q quotes each value for the remote shell, so no part of it is parsed as a command.
-          remote="$(printf 'ARCHIVE=%s RELEASES=%s bash -s' "$archive" "$releases")"
+          remote="$(printf 'ARCHIVE=%q RELEASES=%q bash -s' "$archive" "$releases")"
           ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" -o BatchMode=yes "$SSH_USER@$SSH_HOST" \
             "$remote" < deploy/deploy.sh

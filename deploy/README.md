@@ -11,5 +11,9 @@ Without GitHub, on the server: `bash deploy/deploy.sh` builds on the box from `o
 `NEXT_PUBLIC_*` values — keep it equal to the GitHub variables) and applies the result the same way; it is slow there.
 `ARCHIVE=<file>.tgz bash deploy/deploy.sh` applies an archive built anywhere. The last three releases are kept.
 
+Production builds nowhere near the server: `ENV_FILE=<NEXT_PUBLIC_* file> bash deploy/build-linux.sh <sha>` builds the
+exact commit in a linux/amd64 Node container on a developer's machine (the native binaries must be Linux ones) and
+prints the archive's path; copy it to the server and apply it with `ARCHIVE=<file> bash deploy/deploy.sh`.
+
 The server itself — users, nginx path routing (`/` → port 3100), GitHub secrets — is described in uswap-server's
 `deploy/README.md` (procedure) and `deploy/DEV_SERVER.md` (the dev box as built).

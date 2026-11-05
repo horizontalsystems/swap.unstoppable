@@ -35,8 +35,34 @@ pack_build() {
   cp -r "$src/.next/static" "$src/.next/standalone/.next/static"
   cp -r "$src/public" "$src/.next/standalone/public"
   cp "$src/ecosystem.config.js" "$src/.next/standalone/ecosystem.config.js"
-  git -C "$src" rev-parse HEAD > "$src/.next/standalone/GIT_SHA"
+  # GIT_SHA wins when set: deploy/build-linux.sh builds from `git archive`, which has no .git.
+  printf '%s\n' "${GIT_SHA:-$(git -C "$src" rev-parse HEAD)}" > "$src/.next/standalone/GIT_SHA"
   tar -czf "$out" -C "$src/.next/standalone" .
+}
+
+# npm audit of the production dependencies, as a summary in the deploy log. It fails the deploy only at
+# or above NPM_AUDIT_FAIL_LEVEL (low|moderate|high|critical; unset: never), because on 2026-11-04 every
+# repository had open advisories and a deploy must still be able to ship their fixes. A registry that
+# cannot be reached is reported and skipped.
+audit_dependencies() {
+  local report
+  report="$(npm audit --omit=dev --json 2>/dev/null || true)"   # non-zero whenever anything is found
+  printf '%s' "$report" | node -e '
+    let d = ""
+    process.stdin.on("data", c => (d += c)).on("end", () => {
+      let r
+      try { r = JSON.parse(d) } catch {}
+      const m = r && r.metadata && r.metadata.vulnerabilities
+      if (!m) { console.log("npm audit gave no report (registry unreachable?)"); return }
+      const named = s => Object.values(r.vulnerabilities || {}).filter(v => v.severity === s).map(v => v.name).join(", ")
+      console.log(`critical ${m.critical || 0}, high ${m.high || 0}, moderate ${m.moderate || 0}, low ${m.low || 0}`)
+      if (m.critical) console.log(`critical: ${named("critical")}`)
+      const order = ["low", "moderate", "high", "critical"]
+      const fail = process.env.NPM_AUDIT_FAIL_LEVEL
+      if (!fail) return
+      if (!order.includes(fail)) { console.error(`NPM_AUDIT_FAIL_LEVEL=${fail} is not one of ${order.join("|")}`); process.exit(1) }
+      if (order.slice(order.indexOf(fail)).some(s => m[s] > 0)) { console.error(`npm audit: findings at or above ${fail}`); process.exit(1) }
+    })'
 }
 
 build_here() {
@@ -57,6 +83,9 @@ build_here() {
 
   log "Installing dependencies"
   npm ci --no-audit --no-fund
+
+  log "Auditing production dependencies"
+  audit_dependencies
 
   log "Building (NEXT_PUBLIC_* values come from $APP_DIR/.env)"
   npm run build
@@ -105,8 +134,17 @@ apply_archive() {
 }
 
 prune_releases() {
-  # Newest $KEEP release folders stay; `current` always points at one of them.
-  ls -1dt "$RELEASES"/*/ 2>/dev/null | grep -v '/incoming/$' | tail -n +$((KEEP + 1)) | xargs -r rm -rf
+  # The $KEEP newest release folders stay, newest by the deploy time their name ends with
+  # (<sha12>-<utc>), not by mtime: tar sets a folder's mtime to the BUILD time, so a rollback to an
+  # older build would sort last and be deleted right after going live. `current` is a symlink, not a
+  # release: it is never listed, and the folder it points at is never deleted.
+  local live name
+  live="$(readlink -f "$RELEASES/current" 2>/dev/null || true)"
+  for name in $(find "$RELEASES" -mindepth 1 -maxdepth 1 -type d ! -name incoming -printf '%f\n' \
+      | awk -F- '{ print $NF, $0 }' | sort -r | awk '{ print $2 }' | tail -n +$((KEEP + 1))); do
+    [ "$RELEASES/$name" = "$live" ] && continue
+    rm -rf -- "${RELEASES:?}/$name"
+  done
   rm -f "$RELEASES"/incoming/*.tgz
 }
 
