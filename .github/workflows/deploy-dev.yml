@@ -3,7 +3,7 @@
 # Unlike the uswap-* services, the build does NOT run on the server: `next build` needs ~3 GB and
 # the dev box has 4. So the runner installs, builds, packs the Next.js standalone output
 # (deploy/pack.sh), copies the archive over SSH and runs deploy/deploy.sh there with ARCHIVE set,
-# which unpacks it into a release folder and reloads pm2. The same script run on the server
+# which unpacks it into a release folder and replaces the pm2 process. The same script run on the server
 # without ARCHIVE builds on the box instead (slow; it is the fallback).
 #
 # Secrets (repository → Settings → Environments → dev):
@@ -36,6 +36,8 @@ jobs:
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     environment: dev
+    permissions:
+      contents: read
     timeout-minutes: 25
 
     steps:

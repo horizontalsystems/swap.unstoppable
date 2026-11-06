@@ -4,7 +4,7 @@ Every push to `develop` deploys the site to the dev server by [`deploy-dev.yml`]
 The build runs on the GitHub runner, not on the server (`next build` needs ~3 GB and the dev box has 4): the workflow
 installs, builds with the `NEXT_PUBLIC_*` values from the `dev` environment's variables, packs the Next.js standalone
 output ([`pack.sh`](pack.sh)), copies the archive over SSH and runs [`deploy.sh`](deploy.sh) there with `ARCHIVE` set,
-which unpacks it into a release folder, points `current` at it and reloads pm2 (`swap-web`, port 3100). A change to a
+which unpacks it into a release folder, points `current` at it and replaces the pm2 process (`swap-web`, port 3100). A change to a
 `NEXT_PUBLIC_*` value needs a new build: edit the variable, then "Run workflow".
 
 Without GitHub, on the server: `bash deploy/deploy.sh` builds on the box from `origin/develop` (reading `.env` for the

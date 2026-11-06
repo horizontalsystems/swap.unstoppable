@@ -9,7 +9,8 @@
 # Either way the result is a release folder under $RELEASES — the Next.js standalone output
 # (server.js + its node_modules + .next + public) plus ecosystem.config.js — pointed to by
 # $RELEASES/current and run by pm2 as `swap-web`. The last $KEEP releases are kept for rollback
-# (`pm2 startOrReload $RELEASES/<older>/ecosystem.config.js`, then re-point `current`).
+# (`pm2 delete swap-web && pm2 start $RELEASES/<older>/ecosystem.config.js && pm2 save`, then
+# re-point `current` with `ln -sfn`; a reload would leave the process in the newer release).
 #
 # Building on the box needs ~3 GB of memory for `next build`; on a 4 GB host that is the swap
 # file working hard, and it takes a few minutes. The archive path is the everyday one.
@@ -151,7 +152,7 @@ prune_releases() {
 main() {
   # Absolute paths: the workflow passes paths relative to the login directory (scp's SFTP mode does
   # not expand $HOME), and `current` must be an absolute symlink.
-  mkdir -p "$RELEASES"; RELEASES="$(cd "$RELEASES" && pwd)"
+  mkdir -p "$RELEASES"; RELEASES="$(cd "$RELEASES" && pwd -P)"
   if [ -z "${ARCHIVE:-}" ]; then
     build_here
   fi
