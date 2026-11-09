@@ -36,6 +36,8 @@ pack_build() {
   cp -r "$src/.next/static" "$src/.next/standalone/.next/static"
   cp -r "$src/public" "$src/.next/standalone/public"
   cp "$src/ecosystem.config.js" "$src/.next/standalone/ecosystem.config.js"
+  # A .env present at build time is copied into standalone/ by Next.js; the release must not carry one.
+  rm -f "$src"/.next/standalone/.env*
   # GIT_SHA wins when set: deploy/build-linux.sh builds from `git archive`, which has no .git.
   printf '%s\n' "${GIT_SHA:-$(git -C "$src" rev-parse HEAD)}" > "$src/.next/standalone/GIT_SHA"
   tar -czf "$out" -C "$src/.next/standalone" .
