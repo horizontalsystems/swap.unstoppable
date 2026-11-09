@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { useState } from 'react'
+import { Chain } from '@uswap/core'
 import { useTranslations } from 'next-intl'
 import { formatDuration, intervalToDuration } from 'date-fns'
 import { CredenzaDescription, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
@@ -24,6 +25,10 @@ export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannel
   const [warningCheckedLTC, setWarningCheckedLTC] = useState(false)
 
   const isLTC = assetTo.ticker === 'LTC'
+  // Stellar wallets ask for the memo type, and a text memo sent as an ID won't match
+  const isStellar = assetFrom.chain === Chain.Stellar
+  const attachment = channel.txExtraAttribute
+  const memoLabel = attachment?.destinationTag ? t(isStellar ? 'memoId' : 'destinationTag') : t(isStellar ? 'memoText' : 'memo')
   const isBlurred = !warningChecked || (isLTC && !warningCheckedLTC)
 
   return (
@@ -35,12 +40,7 @@ export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannel
 
       <ScrollArea className="flex min-h-0 flex-1 px-4 md:px-8" classNameViewport="flex-1 h-auto">
         <div className="flex flex-col gap-4 pb-8">
-          <SwapAddressWarning
-            checked={warningChecked}
-            onCheckedChange={setWarningChecked}
-            text={tw('sendExact')}
-            textAccent={tw('lossOfFunds')}
-          />
+          <SwapAddressWarning checked={warningChecked} onCheckedChange={setWarningChecked} text={tw('sendExact')} textAccent={tw('lossOfFunds')} />
 
           {isLTC && (
             <SwapAddressWarning
@@ -65,7 +65,7 @@ export const InstantSwap = ({ assetFrom, assetTo, channel }: SwapMemolessChannel
 
             {(channel.txExtraAttribute?.destinationTag || channel.txExtraAttribute?.memo) && (
               <div className={cn('flex items-center gap-1', { 'blur-xs': isBlurred })}>
-                <div className="text-gray text-sm font-semibold">{channel.txExtraAttribute.destinationTag ? t('destinationTag') : t('memo')}</div>
+                <div className="text-gray text-sm font-semibold">{memoLabel}</div>
                 <div className="flex items-center gap-2">
                   <div className="text-thor-gray text-sm font-semibold break-all">
                     {channel.txExtraAttribute.destinationTag ?? channel.txExtraAttribute.memo}

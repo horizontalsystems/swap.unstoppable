@@ -17,6 +17,8 @@ import { getProvider } from '@uswap/toolboxes/evm'
 import { useAssetFrom } from '@/hooks/use-swap'
 import { useWallets } from '@/hooks/use-wallets'
 import { getAssetBalance } from '@/lib/api'
+import { isRobinhoodChain } from '@/lib/robinhood/asset-list'
+import { getRobinhoodBalance } from '@/lib/robinhood/balance'
 import { getUSwap } from '@/lib/wallets'
 
 type UseBalance = {
@@ -61,7 +63,18 @@ export const useBalance = (): UseBalance => {
         return id.toLowerCase() === assetFrom.identifier.toLowerCase()
       }
 
-      if (assetFrom.chain === Chain.Near) {
+      // Stellar locks part of the balance (reserve, open offers); the toolbox returns what is spendable
+      if (assetFrom.chain === Chain.Stellar && 'getSpendableBalance' in wallet) {
+        const [balances, spendableBalances] = await Promise.all([wallet.getBalance(wallet.address), wallet.getSpendableBalance(wallet.address)])
+        const zero = AssetValue.from({ chain: assetFrom.chain, value: 0 })
+        return { total: balances.find(finder) ?? zero, spendable: spendableBalances.find(finder) ?? zero }
+      }
+
+      // The aggregator's /balance has no Robinhood Chain, so its balances come from the chain's own
+      // RPC. Gas is still estimated below like any other EVM chain.
+      if (isRobinhoodChain(assetFrom.chain)) {
+        value = await getRobinhoodBalance(selected.address, assetFrom)
+      } else if (assetFrom.chain === Chain.Near) {
         const balances = await getAssetBalance(assetFrom.chain, wallet.address, assetFrom.identifier)
         const balance = balances.find(finder)
 

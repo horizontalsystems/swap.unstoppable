@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "Built by",
     "reportBugsTo": "Report bugs to",
-    "gotQuestions": "Got questions?"
+    "gotQuestions": "Got questions?",
+    "privacyPolicy": "Privacy Policy"
   },
   "swap": {
     "title": "Swap",
@@ -44,7 +45,9 @@
       "approvalTransaction": "Approval Transaction",
       "errorSubmitting": "Error Submitting Transaction",
       "submittingTransaction": "Submitting Transaction",
-      "transactionSubmitted": "Transaction submitted"
+      "transactionSubmitted": "Transaction submitted",
+      "quoteExpired": "The quote expired. Review the updated quote and confirm again.",
+      "priceChanged": "The price moved. Review the updated quote and confirm again."
     },
     "confirm": {
       "titleSwap": "Confirm Swap",
@@ -161,6 +164,8 @@
       "sendDescription": "Send exactly {amount} {ticker} to the address below from a self custody wallet.",
       "destinationTag": "destination tag",
       "memo": "memo",
+      "memoText": "memo (type: Text)",
+      "memoId": "memo (type: ID)",
       "confirming": "Confirming",
       "confirm": "Confirm",
       "errMemoMissing": "Memo is missing",
@@ -237,6 +242,13 @@
     "typeSeedPhrase": "Type your seed phrase",
     "invalidFileType": "Invalid file type. Please upload a JSON or TXT file.",
     "noTokensFound": "No tokens found",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "This account is {type}. Bitcoin keeps a separate balance for each address type, so coins held on another type will not show up here — switch the address type in your wallet, or reconnect on a different derivation path.",
     "copyAddress": "Copy Address",
     "addressCopied": "Address copied",
     "disconnectWallet": "Disconnect {name}",
@@ -263,8 +275,10 @@
     "cancelOrder": "Cancel Order",
     "remaining": "{time} remaining",
     "loading": "loading",
+    "notFound": "Not found",
     "status": {
       "not_started": "Deposit Pending",
+      "signed": "Awaiting Confirmation",
       "pending": "Pending",
       "swapping": "Swapping",
       "action_required": "Action Required",

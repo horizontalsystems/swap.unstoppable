@@ -19,7 +19,7 @@ import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSlip
 import { ensureAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useProviders } from '@/hooks/use-providers'
 import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
-import { createSwap, parseApiError } from '@/lib/api'
+import { parseApiError, previewSwap } from '@/lib/api'
 import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/memo-helpers'
 import { QR_PROVIDERS } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
@@ -28,13 +28,13 @@ import { WalletAccount } from '@/store/wallets-store'
 import { ProviderName, QuoteResponseRoute } from '@/types'
 
 const EXTRA_CHAIN_VALIDATORS: Record<string, (address: string) => boolean> = {
-  XMR: address => /^[48][1-9A-HJ-NP-Za-km-z]{94}$/.test(address) || /^[48][1-9A-HJ-NP-Za-km-z]{105}$/.test(address),
-  XLM: address => /^G[A-Z2-7]{55}$/.test(address)
+  XMR: address => /^[48][1-9A-HJ-NP-Za-km-z]{94}$/.test(address) || /^[48][1-9A-HJ-NP-Za-km-z]{105}$/.test(address)
 }
 
 interface SwapRecipientProps {
   provider: ProviderName
-  onFetchQuote: (quote: QuoteResponseRoute) => void
+  // refresh re-runs the same preview (same addresses), e.g. after a commit was refused as stale
+  onFetchQuote: (quote: QuoteResponseRoute, refresh: () => Promise<QuoteResponseRoute>) => void
 }
 
 export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) => {
@@ -66,6 +66,8 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const [isValidRefund, setIsValidRefund] = useState(true)
   const [warningChecked, setWarningChecked] = useState(false)
   const [warningCheckedLTC, setWarningCheckedLTC] = useState(false)
+  // Read-only on mobile until touched: focus gets moved into the field (e.g. by ticking the warning) and raises the keyboard.
+  const [editingField, setEditingField] = useState<'refund' | 'destination'>()
 
   if (!assetFrom || !assetTo) return null
 
@@ -105,32 +107,41 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
     const sourceAddress = selectedAccount?.address
     const resolvedRefundAddress = refundRequired ? refundAddress : provider === 'MAYACHAIN' ? undefined : selectedAccount?.address
 
-    createSwap({
-      buyAsset: assetTo.identifier,
-      sellAsset: assetFrom.identifier,
-      sellAmount: valueFrom.toSignificant(),
-      // sourceAddress makes the server build an unsignedTx
-      sourceAddress: requiresSourceAddress ? sourceAddress : undefined,
-      destinationAddress,
-      refundAddress: resolvedRefundAddress,
-      slippage: isLimitSwap ? 0 : (slippage ?? 99),
-      provider
-    })
-      .then(async route => {
-        // the API doesn't echo the request addresses — the confirm screen and plugins need them
-        let quote: QuoteResponseRoute = { ...route, sourceAddress, destinationAddress, refundAddress: resolvedRefundAddress }
+    // previews are free — nothing is created until the user confirms (commit)
+    const preview = async () => {
+      const route = await previewSwap({
+        buyAsset: assetTo.identifier,
+        sellAsset: assetFrom.identifier,
+        sellAmount: valueFrom.toSignificant(),
+        // sourceAddress makes the server build an unsignedTx
+        sourceAddress: requiresSourceAddress ? sourceAddress : undefined,
+        destinationAddress,
+        refundAddress: resolvedRefundAddress,
+        slippage: isLimitSwap ? 0 : (slippage ?? 99),
+        provider,
+        // the deposit-address flow (no wallet) shows the commit's deposit QR
+        generateQR: !selectedAccount && QR_PROVIDERS.includes(provider) ? true : undefined
+      })
 
-        // For THORChain limit orders, modify the memo to use limit order format
-        if (isLimitSwap && (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING')) {
-          quote = prepareQuoteForLimitSwap(quote, limitSwapBuyAmount, limitSwapExpiry)
-        } else if (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING') {
-          quote = prepareQuoteForStreaming(quote, twapMode, customInterval, customQuantity)
-        }
+      // the API doesn't echo the request addresses — the confirm screen and plugins need them
+      let quote: QuoteResponseRoute = { ...route, sourceAddress, destinationAddress, refundAddress: resolvedRefundAddress }
 
+      // For THORChain limit orders, modify the memo to use limit order format
+      if (isLimitSwap && (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING')) {
+        quote = prepareQuoteForLimitSwap(quote, limitSwapBuyAmount, limitSwapExpiry)
+      } else if (provider === 'THORCHAIN' || provider === 'THORCHAIN_STREAMING') {
+        quote = prepareQuoteForStreaming(quote, twapMode, customInterval, customQuantity)
+      }
+
+      return quote
+    }
+
+    preview()
+      .then(async quote => {
         // run the AML precheck (QUICKEX) and wait for the verdict before navigating to the confirm screen
         await ensureAmlPrecheck(queryClient, provider, { sourceAddress, refundAddress: resolvedRefundAddress, destinationAddress })
 
-        onFetchQuote(quote)
+        onFetchQuote(quote, preview)
       })
       .catch(error => setQuoteError(parseApiError(error)))
       .finally(() => setQuoting(false))
@@ -139,17 +150,28 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const isLTC = assetTo.ticker === 'LTC'
   const buttonEnabled = isValidDestination && destinationAddress.length && !quoting && (refundRequired ? isValidRefund && refundAddress.length : true)
 
-  const addressInput = (asset: Asset, address: string, setAddress: (address: string) => void, isValid: boolean, options: WalletAccount[] = []) => {
+  const addressInput = (
+    field: 'refund' | 'destination',
+    asset: Asset,
+    address: string,
+    setAddress: (address: string) => void,
+    isValid: boolean,
+    options: WalletAccount[] = []
+  ) => {
     const currentOption = options.find(a => a.address.toLowerCase() === address.toLowerCase())
 
     return (
       <>
         <div className="relative">
           <Textarea
-            placeholder={isMobile ? undefined : t('addressPlaceholder', { chain: chainLabel(asset.chain) })}
+            placeholder={t('addressPlaceholder', { chain: chainLabel(asset.chain) })}
             value={address}
             aria-invalid={!isValid}
             onChange={e => setAddress(e.target.value)}
+            enterKeyHint="done"
+            readOnly={isMobile && editingField !== field}
+            onPointerDown={() => setEditingField(field)}
+            onBlur={() => setEditingField(undefined)}
             className={cn('max-h-21 pr-15', { 'pl-13': currentOption })}
             tabIndex={isMobile ? -1 : 0}
           />
@@ -204,6 +226,18 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
     )
   }
 
+  const nextButton = (
+    <ThemeButton
+      variant="primaryMedium"
+      className="w-full"
+      onClick={fetchQuote}
+      disabled={!buttonEnabled || !warningChecked || (isLTC && !warningCheckedLTC)}
+    >
+      {quoting && <LoaderCircle size={20} className="animate-spin" />}
+      <span>{quoting ? t('preparingSwap') : t('next')}</span>
+    </ThemeButton>
+  )
+
   return (
     <>
       <CredenzaHeader>
@@ -217,13 +251,13 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
               {refundRequired && (
                 <div className="flex flex-col gap-3">
                   <div className="text-thor-gray text-sm font-semibold">{t('enterRefundAddress')}</div>
-                  {addressInput(assetFrom, refundAddress, setRefundAddress, isValidRefund)}
+                  {addressInput('refund', assetFrom, refundAddress, setRefundAddress, isValidRefund)}
                 </div>
               )}
 
               <div className="flex flex-col gap-3">
                 {refundRequired && <div className="text-thor-gray text-sm font-semibold">{t('enterReceivingAddress')}</div>}
-                {addressInput(assetTo, destinationAddress, setDestinationAddress, isValidDestination, options)}
+                {addressInput('destination', assetTo, destinationAddress, setDestinationAddress, isValidDestination, options)}
               </div>
             </div>
 
@@ -247,20 +281,12 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
           {quoteError && <SwapError error={quoteError} />}
         </div>
 
+        {isMobile && <div className="pb-4">{nextButton}</div>}
+
         <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-px h-4 bg-linear-to-t to-transparent" />
       </ScrollArea>
 
-      <div className="p-4 pt-2 md:p-8 md:pt-2">
-        <ThemeButton
-          variant="primaryMedium"
-          className="w-full"
-          onClick={fetchQuote}
-          disabled={!buttonEnabled || !warningChecked || (isLTC && !warningCheckedLTC)}
-        >
-          {quoting && <LoaderCircle size={20} className="animate-spin" />}
-          <span>{quoting ? t('preparingSwap') : t('next')}</span>
-        </ThemeButton>
-      </div>
+      {!isMobile && <div className="p-8 pt-2">{nextButton}</div>}
     </>
   )
 }

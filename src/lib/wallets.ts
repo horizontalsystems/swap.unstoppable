@@ -5,6 +5,7 @@ import { P2PPlugin } from '@uswap/plugins/p2p'
 import { SolanaPlugin } from '@uswap/plugins/solana'
 import { MayachainPlugin, ThorchainPlugin } from '@uswap/plugins/thorchain'
 import { evmWallet } from '@uswap/wallets/evm-extensions'
+import { freighterWallet } from '@uswap/wallets/freighter'
 import { keplrWallet } from '@uswap/wallets/keplr'
 import { keystoreWallet } from '@uswap/wallets/keystore'
 import { ledgerWallet } from '@uswap/wallets/ledger'
@@ -12,7 +13,9 @@ import { okxWallet } from '@uswap/wallets/okx'
 import { phantomWallet } from '@uswap/wallets/phantom'
 import { tronlinkWallet } from '@uswap/wallets/tronlink'
 import { vultisigWallet } from '@uswap/wallets/vultisig'
+import { AppConfig } from '@/config'
 import { useWalletStore } from '@/store/wallets-store'
+import { BTC_PURPOSE_ADDRESS_TYPE, btcAddressType } from '@/lib/swap-helpers'
 
 const defaultPlugins = {
   ...EVMPlugin,
@@ -25,6 +28,7 @@ const defaultPlugins = {
 
 const defaultWallets = {
   ...evmWallet,
+  ...freighterWallet,
   ...keplrWallet,
   ...keystoreWallet,
   ...ledgerWallet,
@@ -45,21 +49,38 @@ function createUSwap(config: Parameters<typeof USwap>[0] = {}) {
 
 let instance: ReturnType<typeof createUSwap> | undefined = undefined
 
+// The Blockchair API key stays on the server, so the UTXO toolbox talks to our
+// own proxy (src/app/api/blockchair) instead of api.blockchair.com. The SDK's
+// request client builds a `new URL(...)`, so this has to be absolute.
+function blockchairProxyUrl() {
+  const origin = typeof window === 'undefined' ? AppConfig.baseUrl : window.location.origin
+  return `${origin}/api/blockchair`
+}
+
+// Solana has no free endpoint a browser can use: api.mainnet-beta.solana.com 403s anything sending
+// an `Origin` header, and publicnode blocks the token-account call half of a balance needs. So the
+// toolbox talks to our own proxy (src/app/api/solana) instead, the same arrangement Blockchair has.
+function solanaProxyUrl() {
+  const origin = typeof window === 'undefined' ? AppConfig.baseUrl : window.location.origin
+  return `${origin}/api/solana`
+}
+
 export function getUSwap() {
   if (instance) return instance
 
   instance = createUSwap({
     config: {
       apiKeys: {
-        blockchair: process.env.NEXT_PUBLIC_BLOCKCHAIR_API_KEY,
-        uSwap: process.env.NEXT_PUBLIC_USWAP_API_KEY
+        uSwap: process.env.NEXT_PUBLIC_USWAP_API_KEY,
+        blockchair: 'uws' // fake key to just avoid logs like: No Blockchair API key found
       },
       rpcUrls: {
         [Chain.Ethereum]: ['https://ethereum-rpc.publicnode.com', 'https://eth.llamarpc.com'],
-        [Chain.Solana]: ['https://solana-mainnet.g.alchemy.com/v2/IBi7xnfvpuwGkBEFaAlm0']
+        [Chain.Solana]: [solanaProxyUrl()]
       },
       envs: {
         apiUrl: process.env.NEXT_PUBLIC_USWAP_API_URL,
+        blockchairApiUrl: blockchairProxyUrl(),
         memolessApiUrl: process.env.NEXT_PUBLIC_MEMOLESS_API
       }
     }
@@ -99,6 +120,8 @@ export async function connectWallet(option: WalletOption, chains: Chain[], confi
       return connectEach(c => uSwap.connectVultisig(c))
     case WalletOption.TRONLINK:
       return connectEach(c => uSwap.connectTronLink(c))
+    case WalletOption.FREIGHTER:
+      return uSwap.connectFreighter(chains, { silent: config?.silent })
     case WalletOption.KEYSTORE:
       return uSwap.connectKeystore(chains, config?.phrase, config?.derivationPath)
     case WalletOption.LEDGER:
@@ -122,15 +145,47 @@ export async function getAccounts(
   return chains
     .map(chain => {
       const address = uSwap.getAddress(chain)
-      return address ? { address, network: chain, provider: option } : null
+      if (!address) return null
+      const mismatch = btcPathMismatch(chain, address, config?.derivationPath)
+      if (mismatch) {
+        uSwap.disconnectChain(chain)
+        throw new Error(mismatch)
+      }
+      return { address, network: chain, provider: option }
     })
     .filter(acc => acc !== null)
 }
+
+// A device asked for a BIP-86 path has to answer with a Taproot (bc1p…) address. Ledger
+// firmware that predates Taproot instead derives a Native SegWit address from the Taproot
+// key: a valid-looking bc1q… address holding none of the user's coins. Fail loudly rather
+// than connect an account whose balance will always read zero.
+function btcPathMismatch(chain: Chain, address: string, derivationPath?: number[]): string | null {
+  if (chain !== Chain.Bitcoin || !derivationPath) return null
+
+  const expected = BTC_PURPOSE_ADDRESS_TYPE[derivationPath[0]]
+  const actual = btcAddressType(address)
+
+  if (!expected || !actual || expected === actual) return null
+
+  return (
+    `Your wallet returned a ${BTC_ADDRESS_TYPE_LABEL[actual]} address for the ${BTC_ADDRESS_TYPE_LABEL[expected]} derivation path. ` +
+    `Update your device's Bitcoin app to the latest version, or connect using ${BTC_ADDRESS_TYPE_LABEL[actual]} instead.`
+  )
+}
+
+const BTC_ADDRESS_TYPE_LABEL = {
+  taproot: 'Taproot',
+  nativeSegwit: 'Native SegWit',
+  nestedSegwit: 'Nested SegWit',
+  legacy: 'Legacy'
+} as const
 
 export const supportedChains: Record<WalletOption, Chain[]> = {
   [WalletOption.BRAVE]: evmWallet.connectEVMWallet.supportedChains,
   [WalletOption.COINBASE_WEB]: evmWallet.connectEVMWallet.supportedChains,
   [WalletOption.EIP6963]: evmWallet.connectEVMWallet.supportedChains,
+  [WalletOption.FREIGHTER]: freighterWallet.connectFreighter.supportedChains,
   [WalletOption.KEPLR]: keplrWallet.connectKeplr.supportedChains,
   [WalletOption.KEYSTORE]: keystoreWallet.connectKeystore.supportedChains,
   [WalletOption.LEAP]: keplrWallet.connectKeplr.supportedChains,

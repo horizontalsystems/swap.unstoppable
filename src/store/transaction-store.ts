@@ -9,7 +9,7 @@ export type { TxStatus }
 export interface Transaction {
   uid: string
   provider: ProviderName
-  // the /swap route uuid used for tracking; absent on pre-v2 records
+  // the /commit uuid used for tracking; absent on pre-v2 records
   uuid?: string
   chainId: string
   hash?: string
@@ -116,7 +116,7 @@ export const useHasTransactions = () => transactionStore(state => state.transact
 
 // action_required is non-terminal — the provider may still resolve it, keep polling
 export const isTxPending = (status: string) =>
-  status === 'not_started' || status === 'swapping' || status === 'pending' || status === 'action_required'
+  status === 'not_started' || status === 'signed' || status === 'swapping' || status === 'pending' || status === 'action_required'
 export const isTxTerminal = (status: string) => status === 'completed' || status === 'failed' || status === 'expired' || status === 'refunded'
 
 export const usePendingTransactions = () =>

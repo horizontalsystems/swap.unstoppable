@@ -1,13 +1,11 @@
-import Image from 'next/image'
 import { useState } from 'react'
 import { Chain } from '@uswap/core'
 import { LoaderCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { ALL_CHAINS, chainLabel, COMING_SOON_CHAINS, WalletParams } from '@/components/connect-wallet/config'
+import { ChainSelect } from '@/components/connect-wallet/chain-select'
+import { ALL_CHAINS, WalletParams } from '@/components/connect-wallet/config'
 import { ThemeButton } from '@/components/theme-button'
 import { useWallets } from '@/hooks/use-wallets'
-import { cn } from '@/lib/utils'
 
 export const BrowserWallet = ({ wallet, chains, onConnect }: { wallet: WalletParams; chains: (Chain | string)[]; onConnect: () => void }) => {
   const t = useTranslations('wallet')
@@ -16,10 +14,6 @@ export const BrowserWallet = ({ wallet, chains, onConnect }: { wallet: WalletPar
   const [connecting, setConnecting] = useState(false)
   const [selectedChains, setSelectedChains] = useState<(Chain | string)[]>(availableChains)
   const { connect } = useWallets()
-
-  const onSelectChain = (chain: Chain) => {
-    setSelectedChains(prev => (prev.includes(chain) ? prev.filter(net => net !== chain) : [...prev, chain]))
-  }
 
   const handleConnect = async () => {
     setConnecting(true)
@@ -39,52 +33,9 @@ export const BrowserWallet = ({ wallet, chains, onConnect }: { wallet: WalletPar
       })
   }
 
-  const filteredChains = chains.filter(c => availableChains.includes(c))
-
   return (
     <>
-      <div className="mb-3 flex items-center justify-between px-4 md:px-8">
-        <div className="text-thor-gray text-base font-semibold">{t('chains')}</div>
-        <div className="text-leah cursor-pointer text-xs" onClick={() => setSelectedChains(selectedChains.length ? [] : availableChains)}>
-          {selectedChains.length ? t('deselectAll') : t('selectAll')}
-        </div>
-      </div>
-
-      <div className="relative flex min-h-0 flex-1">
-        <ScrollArea className="flex-1 px-4 md:px-8">
-          <div
-            className="grid flex-1 grid-flow-col gap-2 pb-4"
-            style={{
-              gridTemplateRows: `repeat(${Math.ceil(filteredChains.length / 2)}, minmax(0, 1fr))`,
-              gridTemplateColumns: 'repeat(2, 1fr)'
-            }}
-          >
-            {filteredChains.map(chain => {
-              const isSelected = selectedChains.includes(chain)
-              const isAvailable = availableChains.includes(chain)
-              const isComingSoon = COMING_SOON_CHAINS.includes(chain)
-
-              return (
-                <div
-                  key={chain}
-                  className={cn('flex items-center gap-3 rounded-2xl border-1 border-transparent px-4 py-3', {
-                    'border-brand-second': isSelected,
-                    'opacity-25': !isAvailable,
-                    'hover:bg-blade/50 cursor-pointer': isAvailable
-                  })}
-                  onClick={() => isAvailable && onSelectChain(chain as Chain)}
-                >
-                  <Image src={`/networks/${chain.toLowerCase()}.svg`} alt={chain} width="24" height="24" />
-                  <div className="text-sm">{chainLabel(chain)}</div>
-                  {isComingSoon && <div className="text-gray border-gray rounded-full border px-1.5 text-[10px] font-semibold">{t('soon')}</div>}
-                </div>
-              )
-            })}
-          </div>
-        </ScrollArea>
-
-        <div className="from-lawrence pointer-events-none absolute inset-x-0 -bottom-[1px] h-4 bg-linear-to-t to-transparent" />
-      </div>
+      <ChainSelect chains={chains.filter(c => availableChains.includes(c))} selectedChains={selectedChains} onChange={setSelectedChains} />
 
       <div className="flex p-4 pt-2 md:justify-end md:px-8 md:pb-8">
         <ThemeButton

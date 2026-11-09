@@ -1,9 +1,11 @@
 import Image from 'next/image'
+import { Chain } from '@uswap/core'
 import { useTranslations } from 'next-intl'
 import { ChevronDown, ChevronUp, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { chainLabel } from '@/components/connect-wallet/config'
 import { ChainWalletData } from '@/hooks/use-wallet-balances'
+import { btcAddressType } from '@/lib/swap-helpers'
 import { cn, toCurrencyFixed, truncate } from '@/lib/utils'
 import { WalletToken } from '@/components/wallet-sidebar/wallet-token'
 
@@ -19,6 +21,10 @@ export function WalletChain({ data, isExpanded, onToggle, disabled }: WalletChai
   const { account, tokens, totalUsd, isLoading } = data
   const chainName = chainLabel(account.network)
 
+  // Bitcoin derives a different address — and so a separate balance — per address type.
+  // Naming the connected one turns "the site can't see my BTC" into a self-serve fix.
+  const addressType = account.network === Chain.Bitcoin ? btcAddressType(account.address) : undefined
+
   return (
     <div className={cn({ 'opacity-30': disabled })}>
       <button
@@ -29,7 +35,10 @@ export function WalletChain({ data, isExpanded, onToggle, disabled }: WalletChai
         <Image src={`/networks/${account.network.toLowerCase()}.svg`} alt={chainName} width={32} height={32} className="shrink-0 rounded-full" />
         <div className="min-w-0 flex-1">
           <div className="text-txt-high-contrast truncate text-sm font-medium">{chainName}</div>
-          <div className="text-txt-label-small truncate text-xs font-medium">{truncate(account.address)}</div>
+          <div className="text-txt-label-small truncate text-xs font-medium">
+            {truncate(account.address)}
+            {addressType && <span className="ml-1.5 opacity-70">· {t(`btcAddressType.${addressType}`)}</span>}
+          </div>
         </div>
         <div className="flex items-center gap-1">
           {isLoading ? (
@@ -48,7 +57,10 @@ export function WalletChain({ data, isExpanded, onToggle, disabled }: WalletChai
           {tokens.filter(t => t.amount > 0).length > 0 ? (
             tokens.filter(t => t.amount > 0).map((token, i) => <WalletToken bordered={false} key={i} token={token} account={account} />)
           ) : (
-            <div className="text-txt-label-small px-4 py-1 text-xs">{t('noTokensFound')}</div>
+            <div className="text-txt-label-small px-4 py-1 text-xs">
+              {t('noTokensFound')}
+              {addressType && <div className="mt-1">{t('btcAddressTypeHint', { type: t(`btcAddressType.${addressType}`) })}</div>}
+            </div>
           )}
           <div className="border-t py-1">
             <div className="mx-4 flex gap-2">

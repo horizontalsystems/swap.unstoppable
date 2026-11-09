@@ -20,7 +20,8 @@
   "footer": {
     "builtBy": "Desenvolvido por",
     "reportBugsTo": "Reportar erros para",
-    "gotQuestions": "Tem perguntas?"
+    "gotQuestions": "Tem perguntas?",
+    "privacyPolicy": "Política de Privacidade"
   },
   "swap": {
     "title": "Trocar",
@@ -237,6 +238,13 @@
     "typeSeedPhrase": "Digite sua frase semente",
     "invalidFileType": "Tipo de arquivo inválido. Envie um arquivo JSON ou TXT.",
     "noTokensFound": "Nenhum token encontrado",
+    "btcAddressType": {
+      "taproot": "Taproot",
+      "nativeSegwit": "Native SegWit",
+      "nestedSegwit": "Nested SegWit",
+      "legacy": "Legacy"
+    },
+    "btcAddressTypeHint": "Esta conta é {type}. O Bitcoin mantém um saldo separado para cada tipo de endereço, por isso as moedas guardadas noutro tipo não aparecerão aqui — altere o tipo de endereço na sua carteira ou volte a ligar-se com um caminho de derivação diferente.",
     "copyAddress": "Copiar endereço",
     "addressCopied": "Endereço copiado",
     "disconnectWallet": "Desconectar {name}",

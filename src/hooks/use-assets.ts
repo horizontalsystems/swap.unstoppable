@@ -3,17 +3,23 @@ import { EVMChain, EVMChains, getChainConfig } from '@uswap/helpers'
 import { Asset } from '@/components/swap/asset'
 import { AppConfig } from '@/config'
 import { getAllTokens, getProviders, getProviderTokens } from '@/lib/api'
+import { fetchRobinhoodTokens } from '@/lib/robinhood/asset-list'
+import { EXCLUDED_STELLAR_PROVIDERS, STELLAR_DEX_PROVIDERS, stellarTokens } from '@/lib/stellar/asset-list'
 import { ProviderName } from '@/types'
-
-const EXTRA_CHAINS = new Set(['XMR', 'XLM'])
 
 // aggregators quote every token on the chains they support, so /tokens carries no list for them —
 // they are attached to each token by chain instead
-const MANUAL_PROVIDERS: ProviderName[] = [ProviderName.BARTER, ProviderName.ONEINCH, ProviderName.LIFI, ProviderName.JUPITER]
+const MANUAL_PROVIDERS: ProviderName[] = [
+  ProviderName.BARTER,
+  ProviderName.ONEINCH,
+  ProviderName.LIFI,
+  ProviderName.JUPITER,
+  ...STELLAR_DEX_PROVIDERS
+]
 
 // temporarily disabled — /tokens still tags them, so they are stripped off every asset here,
 // which keeps them out of the providers list /rate is asked for
-const DISABLED_PROVIDERS = new Set<string>(['NEAR_CONFIDENTIAL', 'NEAR_CONFIDENTIAL_ADVANCED'])
+const DISABLED_PROVIDERS = new Set<string>(['NEAR_CONFIDENTIAL', 'NEAR_CONFIDENTIAL_ADVANCED', ...EXCLUDED_STELLAR_PROVIDERS])
 
 // LI.FI also quotes Solana and Tron, but a committed signed_transaction route only carries a target
 // address on EVM (see flattenSwapRoute), so the p2p plugin cannot execute the other chains
@@ -24,7 +30,16 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
     queryKey: ['assets'],
     queryFn: async () => {
       const appProviders = AppConfig.providers
-      const [tokens, providers] = await Promise.all([appProviders ? getProviderTokens(appProviders) : getAllTokens(), getProviders()])
+      // Robinhood Chain is quoted by the aggregator but absent from its catalog, so its tokens are
+      // fetched separately and appended — they then go through the same loop as everything else,
+      // which is what attaches ONEINCH and LIFI to them by chain id.
+      const [aggregatorTokens, providers, robinhoodTokens] = await Promise.all([
+        appProviders ? getProviderTokens(appProviders) : getAllTokens(),
+        getProviders(),
+        fetchRobinhoodTokens().catch(() => [])
+      ])
+      // curated Stellar assets go first so a catalog entry for the same asset wins
+      const tokens = [...stellarTokens(), ...aggregatorTokens, ...robinhoodTokens]
       const assets = new Map<string, Asset>()
       const geckoMap = new Map<string, string>()
 
@@ -34,7 +49,7 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
       }))
 
       for (const token of tokens) {
-        if (!token.chain || (!getChainConfig(token.chain).chain && !EXTRA_CHAINS.has(token.chain))) {
+        if (!token.chain || !getChainConfig(token.chain).chain) {
           continue
         }
 

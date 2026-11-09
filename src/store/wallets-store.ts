@@ -54,7 +54,8 @@ export const useWalletStore = create<WalletState>()(
             }
           })
         } catch (err: any) {
-          toast.error(err.message)
+          // USwap errors keep the readable message on `cause`
+          toast.error(err?.cause?.message ?? err.message)
         }
       },
 
@@ -98,7 +99,8 @@ export const useWalletStore = create<WalletState>()(
 
         Promise.allSettled(
           (state.accounts ?? []).map(w => {
-            return getAccounts(w.provider, [w.network])
+            // don't open Freighter's popup on page load
+            return getAccounts(w.provider, [w.network], w.provider === WalletOption.FREIGHTER ? { silent: true } : undefined)
           })
         )
           .then(res => {

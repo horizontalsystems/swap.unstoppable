@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { ProviderName } from '@/types'
 
-export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' | 'LIZEX' | 'BITANIA' }) => {
+export const SwapProvider = ({ provider }: { provider: ProviderName }) => {
   let title: string = provider
   let icon = title
 
@@ -33,8 +33,18 @@ export const SwapProvider = ({ provider }: { provider: ProviderName | 'CCE' | 'L
     title = 'Lizex'
   } else if (provider === 'BITANIA') {
     title = 'Bitania'
+  } else if (provider === 'XSWAP') {
+    title = 'XSwap'
   } else if (provider === 'CCE') {
     title = 'CCE Cash'
+  } else if (provider === 'SOROSWAP') {
+    title = 'Soroswap'
+  } else if (provider === 'AQUARIUS') {
+    title = 'Aquarius'
+  } else if (provider === 'STELLAR_DEX') {
+    title = 'Stellar DEX'
+  } else if (provider === 'AXELAR_ITS') {
+    title = 'Axelar ITS'
   }
 
   return (

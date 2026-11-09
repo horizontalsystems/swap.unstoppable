@@ -5,10 +5,14 @@ import { useAssets } from '@/hooks/use-assets'
 import { useRates } from '@/hooks/use-rates'
 import { useAccounts, useHasHydrated } from '@/hooks/use-wallets'
 import { getAlchemyTokenBalances, getThorBankBalances } from '@/lib/api'
+import { isRobinhoodChain } from '@/lib/robinhood/asset-list'
+import { getRobinhoodAccountBalances } from '@/lib/robinhood/balance'
 import { getUSwap } from '@/lib/wallets'
 import { WalletAccount } from '@/store/wallets-store'
 
-const ETH_RPC_URL = process.env.NEXT_PUBLIC_ALCHEMY_ETH_RPC_URL || 'https://eth.llamarpc.com'
+// ERC-20 discovery uses Alchemy-only methods, so a public RPC is no fallback. The key stays
+// on the server behind our own proxy (src/app/api/alchemy); the hook only runs in the browser.
+const ALCHEMY_PROXY_URL = '/api/alchemy'
 
 const ETH_SCAM_TICKERS = new Set(['HEX', 'AICC'])
 
@@ -58,6 +62,17 @@ export const useWalletBalances = () => {
     queryFn: async () => {
       const results = await Promise.allSettled(
         accounts.map(async account => {
+          // Robinhood Chain balances come from its own RPC — the aggregator's /balance, which every
+          // USwap EVM wallet asks, answers "Chain ROBINHOOD is not supported".
+          if (isRobinhoodChain(account.network)) {
+            const balances = await queryClient.ensureQueryData({
+              queryKey: ['account-balance', account.network, account.address],
+              queryFn: () => getRobinhoodAccountBalances(account.address),
+              staleTime: 30_000
+            })
+            return { account, balances, alchemyLogoMap: new Map<string, string>() }
+          }
+
           const wallet = uSwap.getWallet(account.provider, account.network)
           if (!wallet || !('getBalance' in wallet)) return { account, balances: [] as AssetValue[], alchemyLogoMap: new Map<string, string>() }
           const rawBalances = await queryClient.ensureQueryData({
@@ -84,10 +99,8 @@ export const useWalletBalances = () => {
           // For Ethereum, supplement with Alchemy to discover meme coins not in the curated API list
           const alchemyLogoMap = new Map<string, string>()
           if (account.network === Chain.Ethereum) {
-            const alchemyBalances = await getAlchemyTokenBalances(wallet.address, ETH_RPC_URL)
-            const existingAddresses = new Set(
-              balances.map(b => b.address?.toLowerCase()).filter(Boolean)
-            )
+            const alchemyBalances = await getAlchemyTokenBalances(wallet.address, ALCHEMY_PROXY_URL)
+            const existingAddresses = new Set(balances.map(b => b.address?.toLowerCase()).filter(Boolean))
             for (const t of alchemyBalances) {
               const addr = t.contractAddress.toLowerCase()
               if (t.logo) alchemyLogoMap.set(addr, t.logo)

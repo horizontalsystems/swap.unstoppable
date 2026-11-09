@@ -1,17 +1,16 @@
 import { useMemo, useState } from 'react'
-import { WalletOption } from '@uswap/core'
+import { Chain, WalletOption } from '@uswap/core'
 import { encryptToKeyStore, generatePhrase } from '@uswap/wallets/keystore'
 import { LoaderCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ALL_CHAINS } from '@/components/connect-wallet/config'
 import { Icon } from '@/components/icons'
 import { ThemeButton } from '@/components/theme-button'
 import { useWallets } from '@/hooks/use-wallets'
 import { cn } from '@/lib/utils'
 
-export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConnect: () => void }) {
+export function CreateWallet({ chains, onBack, onConnect }: { chains: Chain[]; onBack: () => void; onConnect: () => void }) {
   const t = useTranslations('wallet')
   const tc = useTranslations('common')
   const [showPassword, setShowPassword] = useState(false)
@@ -45,7 +44,7 @@ export function CreateWallet({ onBack, onConnect }: { onBack: () => void; onConn
       document.body.removeChild(link)
       URL.revokeObjectURL(url)
 
-      await connect(WalletOption.KEYSTORE, ALL_CHAINS, {
+      await connect(WalletOption.KEYSTORE, chains, {
         phrase
       })
       onConnect()
