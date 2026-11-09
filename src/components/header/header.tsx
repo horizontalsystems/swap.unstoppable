@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { APP_PATH } from '@/lib/app-path'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { WalletIcon } from '@/components/wallet-icon'
@@ -40,7 +41,7 @@ export function Header() {
       })}
     >
       <div className="flex items-start justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href={APP_PATH} className="flex items-center gap-2">
           {AppConfig.Logo ? (
             <AppConfig.Logo />
           ) : (

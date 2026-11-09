@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react'
 import { Asset } from '@/components/swap/asset'
 import { useAssets } from '@/hooks/use-assets'
 import { useSwapStore } from '@/store/swap-store'
+import { APP_PATH } from '@/lib/app-path'
 
 const DEFAULT_SELL = 'BTC.BTC'
 const DEFAULT_BUY = 'XMR.XMR'
@@ -15,8 +16,9 @@ const isNativeAsset = (asset: Asset) => asset.chain === asset.ticker
 const toSlug = (asset: Asset) => (isNativeAsset(asset) ? asset.ticker : asset.identifier)
 
 function parsePath(pathname: string): { sell: string | null; buy: string | null } {
-  if (!pathname.startsWith(`/${SELL}`)) return { sell: null, buy: null }
-  const rest = pathname.slice(1 + SELL.length)
+  const prefix = `${APP_PATH}/${SELL}`
+  if (!pathname.startsWith(prefix)) return { sell: null, buy: null }
+  const rest = pathname.slice(prefix.length)
   const idx = rest.indexOf(BUY)
   if (idx === -1) return { sell: null, buy: null }
   return {
@@ -30,6 +32,9 @@ function resolveAsset(assets: Asset[], token: string | null, fallback: string): 
     const lower = token.toLowerCase()
     const exact = assets.find(a => a.identifier.toLowerCase() === lower)
     if (exact) return exact
+    // 'ETH.USDT' → 'ETH.USDT-0xdac1…' (chain + ticker, contract address omitted)
+    const byChainTicker = assets.find(a => a.identifier.toLowerCase().startsWith(`${lower}-`))
+    if (byChainTicker) return byChainTicker
     if (!token.includes('.')) {
       const nativeAsset = assets.find(a => a.ticker.toLowerCase() === lower && isNativeAsset(a))
       if (nativeAsset) return nativeAsset
@@ -66,7 +71,7 @@ export const useUrlParams = () => {
       skipNextSync.current = false
       return
     }
-    const newPath = `/${SELL}${toSlug(assetFrom)}${BUY}${toSlug(assetTo)}`
+    const newPath = `${APP_PATH}/${SELL}${toSlug(assetFrom)}${BUY}${toSlug(assetTo)}`
     const newUrl = `${newPath}${window.location.search}`
     if (window.location.pathname + window.location.search !== newUrl) {
       window.history.replaceState(window.history.state, '', newUrl)

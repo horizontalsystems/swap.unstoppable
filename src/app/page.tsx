@@ -1,10 +1,14 @@
-import type { Metadata } from 'next'
-import { SwapPage } from '@/app/components/swap-page'
+import { redirect } from 'next/navigation'
+import { Landing } from '@/components/landing/landing'
+import { AppConfig } from '@/config'
+import { APP_PATH } from '@/lib/app-path'
 
-export const metadata: Metadata = {
+export const metadata = {
   alternates: { canonical: '/' }
 }
 
-export default async function Page() {
-  return <SwapPage />
+export default function Page() {
+  // Only the Unstoppable brand has a marketing landing; other brands open the swap directly.
+  if (AppConfig.id !== 'unstoppable') redirect(APP_PATH)
+  return <Landing />
 }
