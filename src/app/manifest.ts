@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { APP_PATH } from '@/lib/app-path'
 import { AppConfig } from '@/config'
 
 export default function manifest(): MetadataRoute.Manifest {
@@ -6,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: AppConfig.name,
     short_name: AppConfig.shortName,
     description: AppConfig.description,
-    start_url: '/',
+    start_url: APP_PATH,
     display: 'standalone',
     background_color: '#ffffff',
     theme_color: '#ffffff',

@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const buy = assetTicker(match[2])
   const title = `Swap ${sell} to ${buy} | ${AppConfig.name}`
   const description = `Exchange ${sell} for ${buy} at the best cross-chain rates from THORChain, Near, 1inch, and more — non-custodial, no sign-up, no limits.`
-  const canonical = `/sell-${match[1].toUpperCase()}-buy-${match[2].toUpperCase()}`
+  const canonical = `/app/sell-${match[1].toUpperCase()}-buy-${match[2].toUpperCase()}`
 
   return {
     title,
