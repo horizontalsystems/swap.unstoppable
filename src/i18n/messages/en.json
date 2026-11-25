@@ -80,6 +80,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} address",
       "invalidAddress": "Invalid {chain} address",
+      "invalidZcashUnified": "This route takes a unified (u1…) or transparent (t1…) Zcash address",
+      "invalidZcashUnifiedOnly": "This route takes a unified (u1…) Zcash address",
+      "invalidZcashTransparent": "This route takes a transparent (t1…) Zcash address",
       "titleAddresses": "Enter Addresses",
       "titleReceiving": "Enter Receiving Address",
       "enterRefundAddress": "Enter refund address:",
