@@ -306,22 +306,26 @@ function renderLeg(tx: any, legTx: any, t: ReturnType<typeof useTranslations>) {
   const explorerUrl = legTx.hash && getExplorerTxUrl({ chain: chain, txHash: legTx.hash })
 
   return (
-    <div className="text-thor-gray flex justify-between">
-      <div className="flex items-center gap-2">
-        {legTx.status === 'completed' ? (
-          <CircleCheck className="text-brand-first" size={16} />
-        ) : legTx.status === 'not_started' ? (
-          <ClockFading size={16} />
-        ) : (
-          <LoaderCircle className="animate-spin" size={16} />
-        )}
-        <span>{text}</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <span>{chainLabel(chain)}</span>
+    <div className="flex flex-col gap-1">
+      <div className="text-thor-gray flex justify-between">
+        <div className="flex items-center gap-2">
+          {legTx.status === 'completed' ? (
+            <CircleCheck className="text-brand-first" size={16} />
+          ) : legTx.status === 'not_started' ? (
+            <ClockFading size={16} />
+          ) : (
+            <LoaderCircle className="animate-spin" size={16} />
+          )}
+          <span>{text}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span>{chainLabel(chain)}</span>
 
-        {explorerUrl && <Icon name="globe" className="size-5 cursor-pointer" onClick={() => window.open(explorerUrl, '_blank')} />}
+          {explorerUrl && <Icon name="globe" className="size-5 cursor-pointer" onClick={() => window.open(explorerUrl, '_blank')} />}
+        </div>
       </div>
+      {/* a held swap names the step it is held on — surface the provider's reason on that leg */}
+      {legTx.meta?.pauseReason && <div className="text-jacob pl-6 text-xs font-medium">{legTx.meta.pauseReason}</div>}
     </div>
   )
 }
