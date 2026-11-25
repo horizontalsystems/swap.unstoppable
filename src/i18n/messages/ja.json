@@ -45,7 +45,8 @@
       "approvalTransaction": "承認トランザクション",
       "errorSubmitting": "トランザクションの送信エラー",
       "submittingTransaction": "トランザクションを送信中",
-      "transactionSubmitted": "トランザクションが送信されました"
+      "transactionSubmitted": "トランザクションが送信されました",
+      "zecUnifiedDeposit": "この注文の入金アドレスは Zcash の統合アドレス（u1…）のため、接続中のウォレットからは送金できません。インスタントスワップを利用し、統合アドレスに対応したウォレットから入金してください。"
     },
     "confirm": {
       "titleSwap": "スワップを確認",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} アドレス",
       "invalidAddress": "無効な {chain} アドレス",
+      "invalidZcashUnified": "このルートは Zcash の統合アドレス（u1…）または透明アドレス（t1…）を受け付けます",
+      "invalidZcashUnifiedOnly": "このルートは Zcash の統合アドレス（u1…）を受け付けます",
+      "invalidZcashTransparent": "このルートは Zcash の透明アドレス（t1…）を受け付けます",
       "titleAddresses": "アドレスを入力",
       "titleReceiving": "受取アドレスを入力",
       "enterRefundAddress": "返金アドレスを入力：",

@@ -45,7 +45,8 @@
       "approvalTransaction": "Transaksi Persetujuan",
       "errorSubmitting": "Gagal Mengirim Transaksi",
       "submittingTransaction": "Mengirim Transaksi",
-      "transactionSubmitted": "Transaksi terkirim"
+      "transactionSubmitted": "Transaksi terkirim",
+      "zecUnifiedDeposit": "Alamat setoran order ini adalah alamat Zcash terpadu (u1…) yang tidak dapat dikirimi oleh dompet yang terhubung. Gunakan pertukaran instan dan bayar setoran dari dompet yang mendukung alamat terpadu."
     },
     "confirm": {
       "titleSwap": "Konfirmasi Pertukaran",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "Alamat {chain}",
       "invalidAddress": "Alamat {chain} tidak valid",
+      "invalidZcashUnified": "Rute ini menerima alamat Zcash terpadu (u1…) atau transparan (t1…)",
+      "invalidZcashUnifiedOnly": "Rute ini menerima alamat Zcash terpadu (u1…)",
+      "invalidZcashTransparent": "Rute ini menerima alamat Zcash transparan (t1…)",
       "titleAddresses": "Masukkan Alamat",
       "titleReceiving": "Masukkan Alamat Penerima",
       "enterRefundAddress": "Masukkan alamat pengembalian:",

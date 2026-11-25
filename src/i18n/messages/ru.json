@@ -45,7 +45,8 @@
       "approvalTransaction": "Транзакция одобрения",
       "errorSubmitting": "Ошибка отправки транзакции",
       "submittingTransaction": "Отправка транзакции",
-      "transactionSubmitted": "Транзакция отправлена"
+      "transactionSubmitted": "Транзакция отправлена",
+      "zecUnifiedDeposit": "Адрес для депозита этого ордера — унифицированный (u1…) адрес Zcash, на который подключённый кошелёк не может отправить средства. Воспользуйтесь мгновенным обменом и оплатите депозит из кошелька, поддерживающего унифицированные адреса."
     },
     "confirm": {
       "titleSwap": "Подтвердите обмен",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "Адрес {chain}",
       "invalidAddress": "Неверный адрес {chain}",
+      "invalidZcashUnified": "Этот маршрут принимает унифицированный (u1…) или прозрачный (t1…) адрес Zcash",
+      "invalidZcashUnifiedOnly": "Этот маршрут принимает унифицированный (u1…) адрес Zcash",
+      "invalidZcashTransparent": "Этот маршрут принимает прозрачный (t1…) адрес Zcash",
       "titleAddresses": "Введите адреса",
       "titleReceiving": "Введите адрес получения",
       "enterRefundAddress": "Введите адрес возврата:",

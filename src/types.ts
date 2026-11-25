@@ -3,12 +3,36 @@ import { ProviderName } from '@uswap/helpers'
 
 export { ProviderName }
 
+// which Zcash addresses this route takes, for one address slot: unified (u1…) when `unified` is
+// present, transparent (t1…/t3…) when `transparent`, tex (ZIP-320) when `tex`
+export interface ZcashAddressRule {
+  unified?: {
+    // the receivers to build a UA from for this route (may omit transparent)
+    receivers: string[]
+    // the UA must carry at least one of these receivers
+    requiresOneOf: string[]
+  }
+  transparent?: boolean
+  tex?: boolean
+  // source only: sourceAddress, when sent, must equal refundAddress
+  sameAsRefund?: boolean
+}
+
+// on every /rate and /preview route with ZEC on either side: destination when buying ZEC,
+// refund and source when selling it
+export interface ZcashAddressRules {
+  destination?: ZcashAddressRule
+  refund?: ZcashAddressRule
+  source?: ZcashAddressRule
+}
+
 export type QuoteResponseRoute = Omit<BaseQuoteResponseRoute, 'providers'> & {
   providers: ProviderName[]
   // set by /preview; commit it to create the order (the uuid comes from /commit)
   previewToken?: string
   // transfer providers at preview: a ready-to-receive account on the sell chain, for fee estimation only — never send to it
   stubDepositAddress?: string
+  addressRules?: ZcashAddressRules
 }
 
 export interface CommitResponse {
@@ -83,6 +107,10 @@ export interface Provider {
   amlPolicy: RiskLevel
   amlPolicyDescription: string
   contacts: Record<string, string> | null
+  // privacy level of the provider's rail; more levels may be added — treat anything but 'none' as confidential
+  privacy?: 'none' | 'basic' | (string & {})
+  // the provider serves split swaps (one deposit, several outputs) via /split/*; it answers no regular quote
+  splitSwaps?: boolean
   suspended: boolean
   accuracy: { matched: number; total: number; avgDeviation: number | null } | null
   timestamp: string

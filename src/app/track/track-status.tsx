@@ -241,24 +241,28 @@ function LegRow({ leg, txFromAsset }: { leg: any; txFromAsset: string }) {
   const explorerUrl = leg.hash && getExplorerTxUrl({ chain, txHash: leg.hash })
 
   return (
-    <div className="text-thor-gray flex justify-between text-xs font-semibold">
-      <div className="flex items-center gap-2">
-        {leg.status === 'completed' ? (
-          <CircleCheck className="text-brand-first" size={16} />
-        ) : leg.status === 'not_started' ? (
-          <ClockFading size={16} />
-        ) : (
-          <LoaderCircle className="animate-spin" size={16} />
-        )}
-        <span>
-          {text}
-          {output}
-        </span>
+    <div className="flex flex-col gap-1">
+      <div className="text-thor-gray flex justify-between text-xs font-semibold">
+        <div className="flex items-center gap-2">
+          {leg.status === 'completed' ? (
+            <CircleCheck className="text-brand-first" size={16} />
+          ) : leg.status === 'not_started' ? (
+            <ClockFading size={16} />
+          ) : (
+            <LoaderCircle className="animate-spin" size={16} />
+          )}
+          <span>
+            {text}
+            {output}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span>{chainLabel(chain)}</span>
+          {explorerUrl && <Icon name="globe" className="size-5 cursor-pointer" onClick={() => window.open(explorerUrl, '_blank')} />}
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <span>{chainLabel(chain)}</span>
-        {explorerUrl && <Icon name="globe" className="size-5 cursor-pointer" onClick={() => window.open(explorerUrl, '_blank')} />}
-      </div>
+      {/* a held swap names the step it is held on — surface the provider's reason on that leg */}
+      {leg.meta?.pauseReason && <div className="text-jacob pl-6 text-xs font-medium">{leg.meta.pauseReason}</div>}
     </div>
   )
 }

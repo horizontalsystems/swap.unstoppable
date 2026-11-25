@@ -45,7 +45,8 @@
       "approvalTransaction": "Approval Transaction",
       "errorSubmitting": "Error Dey Submit Transaction",
       "submittingTransaction": "Dey Submit Transaction",
-      "transactionSubmitted": "Dem don submit transaction"
+      "transactionSubmitted": "Dem don submit transaction",
+      "zecUnifiedDeposit": "Di deposit address for dis order na unified (u1…) Zcash address, and di wallet wey you connect no fit send go am. Use instant swap and pay di deposit from wallet wey dey support unified address."
     },
     "confirm": {
       "titleSwap": "Confirm Swap",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} address",
       "invalidAddress": "Invalid {chain} address",
+      "invalidZcashUnified": "Dis route dey accept unified (u1…) or transparent (t1…) Zcash address",
+      "invalidZcashUnifiedOnly": "Dis route dey accept unified (u1…) Zcash address",
+      "invalidZcashTransparent": "Dis route dey accept transparent (t1…) Zcash address",
       "titleAddresses": "Enter Addresses",
       "titleReceiving": "Enter Receiving Address",
       "enterRefundAddress": "Enter refund address:",

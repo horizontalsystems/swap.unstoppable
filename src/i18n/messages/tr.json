@@ -45,7 +45,8 @@
       "approvalTransaction": "Onay İşlemi",
       "errorSubmitting": "İşlem Gönderilirken Hata",
       "submittingTransaction": "İşlem Gönderiliyor",
-      "transactionSubmitted": "İşlem gönderildi"
+      "transactionSubmitted": "İşlem gönderildi",
+      "zecUnifiedDeposit": "Bu emrin yatırma adresi, bağlı cüzdanın gönderim yapamadığı birleşik (u1…) bir Zcash adresidir. Anında takası kullanın ve yatırmayı birleşik adresleri destekleyen bir cüzdandan yapın."
     },
     "confirm": {
       "titleSwap": "Takası Onayla",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} adresi",
       "invalidAddress": "Geçersiz {chain} adresi",
+      "invalidZcashUnified": "Bu rota birleşik (u1…) veya şeffaf (t1…) bir Zcash adresi kabul eder",
+      "invalidZcashUnifiedOnly": "Bu rota birleşik (u1…) bir Zcash adresi kabul eder",
+      "invalidZcashTransparent": "Bu rota şeffaf (t1…) bir Zcash adresi kabul eder",
       "titleAddresses": "Adresleri Girin",
       "titleReceiving": "Alıcı Adresi Girin",
       "enterRefundAddress": "İade adresini girin:",

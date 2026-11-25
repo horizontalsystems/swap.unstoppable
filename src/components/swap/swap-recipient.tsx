@@ -1,8 +1,10 @@
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useQueryClient } from '@tanstack/react-query'
+import { Chain } from '@uswap/core'
 import { getAddressValidator } from '@uswap/toolboxes'
+import { AxiosError } from 'axios'
 import { LoaderCircle } from 'lucide-react'
 import { CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -18,14 +20,16 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { useAssetFrom, useAssetTo, useCustomInterval, useCustomQuantity, useSlippage, useSwap, useTwapMode } from '@/hooks/use-swap'
 import { ensureAmlPrecheck } from '@/hooks/use-aml-precheck'
 import { useProviders } from '@/hooks/use-providers'
+import { useQuote } from '@/hooks/use-quote'
 import { useAccounts, useSelectedAccount } from '@/hooks/use-wallets'
 import { parseApiError, previewSwap } from '@/lib/api'
 import { prepareQuoteForLimitSwap, prepareQuoteForStreaming } from '@/lib/memo-helpers'
 import { QR_PROVIDERS } from '@/lib/swap-helpers'
 import { cn, truncate } from '@/lib/utils'
+import { zcashRuleAllows } from '@/lib/zcash'
 import { useIsLimitSwap, useLimitSwapBuyAmount, useLimitSwapExpiry } from '@/store/limit-swap-store'
 import { WalletAccount } from '@/store/wallets-store'
-import { ProviderName, QuoteResponseRoute } from '@/types'
+import { ProviderName, QuoteResponseRoute, ZcashAddressRule } from '@/types'
 
 const EXTRA_CHAIN_VALIDATORS: Record<string, (address: string) => boolean> = {
   XMR: address => /^[48][1-9A-HJ-NP-Za-km-z]{94}$/.test(address) || /^[48][1-9A-HJ-NP-Za-km-z]{105}$/.test(address)
@@ -55,6 +59,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const limitSwapExpiry = useLimitSwapExpiry()
 
   const { getProvider } = useProviders()
+  const { quotes } = useQuote()
   const { valueFrom } = useSwap()
   const queryClient = useQueryClient()
   const [quoting, setQuoting] = useState(false)
@@ -66,40 +71,73 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   const [isValidRefund, setIsValidRefund] = useState(true)
   const [warningChecked, setWarningChecked] = useState(false)
   const [warningCheckedLTC, setWarningCheckedLTC] = useState(false)
+  // the address /preview named in a 400 `field` — kept apart from the client validity flags, which
+  // the validation effects own and would overwrite; cleared when the user edits that field
+  const [serverRejected, setServerRejected] = useState<'refund' | 'destination'>()
   // Read-only on mobile until touched: focus gets moved into the field (e.g. by ticking the warning) and raises the keyboard.
   const [editingField, setEditingField] = useState<'refund' | 'destination'>()
+
+  // a route with ZEC on either side says which Zcash addresses it takes — follow it over the SDK
+  // validator, which knows transparent addresses only. The rate query empties `quotes` while it
+  // refetches (window focus) or errors, so keep the last rules seen for this screen's provider.
+  const quoteAddressRules = quotes.find(q => q.providers[0] === provider)?.addressRules
+  const addressRulesRef = useRef(quoteAddressRules)
+  if (quoteAddressRules) addressRulesRef.current = quoteAddressRules
+  const addressRules = quoteAddressRules ?? addressRulesRef.current
 
   if (!assetFrom || !assetTo) return null
 
   const refundRequired = !selectedAccount && [...QR_PROVIDERS, 'THORCHAIN'].includes(provider)
   const requiresSourceAddress = getProvider(provider)?.executionType === 'signed_transaction'
   const options = accounts.filter(a => a.network === assetTo.chain)
+  const destinationZecRule = assetTo.chain === Chain.Zcash ? addressRules?.destination : undefined
+  const refundZecRule = assetFrom.chain === Chain.Zcash ? addressRules?.refund : undefined
 
   useEffect(() => {
     if (destinationAddress.length === 0) return setIsValidDestination(true)
+
+    if (destinationZecRule) {
+      const allowed = zcashRuleAllows(destinationZecRule, destinationAddress)
+      if (allowed !== 'checksum') return setIsValidDestination(allowed)
+    }
 
     const extraValidator = EXTRA_CHAIN_VALIDATORS[assetTo.chain]
     if (extraValidator) {
       return setIsValidDestination(extraValidator(destinationAddress))
     }
 
+    // the effect can re-run (new input, rules arriving) before the validator resolves — a stale
+    // result must not overwrite the newer one
+    let cancelled = false
     getAddressValidator()
-      .then(validateAddress => setIsValidDestination(validateAddress({ address: destinationAddress, chain: assetTo.chain })))
-      .catch(() => setIsValidDestination(false))
-  }, [destinationAddress])
+      .then(validateAddress => !cancelled && setIsValidDestination(validateAddress({ address: destinationAddress, chain: assetTo.chain })))
+      .catch(() => !cancelled && setIsValidDestination(false))
+    return () => {
+      cancelled = true
+    }
+  }, [destinationAddress, destinationZecRule])
 
   useEffect(() => {
     if (refundAddress.length === 0) return setIsValidRefund(true)
+
+    if (refundZecRule) {
+      const allowed = zcashRuleAllows(refundZecRule, refundAddress)
+      if (allowed !== 'checksum') return setIsValidRefund(allowed)
+    }
 
     const extraValidator = EXTRA_CHAIN_VALIDATORS[assetFrom.chain]
     if (extraValidator) {
       return setIsValidRefund(extraValidator(refundAddress))
     }
 
+    let cancelled = false
     getAddressValidator()
-      .then(validateAddress => setIsValidRefund(validateAddress({ address: refundAddress, chain: assetFrom.chain })))
-      .catch(() => setIsValidRefund(false))
-  }, [refundAddress])
+      .then(validateAddress => !cancelled && setIsValidRefund(validateAddress({ address: refundAddress, chain: assetFrom.chain })))
+      .catch(() => !cancelled && setIsValidRefund(false))
+    return () => {
+      cancelled = true
+    }
+  }, [refundAddress, refundZecRule])
 
   const fetchQuote = () => {
     setQuoting(true)
@@ -143,7 +181,14 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
 
         onFetchQuote(quote, preview)
       })
-      .catch(error => setQuoteError(parseApiError(error)))
+      .catch(error => {
+        // a 400 with `field` names the address the route does not take (Zcash address rules);
+        // only flag a field the user can edit — a rejected wallet address shows via quoteError alone
+        const field = error instanceof AxiosError ? error.response?.data?.field : undefined
+        if (field === 'destinationAddress') setServerRejected('destination')
+        else if (field === 'refundAddress' && refundRequired) setServerRejected('refund')
+        setQuoteError(parseApiError(error))
+      })
       .finally(() => setQuoting(false))
   }
 
@@ -160,14 +205,39 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
   ) => {
     const currentOption = options.find(a => a.address.toLowerCase() === address.toLowerCase())
 
+    // an edit withdraws the server's verdict on this field — it answers the old address
+    const updateAddress = (value: string) => {
+      setServerRejected(prev => (prev === field ? undefined : prev))
+      setAddress(value)
+    }
+
+    const showInvalid = !isValid || serverRejected === field
+
+    // under a Zcash rule, say which address encodings this route takes — unless the encoding is one
+    // the rule takes ('checksum': a transparent address that failed base58check), where the kind
+    // hint would mislead and plain "invalid address" is the truth
+    const zecRule: ZcashAddressRule | undefined = field === 'destination' ? destinationZecRule : refundZecRule
+    const invalidText =
+      serverRejected === field && isValid
+        ? // the server refused an address the client-side rules take (e.g. a UA missing a required
+          // receiver) — the kind hint would mislead; the server's own message shows in the error below
+          undefined
+        : zecRule && zcashRuleAllows(zecRule, address) !== 'checksum'
+          ? zecRule.unified
+            ? zecRule.transparent
+              ? t('invalidZcashUnified')
+              : t('invalidZcashUnifiedOnly')
+            : t('invalidZcashTransparent')
+          : t('invalidAddress', { chain: chainLabel(asset.chain) })
+
     return (
       <>
         <div className="relative">
           <Textarea
             placeholder={t('addressPlaceholder', { chain: chainLabel(asset.chain) })}
             value={address}
-            aria-invalid={!isValid}
-            onChange={e => setAddress(e.target.value)}
+            aria-invalid={showInvalid}
+            onChange={e => updateAddress(e.target.value)}
             enterKeyHint="done"
             readOnly={isMobile && editingField !== field}
             onPointerDown={() => setEditingField(field)}
@@ -191,7 +261,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
               variant="circleSmall"
               className="absolute end-4 top-1/2 -translate-y-1/2"
               onClick={() => {
-                setAddress('')
+                updateAddress('')
               }}
             >
               <Icon name="trash" />
@@ -200,7 +270,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
             <div className="absolute end-4 top-1/2 flex -translate-y-1/2 gap-2">
               {[...options].map((account, index) => (
                 <Tooltip key={index} content={truncate(account.address)}>
-                  <ThemeButton variant="circleSmall" className="rounded-xl" onClick={() => setDestinationAddress(account.address)}>
+                  <ThemeButton variant="circleSmall" className="rounded-xl" onClick={() => updateAddress(account.address)}>
                     <Image src={`/wallets/${account.provider.toLowerCase()}.svg`} alt={account.provider} width="24" height="24" />
                   </ThemeButton>
                 </Tooltip>
@@ -211,7 +281,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
                 className="hidden md:block"
                 onClick={() => {
                   navigator.clipboard.readText().then(text => {
-                    setAddress(text)
+                    updateAddress(text)
                   })
                 }}
               >
@@ -221,7 +291,7 @@ export const SwapRecipient = ({ provider, onFetchQuote }: SwapRecipientProps) =>
           )}
         </div>
 
-        {!isValid && <div className="text-lucian text-xs font-semibold">{t('invalidAddress', { chain: chainLabel(asset.chain) })}</div>}
+        {showInvalid && invalidText && <div className="text-lucian text-xs font-semibold">{invalidText}</div>}
       </>
     )
   }

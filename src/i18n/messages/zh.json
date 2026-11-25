@@ -45,7 +45,8 @@
       "approvalTransaction": "授权交易",
       "errorSubmitting": "提交交易出错",
       "submittingTransaction": "正在提交交易",
-      "transactionSubmitted": "交易已提交"
+      "transactionSubmitted": "交易已提交",
+      "zecUnifiedDeposit": "此订单的充值地址是统一（u1…）Zcash 地址，已连接的钱包无法向其转账。请使用即时兑换，并从支持统一地址的钱包支付充值。"
     },
     "confirm": {
       "titleSwap": "确认兑换",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} 地址",
       "invalidAddress": "无效的 {chain} 地址",
+      "invalidZcashUnified": "此路由接受统一（u1…）或透明（t1…）Zcash 地址",
+      "invalidZcashUnifiedOnly": "此路由接受统一（u1…）Zcash 地址",
+      "invalidZcashTransparent": "此路由接受透明（t1…）Zcash 地址",
       "titleAddresses": "输入地址",
       "titleReceiving": "输入接收地址",
       "enterRefundAddress": "输入退款地址：",

@@ -45,7 +45,8 @@
       "approvalTransaction": "승인 트랜잭션",
       "errorSubmitting": "트랜잭션 제출 오류",
       "submittingTransaction": "트랜잭션 제출 중",
-      "transactionSubmitted": "트랜잭션이 제출되었습니다"
+      "transactionSubmitted": "트랜잭션이 제출되었습니다",
+      "zecUnifiedDeposit": "이 주문의 입금 주소는 통합(u1…) Zcash 주소로, 연결된 지갑에서는 전송할 수 없습니다. 인스턴트 스왑을 사용해 통합 주소를 지원하는 지갑에서 입금하세요."
     },
     "confirm": {
       "titleSwap": "스왑 확인",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} 주소",
       "invalidAddress": "유효하지 않은 {chain} 주소",
+      "invalidZcashUnified": "이 경로는 통합(u1…) 또는 투명(t1…) Zcash 주소를 받습니다",
+      "invalidZcashUnifiedOnly": "이 경로는 통합(u1…) Zcash 주소를 받습니다",
+      "invalidZcashTransparent": "이 경로는 투명(t1…) Zcash 주소를 받습니다",
       "titleAddresses": "주소 입력",
       "titleReceiving": "수령 주소 입력",
       "enterRefundAddress": "환불 주소 입력:",

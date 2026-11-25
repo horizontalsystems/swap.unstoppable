@@ -45,7 +45,8 @@
       "approvalTransaction": "অনুমোদন লেনদেন",
       "errorSubmitting": "লেনদেন জমা দিতে ত্রুটি",
       "submittingTransaction": "লেনদেন জমা দেওয়া হচ্ছে",
-      "transactionSubmitted": "লেনদেন জমা হয়েছে"
+      "transactionSubmitted": "লেনদেন জমা হয়েছে",
+      "zecUnifiedDeposit": "এই অর্ডারের জমার ঠিকানা একটি ইউনিফাইড (u1…) Zcash ঠিকানা, যেখানে সংযুক্ত ওয়ালেট পাঠাতে পারে না। ইনস্ট্যান্ট সোয়াপ ব্যবহার করুন এবং ইউনিফাইড ঠিকানা সমর্থন করে এমন ওয়ালেট থেকে জমা পরিশোধ করুন।"
     },
     "confirm": {
       "titleSwap": "সোয়াপ নিশ্চিত করুন",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} ঠিকানা",
       "invalidAddress": "অবৈধ {chain} ঠিকানা",
+      "invalidZcashUnified": "এই রুটটি ইউনিফাইড (u1…) বা ট্রান্সপারেন্ট (t1…) Zcash ঠিকানা গ্রহণ করে",
+      "invalidZcashUnifiedOnly": "এই রুটটি ইউনিফাইড (u1…) Zcash ঠিকানা গ্রহণ করে",
+      "invalidZcashTransparent": "এই রুটটি ট্রান্সপারেন্ট (t1…) Zcash ঠিকানা গ্রহণ করে",
       "titleAddresses": "ঠিকানা লিখুন",
       "titleReceiving": "গ্রহণের ঠিকানা লিখুন",
       "enterRefundAddress": "ফেরত ঠিকানা লিখুন:",

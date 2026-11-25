@@ -45,7 +45,8 @@
       "approvalTransaction": "Giao dịch phê duyệt",
       "errorSubmitting": "Lỗi gửi giao dịch",
       "submittingTransaction": "Đang gửi giao dịch",
-      "transactionSubmitted": "Đã gửi giao dịch"
+      "transactionSubmitted": "Đã gửi giao dịch",
+      "zecUnifiedDeposit": "Địa chỉ nạp của lệnh này là địa chỉ Zcash hợp nhất (u1…) mà ví đang kết nối không thể gửi tới. Hãy dùng hoán đổi tức thì và thanh toán khoản nạp từ ví hỗ trợ địa chỉ hợp nhất."
     },
     "confirm": {
       "titleSwap": "Xác nhận hoán đổi",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "Địa chỉ {chain}",
       "invalidAddress": "Địa chỉ {chain} không hợp lệ",
+      "invalidZcashUnified": "Tuyến đường này chấp nhận địa chỉ Zcash hợp nhất (u1…) hoặc minh bạch (t1…)",
+      "invalidZcashUnifiedOnly": "Tuyến đường này chấp nhận địa chỉ Zcash hợp nhất (u1…)",
+      "invalidZcashTransparent": "Tuyến đường này chấp nhận địa chỉ Zcash minh bạch (t1…)",
       "titleAddresses": "Nhập địa chỉ",
       "titleReceiving": "Nhập địa chỉ nhận",
       "enterRefundAddress": "Nhập địa chỉ hoàn tiền:",
