@@ -79,7 +79,7 @@
     "recipient": {
       "addressPlaceholder": "{chain}-Adresse",
       "invalidAddress": "Ungültige {chain}-Adresse",
-      "invalidZcashUnified": "Diese Route akzeptiert eine Unified- (u1…) oder transparente (t1…) Zcash-Adresse",
+      "invalidZcashUnified": "Diese Route akzeptiert eine Unified-Zcash-Adresse (u1…) oder eine transparente Zcash-Adresse (t1…)",
       "invalidZcashUnifiedOnly": "Diese Route akzeptiert eine Unified-Zcash-Adresse (u1…)",
       "invalidZcashTransparent": "Diese Route akzeptiert eine transparente Zcash-Adresse (t1…)",
       "titleAddresses": "Adressen eingeben",

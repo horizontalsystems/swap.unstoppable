@@ -46,7 +46,7 @@
       "errorSubmitting": "Gagal Mengirim Transaksi",
       "submittingTransaction": "Mengirim Transaksi",
       "transactionSubmitted": "Transaksi terkirim",
-      "zecUnifiedDeposit": "Alamat setoran order ini adalah alamat Zcash terpadu (u1…) yang tidak dapat dikirimi oleh dompet yang terhubung. Gunakan tukar instan dan bayar setoran dari dompet yang mendukung alamat terpadu."
+      "zecUnifiedDeposit": "Alamat setoran order ini adalah alamat Zcash terpadu (u1…) yang tidak dapat dikirimi oleh dompet yang terhubung. Gunakan pertukaran instan dan bayar setoran dari dompet yang mendukung alamat terpadu."
     },
     "confirm": {
       "titleSwap": "Konfirmasi Pertukaran",

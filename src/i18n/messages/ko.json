@@ -79,9 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} 주소",
       "invalidAddress": "유효하지 않은 {chain} 주소",
-      "invalidZcashUnified": "이 경로는 통합(u1…) 또는 투명(t1…) Zcash 주소를 지원합니다",
-      "invalidZcashUnifiedOnly": "이 경로는 통합(u1…) Zcash 주소를 지원합니다",
-      "invalidZcashTransparent": "이 경로는 투명(t1…) Zcash 주소를 지원합니다",
+      "invalidZcashUnified": "이 경로는 통합(u1…) 또는 투명(t1…) Zcash 주소를 받습니다",
+      "invalidZcashUnifiedOnly": "이 경로는 통합(u1…) Zcash 주소를 받습니다",
+      "invalidZcashTransparent": "이 경로는 투명(t1…) Zcash 주소를 받습니다",
       "titleAddresses": "주소 입력",
       "titleReceiving": "수령 주소 입력",
       "enterRefundAddress": "환불 주소 입력:",

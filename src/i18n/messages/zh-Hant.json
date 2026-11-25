@@ -79,9 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} 地址",
       "invalidAddress": "無效的 {chain} 地址",
-      "invalidZcashUnified": "此兌換路線接受統一（u1…）或透明（t1…）Zcash 地址",
-      "invalidZcashUnifiedOnly": "此兌換路線接受統一（u1…）Zcash 地址",
-      "invalidZcashTransparent": "此兌換路線接受透明（t1…）Zcash 地址",
+      "invalidZcashUnified": "此路由接受統一（u1…）或透明（t1…）Zcash 地址",
+      "invalidZcashUnifiedOnly": "此路由接受統一（u1…）Zcash 地址",
+      "invalidZcashTransparent": "此路由接受透明（t1…）Zcash 地址",
       "titleAddresses": "輸入地址",
       "titleReceiving": "輸入接收地址",
       "enterRefundAddress": "輸入退款地址：",
