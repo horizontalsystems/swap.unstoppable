@@ -47,7 +47,8 @@
       "submittingTransaction": "Submitting Transaction",
       "transactionSubmitted": "Transaction submitted",
       "quoteExpired": "The quote expired. Review the updated quote and confirm again.",
-      "priceChanged": "The price moved. Review the updated quote and confirm again."
+      "priceChanged": "The price moved. Review the updated quote and confirm again.",
+      "zecUnifiedDeposit": "This order's deposit address is a unified (u1…) Zcash address, which the connected wallet cannot send to. Use the instant swap flow and pay the deposit from a wallet that supports unified addresses."
     },
     "confirm": {
       "titleSwap": "Confirm Swap",

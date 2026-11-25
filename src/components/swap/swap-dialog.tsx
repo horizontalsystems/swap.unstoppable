@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FeeOption, getChainConfig, USwapNumber } from '@uswap/core'
+import { Chain, FeeOption, getChainConfig, USwapNumber } from '@uswap/core'
 import { LoaderCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
@@ -14,6 +14,7 @@ import { CommitError, commitRoute, reportSigned, StaleQuoteError } from '@/lib/a
 import { getRouteDepositAddress, getRouteMemo } from '@/lib/swap-helpers'
 import { generateId } from '@/lib/utils'
 import { getUSwap } from '@/lib/wallets'
+import { zcashAddressKind } from '@/lib/zcash'
 import { useIsLimitSwap } from '@/store/limit-swap-store'
 import { useSetTransaction } from '@/store/transaction-store'
 import { ProviderName, QuoteResponseRoute } from '@/types'
@@ -47,7 +48,15 @@ export const SwapDialog = ({ provider, isOpen, onOpenChange }: SwapDialogProps) 
 
     // commit creates the order (and, for transfer providers, the deposit address), then the wallet signs and broadcasts
     const broadcast = commitRoute(quote)
-      .then(route => uSwap.swap({ route, feeOptionKey: FeeOption.Fast }).then((hash: string) => ({ route, hash })))
+      .then(route => {
+        // a ZEC sell (Exolix) may get a unified (u1…) deposit address, which the transparent-only
+        // UTXO toolbox cannot build an output for — stop with a clear message before signing
+        const depositAddress = getRouteDepositAddress(route)
+        if (assetFrom.chain === Chain.Zcash && depositAddress && zcashAddressKind(depositAddress) !== 'transparent') {
+          throw new CommitError(t('zecUnifiedDeposit'))
+        }
+        return uSwap.swap({ route, feeOptionKey: FeeOption.Fast }).then((hash: string) => ({ route, hash }))
+      })
       .then(({ route, hash }) => {
         setTransaction({
           uid: generateId(),
