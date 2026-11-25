@@ -17,8 +17,9 @@ const MANUAL_PROVIDERS: ProviderName[] = [
   ...STELLAR_DEX_PROVIDERS
 ]
 
-// temporarily disabled — /tokens still tags them, so they are stripped off every asset here,
-// which keeps them out of the providers list /rate is asked for
+// disabled by name — /tokens still tags them, so they are stripped off every asset here, which
+// keeps them out of the providers list /rate is asked for. The confidential rails are also caught
+// by the privacy filter below; the names stay as a guard in case /providers omits the field.
 const DISABLED_PROVIDERS = new Set<string>(['NEAR_CONFIDENTIAL', 'NEAR_CONFIDENTIAL_ADVANCED', ...EXCLUDED_STELLAR_PROVIDERS])
 
 // LI.FI also quotes Solana and Tron, but a committed signed_transaction route only carries a target
@@ -48,6 +49,10 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
         chainIds: new Set(providers.find(p => p.provider === name)?.supportedChainIds ?? [])
       }))
 
+      // the app offers no private-swap mode, so confidential rails are excluded by their privacy
+      // level — any value other than 'none' is confidential, and new levels/providers may be added
+      const confidentialProviders = new Set(providers.filter(p => p.privacy && p.privacy !== 'none').map(p => p.provider))
+
       for (const token of tokens) {
         if (!token.chain || !getChainConfig(token.chain).chain) {
           continue
@@ -55,9 +60,11 @@ export const useAssets = (): { assets?: Asset[]; geckoMap?: Map<string, string>;
 
         const isEvm = EVMChains.includes(token.chain as EVMChain)
 
-        let providerNames: ProviderName[] = (token.providers ?? []).filter((p: ProviderName) => !DISABLED_PROVIDERS.has(p))
+        let providerNames: ProviderName[] = (token.providers ?? []).filter(
+          (p: ProviderName) => !DISABLED_PROVIDERS.has(p) && !confidentialProviders.has(p)
+        )
         for (const { name, chainIds } of manualProviderChains) {
-          if (!chainIds.has(token.chainId) || providerNames.includes(name)) continue
+          if (!chainIds.has(token.chainId) || providerNames.includes(name) || confidentialProviders.has(name)) continue
           if (!isEvm && EVM_ONLY_PROVIDERS.has(name)) continue
           providerNames.push(name)
         }

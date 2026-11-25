@@ -107,6 +107,10 @@ export interface Provider {
   amlPolicy: RiskLevel
   amlPolicyDescription: string
   contacts: Record<string, string> | null
+  // privacy level of the provider's rail; more levels may be added — treat anything but 'none' as confidential
+  privacy?: 'none' | 'basic' | (string & {})
+  // the provider serves split swaps (one deposit, several outputs) via /split/*; it answers no regular quote
+  splitSwaps?: boolean
   suspended: boolean
   accuracy: { matched: number; total: number; avgDeviation: number | null } | null
   timestamp: string
