@@ -45,7 +45,8 @@
       "approvalTransaction": "ธุรกรรมการอนุมัติ",
       "errorSubmitting": "เกิดข้อผิดพลาดในการส่งธุรกรรม",
       "submittingTransaction": "กำลังส่งธุรกรรม",
-      "transactionSubmitted": "ส่งธุรกรรมแล้ว"
+      "transactionSubmitted": "ส่งธุรกรรมแล้ว",
+      "zecUnifiedDeposit": "ที่อยู่สำหรับฝากของคำสั่งนี้เป็นที่อยู่ Zcash แบบรวม (u1…) ซึ่งกระเป๋าเงินที่เชื่อมต่อไม่สามารถส่งไปได้ โปรดใช้การแลกเปลี่ยนทันทีและชำระเงินฝากจากกระเป๋าเงินที่รองรับที่อยู่แบบรวม"
     },
     "confirm": {
       "titleSwap": "ยืนยันการแลกเปลี่ยน",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "ที่อยู่ {chain}",
       "invalidAddress": "ที่อยู่ {chain} ไม่ถูกต้อง",
+      "invalidZcashUnified": "เส้นทางนี้รองรับที่อยู่ Zcash แบบรวม (u1…) หรือแบบโปร่งใส (t1…)",
+      "invalidZcashUnifiedOnly": "เส้นทางนี้รองรับที่อยู่ Zcash แบบรวม (u1…)",
+      "invalidZcashTransparent": "เส้นทางนี้รองรับที่อยู่ Zcash แบบโปร่งใส (t1…)",
       "titleAddresses": "กรอกที่อยู่",
       "titleReceiving": "กรอกที่อยู่สำหรับรับ",
       "enterRefundAddress": "กรอกที่อยู่สำหรับคืนเงิน:",

@@ -45,7 +45,8 @@
       "approvalTransaction": "تراکنش تأیید",
       "errorSubmitting": "خطا در ارسال تراکنش",
       "submittingTransaction": "در حال ارسال تراکنش",
-      "transactionSubmitted": "تراکنش ارسال شد"
+      "transactionSubmitted": "تراکنش ارسال شد",
+      "zecUnifiedDeposit": "آدرس واریز این سفارش یک آدرس یکپارچه (u1…) Zcash است که کیف پول متصل نمی‌تواند به آن ارسال کند. از تبادل آنی استفاده کنید و واریز را از کیف پولی انجام دهید که از آدرس‌های یکپارچه پشتیبانی می‌کند."
     },
     "confirm": {
       "titleSwap": "تأیید تبادل",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "آدرس {chain}",
       "invalidAddress": "آدرس {chain} نامعتبر است",
+      "invalidZcashUnified": "این مسیر آدرس یکپارچه (u1…) یا شفاف (t1…) Zcash را می‌پذیرد",
+      "invalidZcashUnifiedOnly": "این مسیر آدرس یکپارچه (u1…) Zcash را می‌پذیرد",
+      "invalidZcashTransparent": "این مسیر آدرس شفاف (t1…) Zcash را می‌پذیرد",
       "titleAddresses": "آدرس‌ها را وارد کنید",
       "titleReceiving": "آدرس دریافت را وارد کنید",
       "enterRefundAddress": "آدرس بازپرداخت را وارد کنید:",

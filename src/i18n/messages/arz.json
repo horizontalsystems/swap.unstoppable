@@ -45,7 +45,8 @@
       "approvalTransaction": "معاملة الموافقة",
       "errorSubmitting": "خطأ في إرسال المعاملة",
       "submittingTransaction": "بنبعت المعاملة",
-      "transactionSubmitted": "اتبعتت المعاملة"
+      "transactionSubmitted": "اتبعتت المعاملة",
+      "zecUnifiedDeposit": "عنوان الإيداع للأمر ده عنوان Zcash موحّد (u1…) والمحفظة المتوصلة مش هتقدر تبعت له. استخدم التبديل الفوري وادفع الإيداع من محفظة بتدعم العناوين الموحّدة."
     },
     "confirm": {
       "titleSwap": "أكّد التبديل",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "عنوان {chain}",
       "invalidAddress": "عنوان {chain} مش صالح",
+      "invalidZcashUnified": "المسار ده بيقبل عنوان Zcash موحّد (u1…) أو شفاف (t1…)",
+      "invalidZcashUnifiedOnly": "المسار ده بيقبل عنوان Zcash موحّد (u1…)",
+      "invalidZcashTransparent": "المسار ده بيقبل عنوان Zcash شفاف (t1…)",
       "titleAddresses": "اكتب العناوين",
       "titleReceiving": "اكتب عنوان الاستلام",
       "enterRefundAddress": "اكتب عنوان الاسترداد:",

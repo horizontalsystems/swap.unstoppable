@@ -45,7 +45,8 @@
       "approvalTransaction": "منظوری ٹرانزیکشن",
       "errorSubmitting": "ٹرانزیکشن جمع کرانے میں خرابی",
       "submittingTransaction": "ٹرانزیکشن جمع کرائی جا رہی ہے",
-      "transactionSubmitted": "ٹرانزیکشن جمع ہو گئی"
+      "transactionSubmitted": "ٹرانزیکشن جمع ہو گئی",
+      "zecUnifiedDeposit": "اس آرڈر کا ڈپازٹ ایڈریس ایک یونیفائیڈ (u1…) Zcash ایڈریس ہے، جس پر منسلک والیٹ نہیں بھیج سکتا۔ انسٹنٹ سویپ استعمال کریں اور ڈپازٹ ایسے والیٹ سے ادا کریں جو یونیفائیڈ ایڈریس سپورٹ کرتا ہو۔"
     },
     "confirm": {
       "titleSwap": "سویپ کی تصدیق کریں",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} ایڈریس",
       "invalidAddress": "غلط {chain} ایڈریس",
+      "invalidZcashUnified": "یہ روٹ یونیفائیڈ (u1…) یا شفاف (t1…) Zcash ایڈریس قبول کرتا ہے",
+      "invalidZcashUnifiedOnly": "یہ روٹ یونیفائیڈ (u1…) Zcash ایڈریس قبول کرتا ہے",
+      "invalidZcashTransparent": "یہ روٹ شفاف (t1…) Zcash ایڈریس قبول کرتا ہے",
       "titleAddresses": "ایڈریسز درج کریں",
       "titleReceiving": "وصولی ایڈریس درج کریں",
       "enterRefundAddress": "رقم واپسی ایڈریس درج کریں:",

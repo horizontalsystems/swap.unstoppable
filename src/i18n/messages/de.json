@@ -45,7 +45,8 @@
       "approvalTransaction": "Genehmigungstransaktion",
       "errorSubmitting": "Fehler beim Senden der Transaktion",
       "submittingTransaction": "Transaktion wird gesendet",
-      "transactionSubmitted": "Transaktion gesendet"
+      "transactionSubmitted": "Transaktion gesendet",
+      "zecUnifiedDeposit": "Die Einzahlungsadresse dieser Order ist eine Unified-Zcash-Adresse (u1…), an die die verbundene Wallet nicht senden kann. Nutze den Instant-Swap und sende die Einzahlung von einer Wallet, die Unified-Adressen unterstützt."
     },
     "confirm": {
       "titleSwap": "Swap bestätigen",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain}-Adresse",
       "invalidAddress": "Ungültige {chain}-Adresse",
+      "invalidZcashUnified": "Diese Route akzeptiert eine Unified- (u1…) oder transparente (t1…) Zcash-Adresse",
+      "invalidZcashUnifiedOnly": "Diese Route akzeptiert eine Unified-Zcash-Adresse (u1…)",
+      "invalidZcashTransparent": "Diese Route akzeptiert eine transparente Zcash-Adresse (t1…)",
       "titleAddresses": "Adressen eingeben",
       "titleReceiving": "Empfangsadresse eingeben",
       "enterRefundAddress": "Rückerstattungsadresse eingeben:",

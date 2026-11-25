@@ -45,7 +45,8 @@
       "approvalTransaction": "Transação de aprovação",
       "errorSubmitting": "Erro ao enviar a transação",
       "submittingTransaction": "Enviando transação",
-      "transactionSubmitted": "Transação enviada"
+      "transactionSubmitted": "Transação enviada",
+      "zecUnifiedDeposit": "O endereço de depósito desta ordem é um endereço Zcash unificado (u1…), para o qual a carteira conectada não consegue enviar. Use a troca instantânea e pague o depósito a partir de uma carteira que suporte endereços unificados."
     },
     "confirm": {
       "titleSwap": "Confirmar troca",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "Endereço {chain}",
       "invalidAddress": "Endereço {chain} inválido",
+      "invalidZcashUnified": "Esta rota aceita um endereço Zcash unificado (u1…) ou transparente (t1…)",
+      "invalidZcashUnifiedOnly": "Esta rota aceita um endereço Zcash unificado (u1…)",
+      "invalidZcashTransparent": "Esta rota aceita um endereço Zcash transparente (t1…)",
       "titleAddresses": "Insira os endereços",
       "titleReceiving": "Insira o endereço de recebimento",
       "enterRefundAddress": "Insira o endereço de reembolso:",

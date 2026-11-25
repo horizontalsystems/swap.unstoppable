@@ -45,7 +45,8 @@
       "approvalTransaction": "Transacción de aprobación",
       "errorSubmitting": "Error al enviar la transacción",
       "submittingTransaction": "Enviando transacción",
-      "transactionSubmitted": "Transacción enviada"
+      "transactionSubmitted": "Transacción enviada",
+      "zecUnifiedDeposit": "La dirección de depósito de esta orden es una dirección Zcash unificada (u1…), a la que la billetera conectada no puede enviar. Usa el intercambio instantáneo y paga el depósito desde una billetera que admita direcciones unificadas."
     },
     "confirm": {
       "titleSwap": "Confirmar intercambio",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "Dirección {chain}",
       "invalidAddress": "Dirección {chain} no válida",
+      "invalidZcashUnified": "Esta ruta acepta una dirección Zcash unificada (u1…) o transparente (t1…)",
+      "invalidZcashUnifiedOnly": "Esta ruta acepta una dirección Zcash unificada (u1…)",
+      "invalidZcashTransparent": "Esta ruta acepta una dirección Zcash transparente (t1…)",
       "titleAddresses": "Introduce las direcciones",
       "titleReceiving": "Introduce la dirección de recepción",
       "enterRefundAddress": "Introduce la dirección de reembolso:",

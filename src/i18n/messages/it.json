@@ -45,7 +45,8 @@
       "approvalTransaction": "Transazione di approvazione",
       "errorSubmitting": "Errore nell'invio della transazione",
       "submittingTransaction": "Invio della transazione",
-      "transactionSubmitted": "Transazione inviata"
+      "transactionSubmitted": "Transazione inviata",
+      "zecUnifiedDeposit": "L'indirizzo di deposito di questo ordine è un indirizzo Zcash unificato (u1…), a cui il wallet collegato non può inviare. Usa lo swap istantaneo e paga il deposito da un wallet che supporta gli indirizzi unificati."
     },
     "confirm": {
       "titleSwap": "Conferma scambio",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "Indirizzo {chain}",
       "invalidAddress": "Indirizzo {chain} non valido",
+      "invalidZcashUnified": "Questo percorso accetta un indirizzo Zcash unificato (u1…) o trasparente (t1…)",
+      "invalidZcashUnifiedOnly": "Questo percorso accetta un indirizzo Zcash unificato (u1…)",
+      "invalidZcashTransparent": "Questo percorso accetta un indirizzo Zcash trasparente (t1…)",
       "titleAddresses": "Inserisci gli indirizzi",
       "titleReceiving": "Inserisci l'indirizzo di ricezione",
       "enterRefundAddress": "Inserisci l'indirizzo di rimborso:",

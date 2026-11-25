@@ -45,7 +45,8 @@
       "approvalTransaction": "स्वीकृति लेनदेन",
       "errorSubmitting": "लेनदेन सबमिट करने में त्रुटि",
       "submittingTransaction": "लेनदेन सबमिट हो रहा है",
-      "transactionSubmitted": "लेनदेन सबमिट हुआ"
+      "transactionSubmitted": "लेनदेन सबमिट हुआ",
+      "zecUnifiedDeposit": "इस ऑर्डर का जमा पता एक यूनिफ़ाइड (u1…) Zcash पता है, जिस पर कनेक्टेड वॉलेट नहीं भेज सकता। इंस्टेंट स्वैप का उपयोग करें और यूनिफ़ाइड पतों को सपोर्ट करने वाले वॉलेट से जमा का भुगतान करें।"
     },
     "confirm": {
       "titleSwap": "स्वैप की पुष्टि करें",
@@ -78,6 +79,9 @@
     "recipient": {
       "addressPlaceholder": "{chain} पता",
       "invalidAddress": "अमान्य {chain} पता",
+      "invalidZcashUnified": "यह रूट यूनिफ़ाइड (u1…) या ट्रांसपेरेंट (t1…) Zcash पता स्वीकार करता है",
+      "invalidZcashUnifiedOnly": "यह रूट यूनिफ़ाइड (u1…) Zcash पता स्वीकार करता है",
+      "invalidZcashTransparent": "यह रूट ट्रांसपेरेंट (t1…) Zcash पता स्वीकार करता है",
       "titleAddresses": "पते दर्ज करें",
       "titleReceiving": "प्राप्ति पता दर्ज करें",
       "enterRefundAddress": "रिफ़ंड पता दर्ज करें:",
