@@ -295,9 +295,12 @@ function renderLeg(tx: any, legTx: any, t: ReturnType<typeof useTranslations>) {
   const from = assetFromString(legTx.fromAsset)
   const to = assetFromString(legTx.toAsset)
 
+  // compare the leg's asset with the same response's top-level fromAsset — v3 canonicalizes asset
+  // spellings, so a response field never matches the request's spelling reliably
+  const txFromAsset: string = tx.details?.fromAsset || tx.assetFrom.identifier
   const text =
     legTx.fromAsset === legTx.toAsset
-      ? legTx.fromAsset.toLowerCase() === tx.assetFrom.identifier.toLowerCase()
+      ? legTx.fromAsset.toLowerCase() === txFromAsset.toLowerCase()
         ? t('leg.deposit', { ticker: from.ticker ?? '' })
         : t('leg.send', { ticker: to.ticker ?? '' })
       : t('leg.swap', { from: from.ticker ?? '', to: to.ticker ?? '' })
